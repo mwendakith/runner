@@ -419,7 +419,7 @@ class EidDivision extends Model
 
 
 	// Median age	
-	public function Getoverallmedianage($year, $division='view_facilitys.county')
+	public function Getoverallmedianage($year, $div_array, $division='view_facilitys.county', $col='county')
 	{
 		$data = DB::connection('eid')
 		->table('samples')
@@ -440,16 +440,31 @@ class EidDivision extends Model
 
 		$return;
 
+		$place = 0;
+
 		for ($i=0; $i < 12; $i++) { 
 			$month = $i + 1;
-			$subset = $data->where('month', $month);
 
-			if($subset->isEmpty()){
-				break;
+			for ($iterator=0; $iterator < count($div_array); $iterator++) { 
+				$c = $div_array[$iterator];
+				
+				$d = $data->where('month', $month)->where($col, $c);
+
+				if($d->isEmpty()){
+					$return[$place]['totals'] = 0;
+					$return[$place]['county'] = $c;
+					$return[$place]['month'] = $month;
+					continue;
+				}
+
+				$return[$place]['totals'] = $d->median('age');
+				$return[$place]['county'] = $c;
+				$return[$place]['month'] = $month;
+
+				$place++;
+
 			}
-			else{
-				$return[$i] = $subset->median('age');
-			}
+
 
 		}
 
@@ -570,7 +585,7 @@ class EidDivision extends Model
 	}
 
 	// Average age	
-	public function GetNatTATs($year, $division='view_facilitys.county', $col='county', $div_array)
+	public function GetNatTATs($year, $div_array, $division='view_facilitys.county', $col='county')
 	{
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
@@ -625,10 +640,10 @@ class EidDivision extends Model
 
 				foreach ($d as $key => $value) {
 					
-					$tat1 += $this->get_days($value->datecollected, $value->datereceived, $holidays);
-					$tat2 += $this->get_days($value->datereceived, $value->datetested, $holidays);
-					$tat3 += $this->get_days($value->datetested, $value->datedispatched, $holidays);
-					$tat4 += $this->get_days($value->datecollected, $value->datedispatched, $holidays);
+					$tat1 += $b->get_days($value->datecollected, $value->datereceived, $holidays);
+					$tat2 += $b->get_days($value->datereceived, $value->datetested, $holidays);
+					$tat3 += $b->get_days($value->datetested, $value->datedispatched, $holidays);
+					$tat4 += $b->get_days($value->datecollected, $value->datedispatched, $holidays);
 
 				}
 
@@ -651,23 +666,5 @@ class EidDivision extends Model
 		             
 	}
 
-	public function get_days($start, $finish, $holidays){
-		$b = new BaseModel;
-		$finish = date("d-m-Y",strtotime($finish));
-		$start = date("d-m-Y",strtotime($start));
-
-		$workingdays= $b->getWorkingDays($start, $finish);
-
-		$totaldays = $workingdays - $holidays;
-		if ($totaldays < 0) 
-		{
-			$totaldays=1;
-		}
-		else
-		{
-			$totaldays=$totaldays;
-		}
-		return $totaldays;
-
-	}
+	
 }

@@ -14,6 +14,22 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        Commands\UpdateEid::class,
+        Commands\UpdateVl::class,
+
+        Commands\EidNation::class,
+        Commands\EidCounty::class,
+        Commands\EidSubcounty::class,
+        Commands\EidFacility::class,
+        Commands\EidLab::class,
+        Commands\EidPartner::class,
+
+        Commands\VlNation::class,
+        Commands\VlCounty::class,
+        Commands\VlSubcounty::class,
+        Commands\VlFacility::class,
+        Commands\VlLab::class,
+        Commands\VlPartner::class,
     ];
 
     /**

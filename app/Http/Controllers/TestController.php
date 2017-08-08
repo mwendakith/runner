@@ -12,6 +12,7 @@ class TestController extends Controller
     //
 
     public function test(){
+    	// $t = new EidNation;
     	$t = new EidDivision;
 
 	    // $r = $t->GetNatTATs(2016);
@@ -25,13 +26,14 @@ class TestController extends Controller
 			$a[$key] = $value->ID;
 		}
 
-		$r = $t->GetNatTATs(2016, 'view_facilitys.county', 'county', $a);
+		$r = $t->GetNatTATs(2016, $a);
+		// $r = $t->GetNatTATs(2016);
 
 		$r = collect($r);
 
 
 
-	    $d = $r->where('month', 4)->where('county', 10);
+	    $d = $r->where('month', 1)->where('county', 9)->first();
 
 	    dd($d);
 
@@ -39,6 +41,10 @@ class TestController extends Controller
 	    // 	echo $value->county . ' ' . $value->totals;
 	    // }
 
+    }
+
+    public function checknull($var){
+    	if()
     }
 
     

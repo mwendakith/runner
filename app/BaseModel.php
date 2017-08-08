@@ -159,6 +159,25 @@ class BaseModel extends Model
 		return $age_b;
 	}
 
+	public function get_days($start, $finish, $holidays){
+		$finish = date("d-m-Y",strtotime($finish));
+		$start = date("d-m-Y",strtotime($start));
+
+		$workingdays= $this->getWorkingDays($start, $finish);
+
+		$totaldays = $workingdays - $holidays;
+		if ($totaldays < 0) 
+		{
+			$totaldays=1;
+		}
+		else
+		{
+			$totaldays=$totaldays;
+		}
+		return $totaldays;
+
+	}
+
 	
 
 

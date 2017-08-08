@@ -588,10 +588,10 @@ class EidNation extends Model
 
 			foreach ($d as $key => $value) {
 
-				$tat1 += $this->get_days($value->datecollected, $value->datereceived, $holidays);
-				$tat2 += $this->get_days($value->datereceived, $value->datetested, $holidays);
-				$tat3 += $this->get_days($value->datetested, $value->datedispatched, $holidays);
-				$tat4 += $this->get_days($value->datecollected, $value->datedispatched, $holidays);
+				$tat1 += $b->get_days($value->datecollected, $value->datereceived, $holidays);
+				$tat2 += $b->get_days($value->datereceived, $value->datetested, $holidays);
+				$tat3 += $b->get_days($value->datetested, $value->datedispatched, $holidays);
+				$tat4 += $b->get_days($value->datecollected, $value->datedispatched, $holidays);
 
 			}
 
@@ -599,6 +599,7 @@ class EidNation extends Model
 			$return[$i]['tat2'] = floor($tat2 / $rows);
 			$return[$i]['tat3'] = floor($tat3 / $rows);
 			$return[$i]['tat4'] = floor($tat4 / $rows);
+			$return[$i]['month'] = $month;
 
 			
 
@@ -609,25 +610,7 @@ class EidNation extends Model
 		              
 	}
 
-	public function get_days($start, $finish, $holidays){
-		$b = new BaseModel;
-		$finish = date("d-m-Y",strtotime($finish));
-		$start = date("d-m-Y",strtotime($start));
-
-		$workingdays= $b->getWorkingDays($start, $finish);
-
-		$totaldays = $workingdays - $holidays;
-		if ($totaldays < 0) 
-		{
-			$totaldays=1;
-		}
-		else
-		{
-			$totaldays=$totaldays;
-		}
-		return $totaldays;
-
-	}
+	
 
 
 }

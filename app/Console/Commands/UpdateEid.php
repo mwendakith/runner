@@ -38,5 +38,12 @@ class UpdateEid extends Command
     public function handle()
     {
         //
+        $this->info('Display this on the screen');
+
+        $year = $this->argument('year');
+
+        $this->call('update:eid_nation', [
+            'year' => $year
+        ]);
     }
 }
