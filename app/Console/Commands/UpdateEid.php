@@ -38,11 +38,31 @@ class UpdateEid extends Command
     public function handle()
     {
         //
-        $this->info('Display this on the screen');
-
         $year = $this->argument('year');
 
-        $this->call('update:eid_nation', [
+        $this->info('Updating eid summary tables for the year ' . $year);
+
+        $this->call('update:eid-nation', [
+            'year' => $year
+        ]);
+
+        $this->call('update:eid-county', [
+            'year' => $year
+        ]);
+
+        $this->call('update:eid-subcounty', [
+            'year' => $year
+        ]);
+
+        $this->call('update:eid-lab', [
+            'year' => $year
+        ]);
+
+        $this->call('update:eid-partner', [
+            'year' => $year
+        ]);
+
+        $this->call('update:eid-facility', [
             'year' => $year
         ]);
     }

@@ -19,4 +19,4 @@ Artisan::command('inspire', function () {
 
 Artisan::command('fart', function () {
     $this->comment("This is pretty smelly.");
-})->describe('Display an inspiring quote');
+})->describe('Release a smelly gas');

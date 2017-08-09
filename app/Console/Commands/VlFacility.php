@@ -11,14 +11,14 @@ class VlFacility extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'update:vl-facility {year?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Compile summary tables for viralload facilities';
 
     /**
      * Create a new command instance.

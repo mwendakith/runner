@@ -11,14 +11,14 @@ class VlLab extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'update:vl-lab {year?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Compile summary tables for viralload labs';
 
     /**
      * Create a new command instance.

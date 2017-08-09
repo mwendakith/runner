@@ -10,6 +10,24 @@ class EidDivision extends Model
 {
     //
 
+    // Total number of batches
+    public function GettotalbatchesPerlab($year, $division='view_facilitys.county'){
+    	$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.batchno) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->whereYear('datetested', $year)
+		->whereRaw("(samples.parentid=0  OR samples.parentid IS NULL)")
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->groupBy('month', $division)
+		->get();
+
+		return $data;
+
+		// $sql = "SELECT COUNT(DISTINCT(batchno)) as totals  FROM samples WHERE labtestedin='$lab' AND  YEAR(datereceived)='$year'  AND ((samples.parentid=0)||(samples.parentid IS NULL))  AND Flag=1 AND eqa=0";
+    }
+
     //national ALL tests EQA + INFANTS
 	public function CumulativeTestedSamples($year, $division='view_facilitys.county')
 	{
@@ -27,9 +45,7 @@ class EidDivision extends Model
 
 		return $data;
 
-		// $sql=mysql_query("SELECT COUNT(samples.ID) as totals  FROM samples WHERE result > 0 AND YEAR(datetested)='$year' AND (samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))   AND Flag=1 AND eqa=0") or die(mysql_error());            
-
-
+		// $sql=mysql_query("SELECT COUNT(samples.ID) as totals  FROM samples WHERE result > 0 AND YEAR(datetested)='$year' AND (samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))   AND Flag=1 AND eqa=0") or die(mysql_error()); 
 	}
 
 	
@@ -494,7 +510,7 @@ class EidDivision extends Model
 		return $data;
 
 		// $prophQuery =mysql_query("SELECT count(patients.AutoID) as 'TotOutput'
-  //           FROM samples,patients WHERE  samples.patientautoid=patients.autoID    AND patients.prophylaxis='$drug'   AND  (samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))  AND    samples.result='$resulttype' AND YEAR(samples.datetested)='$yea' AND  samples.repeatt=0 AND samples.Flag=1 and samples.eqa=0  ") or die(mysql_error());
+  		//           FROM samples,patients WHERE  samples.patientautoid=patients.autoID    AND patients.prophylaxis='$drug'   AND  (samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))  AND    samples.result='$resulttype' AND YEAR(samples.datetested)='$yea' AND  samples.repeatt=0 AND samples.Flag=1 and samples.eqa=0  ") or die(mysql_error());
               
 	}
 

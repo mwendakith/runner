@@ -11,14 +11,14 @@ class VlSubcounty extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'update:vl-subcounty {year?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Compile summary tables for viralload subcounties';
 
     /**
      * Create a new command instance.

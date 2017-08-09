@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\EidNation;
 use App\EidDivision;
+use DB;
 
 class Eid extends Model
 {
@@ -38,7 +39,7 @@ class Eid extends Model
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1);
 		$infantsless2mPOS_a = 	$n->Gettestedsamplescountrange($year, 1, true);
 		$infantsless2w_a =		$n->Gettestedsamplescountrange($year, 3);
-		$infantsless2wPOS_a =		$n->Gettestedsamplescountrange($year, 3, true);
+		$infantsless2wPOS_a =	$n->Gettestedsamplescountrange($year, 3, true);
 		$infantsless46w_a =		$n->Gettestedsamplescountrange($year, 4);
 		$infantsless46wPOS_a =	$n->Gettestedsamplescountrange($year, 4, true);
 		$infantsabove2m_a =		$n->Gettestedsamplescountrange($year, 2);
@@ -84,58 +85,79 @@ class Eid extends Model
 		for ($i=0; $i < $count; $i++) { 
 			$month = $i + 1;
 
-			$alltests = $alltests_a->where('month', $month)->first()->totals;
-			$eqatests = $eqatests_a->where('month', $month)->first()->totals;
-			$tests = $tests_a->where('month', $month)->first()->totals;
-			$patienttests = $patienttests_a->where('month', $month)->first()->totals;
-			$patienttestsPOS = $patienttestsPOS_a->where('month', $month)->first()->totals;
+			$alltests = $this->checknull($alltests_a->where('month', $month));
+			$eqatests = $this->checknull($eqatests_a->where('month', $month));
+			$tests = $this->checknull($tests_a->where('month', $month));
+			$patienttests = $this->checknull($patienttests_a->where('month', $month));
+			$patienttestsPOS = $this->checknull($patienttestsPOS_a->where('month', $month));
 
-			$received = $received_a->where('month', $month)->first()->totals;
-			$firstdna = $firstdna_a->where('month', $month)->first()->totals;
-			$confirmdna = $confirmdna_a->where('month', $month)->first()->totals;
-			$posrepeats = $posrepeats_a->where('month', $month)->first()->totals;
-			$confirmdnaPOS = $confirmdnaPOS_a->where('month', $month)->first()->totals;
-			$posrepeatsPOS = $posrepeatsPOS_a->where('month', $month)->first()->totals;
-			$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
+			$received = $this->checknull($received_a->where('month', $month));
+			$firstdna = $this->checknull($firstdna_a->where('month', $month));
+			$confirmdna = $this->checknull($confirmdna_a->where('month', $month));
+			$posrepeats = $this->checknull($posrepeats_a->where('month', $month));
+			$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where('month', $month));
+			$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month));
+			$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
 
-			$infantsless2m = $infantsless2m_a->where('month', $month)->first()->totals;
-			$infantsless2mPOS = $infantsless2mPOS_a->where('month', $month)->first()->totals;
-			$infantsless2w = $infantsless2w_a->where('month', $month)->first()->totals;
-			$infantsless2wPOS = $infantsless2wPOS_a->where('month', $month)->first()->totals;
-			$infantsless46w = $infantsless46w_a->where('month', $month)->first()->totals;
-			$infantsless46wPOS = $infantsless46wPOS_a->where('month', $month)->first()->totals;
-			$infantsabove2m = $infantsabove2m_a->where('month', $month)->first()->totals;
-			$infantsabove2mPOS = $infantsabove2mPOS_a->where('month', $month)->first()->totals;
-			$adulttests = $adulttests_a->where('month', $month)->first()->totals;
-			$adulttestsPOS = $adulttestsPOS_a->where('month', $month)->first()->totals;
+			$infantsless2m = $this->checknull($infantsless2m_a->where('month', $month));
+			$infantsless2mPOS = $this->checknull($infantsless2mPOS_a->where('month', $month));
+			$infantsless2w = $this->checknull($infantsless2w_a->where('month', $month));
+			$infantsless2wPOS = $this->checknull($infantsless2wPOS_a->where('month', $month));
+			$infantsless46w = $this->checknull($infantsless46w_a->where('month', $month));
+			$infantsless46wPOS = $this->checknull($infantsless46wPOS_a->where('month', $month));
+			$infantsabove2m = $this->checknull($infantsabove2m_a->where('month', $month));
+			$infantsabove2mPOS = $this->checknull($infantsabove2mPOS_a->where('month', $month));
+			$adulttests = $this->checknull($adulttests_a->where('month', $month));
+			$adulttestsPOS = $this->checknull($adulttestsPOS_a->where('month', $month));
 
 
-			$pos = $pos_a->where('month', $month)->first()->totals;
-			$neg = $neg_a->where('month', $month)->first()->totals;
-			$fail = $fail_a->where('month', $month)->first()->totals;
-			$rd = $rd_a->where('month', $month)->first()->totals;
-			$rdd = $rdd_a->where('month', $month)->first()->totals;
+			$pos = $this->checknull($pos_a->where('month', $month));
+			$neg = $this->checknull($neg_a->where('month', $month));
+			$fail = $this->checknull($fail_a->where('month', $month));
+			$rd = $this->checknull($rd_a->where('month', $month));
+			$rdd = $this->checknull($rdd_a->where('month', $month));
 			$redraw = $fail + $rd + $rdd;
 
-			$rej = $rej_a->where('month', $month)->first()->totals;
-			$enrolled = $enrolled_a->where('month', $month)->first()->totals;
-			$ltfu = $ltfu_a->where('month', $month)->first()->totals;
-			$dead = $dead_a->where('month', $month)->first()->totals;
-			$adult = $adult_a->where('month', $month)->first()->totals;
-			$transout = $transout_a->where('month', $month)->first()->totals;
-			$other = $other_a->where('month', $month)->first()->totals;
+			$rej = $this->checknull($rej_a->where('month', $month));
+			$enrolled = $this->checknull($enrolled_a->where('month', $month));
+			$ltfu = $this->checknull($ltfu_a->where('month', $month));
+			$dead = $this->checknull($dead_a->where('month', $month));
+			$adult = $this->checknull($adult_a->where('month', $month));
+			$transout = $this->checknull($transout_a->where('month', $month));
+			$other = $this->checknull($other_a->where('month', $month));
 
-			$v_cp = $v_cp_a->where('month', $month)->first()->totals;
-			$v_ad = $v_ad_a->where('month', $month)->first()->totals;
-			$v_vl = $v_vl_a->where('month', $month)->first()->totals;
-			$v_rp = $v_rp_a->where('month', $month)->first()->totals;
-			$v_uf = $v_uf_a->where('month', $month)->first()->totals;
+			$v_cp = $this->checknull($v_cp_a->where('month', $month));
+			$v_ad = $this->checknull($v_ad_a->where('month', $month));
+			$v_vl = $this->checknull($v_vl_a->where('month', $month));
+			$v_rp = $this->checknull($v_rp_a->where('month', $month));
+			$v_uf = $this->checknull($v_uf_a->where('month', $month));
 
-			$sitesending = $sitesending_a->where('month', $month)->first()->totals;
-			$avgage = $avgage_a->where('month', $month)->first()->totals;
+			$sitesending = $this->checknull($sitesending_a->where('month', $month));
+			$avgage = $this->checknull($avgage_a->where('month', $month));
 			$medage = $medage_a[$i];
 
-			$tt = $tat[$i];
+			$tt = $tat[$i];			
+
+			$data_array = array(
+				'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
+				'alltests' => $alltests, 'eqatests' => $eqatests, 'tests' => $tests,
+				'firstdna' => $firstdna, 'confirmdna' => $confirmdna, 'repeatspos' => $posrepeats,
+				'confirmedPOs' => $confimPOS, 'infantsless2m' => $infantsless2m,
+				'infantsless2mPOs' => $infantsless2mPOS, 'infantsless2w' => $infantsless2w,
+				'infantsless2mPOs' => $infantsless2wPOS, 'infantsabove2m' => $infantsabove2m,
+				'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
+				'adultsPOs' => $adulttestsPOS, 'actualinfants' => $patienttests,
+				'actualinfantsPOs' => $patienttestsPOS, 'pos' => $pos, 'neg' => $neg,
+				'redraw' => $redraw, 'rejected' => $rej, 'enrolled' => $enrolled, 'dead' => $dead,
+				'ltfu' => $ltfu, 'adult' => $adult, 'transout' => $transout, 'other' => $other,
+				'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
+				'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
+				'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
+				'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
+				'tat4' => $tt['tat4'], 'sorted' => 15
+			);
+
+			DB::table('national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
 			$sql = "UPDATE national_summary set avgage='$avgage', medage='$medage',received='$received' , alltests ='$alltests' , eqatests ='$eqatests' , tests ='$tests',firstdna='$firstdna',confirmdna='$confirmdna',repeatspos ='$posrepeats',confirmedPOs ='$confimPOS',infantsless2m='$infantsless2m'  ,infantsless2mPOs ='$infantsless2mPOS' ,infantsless2w='$infantsless2w'  ,infantsless2wPOs ='$infantsless2wPOS',infants4to6w='$infantsless46w'  ,infants4to6wPOs ='$infantsless46wPOS',infantsabove2m='$infantsabove2m', infantsabove2mPOs ='$infantsabove2mPOS',adults ='$adulttests',adultsPOs ='$adulttestsPOS' ,actualinfants ='$patienttests', actualinfantsPOs ='$patienttestsPOS',pos ='$pos',neg ='$neg',redraw='$redraw',rejected='$rej',enrolled='$enrolled',dead='$dead',ltfu='$ltfu',adult='$adult',transout='$transout',	 other='$other' ,validation_confirmedpos ='$v_cp',validation_repeattest='$v_ad',validation_viralload='$v_vl',validation_adult='$v_rp',validation_unknownsite='$v_uf',sitessending ='$sitesending', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',sorted=15   WHERE month='$month' AND year='$year' ";
 
@@ -177,32 +199,46 @@ class Eid extends Model
 		for ($i=0; $i < $count; $i++) { 
 			$month = $i + 1;
 
-			$age1pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age1neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age2pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age2neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age3pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age3neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age4pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age4neg = $age1neg_a->where('month', $month)->first()->totals;
+			$age1pos = $this->checknull($age1pos_a->where('month', $month));
+			$age1neg = $this->checknull($age1neg_a->where('month', $month));
+			$age2pos = $this->checknull($age2pos_a->where('month', $month));
+			$age2neg = $this->checknull($age2neg_a->where('month', $month));
+			$age3pos = $this->checknull($age3pos_a->where('month', $month));
+			$age3neg = $this->checknull($age3neg_a->where('month', $month));
+			$age4pos = $this->checknull($age4pos_a->where('month', $month));
+			$age4neg = $this->checknull($age4neg_a->where('month', $month));
 
-			$age6pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age6neg = $age1neg_a->where('month', $month)->first()->totals;
+			$age6pos = $this->checknull($age6pos_a->where('month', $month));
+			$age6neg = $this->checknull($age6neg_a->where('month', $month));
 
-			$age9pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age9neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age10pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age10neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age11pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age11neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age12pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age12neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age13pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age13neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age14pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age14neg = $age1neg_a->where('month', $month)->first()->totals;
+			$age9pos = $this->checknull($age9pos_a->where('month', $month));
+			$age9neg = $this->checknull($age9neg_a->where('month', $month));
+			$age10pos = $this->checknull($age10pos_a->where('month', $month));
+			$age10neg = $this->checknull($age10neg_a->where('month', $month));
+			$age11pos = $this->checknull($age11pos_a->where('month', $month));
+			$age11neg = $this->checknull($age11neg_a->where('month', $month));
+			$age12pos = $this->checknull($age12pos_a->where('month', $month));
+			$age12neg = $this->checknull($age12neg_a->where('month', $month));
+			$age13pos = $this->checknull($age13pos_a->where('month', $month));
+			$age13neg = $this->checknull($age13neg_a->where('month', $month));
+			$age14pos = $this->checknull($age14pos_a->where('month', $month));
+			$age14neg = $this->checknull($age14neg_a->where('month', $month));
 
 
+			$data_array = array(
+				'sixweekspos' => $age1pos, 'sixweeksneg' => $age1neg, 'sevento3mpos' => $age2pos,
+				'sevento3mneg' => $age2neg, 'threemto9mpos' => $age3pos, 
+				'threemto9mneg' => $age3neg, 'ninemto18mpos' => $age4pos,
+				'ninemto18mneg' => $age4neg, 'above18mpos' => $age5pos, 'above18mneg' => $age5neg,
+				'nodatapos' => $age6pos, 'nodataneg' => $age6neg, 'less2wpos' => $age9pos,
+				'less2wneg' => $age9neg, 'twoto6wpos' => $age10pos, 'twoto6wneg' => $age10neg,
+				'sixto8wpos' => $age11pos, 'sixto8wneg' => $age11neg, 'sixmonthpos' => $age12pos,
+				'sixmonthneg' => $age12neg, 'ninemonthpos' => $age13pos, 
+				'ninemonthneg' => $age13neg, 'twelvemonthpos' => $age14pos,
+				'twelvemonthneg' => $age14neg, 'sorted' => 9
+			);
+
+			DB::table('national_agebreakdown')->where('year', $year)->where('month', $month)->update($data_array);
 
 			$sql = "UPDATE national_agebreakdown set sixweekspos='$age1pos', sixweeksneg='$age1neg', sevento3mpos='$age2pos', sevento3mneg='$age2neg'	,threemto9mpos='$age3pos',threemto9mneg='$age3neg',ninemto18mpos='$age4pos',ninemto18mneg='$age4neg',above18mpos='$age5pos',above18mneg='$age5neg',nodatapos='$age6pos',nodataneg='$age6neg', less2wpos='$age9pos',less2wneg='$age9neg',twoto6wpos='$age10pos',twoto6wneg='$age10neg',sixto8wpos='$age11pos',sixto8wneg='$age11neg',sixmonthpos='$age12pos',sixmonthneg='$age12neg',ninemonthpos='$age13pos',ninemonthneg='$age13neg',twelvemonthpos='$age14pos',twelvemonthneg='$age14neg',sorted=9 WHERE month='$month' AND year='$year'";
 
@@ -225,13 +261,20 @@ class Eid extends Model
 			for ($i=0; $i < $count; $i++) { 
 				$month = $i + 1;
 
-				$ipos = $ipos_a->where('month', $month)->first()->totals;
-				$ineg = $ineg_a->where('month', $month)->first()->totals;
-				$ifail = $ifail_a->where('month', $month)->first()->totals;
-				$ird = $ird_a->where('month', $month)->first()->totals;
+				$ipos = $this->checknull($ipos_a->where('month', $month));
+				$ineg = $this->checknull($ineg_a->where('month', $month));
+				$ifail = $this->checknull($ifail_a->where('month', $month));
+				$ird = $this->checknull($ird_a->where('month', $month));
 
 				$iredraw = $ifail + $ird;
 				$itests = $ipos + $ineg +  $iredraw;
+
+				$data_array = array(
+					'tests' => $itests, 'pos' => $ipos, 'neg' => $ineg, 'redraw' => $iredraw,
+					'sorted' => 9
+				);
+
+				DB::table('national_iprophylaxis')->where('year', $year)->where('month', $month)->where('prophylaxis', $value->ID)->update($data_array);
 
 				$sql = "UPDATE national_iprophylaxis set tests='$itests', pos='$ipos', neg='$ineg', redraw='$iredraw',sorted=9 WHERE prophylaxis='$iaArray[$irow]' AND month='$month' AND year='$year'";
 
@@ -255,13 +298,20 @@ class Eid extends Model
 			for ($i=0; $i < $count; $i++) { 
 				$month = $i + 1;
 
-				$mpos = $mpos_a->where('month', $month)->first()->totals;
-				$mneg = $mneg_a->where('month', $month)->first()->totals;
-				$mfail = $mfail_a->where('month', $month)->first()->totals;
-				$mrd = $mrd_a->where('month', $month)->first()->totals;
+				$mpos = $this->checknull($mpos_a->where('month', $month));
+				$mneg = $this->checknull($mneg_a->where('month', $month));
+				$mfail = $this->checknull($mfail_a->where('month', $month));
+				$mrd = $this->checknull($mrd_a->where('month', $month));
 
 				$mredraw=$mfail + $mrd;
 				$tests=$mpos + $mneg +  $mredraw;
+
+				$data_array = array(
+					'tests' => $itests, 'pos' => $mpos, 'neg' => $mneg, 'redraw' => $mredraw,
+					'sorted' => 9
+				);
+
+				DB::table('national_mprophylaxis')->where('year', $year)->where('month', $month)->where('prophylaxis', $value->ID)->update($data_array);
 
 				$sql = "UPDATE national_mprophylaxis set tests='$tests', pos='$mpos', neg='$mneg', redraw='$mredraw',sorted=9 WHERE prophylaxis='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
 
@@ -285,13 +335,20 @@ class Eid extends Model
 			for ($i=0; $i < $count; $i++) { 
 				$month = $i + 1;
 
-				$epos = $epos_a->where('month', $month)->first()->totals;
-				$eneg = $eneg_a->where('month', $month)->first()->totals;
-				$efail = $efail_a->where('month', $month)->first()->totals;
-				$erd = $erd_a->where('month', $month)->first()->totals;
+				$epos = $this->checknull($epos_a->where('month', $month));
+				$eneg = $this->checknull($eneg_a->where('month', $month));
+				$efail = $this->checknull($efail_a->where('month', $month));
+				$erd = $this->checknull($erd_a->where('month', $month));
 
 				$eredraw = $efail + $erd;
 				$etests = $epos + $eneg +  $eredraw;
+
+				$data_array = array(
+					'tests' => $etests, 'pos' => $epos, 'neg' => $eneg, 'redraw' => $eredraw,
+					'sorted' => 9
+				);
+
+				DB::table('national_entrypoint')->where('year', $year)->where('month', $month)->where('entrypoint', $value->ID)->update($data_array);
 
 				$sql = "UPDATE national_entrypoint set tests='$etests', pos='$epos', neg='$eneg', redraw='$eredraw',sorted=9 WHERE entrypoint='$aArray[$row]' AND month='$month' AND year='$year'  ";
 
@@ -303,10 +360,97 @@ class Eid extends Model
 		// End of national function
     }
 
+    public function update_labs($year = null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+
+    	// Instantiate new object
+    	$n = new EidDivision;
+    	$div_array;
+    	$array_size = 0;
+
+    	$divs = $data = DB::connection('eid')
+		->table('labs')->select('ID')->get();
+
+		foreach ($divs as $key => $value) {
+			$div_array[$key] = $value->ID;
+			$array_size++;
+		}
+
+		$division = "samples.labtestedin";
+
+		$noofbatches= $n->GettotalbatchesPerlab($year, $division);
+
+		$received_a = $n->OverallReceivedSamples($year, $division);
+		$testedsamples = $n->OverallTestedSamples($year, $division);
+		$alltestedsamples = $n->CumulativeTestedSamples($year, $division);
+		$EQAtestedsamples = $n->OverallEQATestedSamples($year, $division);
+		$confirmdna_a = $n->OveralldnasecondTestedSamples($year, $division);
+
+		$posrepeats_a = $n->OverallPosRepeatsTestedSamples($year, $division);
+		$rejectedsamples = $n->Getnationalrejectedsamples($year, $division);
+
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, $division);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, $division);
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 5, $division);
+		$redraws_a = $n->OverallTestedSamplesOutcomes($year, 3, $division);
+		
+		$facilityssupported = $n->GettotalEIDsitesbytimeperiod($year, $division);
+
+		$tat = $n->GetNatTATs($year, $division);
+		$tat = collect($tat);
+
+		// Loop through the months and insert data into the division summary
+		for ($i=0; $i < 12; $i++) { 
+			$month = $i + 1;
+
+			if($year == Date('Y') && $month > Date('m')){ break; }
+
+			// Loop through labs
+			for ($it=0; $it < $array_size; $it++) { 
 
 
+				$received = $this->checknull($received_a->where('month', $month)->($column, $div_array[$it]));
+				$alltests = $this->checknull($alltestedsamples->where('month', $month)->($column, $div_array[$it]));
+				$tests = $this->checknull($testedsamples->where('month', $month)->($column, $div_array[$it]));
+				$confirmdna = $this->checknull($confirmdna_a->where('month', $month)->($column, $div_array[$it]));
+				$posrepeats = $this->checknull($posrepeats_a->where('month', $month)->($column, $div_array[$it]));
+
+				$pos = $this->checknull($pos_a->where('month', $month)->($column, $div_array[$it]));
+				$neg = $this->checknull($neg_a->where('month', $month)->($column, $div_array[$it]));
+				$fail = $this->checknull($fail_a->where('month', $month)->($column, $div_array[$it]));
+				$redraws = $this->checknull($redraws_a->where('month', $month)->($column, $div_array[$it]));
+				$failed = $fail+$redraws;
+
+				$batches = $this->checknull($noofbatches->where('month', $month)->($column, $div_array[$it]));
+
+				$rej = $this->checknull($rejectedsamples->where('month', $month)->($column, $div_array[$it]));
+
+				$sitesending = $this->checknull($facilityssupported->where('month', $month)->($column, $div_array[$it]));
+
+				$tt = $this->checktat($tat->where('month', $month)->($column, $div_array[$it]));
+
+				$data_array = array(
+					'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
+					'confirmdna' => $confirmdna, 'eqatests' => $eqatests, 
+					'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
+					'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
+					'sitessending' => $sitesending,
+					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
+					'tat4' => $tt['tat4'], 'sorted' => 15
+				);
+
+				DB::table("lab_summary")->where('year', $year)->where('month', $month)->($lab, $div_array[$it])->update($data_array);
+
+				$sql = "UPDATE lab_summary set received='$received',alltests='$alltestedsamples', tests='$testedsamples' ,confirmdna='$confirmdna',repeatspos='$posrepeats',  pos='$positives', neg='$negatives', redraw='$failed',eqatests='$EQAtestedsamples',batches='$noofbatches', rejected='$rejectedsamples', sitessending='$facilityssupported', tat1='$t1',tat2='$t2',tat3='$t3',tat4='$t4',sorted=15  WHERE lab='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
+
+			}
+
+		}
 
 
+    }
 
 
     // Will be used to enter data for divisions except labs
@@ -331,65 +475,67 @@ class Eid extends Model
 		}
 
 		// Get collection instances of the data
-    	$alltests_a = $n->CumulativeTestedSamples($year);
-    	$eqatests_a = $n->OverallEQATestedSamples($year);
+    	$alltests_a = $n->CumulativeTestedSamples($year, $division);
+    	$eqatests_a = $n->OverallEQATestedSamples($year, $division);
 
-    	$tests_a = $n->OverallTestedSamples($year);
+    	$tests_a = $n->OverallTestedSamples($year, $division);
 		
-		$patienttests_a = $n->OverallTestedPatients($year);
-		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year);
-		$received_a = $n->OverallReceivedSamples($year);
+		$patienttests_a = $n->OverallTestedPatients($year, $division);
+		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, $division);
+		$received_a = $n->OverallReceivedSamples($year, $division);
 			
-		$firstdna_a = $n->OveralldnafirstTestedSamples($year);
-		$confirmdna_a = $n->OveralldnasecondTestedSamples($year);
-		$posrepeats_a = $n->OverallPosRepeatsTestedSamples($year);
+		$firstdna_a = $n->OveralldnafirstTestedSamples($year, $division);
+		$confirmdna_a = $n->OveralldnasecondTestedSamples($year, $division);
+		$posrepeats_a = $n->OverallPosRepeatsTestedSamples($year, $division);
 
-		$confirmdnaPOS_a = $n->OveralldnasecondTestedSamplesPOS($year);
-		$posrepeatsPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year);
+		$confirmdnaPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division);
+		$posrepeatsPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division);
 		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
 
 
-		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1);
-		$infantsless2mPOS_a = 	$n->Gettestedsamplescountrange($year, 1, true);
-		$infantsless2w_a =		$n->Gettestedsamplescountrange($year, 3);
-		$infantsless2wPOS_a =		$n->Gettestedsamplescountrange($year, 3, true);
-		$infantsless46w_a =		$n->Gettestedsamplescountrange($year, 4);
-		$infantsless46wPOS_a =	$n->Gettestedsamplescountrange($year, 4, true);
-		$infantsabove2m_a =		$n->Gettestedsamplescountrange($year, 2);
-		$infantsabove2mPOS_a = 	$n->Gettestedsamplescountrange($year, 2, true);
-		$adulttests_a =			$n->Gettestedsamplescountrange($year, 5);
-		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true);
+		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, $division);
+		$infantsless2mPOS_a = 	$n->Gettestedsamplescountrange($year, 1, true, $division);
+		$infantsless2w_a =		$n->Gettestedsamplescountrange($year, 3, false, $division);
+		$infantsless2wPOS_a =		$n->Gettestedsamplescountrange($year, 3, true, $division);
+		$infantsless46w_a =		$n->Gettestedsamplescountrange($year, 4, false, $division);
+		$infantsless46wPOS_a =	$n->Gettestedsamplescountrange($year, 4, true, $division);
+		$infantsabove2m_a =		$n->Gettestedsamplescountrange($year, 2, false, $division);
+		$infantsabove2mPOS_a = 	$n->Gettestedsamplescountrange($year, 2, true, $division);
+		$adulttests_a =			$n->Gettestedsamplescountrange($year, 5, false, $division);
+		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true, $division);
 		
 
-		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2);
-		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1);
-		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3);
-		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5);
-		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6);
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, $division);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, $division);
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, $division);
+		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, $division);
+		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, $division);
 		// $redraw=$fail + $rd + $rdd;
 
-		$rej_a = $n->Getnationalrejectedsamples($year);
+		$rej_a = $n->Getnationalrejectedsamples($year, $division);
 		
-		$enrolled_a = $n->GetHEIFollowUpNational($year, 1);
-		$ltfu_a = $n->GetHEIFollowUpNational($year, 2);
-		$dead_a = $n->GetHEIFollowUpNational($year, 3);
-		$adult_a = $n->GetHEIFollowUpNational($year, 4);
-		$transout_a = $n->GetHEIFollowUpNational($year, 5);
-		$other_a = $n->GetHEIFollowUpNational($year, 6);
+		$v = "samples.enrollmentstatus";
+		$enrolled_a = $n->GetHEIFollowUpNational($year, 1, $v, $division);
+		$ltfu_a = $n->GetHEIFollowUpNational($year, 2, $v, $division);
+		$dead_a = $n->GetHEIFollowUpNational($year, 3, $v, $division);
+		$adult_a = $n->GetHEIFollowUpNational($year, 4, $v, $division);
+		$transout_a = $n->GetHEIFollowUpNational($year, 5, $v, $division);
+		$other_a = $n->GetHEIFollowUpNational($year, 6, $v, $division);
 
 
 		$v = 'samples.hei_validation';
-		$v_cp_a = $n->GetHEIFollowUpNational($year, 1, $v); //confirmedpos	
-		$v_ad_a = $n->GetHEIFollowUpNational($year, 2, $v); //adult
-		$v_vl_a = $n->GetHEIFollowUpNational($year, 3, $v); //vl
-		$v_rp_a = $n->GetHEIFollowUpNational($year, 4, $v); //repeat
-		$v_uf_a = $n->GetHEIFollowUpNational($year, 5, $v); //unknownfacility		
+		$v_cp_a = $n->GetHEIFollowUpNational($year, 1, $v, $division); //confirmedpos	
+		$v_ad_a = $n->GetHEIFollowUpNational($year, 2, $v, $division); //adult
+		$v_vl_a = $n->GetHEIFollowUpNational($year, 3, $v, $division); //vl
+		$v_rp_a = $n->GetHEIFollowUpNational($year, 4, $v, $division); //repeat
+		$v_uf_a = $n->GetHEIFollowUpNational($year, 5, $v, $division); //unknownfacility		
 		
-		$sitesending_a = $n->GettotalEIDsitesbytimeperiod($year);
-		$avgage_a = $n->Getoverallaverageage($year);
-		$medage_a = $n->Getoverallmedianage($year);
+		$sitesending_a = $n->GettotalEIDsitesbytimeperiod($year, $division);
+		$avgage_a = $n->Getoverallaverageage($year, $division);
+		$medage_a = $n->Getoverallmedianage($year, $division);
+		$medage_a = collect($medage_a);
 
-		$tat = $n->GetNatTATs($year);
+		$tat = $n->GetNatTATs($year, $division);
 		$tat = collect($tat);
 		
 
@@ -397,134 +543,174 @@ class Eid extends Model
 		for ($i=0; $i < 12; $i++) { 
 			$month = $i + 1;
 
+			if($year == Date('Y') && $month > Date('m')){ break; }
+
+			// Loop through divisions i.e. counties, subcounties, partners and sites
 			for ($it=0; $it < $array_size; $it++) { 
-				$alltests = $alltests_a->where('month', $month)->first()->totals;
-				$eqatests = $eqatests_a->where('month', $month)->first()->totals;
-				$tests = $tests_a->where('month', $month)->first()->totals;
-				$patienttests = $patienttests_a->where('month', $month)->first()->totals;
-				$patienttestsPOS = $patienttestsPOS_a->where('month', $month)->first()->totals;
+				$alltests = $this->checknull($alltests_a->where('month', $month)->($column, $div_array[$it]));
+				$eqatests = $this->checknull($eqatests_a->where('month', $month)->($column, $div_array[$it]));
+				$tests = $this->checknull($tests_a->where('month', $month)->($column, $div_array[$it]));
+				$patienttests = $this->checknull($patienttests_a->where('month', $month)->($column, $div_array[$it]));
+				$patienttestsPOS = $this->checknull($patienttestsPOS_a->where('month', $month)->($column, $div_array[$it]));
 
-				$received = $received_a->where('month', $month)->first()->totals;
-				$firstdna = $firstdna_a->where('month', $month)->first()->totals;
-				$confirmdna = $confirmdna_a->where('month', $month)->first()->totals;
-				$posrepeats = $posrepeats_a->where('month', $month)->first()->totals;
-				$confirmdnaPOS = $confirmdnaPOS_a->where('month', $month)->first()->totals;
-				$posrepeatsPOS = $posrepeatsPOS_a->where('month', $month)->first()->totals;
-				$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
+				$received = $this->checknull($received_a->where('month', $month)->($column, $div_array[$it]));
+				$firstdna = $this->checknull($firstdna_a->where('month', $month)->($column, $div_array[$it]));
+				$confirmdna = $this->checknull($confirmdna_a->where('month', $month)->($column, $div_array[$it]));
+				$posrepeats = $this->checknull($posrepeats_a->where('month', $month)->($column, $div_array[$it]));
+				$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where('month', $month)->($column, $div_array[$it]));
+				$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month)->($column, $div_array[$it]));
+				$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
 
-				$infantsless2m = $infantsless2m_a->where('month', $month)->first()->totals;
-				$infantsless2mPOS = $infantsless2mPOS_a->where('month', $month)->first()->totals;
-				$infantsless2w = $infantsless2w_a->where('month', $month)->first()->totals;
-				$infantsless2wPOS = $infantsless2wPOS_a->where('month', $month)->first()->totals;
-				$infantsless46w = $infantsless46w_a->where('month', $month)->first()->totals;
-				$infantsless46wPOS = $infantsless46wPOS_a->where('month', $month)->first()->totals;
-				$infantsabove2m = $infantsabove2m_a->where('month', $month)->first()->totals;
-				$infantsabove2mPOS = $infantsabove2mPOS_a->where('month', $month)->first()->totals;
-				$adulttests = $adulttests_a->where('month', $month)->first()->totals;
-				$adulttestsPOS = $adulttestsPOS_a->where('month', $month)->first()->totals;
+				$infantsless2m = $this->checknull($infantsless2m_a->where('month', $month)->($column, $div_array[$it]));
+				$infantsless2mPOS = $this->checknull($infantsless2mPOS_a->where('month', $month)->($column, $div_array[$it]));
+				$infantsless2w = $this->checknull($infantsless2w_a->where('month', $month)->($column, $div_array[$it]));
+				$infantsless2wPOS = $this->checknull($infantsless2wPOS_a->where('month', $month)->($column, $div_array[$it]));
+				$infantsless46w = $this->checknull($infantsless46w_a->where('month', $month)->($column, $div_array[$it]));
+				$infantsless46wPOS = $this->checknull($infantsless46wPOS_a->where('month', $month)->($column, $div_array[$it]));
+				$infantsabove2m = $this->checknull($infantsabove2m_a->where('month', $month)->($column, $div_array[$it]));
+				$infantsabove2mPOS = $this->checknull($infantsabove2mPOS_a->where('month', $month)->($column, $div_array[$it]));
+				$adulttests = $this->checknull($adulttests_a->where('month', $month)->($column, $div_array[$it]));
+				$adulttestsPOS = $this->checknull($adulttestsPOS_a->where('month', $month)->($column, $div_array[$it]));
 
 
-				$pos = $pos_a->where('month', $month)->first()->totals;
-				$neg = $neg_a->where('month', $month)->first()->totals;
-				$fail = $fail_a->where('month', $month)->first()->totals;
-				$rd = $rd_a->where('month', $month)->first()->totals;
-				$rdd = $rdd_a->where('month', $month)->first()->totals;
+				$pos = $this->checknull($pos_a->where('month', $month)->($column, $div_array[$it]));
+				$neg = $this->checknull($neg_a->where('month', $month)->($column, $div_array[$it]));
+				$fail = $this->checknull($fail_a->where('month', $month)->($column, $div_array[$it]));
+				$rd = $this->checknull($rd_a->where('month', $month)->($column, $div_array[$it]));
+				$rdd = $this->checknull($rdd_a->where('month', $month)->($column, $div_array[$it]));
 				$redraw = $fail + $rd + $rdd;
 
-				$rej = $rej_a->where('month', $month)->first()->totals;
-				$enrolled = $enrolled_a->where('month', $month)->first()->totals;
-				$ltfu = $ltfu_a->where('month', $month)->first()->totals;
-				$dead = $dead_a->where('month', $month)->first()->totals;
-				$adult = $adult_a->where('month', $month)->first()->totals;
-				$transout = $transout_a->where('month', $month)->first()->totals;
-				$other = $other_a->where('month', $month)->first()->totals;
+				$rej = $this->checknull($rej_a->where('month', $month)->($column, $div_array[$it]));
+				$enrolled = $this->checknull($enrolled_a->where('month', $month)->($column, $div_array[$it]));
+				$ltfu = $this->checknull($ltfu_a->where('month', $month)->($column, $div_array[$it]));
+				$dead = $this->checknull($dead_a->where('month', $month)->($column, $div_array[$it]));
+				$adult = $this->checknull($adult_a->where('month', $month)->($column, $div_array[$it]));
+				$transout = $this->checknull($transout_a->where('month', $month)->($column, $div_array[$it]));
+				$other = $this->checknull($other_a->where('month', $month)->($column, $div_array[$it]));
 
-				$v_cp = $v_cp_a->where('month', $month)->first()->totals;
-				$v_ad = $v_ad_a->where('month', $month)->first()->totals;
-				$v_vl = $v_vl_a->where('month', $month)->first()->totals;
-				$v_rp = $v_rp_a->where('month', $month)->first()->totals;
-				$v_uf = $v_uf_a->where('month', $month)->first()->totals;
+				$v_cp = $this->checknull($v_cp_a->where('month', $month)->($column, $div_array[$it]));
+				$v_ad = $this->checknull($v_ad_a->where('month', $month)->($column, $div_array[$it]));
+				$v_vl = $this->checknull($v_vl_a->where('month', $month)->($column, $div_array[$it]));
+				$v_rp = $this->checknull($v_rp_a->where('month', $month)->($column, $div_array[$it]));
+				$v_uf = $this->checknull($v_uf_a->where('month', $month)->($column, $div_array[$it]));
 
-				$sitesending = $sitesending_a->where('month', $month)->first()->totals;
-				$avgage = $avgage_a->where('month', $month)->first()->totals;
-				$medage = $medage_a[$i];
+				$sitesending = $this->checknull($sitesending_a->where('month', $month)->($column, $div_array[$it]));
+				$avgage = $this->checknull($avgage_a->where('month', $month)->($column, $div_array[$it]));
+				$medage = $this->checkmedage($medage_a->where('month', $month)->($column, $div_array[$it]));
 
-				$tt = $tat->where('month', $month)->first();
+				$tt = $this->checktat($tat->where('month', $month)->($column, $div_array[$it]));
+
+				$data_array = array(
+					'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
+					'alltests' => $alltests, 'eqatests' => $eqatests, 'tests' => $tests,
+					'firstdna' => $firstdna, 'confirmdna' => $confirmdna, 'repeatspos' => $posrepeats,
+					'confirmedPOs' => $confimPOS, 'infantsless2m' => $infantsless2m,
+					'infantsless2mPOs' => $infantsless2mPOS, 'infantsless2w' => $infantsless2w,
+					'infantsless2mPOs' => $infantsless2wPOS, 'infantsabove2m' => $infantsabove2m,
+					'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
+					'adultsPOs' => $adulttestsPOS, 'actualinfants' => $patienttests,
+					'actualinfantsPOs' => $patienttestsPOS, 'pos' => $pos, 'neg' => $neg,
+					'redraw' => $redraw, 'rejected' => $rej, 'enrolled' => $enrolled, 'dead' => $dead,
+					'ltfu' => $ltfu, 'adult' => $adult, 'transout' => $transout, 'other' => $other,
+					'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
+					'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
+					'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
+					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
+					'tat4' => $tt['tat4'], 'sorted' => 15
+				);
+
+				DB::table($sum_table)->where('year', $year)->where('month', $month)->($column, $div_array[$it])->update($data_array);
 
 			}
+			// End of division loop
 			
-
-			$sql = "UPDATE national_summary set avgage='$avgage', medage='$medage',received='$received' , alltests ='$alltests' , eqatests ='$eqatests' , tests ='$tests',firstdna='$firstdna',confirmdna='$confirmdna',repeatspos ='$posrepeats',confirmedPOs ='$confimPOS',infantsless2m='$infantsless2m'  ,infantsless2mPOs ='$infantsless2mPOS' ,infantsless2w='$infantsless2w'  ,infantsless2wPOs ='$infantsless2wPOS',infants4to6w='$infantsless46w'  ,infants4to6wPOs ='$infantsless46wPOS',infantsabove2m='$infantsabove2m', infantsabove2mPOs ='$infantsabove2mPOS',adults ='$adulttests',adultsPOs ='$adulttestsPOS' ,actualinfants ='$patienttests', actualinfantsPOs ='$patienttestsPOS',pos ='$pos',neg ='$neg',redraw='$redraw',rejected='$rej',enrolled='$enrolled',dead='$dead',ltfu='$ltfu',adult='$adult',transout='$transout',	 other='$other' ,validation_confirmedpos ='$v_cp',validation_repeattest='$v_ad',validation_viralload='$v_vl',validation_adult='$v_rp',validation_unknownsite='$v_uf',sitessending ='$sitesending', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',sorted=15   WHERE month='$month' AND year='$year' ";
-
-			
-
-
 		}
-		// End of for loop
+		// End of summary
+
+		if($type == 4){ 
+			return "Success";
+		}
 
 
 		// Get national age_breakdown
-		$age1pos_a = $n->GetTestOutcomesbyAgeBand($year, 1, 2);
-		$age1neg_a = $n->GetTestOutcomesbyAgeBand($year, 1, 1);
-		$age2pos_a = $n->GetTestOutcomesbyAgeBand($year, 2, 2);
-		$age2neg_a = $n->GetTestOutcomesbyAgeBand($year, 2, 1);
-		$age3pos_a = $n->GetTestOutcomesbyAgeBand($year, 3, 2);
-		$age3neg_a = $n->GetTestOutcomesbyAgeBand($year, 3, 1);
-		$age4pos_a = $n->GetTestOutcomesbyAgeBand($year, 4, 2);
-		$age4neg_a = $n->GetTestOutcomesbyAgeBand($year, 4, 1);
+		$age1pos_a = $n->GetTestOutcomesbyAgeBand($year, 1, 2, $division);
+		$age1neg_a = $n->GetTestOutcomesbyAgeBand($year, 1, 1, $division);
+		$age2pos_a = $n->GetTestOutcomesbyAgeBand($year, 2, 2, $division);
+		$age2neg_a = $n->GetTestOutcomesbyAgeBand($year, 2, 1, $division);
+		$age3pos_a = $n->GetTestOutcomesbyAgeBand($year, 3, 2, $division);
+		$age3neg_a = $n->GetTestOutcomesbyAgeBand($year, 3, 1, $division);
+		$age4pos_a = $n->GetTestOutcomesbyAgeBand($year, 4, 2, $division);
+		$age4neg_a = $n->GetTestOutcomesbyAgeBand($year, 4, 1, $division);
 		$age5pos = 0;
 		$age5neg = 0;
-		$age6pos_a = $n->GetTestOutcomesbyAgeBand($year, 6, 2);
-		$age6neg_a = $n->GetTestOutcomesbyAgeBand($year, 6, 1);
+		$age6pos_a = $n->GetTestOutcomesbyAgeBand($year, 6, 2, $division);
+		$age6neg_a = $n->GetTestOutcomesbyAgeBand($year, 6, 1, $division);
 		
-		$age9pos_a = $n->GetTestOutcomesbyAgeBand($year, 9, 2);
-		$age9neg_a = $n->GetTestOutcomesbyAgeBand($year, 9, 1);
-		$age10pos_a = $n->GetTestOutcomesbyAgeBand($year, 10, 2);
-		$age10neg_a = $n->GetTestOutcomesbyAgeBand($year, 10, 1);
-		$age11pos_a = $n->GetTestOutcomesbyAgeBand($year, 11, 2);
-		$age11neg_a = $n->GetTestOutcomesbyAgeBand($year, 11, 1);
-		$age12pos_a = $n->GetTestOutcomesbyAgeBand($year, 12, 2);
-		$age12neg_a = $n->GetTestOutcomesbyAgeBand($year, 12, 1);
-		$age13pos_a = $n->GetTestOutcomesbyAgeBand($year, 13, 2);
-		$age13neg_a = $n->GetTestOutcomesbyAgeBand($year, 13, 1);
-		$age14pos_a = $n->GetTestOutcomesbyAgeBand($year, 14, 2);
-		$age14neg_a = $n->GetTestOutcomesbyAgeBand($year, 14, 1);
+		$age9pos_a = $n->GetTestOutcomesbyAgeBand($year, 9, 2, $division);
+		$age9neg_a = $n->GetTestOutcomesbyAgeBand($year, 9, 1, $division);
+		$age10pos_a = $n->GetTestOutcomesbyAgeBand($year, 10, 2, $division);
+		$age10neg_a = $n->GetTestOutcomesbyAgeBand($year, 10, 1, $division);
+		$age11pos_a = $n->GetTestOutcomesbyAgeBand($year, 11, 2, $division);
+		$age11neg_a = $n->GetTestOutcomesbyAgeBand($year, 11, 1, $division);
+		$age12pos_a = $n->GetTestOutcomesbyAgeBand($year, 12, 2, $division);
+		$age12neg_a = $n->GetTestOutcomesbyAgeBand($year, 12, 1, $division);
+		$age13pos_a = $n->GetTestOutcomesbyAgeBand($year, 13, 2, $division);
+		$age13neg_a = $n->GetTestOutcomesbyAgeBand($year, 13, 1, $division);
+		$age14pos_a = $n->GetTestOutcomesbyAgeBand($year, 14, 2, $division);
+		$age14neg_a = $n->GetTestOutcomesbyAgeBand($year, 14, 1, $division);
 
 		// Loop through the months and insert data into the national agebreakdown
-		for ($i=0; $i < $count; $i++) { 
+		for ($i=0; $i < 12; $i++) { 
 			$month = $i + 1;
 
-			$age1pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age1neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age2pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age2neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age3pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age3neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age4pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age4neg = $age1neg_a->where('month', $month)->first()->totals;
+			if($year == Date('Y') && $month > Date('m')){ break; }
 
-			$age6pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age6neg = $age1neg_a->where('month', $month)->first()->totals;
+			// Loop through divisions
+			for ($it=0; $it < $array_size; $it++) {
+				$age1pos = $this->checknull($age1pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age1neg = $this->checknull($age1neg_a->where('month', $month)->($column, $div_array[$it]));
+				$age2pos = $this->checknull($age2pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age2neg = $this->checknull($age2neg_a->where('month', $month)->($column, $div_array[$it]));
+				$age3pos = $this->checknull($age3pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age3neg = $this->checknull($age3neg_a->where('month', $month)->($column, $div_array[$it]));
+				$age4pos = $this->checknull($age4pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age4neg = $this->checknull($age4neg_a->where('month', $month)->($column, $div_array[$it]));
 
-			$age9pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age9neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age10pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age10neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age11pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age11neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age12pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age12neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age13pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age13neg = $age1neg_a->where('month', $month)->first()->totals;
-			$age14pos = $age1pos_a->where('month', $month)->first()->totals;
-			$age14neg = $age1neg_a->where('month', $month)->first()->totals;
+				$age6pos = $this->checknull($age6pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age6neg = $this->checknull($age6neg_a->where('month', $month)->($column, $div_array[$it]));
+
+				$age9pos = $this->checknull($age9pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age9neg = $this->checknull($age9neg_a->where('month', $month)->($column, $div_array[$it]));
+				$age10pos = $this->checknull($age10pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age10neg = $this->checknull($age10neg_a->where('month', $month)->($column, $div_array[$it]));
+				$age11pos = $this->checknull($age11pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age11neg = $this->checknull($age11neg_a->where('month', $month)->($column, $div_array[$it]));
+				$age12pos = $this->checknull($age12pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age12neg = $this->checknull($age12neg_a->where('month', $month)->($column, $div_array[$it]));
+				$age13pos = $this->checknull($age13pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age13neg = $this->checknull($age13neg_a->where('month', $month)->($column, $div_array[$it]));
+				$age14pos = $this->checknull($age14pos_a->where('month', $month)->($column, $div_array[$it]));
+				$age14neg = $this->checknull($age14neg_a->where('month', $month)->($column, $div_array[$it]));
 
 
+				$data_array = array(
+					'sixweekspos' => $age1pos, 'sixweeksneg' => $age1neg, 'sevento3mpos' => $age2pos,
+					'sevento3mneg' => $age2neg, 'threemto9mpos' => $age3pos, 
+					'threemto9mneg' => $age3neg, 'ninemto18mpos' => $age4pos,
+					'ninemto18mneg' => $age4neg, 'above18mpos' => $age5pos, 'above18mneg' => $age5neg,
+					'nodatapos' => $age6pos, 'nodataneg' => $age6neg, 'less2wpos' => $age9pos,
+					'less2wneg' => $age9neg, 'twoto6wpos' => $age10pos, 'twoto6wneg' => $age10neg,
+					'sixto8wpos' => $age11pos, 'sixto8wneg' => $age11neg, 'sixmonthpos' => $age12pos,
+					'sixmonthneg' => $age12neg, 'ninemonthpos' => $age13pos, 
+					'ninemonthneg' => $age13neg, 'twelvemonthpos' => $age14pos,
+					'twelvemonthneg' => $age14neg, 'sorted' => 9
+				);
 
-			$sql = "UPDATE national_agebreakdown set sixweekspos='$age1pos', sixweeksneg='$age1neg', sevento3mpos='$age2pos', sevento3mneg='$age2neg'	,threemto9mpos='$age3pos',threemto9mneg='$age3neg',ninemto18mpos='$age4pos',ninemto18mneg='$age4neg',above18mpos='$age5pos',above18mneg='$age5neg',nodatapos='$age6pos',nodataneg='$age6neg', less2wpos='$age9pos',less2wneg='$age9neg',twoto6wpos='$age10pos',twoto6wneg='$age10neg',sixto8wpos='$age11pos',sixto8wneg='$age11neg',sixmonthpos='$age12pos',sixmonthneg='$age12neg',ninemonthpos='$age13pos',ninemonthneg='$age13neg',twelvemonthpos='$age14pos',twelvemonthneg='$age14neg',sorted=9 WHERE month='$month' AND year='$year'";
-
+				DB::table($age_table)->where('year', $year)->where('month', $month)->($column, $div_array[$it])->update($data_array);
+			}
+			// End of division loop
 		}
-		// End of for loop
+		// End of months loop
 
 
 		// Start of infant regimen
@@ -533,27 +719,39 @@ class Eid extends Model
 
 		// Loop through infant regimen
 		foreach ($iregimen as $key => $value) {
-			$ipos_a = $n->Getinfantprophpositivitycount($year, $value->ID, 2);
-			$ineg_a = $n->Getinfantprophpositivitycount($year, $value->ID, 1);
-			$ifail_a = $n->Getinfantprophpositivitycount($year, $value->ID, 3);
-			$ird_a = $n->Getinfantprophpositivitycount($year, $value->ID, 5);
+			$ipos_a = $n->Getinfantprophpositivitycount($year, $value->ID, 2, $division);
+			$ineg_a = $n->Getinfantprophpositivitycount($year, $value->ID, 1, $division);
+			$ifail_a = $n->Getinfantprophpositivitycount($year, $value->ID, 3, $division);
+			$ird_a = $n->Getinfantprophpositivitycount($year, $value->ID, 5, $division);
 
 			// Loop through each month and update iprophylaxis
-			for ($i=0; $i < $count; $i++) { 
+			for ($i=0; $i < 12; $i++) { 
 				$month = $i + 1;
 
-				$ipos = $ipos_a->where('month', $month)->first()->totals;
-				$ineg = $ineg_a->where('month', $month)->first()->totals;
-				$ifail = $ifail_a->where('month', $month)->first()->totals;
-				$ird = $ird_a->where('month', $month)->first()->totals;
+				if($year == Date('Y') && $month > Date('m')){ break; }
 
-				$iredraw = $ifail + $ird;
-				$itests = $ipos + $ineg +  $iredraw;
+				// Loop through divisions
+				for ($it=0; $it < $array_size; $it++) {
 
-				$sql = "UPDATE national_iprophylaxis set tests='$itests', pos='$ipos', neg='$ineg', redraw='$iredraw',sorted=9 WHERE prophylaxis='$iaArray[$irow]' AND month='$month' AND year='$year'";
+					$ipos = $this->checknull($ipos_a->where('month', $month)->($column, $div_array[$it]));
+					$ineg = $this->checknull($ineg_a->where('month', $month)->($column, $div_array[$it]));
+					$ifail = $this->checknull($ifail_a->where('month', $month)->($column, $div_array[$it]));
+					$ird = $this->checknull($ird_a->where('month', $month)->($column, $div_array[$it]));
 
+					$iredraw = $ifail + $ird;
+					$itests = $ipos + $ineg +  $iredraw;
+
+					$data_array = array(
+						'tests' => $itests, 'pos' => $ipos, 'neg' => $ineg, 'redraw' => $iredraw,
+						'sorted' => 9
+					);
+
+					DB::table($ir_table)->where('year', $year)->where('month', $month)->($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
+
+				}
+				// End of loop through divisions
 			}
-			
+			// End of loop through months			
 		}
 		// End of infant regimen
 
@@ -563,24 +761,35 @@ class Eid extends Model
 
 		// Loop through mother regimen
 		foreach ($mregimen as $key => $value) {
-			$mpos_a = $n->Getinterventionspositivitycount($year, $value->ID, 2);
-			$mneg_a = $n->Getinterventionspositivitycount($year, $value->ID, 1);
-			$mfail_a = $n->Getinterventionspositivitycount($year, $value->ID, 3);
-			$mrd_a = $n->Getinterventionspositivitycount($year, $value->ID, 5);
+			$mpos_a = $n->Getinterventionspositivitycount($year, $value->ID, 2, $division);
+			$mneg_a = $n->Getinterventionspositivitycount($year, $value->ID, 1, $division);
+			$mfail_a = $n->Getinterventionspositivitycount($year, $value->ID, 3, $division);
+			$mrd_a = $n->Getinterventionspositivitycount($year, $value->ID, 5, $division);
 
 			// Loop through each month and update mprophylaxis
-			for ($i=0; $i < $count; $i++) { 
+			for ($i=0; $i < 12; $i++) { 
 				$month = $i + 1;
 
-				$mpos = $mpos_a->where('month', $month)->first()->totals;
-				$mneg = $mneg_a->where('month', $month)->first()->totals;
-				$mfail = $mfail_a->where('month', $month)->first()->totals;
-				$mrd = $mrd_a->where('month', $month)->first()->totals;
+				if($year == Date('Y') && $month > Date('m')){ break; }
 
-				$mredraw=$mfail + $mrd;
-				$tests=$mpos + $mneg +  $mredraw;
+				for ($it=0; $it < $array_size; $it++) {
 
-				$sql = "UPDATE national_mprophylaxis set tests='$tests', pos='$mpos', neg='$mneg', redraw='$mredraw',sorted=9 WHERE prophylaxis='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
+					$mpos = $this->checknull($mpos_a->where('month', $month)->($column, $div_array[$it]));
+					$mneg = $this->checknull($mneg_a->where('month', $month)->($column, $div_array[$it]));
+					$mfail = $this->checknull($mfail_a->where('month', $month)->($column, $div_array[$it]));
+					$mrd = $this->checknull($mrd_a->where('month', $month)->($column, $div_array[$it]));
+
+					$mredraw=$mfail + $mrd;
+					$tests=$mpos + $mneg +  $mredraw;
+
+					$data_array = array(
+						'tests' => $itests, 'pos' => $mpos, 'neg' => $mneg, 'redraw' => $mredraw,
+						'sorted' => 9
+					);
+
+					DB::table($mr_table)->where('year', $year)->where('month', $month)->($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
+
+				}
 
 			}
 			
@@ -593,31 +802,94 @@ class Eid extends Model
 
 		// Loop through entrypoints
 		foreach ($entrypoints as $key => $value) {
-			$epos_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 2);
-			$eneg_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 1);
-			$efail_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 3);
-			$erd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5);
+			$epos_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 2, $division);
+			$eneg_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 1, $division);
+			$efail_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 3, $division);
+			$erd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5, $division);
 
 			// Loop through each month and update entrypoints
-			for ($i=0; $i < $count; $i++) { 
+			for ($i=0; $i < 12; $i++) { 
 				$month = $i + 1;
 
-				$epos = $epos_a->where('month', $month)->first()->totals;
-				$eneg = $eneg_a->where('month', $month)->first()->totals;
-				$efail = $efail_a->where('month', $month)->first()->totals;
-				$erd = $erd_a->where('month', $month)->first()->totals;
+				if($year == Date('Y') && $month > Date('m')){ break; }
 
-				$eredraw = $efail + $erd;
-				$etests = $epos + $eneg +  $eredraw;
+				for ($it=0; $it < $array_size; $it++) {
 
-				$sql = "UPDATE national_entrypoint set tests='$etests', pos='$epos', neg='$eneg', redraw='$eredraw',sorted=9 WHERE entrypoint='$aArray[$row]' AND month='$month' AND year='$year'  ";
+					$epos = $this->checknull($epos_a->where('month', $month)->($column, $div_array[$it]));
+					$eneg = $this->checknull($eneg_a->where('month', $month)->($column, $div_array[$it]));
+					$efail = $this->checknull($efail_a->where('month', $month)->($column, $div_array[$it]));
+					$erd = $this->checknull($erd_a->where('month', $month)->($column, $div_array[$it]));
+
+					$eredraw = $efail + $erd;
+					$etests = $epos + $eneg +  $eredraw;
+
+					$data_array = array(
+						'tests' => $etests, 'pos' => $epos, 'neg' => $eneg, 'redraw' => $eredraw,
+						'sorted' => 9
+					);
+
+					DB::table($ent_table)->where('year', $year)->where('month', $month)->($column, $div_array[$it])->where('entrypoint', $value->ID)->update($data_array);
+
+				}
 
 			}
 			
 		}
 		// End of entrypoints
 
-
-
+		// End of division updator
     }
+
+    public function update_counties($year = null){
+    	$this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary', 'county_agebreakdown', 'county_iprophylaxis', 'county_mprophylaxis', 'county_entrypoint');
+    }
+
+    public function update_subcounties($year = null){
+    	$this->division_updator($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_iprophylaxis', 'subcounty_mprophylaxis', 'subcounty_entrypoint');
+    }
+
+    public function update_partners($year = null){
+    	$this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_iprophylaxis', 'ip_mprophylaxis', 'ip_entrypoint');
+    }
+
+    public function update_facilities($year = null){
+    	$this->division_updator($year, 4, 'ID', 'view_facilitys.ID', 'facilitys', 'site_summary');
+    }
+
+
+
+    public function checknull($var){
+    	if($var->isEmpty()){
+    		return 0;
+    	}else{
+    		return $var->first()->totals;
+    	}
+    }
+
+    public function checktat($var){
+    	if($var->isEmpty()){
+    		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
+    	}else{
+    		return $var->first();
+    	}
+    }
+
+    public function checkmedage($var){
+    	if($var->isEmpty()){
+    		return 0;
+    	}else{
+    		$a = $var->first();
+    		return $a['totals'];
+    	}
+    }
+
+
+
+
+
+
+
+
+
+   
 }

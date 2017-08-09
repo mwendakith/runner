@@ -33,7 +33,8 @@ class TestController extends Controller
 
 
 
-	    $d = $r->where('month', 1)->where('county', 9)->first();
+	    $d = $r->where('month', 1)->where('county', 1);
+	    return $this->checknull($d);
 
 	    dd($d);
 
@@ -44,7 +45,11 @@ class TestController extends Controller
     }
 
     public function checknull($var){
-    	if()
+    	if($var->isEmpty()){
+    		return 0;
+    	}else{
+    		dd($var);
+    	}
     }
 
     

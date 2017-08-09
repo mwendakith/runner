@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Eid;
 
 class EidCounty extends Command
 {
@@ -11,14 +12,14 @@ class EidCounty extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'update:eid-county {year?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Compile summary tables for eid counties';
 
     /**
      * Create a new command instance.
@@ -38,5 +39,12 @@ class EidCounty extends Command
     public function handle()
     {
         //
+        $year = $this->argument('year');
+
+        $eid = new Eid;
+
+        $output = $eid->update_counties($year);
+
+        $this->info($output);
     }
 }

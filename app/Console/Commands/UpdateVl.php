@@ -38,5 +38,32 @@ class UpdateVl extends Command
     public function handle()
     {
         //
+        $year = $this->argument('year');
+
+        $this->info('Updating viralload summary tables for the year ' . $year);
+
+        $this->call('update:vl-nation', [
+            'year' => $year
+        ]);
+
+        $this->call('update:vl-county', [
+            'year' => $year
+        ]);
+
+        $this->call('update:vl-subcounty', [
+            'year' => $year
+        ]);
+
+        $this->call('update:vl-lab', [
+            'year' => $year
+        ]);
+
+        $this->call('update:vl-partner', [
+            'year' => $year
+        ]);
+        
+        $this->call('update:vl-facility', [
+            'year' => $year
+        ]);
     }
 }

@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class VlNation extends Command
+class UpdateDb extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'update:vl-nation {year?}';
+    protected $signature = 'update:all {year?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Compile summary tables for viralload nation';
+    protected $description = 'Compile Summary Tables For Eid and Viralload';
 
     /**
      * Create a new command instance.
@@ -38,5 +38,16 @@ class VlNation extends Command
     public function handle()
     {
         //
+        $year = $this->argument('year');
+
+        $this->info('Updating eid and viralload summary tables for the year ' . $year);
+
+        $this->call('update:eid', [
+            'year' => $year
+        ]);
+
+        $this->call('update:vl', [
+            'year' => $year
+        ]);
     }
 }

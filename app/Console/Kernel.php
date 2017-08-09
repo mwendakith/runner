@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        Commands\UpdateDb::class,
+
         Commands\UpdateEid::class,
         Commands\UpdateVl::class,
 
@@ -42,6 +44,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        $filePath = public_path('logs.txt');
+
+        $schedule->command('update:all')->dailyAt('20:00')->appendOutputTo($filePath);
     }
 
     /**
