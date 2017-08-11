@@ -17,6 +17,8 @@ class Eid extends Model
     	// Instantiate new object
     	$n = new EidNation;
 
+    	echo "Start nation update at " . date('d/m/Y h:i:s a', time());
+
     	// Get collection instances of the data
     	$alltests_a = $n->CumulativeTestedSamples($year);
     	$eqatests_a = $n->OverallEQATestedSamples($year);
@@ -167,6 +169,11 @@ class Eid extends Model
 		}
 		// End of for loop
 
+		echo "Completed entry into national summary at " . date('d/m/Y h:i:s a', time());
+
+		// Set the following to null in order to free memory
+		$alltests_a = $eqatests_a = $tests_a = $patienttests_a = $patienttestsPOS_a = $received_a = $firstdna_a = $confirmdna_a = $posrepeats_a = $confirmdnaPOS_a = $posrepeatsPOS_a = $infantsless2m_a = $infantsless2mPOS_a = $infantsless2w_a = $infantsless2wPOS_a = $infantsless46w_a = $infantsless46wPOS_a = $infantsabove2m_a = $infantsabove2mPOS_a = $adulttests_a = $adulttestsPOS_a = $pos_a = $neg_a = $fail_a = $rd_a = $rdd_a = $rej_a = $enrolled_a = $ltfu_a = $dead_a = $adult_a = $transout_a = $other_a = $v_cp_a = $v_ad_a = $v_vl_a = $v_rp_a = $v_uf_a = $sitesending_a = $avgage_a = $medage_a = $tat = null;
+
 
 		// Get national age_breakdown
 		$age1pos_a = $n->GetTestOutcomesbyAgeBand($year, 1, 2);
@@ -245,6 +252,8 @@ class Eid extends Model
 		}
 		// End of for loop
 
+		echo "Completed entry into national age breakdown at " . date('d/m/Y h:i:s a', time());
+
 
 		// Start of infant regimen
 		$iregimen = $data = DB::connection('eid')
@@ -283,6 +292,8 @@ class Eid extends Model
 		}
 		// End of infant regimen
 
+		echo "Completed entry into national infant regimen at " . date('d/m/Y h:i:s a', time());
+
 		// Start of mother regimen
 		$mregimen = $data = DB::connection('eid')
 		->table('prophylaxis')->select('ID')->where('ptype', 1)->get();
@@ -319,6 +330,8 @@ class Eid extends Model
 			
 		}
 		// End of mother regimen
+
+		echo "Completed entry into national mother regimen " . date('d/m/Y h:i:s a', time());
 
 		// Start of entrypoints
 		$entrypoints = $data = DB::connection('eid')
@@ -357,6 +370,8 @@ class Eid extends Model
 		}
 		// End of entrypoints
 
+		echo "Completed entry into national entrypoints at " . date('d/m/Y h:i:s a', time());
+
 		// End of national function
     }
 
@@ -364,6 +379,8 @@ class Eid extends Model
     	if($year == null){
     		$year = Date('Y');
     	}
+
+    	echo "Begin lab summary update at " . date('d/m/Y h:i:s a', time());
 
     	// Instantiate new object
     	$n = new EidDivision;
@@ -448,8 +465,7 @@ class Eid extends Model
 			}
 
 		}
-
-
+		echo "End lab update at " . date('d/m/Y h:i:s a', time());
     }
 
 
@@ -473,6 +489,8 @@ class Eid extends Model
 			$div_array[$key] = $value->ID;
 			$array_size++;
 		}
+
+		echo "Begin {$column} update at " . date('d/m/Y h:i:s a', time());
 
 		// Get collection instances of the data
     	$alltests_a = $n->CumulativeTestedSamples($year, $division);
@@ -627,9 +645,16 @@ class Eid extends Model
 		}
 		// End of summary
 
+		echo "Completed entry into {$column} summary at " . date('d/m/Y h:i:s a', time());
+
 		if($type == 4){ 
 			return "Success";
 		}
+
+
+
+		// Set the following to null in order to free memory
+		$alltests_a = $eqatests_a = $tests_a = $patienttests_a = $patienttestsPOS_a = $received_a = $firstdna_a = $confirmdna_a = $posrepeats_a = $confirmdnaPOS_a = $posrepeatsPOS_a = $infantsless2m_a = $infantsless2mPOS_a = $infantsless2w_a = $infantsless2wPOS_a = $infantsless46w_a = $infantsless46wPOS_a = $infantsabove2m_a = $infantsabove2mPOS_a = $adulttests_a = $adulttestsPOS_a = $pos_a = $neg_a = $fail_a = $rd_a = $rdd_a = $rej_a = $enrolled_a = $ltfu_a = $dead_a = $adult_a = $transout_a = $other_a = $v_cp_a = $v_ad_a = $v_vl_a = $v_rp_a = $v_uf_a = $sitesending_a = $avgage_a = $medage_a = $tat = null;
 
 
 		// Get national age_breakdown
@@ -712,6 +737,8 @@ class Eid extends Model
 		}
 		// End of months loop
 
+		echo "Completed entry into {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
+
 
 		// Start of infant regimen
 		$iregimen = $data = DB::connection('eid')
@@ -755,6 +782,8 @@ class Eid extends Model
 		}
 		// End of infant regimen
 
+		echo "Completed entry into {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
+
 		// Start of mother regimen
 		$mregimen = $data = DB::connection('eid')
 		->table('prophylaxis')->select('ID')->where('ptype', 1)->get();
@@ -795,6 +824,8 @@ class Eid extends Model
 			
 		}
 		// End of mother regimen
+
+		echo "Completed entry into {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
 
 		// Start of entrypoints
 		$entrypoints = $data = DB::connection('eid')
@@ -837,23 +868,25 @@ class Eid extends Model
 		}
 		// End of entrypoints
 
+		echo "Completed entry into {$column} entrypoints at " . date('d/m/Y h:i:s a', time());
+
 		// End of division updator
     }
 
     public function update_counties($year = null){
-    	$this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary', 'county_agebreakdown', 'county_iprophylaxis', 'county_mprophylaxis', 'county_entrypoint');
+    	return $this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary', 'county_agebreakdown', 'county_iprophylaxis', 'county_mprophylaxis', 'county_entrypoint');
     }
 
     public function update_subcounties($year = null){
-    	$this->division_updator($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_iprophylaxis', 'subcounty_mprophylaxis', 'subcounty_entrypoint');
+    	return $this->division_updator($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_iprophylaxis', 'subcounty_mprophylaxis', 'subcounty_entrypoint');
     }
 
     public function update_partners($year = null){
-    	$this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_iprophylaxis', 'ip_mprophylaxis', 'ip_entrypoint');
+    	return $this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_iprophylaxis', 'ip_mprophylaxis', 'ip_entrypoint');
     }
 
     public function update_facilities($year = null){
-    	$this->division_updator($year, 4, 'ID', 'view_facilitys.ID', 'facilitys', 'site_summary');
+    	return $this->division_updator($year, 4, 'ID', 'view_facilitys.ID', 'facilitys', 'site_summary');
     }
 
 
