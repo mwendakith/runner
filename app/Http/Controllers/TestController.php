@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\EidNation;
 use App\EidDivision;
+use App\Eid;
 use DB;
 
 class TestController extends Controller
@@ -42,6 +43,11 @@ class TestController extends Controller
 	    // 	echo $value->county . ' ' . $value->totals;
 	    // }
 
+    }
+
+    public function test2(){
+    	$n = new Eid;
+    	echo $n->update_nation(2016);
     }
 
     public function checknull($var){
