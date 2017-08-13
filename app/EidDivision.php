@@ -644,7 +644,7 @@ class EidDivision extends Model
 					$return[$place]['tat2'] = 0;
 					$return[$place]['tat3'] = 0;
 					$return[$place]['tat4'] = 0;
-					$return[$place]['county'] = $c;
+					$return[$place]['division'] = $c;
 					$return[$place]['month'] = $month;
 					continue;
 				}
@@ -678,8 +678,6 @@ class EidDivision extends Model
 		}
 
 		return $return;
-
-		             
 	}
 
 	

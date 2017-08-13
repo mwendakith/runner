@@ -550,6 +550,7 @@ class EidNation extends Model
 	public function GetNatTATs($year)
 	{
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
+		
 		$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 
 		$data = DB::connection('eid')

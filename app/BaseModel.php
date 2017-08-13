@@ -93,6 +93,7 @@ class BaseModel extends Model
 	} 
 
 	public function age_range($age){
+		$age_b;
 		switch ($age) {
 			case 1:
 				$age_b = array(0.0001, 2);
@@ -116,6 +117,7 @@ class BaseModel extends Model
 	}
 
 	public function age_band($age){
+		$age_b;
 		switch ($age) {
 			case 1:
 				$age_b = array(0.0001, 2);
@@ -177,6 +179,125 @@ class BaseModel extends Model
 		return $totaldays;
 
 	}
+
+	public function get_gender($gender){
+		$sex;
+		switch ($gender) {
+			case 1:
+				$sex = "M";
+				break;
+			case 2:
+				$sex = "F";
+				break;
+			default:
+				$sex = "No Data";
+				break;
+		}
+		return $sex;
+	}
+
+	public function get_vlage($age){
+		$age_b;
+		switch ($age) {
+			case 0:
+				$age_b = array(0, 0);
+				break;
+			case 1:
+				$age_b = array(0.0001, 4.9);
+				break;
+			case 2:
+				$age_b = array(5, 9.9);
+				break;
+			case 3:
+				$age_b = array(10, 14.9);
+				break;
+			case 4:
+				$age_b = array(15, 17.9);
+				break;
+			case 5:
+				$age_b = array(18, 10000000);
+				break;
+			case 6:
+				$age_b = array(0.0001, 1.9);
+				break;
+			case 7:
+				$age_b = array(2, 9.9);
+				break;
+			case 8:
+				$age_b = array(10, 14.9);
+				break;
+			case 9:
+				$age_b = array(15, 19.9);
+				break;
+			case 10:
+				$age_b = array(20, 24.9);
+				break;
+			case 11:
+				$age_b = array(25, 100000);
+				break;
+			default:
+				break;
+		}
+		return $age_b;
+	}
+
+	public function get_vlparams($type=1, $param=1){
+		$data;
+
+		// Type 1 for age
+		if($type == 1){
+			if($param < 6){
+				return array('column' => 'viralsamples.age', 'param' => $param);
+			}
+			return array('column' => 'viralsamples.age2', 'param' => $param);
+		}
+
+		// Type 2 for gender
+		else if($type == 2){
+			switch ($param) {
+				case 1:
+					return array('column' => 'viralpatients.gender', 'param' => "M");
+					break;
+				case 2:
+					return array('column' => 'viralpatients.gender', 'param' => "F");
+					break;
+				default:
+					return array('column' => 'viralpatients.gender', 'param' => "No data");
+					break;
+			}
+		}
+
+		// Type 3 for regimen
+		else if($type == 3){
+			return array('column' => 'viralsamples.prophylaxis', 'param' => $param);
+		}
+
+		// Type 4 for justification
+		else if($type == 4){
+			return array('column' => 'viralsamples.justification', 'param' => $param);
+		}
+
+		// Type 5 for sampletype
+		else if ($type == 5) {
+			return array('column' => 'viralsamples.sampletype', 'param' => $param);
+		}
+
+
+	}
+
+	
+
+	public function compare_alltestedviralloadsamples(){
+    	$age = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND repeatt=0 and Flag=1 AND $colmn ='$age' and viralsamples.rcategory BETWEEN 1 AND 4";
+
+    	$gender = "select count(viralsamples.ID)  as numsamples from viralsamples, viralpatients where  viralsamples.patientid=viralpatients.AutoID AND MONTH(datetested)='$month' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND viralpatients.gender='$gender' and viralsamples.rcategory BETWEEN 1 AND 4";
+
+    	$regimen = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND prophylaxis='$regimen' and (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2";
+
+    	$justification = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND justification='$justification'";
+
+    	$sampletype = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND sampletype BETWEEN '$stype' AND '$ttype'";
+    }
 
 	
 

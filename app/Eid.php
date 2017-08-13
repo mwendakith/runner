@@ -446,7 +446,7 @@ class Eid extends Model
 
 				$sitesending = $this->checknull($facilityssupported->where('month', $month)->where($column, $div_array[$it]));
 
-				$tt = $this->checktat($tat->where('month', $month)->where($column, $div_array[$it]));
+				$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
 
 				$data_array = array(
 					'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
@@ -514,7 +514,7 @@ class Eid extends Model
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, $division);
 		$infantsless2mPOS_a = 	$n->Gettestedsamplescountrange($year, 1, true, $division);
 		$infantsless2w_a =		$n->Gettestedsamplescountrange($year, 3, false, $division);
-		$infantsless2wPOS_a =		$n->Gettestedsamplescountrange($year, 3, true, $division);
+		$infantsless2wPOS_a =	$n->Gettestedsamplescountrange($year, 3, true, $division);
 		$infantsless46w_a =		$n->Gettestedsamplescountrange($year, 4, false, $division);
 		$infantsless46wPOS_a =	$n->Gettestedsamplescountrange($year, 4, true, $division);
 		$infantsabove2m_a =		$n->Gettestedsamplescountrange($year, 2, false, $division);
@@ -616,7 +616,7 @@ class Eid extends Model
 				$avgage = $this->checknull($avgage_a->where('month', $month)->where($column, $div_array[$it]));
 				$medage = $this->checkmedage($medage_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$tt = $this->checktat($tat->where('month', $month)->where($column, $div_array[$it]));
+				$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
 
 				$data_array = array(
 					'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
