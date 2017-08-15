@@ -241,7 +241,7 @@ class BaseModel extends Model
 		return $age_b;
 	}
 
-	public function get_vlparams($type=1, $param=1){
+	public function get_vlparams($type=1, $param=6){
 		$data;
 
 		// Type 1 for age
@@ -254,17 +254,8 @@ class BaseModel extends Model
 
 		// Type 2 for gender
 		else if($type == 2){
-			switch ($param) {
-				case 1:
-					return array('column' => 'viralpatients.gender', 'param' => "M");
-					break;
-				case 2:
-					return array('column' => 'viralpatients.gender', 'param' => "F");
-					break;
-				default:
-					return array('column' => 'viralpatients.gender', 'param' => "No data");
-					break;
-			}
+			$gender = $this->get_gender($param);
+			return array('column' => 'viralpatients.gender', 'param' => $gender);
 		}
 
 		// Type 3 for regimen
@@ -272,14 +263,20 @@ class BaseModel extends Model
 			return array('column' => 'viralsamples.prophylaxis', 'param' => $param);
 		}
 
-		// Type 4 for justification
-		else if($type == 4){
-			return array('column' => 'viralsamples.justification', 'param' => $param);
+		// Type 4 for sampletype
+		else if ($type == 4) {
+			if ($param == 2) {
+				return array('column' => 'viralsamples.sampletype', 'param' => 3);
+			}
+			else if ($param == 3) {
+				return array('column' => 'viralsamples.sampletype', 'param' => 2);
+			}
+			return array('column' => 'viralsamples.sampletype', 'param' => $param);
 		}
 
-		// Type 5 for sampletype
-		else if ($type == 5) {
-			return array('column' => 'viralsamples.sampletype', 'param' => $param);
+		// Type 5 for justification
+		else if($type == 5){
+			return array('column' => 'viralsamples.justification', 'param' => $param);
 		}
 
 

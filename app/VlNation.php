@@ -16,8 +16,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
-		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
-		->where('viralsamples.justification', '!=', 1)
+		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -26,7 +25,7 @@ class VlNation extends Model
 		return $data;
 
 
-    	// $sql="select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2  and Flag=1 and viralsamples.repeatt=0";
+    	// $sql="select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' and Flag=1 and viralsamples.repeatt=0 AND viralsamples.rcategory  BETWEEN 1 AND 4";
     }
 
     public function getallactualpatients($year){
@@ -35,9 +34,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.patient,viralsamples.facility) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
-		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
-		->where('viralsamples.justification', '!=', 1)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -45,7 +42,9 @@ class VlNation extends Model
 
 		return $data;
 
-    	// $sql = "select COUNT(DISTINCT viralsamples.patient,viralsamples.facility)  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND viralsamples.repeatt=0 and viralsamples.Flag=1 AND viralsamples.rcategory  BETWEEN 1 AND 4";
+		$sql = "select COUNT(DISTINCT viralsamples.patient,viralsamples.facility)  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND viralsamples.repeatt=0 and viralsamples.Flag=1 AND viralsamples.rcategory  BETWEEN 1 AND 4";
+
+    	// $sql = "select COUNT(DISTINCT viralsamples.patient,viralsamples.facility)  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2	 AND viralsamples.repeatt=0 and viralsamples.Flag=1 AND viralsamples.rcategory  BETWEEN 1 AND 4";
     }
 
     public function getallreceivediraloadsamples($year){
@@ -135,6 +134,45 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=2 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND viralsamples.rcategory BETWEEN 3 AND 4  AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1";
     }
 
+    public function GetNationalBaseline($year){
+
+    	$data = DB::connection('vl')
+		->table('viralsamples')
+		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->whereYear('datetested', $year)
+		->whereBetween('viralsamples.rcategory', [1, 4])
+		->whereBetween('viralsamples.sampletype', [1, 4])
+		->where('viralsamples.justification', 10)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month')
+		->get();
+
+		return $data;
+
+    	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=10 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year'   AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1 and rcategory between 1 and 4";
+    }
+
+    public function GetNationalBaselineFailure($year){
+
+    	$data = DB::connection('vl')
+		->table('viralsamples')
+		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->whereYear('datetested', $year)
+		->whereBetween('viralsamples.rcategory', [3, 4])
+		->whereBetween('viralsamples.sampletype', [1, 4])
+		->where('viralsamples.justification', 10)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month')
+		->get();
+
+		return $data;
+
+    	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=10 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND viralsamples.rcategory BETWEEN 3 AND 4  AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1";
+    }
+
+
     public function getallrepeattviraloadsamples($year){
 
     	$data = DB::connection('vl')
@@ -162,6 +200,7 @@ class VlNation extends Model
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.sampletype', $sampletype)
 		->where('viralsamples.justification', '!=', 2)
+		->where('viralsamples.justification', '!=', 10)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -185,6 +224,7 @@ class VlNation extends Model
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.gender', $gender)
 		->where('viralsamples.justification', '!=', 2)
+		->where('viralsamples.justification', '!=', 10)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -219,6 +259,7 @@ class VlNation extends Model
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where($age_column, $age)
 		->where('viralsamples.justification', '!=', 2)
+		->where('viralsamples.justification', '!=', 10)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -242,6 +283,7 @@ class VlNation extends Model
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->where('viralsamples.rcategory', $result)
 		->where('viralsamples.justification', '!=', 2)
+		->where('viralsamples.justification', '!=', 10)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -341,6 +383,7 @@ class VlNation extends Model
 				return $query
 				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
+				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}				
 		})
@@ -548,6 +591,7 @@ class VlNation extends Model
 				return $query
 				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
+				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}				
 		})
@@ -592,6 +636,7 @@ class VlNation extends Model
 				return $query
 				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
+				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}				
 		})
@@ -645,6 +690,7 @@ class VlNation extends Model
 				return $query
 				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
+				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}				
 		})
@@ -692,6 +738,7 @@ class VlNation extends Model
 				return $query
 				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
+				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}				
 		})

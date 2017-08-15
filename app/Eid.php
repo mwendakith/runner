@@ -17,6 +17,8 @@ class Eid extends Model
     	// Instantiate new object
     	$n = new EidNation;
 
+    	$today=date("Y-m-d");
+
     	echo "Start nation update at " . date('d/m/Y h:i:s a', time());
 
     	// Get collection instances of the data
@@ -144,7 +146,8 @@ class Eid extends Model
 				'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
 				'alltests' => $alltests, 'eqatests' => $eqatests, 'tests' => $tests,
 				'firstdna' => $firstdna, 'confirmdna' => $confirmdna, 'repeatspos' => $posrepeats,
-				'confirmedPOs' => $confimPOS, 'infantsless2m' => $infantsless2m,
+				'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
+				'infantsless2m' => $infantsless2m,
 				'infantsless2mPOs' => $infantsless2mPOS, 'infantsless2w' => $infantsless2w,
 				'infantsless2mPOs' => $infantsless2wPOS, 'infantsabove2m' => $infantsabove2m,
 				'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
@@ -156,7 +159,7 @@ class Eid extends Model
 				'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
 				'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
 				'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
-				'tat4' => $tt['tat4'], 'sorted' => 15
+				'tat4' => $tt['tat4'], 'dateupdated' => $today
 			);
 
 			DB::table('national_summary')->where('year', $year)->where('month', $month)->update($data_array);
@@ -242,7 +245,7 @@ class Eid extends Model
 				'sixto8wpos' => $age11pos, 'sixto8wneg' => $age11neg, 'sixmonthpos' => $age12pos,
 				'sixmonthneg' => $age12neg, 'ninemonthpos' => $age13pos, 
 				'ninemonthneg' => $age13neg, 'twelvemonthpos' => $age14pos,
-				'twelvemonthneg' => $age14neg, 'sorted' => 9
+				'twelvemonthneg' => $age14neg, 'dateupdated' => $today
 			);
 
 			DB::table('national_agebreakdown')->where('year', $year)->where('month', $month)->update($data_array);
@@ -280,7 +283,7 @@ class Eid extends Model
 
 				$data_array = array(
 					'tests' => $itests, 'pos' => $ipos, 'neg' => $ineg, 'redraw' => $iredraw,
-					'sorted' => 9
+					'dateupdated' => $today
 				);
 
 				DB::table('national_iprophylaxis')->where('year', $year)->where('month', $month)->where('prophylaxis', $value->ID)->update($data_array);
@@ -319,7 +322,7 @@ class Eid extends Model
 
 				$data_array = array(
 					'tests' => $itests, 'pos' => $mpos, 'neg' => $mneg, 'redraw' => $mredraw,
-					'sorted' => 9
+					'dateupdated' => $today
 				);
 
 				DB::table('national_mprophylaxis')->where('year', $year)->where('month', $month)->where('prophylaxis', $value->ID)->update($data_array);
@@ -358,7 +361,7 @@ class Eid extends Model
 
 				$data_array = array(
 					'tests' => $etests, 'pos' => $epos, 'neg' => $eneg, 'redraw' => $eredraw,
-					'sorted' => 9
+					'dateupdated' => $today
 				);
 
 				DB::table('national_entrypoint')->where('year', $year)->where('month', $month)->where('entrypoint', $value->ID)->update($data_array);
@@ -384,6 +387,9 @@ class Eid extends Model
 
     	// Instantiate new object
     	$n = new EidDivision;
+
+    	$today=date("Y-m-d");
+
     	$div_array;
     	$array_size = 0;
 
@@ -455,7 +461,7 @@ class Eid extends Model
 					'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
 					'sitessending' => $sitesending,
 					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
-					'tat4' => $tt['tat4'], 'sorted' => 15
+					'tat4' => $tt['tat4'], 'dateupdated' => $today
 				);
 
 				DB::table("lab_summary")->where('year', $year)->where('month', $month)->where($lab, $div_array[$it])->update($data_array);
@@ -479,6 +485,9 @@ class Eid extends Model
 
     	// Instantiate new object
     	$n = new EidDivision;
+
+    	$today=date("Y-m-d");
+
     	$div_array;
     	$array_size = 0;
 
@@ -622,7 +631,8 @@ class Eid extends Model
 					'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
 					'alltests' => $alltests, 'eqatests' => $eqatests, 'tests' => $tests,
 					'firstdna' => $firstdna, 'confirmdna' => $confirmdna, 'repeatspos' => $posrepeats,
-					'confirmedPOs' => $confimPOS, 'infantsless2m' => $infantsless2m,
+					'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
+					'infantsless2m' => $infantsless2m,
 					'infantsless2mPOs' => $infantsless2mPOS, 'infantsless2w' => $infantsless2w,
 					'infantsless2mPOs' => $infantsless2wPOS, 'infantsabove2m' => $infantsabove2m,
 					'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
@@ -634,7 +644,7 @@ class Eid extends Model
 					'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
 					'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
 					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
-					'tat4' => $tt['tat4'], 'sorted' => 15
+					'tat4' => $tt['tat4'], 'dateupdated' => $today
 				);
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
@@ -728,7 +738,7 @@ class Eid extends Model
 					'sixto8wpos' => $age11pos, 'sixto8wneg' => $age11neg, 'sixmonthpos' => $age12pos,
 					'sixmonthneg' => $age12neg, 'ninemonthpos' => $age13pos, 
 					'ninemonthneg' => $age13neg, 'twelvemonthpos' => $age14pos,
-					'twelvemonthneg' => $age14neg, 'sorted' => 9
+					'twelvemonthneg' => $age14neg, 'dateupdated' => $today
 				);
 
 				DB::table($age_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
@@ -770,7 +780,7 @@ class Eid extends Model
 
 					$data_array = array(
 						'tests' => $itests, 'pos' => $ipos, 'neg' => $ineg, 'redraw' => $iredraw,
-						'sorted' => 9
+						'dateupdated' => $today
 					);
 
 					DB::table($ir_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
@@ -813,7 +823,7 @@ class Eid extends Model
 
 					$data_array = array(
 						'tests' => $itests, 'pos' => $mpos, 'neg' => $mneg, 'redraw' => $mredraw,
-						'sorted' => 9
+						'dateupdated' => $today
 					);
 
 					DB::table($mr_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
@@ -856,7 +866,7 @@ class Eid extends Model
 
 					$data_array = array(
 						'tests' => $etests, 'pos' => $epos, 'neg' => $eneg, 'redraw' => $eredraw,
-						'sorted' => 9
+						'dateupdated' => $today
 					);
 
 					DB::table($ent_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('entrypoint', $value->ID)->update($data_array);
