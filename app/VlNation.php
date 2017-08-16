@@ -298,7 +298,7 @@ class VlNation extends Model
     public function GetNatTATs($year){
     	$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 
-		$data = DB::connection('eid')
+		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw($sql))
 		->whereYear('viralsamples.datecollected', '>', 1980)

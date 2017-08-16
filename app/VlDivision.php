@@ -274,7 +274,7 @@ class VlDivision extends Model
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 
-		$data = DB::connection('eid')
+		$data = DB::connection('vl')
 		->table('samples')
 		->select($division, $division, DB::raw($sql))
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')

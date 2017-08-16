@@ -138,13 +138,13 @@ class Vl extends Model
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
-		$this->finish_nation($year, $today);
+		echo $this->finish_nation($year, $today);
 
 
     }
 
     private function finish_nation($year, $today){
-
+    	$n = new VlNation;
     	for ($type=1; $type < 6; $type++) { 
 			$table = $this->get_table(0, $type);
 
@@ -213,7 +213,7 @@ class Vl extends Model
 				for ($i=0; $i < 12; $i++) { 
 					$month = $i + 1;
 
-					$rec = $this->checknull($rec_a->where('month', $month));
+					// $rec = $this->checknull($rec_a->where('month', $month));
 					$tested = $this->checknull($tested_a->where('month', $month));
 					$rej = $this->checknull($rej_a->where('month', $month));
 
@@ -228,7 +228,7 @@ class Vl extends Model
 					$sustx = $less5k +  $above5k;
 
 					$data_array = array(
-						'received' => $rec, 'alltests' => $tested,
+						'alltests' => $tested,
 						'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
 						'confirm2vl' => $conf2VL, 'rejected' => $rej, 'Undetected' => $ldl, 'less1000' => $less1k,
 						'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
@@ -282,7 +282,7 @@ class Vl extends Model
 					}
 					
 
-					DB::table($table[0])->where('year', $year)->where('month', $month)->update($data_array);
+					DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->update($data_array);
 
 				}
 				// End of for loop for months
@@ -315,19 +315,19 @@ class Vl extends Model
     	if ($division == 0) {
     		switch ($type) {
     			case 1:
-    				$name = array("vl_national_age", "agecategory");
+    				$name = array("vl_national_age", "agecategory", "age");
     				break;
     			case 2:
-    				$name = array("vl_national_gender", "gender");
+    				$name = array("vl_national_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_national_regimen", "viralprophylaxis");
+    				$name = array("vl_national_regimen", "viralprophylaxis", "regimen");
     				break;
     			case 4:
-    				$name = array("vl_national_sampletype", "viralsampletypedetails");
+    				$name = array("vl_national_sampletype", "viralsampletypedetails", "sampletype");
     				break;
     			case 5:
-    				$name = array("vl_national_justification", "viraljustifications");
+    				$name = array("vl_national_justification", "viraljustifications", "justification");
     				break;
     			default:
     				break;
@@ -336,19 +336,19 @@ class Vl extends Model
     	else if ($division == 1) {
     		switch ($type) {
     			case 1:
-    				$name = array("vl_county_age", "agecategory");
+    				$name = array("vl_county_age", "agecategory", "age");
     				break;
     			case 2:
-    				$name = array("vl_county_gender", "gender");
+    				$name = array("vl_county_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_county_regimen", "viralprophylaxis");
+    				$name = array("vl_county_regimen", "viralprophylaxis", "regimen");
     				break;
     			case 4:
-    				$name = array("vl_county_sampletype", "viralsampletypedetails");
+    				$name = array("vl_county_sampletype", "viralsampletypedetails", "sampletype");
     				break;
     			case 5:
-    				$name = array("vl_county_justification", "viraljustifications");
+    				$name = array("vl_county_justification", "viraljustifications", "justification");
     				break;
     			default:
     				break;
@@ -358,19 +358,19 @@ class Vl extends Model
     	else if ($division == 2) {
     		switch ($type) {
     			case 1:
-    				$name = array("vl_subcounty_age", "agecategory");
+    				$name = array("vl_subcounty_age", "agecategory", "age");
     				break;
     			case 2:
-    				$name = array("vl_subcounty_gender", "gender");
+    				$name = array("vl_subcounty_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_subcounty_regimen", "viralprophylaxis");
+    				$name = array("vl_subcounty_regimen", "viralprophylaxis", "regimen");
     				break;
     			case 4:
-    				$name = array("vl_subcounty_sampletype", "viralsampletypedetails");
+    				$name = array("vl_subcounty_sampletype", "viralsampletypedetails", "sampletype");
     				break;
     			case 5:
-    				$name = array("vl_subcounty_justification", "viraljustifications");
+    				$name = array("vl_subcounty_justification", "viraljustifications", "justification");
     				break;
     			default:
     				break;
@@ -380,19 +380,19 @@ class Vl extends Model
     	else if ($division == 3) {
     		switch ($type) {
     			case 1:
-    				$name = array("vl_partner_age", "agecategory");
+    				$name = array("vl_partner_age", "agecategory", "age");
     				break;
     			case 2:
-    				$name = array("vl_partner_gender", "gender");
+    				$name = array("vl_partner_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_partner_regimen", "viralprophylaxis");
+    				$name = array("vl_partner_regimen", "viralprophylaxis", "regimen");
     				break;
     			case 4:
-    				$name = array("vl_partner_sampletype", "viralsampletypedetails");
+    				$name = array("vl_partner_sampletype", "viralsampletypedetails", "sampletype");
     				break;
     			case 5:
-    				$name = array("vl_partner_justification", "viraljustifications");
+    				$name = array("vl_partner_justification", "viraljustifications", "justification");
     				break;
     			default:
     				break;
@@ -402,19 +402,19 @@ class Vl extends Model
     	else if ($division == 4) {
     		switch ($type) {
     			case 1:
-    				$name = array("vl_site_age", "agecategory");
+    				$name = array("vl_site_age", "agecategory", "age");
     				break;
     			case 2:
-    				$name = array("vl_site_gender", "gender");
+    				$name = array("vl_site_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_site_regimen", "viralprophylaxis");
+    				$name = array("vl_site_regimen", "viralprophylaxis", "regimen");
     				break;
     			case 4:
-    				$name = array("vl_site_sampletype", "viralsampletypedetails");
+    				$name = array("vl_site_sampletype", "viralsampletypedetails", "sampletype");
     				break;
     			case 5:
-    				$name = array("vl_site_justification", "viraljustifications");
+    				$name = array("vl_site_justification", "viraljustifications", "justification");
     				break;
     			default:
     				break;
