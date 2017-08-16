@@ -19,7 +19,7 @@ class Vl extends Model
 
     	$today=date("Y-m-d");
 
-    	echo "Start viralload nation update at " . date('d/m/Y h:i:s a', time());
+    	echo "\n Begin  viralload nation update at " . date('d/m/Y h:i:s a', time());
 
     	// Get collection instances of the data
 
@@ -136,7 +136,7 @@ class Vl extends Model
 		}
 		// End of for loop
 
-		echo "Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
 		$this->finish_nation($year, $today);
 
@@ -148,7 +148,7 @@ class Vl extends Model
     	for ($type=1; $type < 6; $type++) { 
 			$table = $this->get_table(0, $type);
 
-			echo "Start " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 			
 			// Get ids of the necessary table
 			$divs = $data = DB::connection('vl')
@@ -291,6 +291,7 @@ class Vl extends Model
 			// End of looping through ids of each table e.g. agecategory
 		}
 		// End of looping of params
+		echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
     }
 
     public function checknull($var){

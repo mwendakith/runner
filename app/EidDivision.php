@@ -575,7 +575,7 @@ class EidDivision extends Model
 	{
 
 		$b = new BaseModel;
-		$age = $b->age_range($a);
+		$age = $b->age_band($a);
 
 		$data = DB::connection('eid')
 		->table('samples')

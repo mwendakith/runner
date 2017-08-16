@@ -19,7 +19,7 @@ class Eid extends Model
 
     	$today=date("Y-m-d");
 
-    	echo "Start nation update at " . date('d/m/Y h:i:s a', time());
+    	echo "\n Begin nation update at " . date('d/m/Y h:i:s a', time());
 
     	// Get collection instances of the data
     	$alltests_a = $n->CumulativeTestedSamples($year);
@@ -173,7 +173,7 @@ class Eid extends Model
 		}
 		// End of for loop
 
-		echo "Completed entry into national summary at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into national summary at " . date('d/m/Y h:i:s a', time());
 
 		// Set the following to null in order to free memory
 		$alltests_a = $eqatests_a = $tests_a = $patienttests_a = $patienttestsPOS_a = $received_a = $firstdna_a = $confirmdna_a = $posrepeats_a = $confirmdnaPOS_a = $posrepeatsPOS_a = $infantsless2m_a = $infantsless2mPOS_a = $infantsless2w_a = $infantsless2wPOS_a = $infantsless46w_a = $infantsless46wPOS_a = $infantsabove2m_a = $infantsabove2mPOS_a = $adulttests_a = $adulttestsPOS_a = $pos_a = $neg_a = $fail_a = $rd_a = $rdd_a = $rej_a = $enrolled_a = $ltfu_a = $dead_a = $adult_a = $transout_a = $other_a = $v_cp_a = $v_ad_a = $v_vl_a = $v_rp_a = $v_uf_a = $sitesending_a = $avgage_a = $medage_a = $tat = null;
@@ -256,7 +256,7 @@ class Eid extends Model
 		}
 		// End of for loop
 
-		echo "Completed entry into national age breakdown at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into national age breakdown at " . date('d/m/Y h:i:s a', time());
 
 
 		// Start of infant regimen
@@ -296,7 +296,7 @@ class Eid extends Model
 		}
 		// End of infant regimen
 
-		echo "Completed entry into national infant regimen at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into national infant regimen at " . date('d/m/Y h:i:s a', time());
 
 		// Start of mother regimen
 		$mregimen = $data = DB::connection('eid')
@@ -335,7 +335,7 @@ class Eid extends Model
 		}
 		// End of mother regimen
 
-		echo "Completed entry into national mother regimen " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into national mother regimen " . date('d/m/Y h:i:s a', time());
 
 		// Start of entrypoints
 		$entrypoints = $data = DB::connection('eid')
@@ -374,7 +374,7 @@ class Eid extends Model
 		}
 		// End of entrypoints
 
-		echo "Completed entry into national entrypoints at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into national entrypoints at " . date('d/m/Y h:i:s a', time());
 
 		// End of national function
     }
@@ -384,7 +384,7 @@ class Eid extends Model
     		$year = Date('Y');
     	}
 
-    	echo "Begin lab summary update at " . date('d/m/Y h:i:s a', time());
+    	echo "\n Begin lab summary update at " . date('d/m/Y h:i:s a', time());
 
     	// Instantiate new object
     	$n = new EidDivision;
@@ -500,7 +500,7 @@ class Eid extends Model
 			$array_size++;
 		}
 
-		echo "Begin {$column} update at " . date('d/m/Y h:i:s a', time());
+		echo "\n Begin {$column} update at " . date('d/m/Y h:i:s a', time());
 
 		// Get collection instances of the data
     	$alltests_a = $n->CumulativeTestedSamples($year, $division);
@@ -644,9 +644,13 @@ class Eid extends Model
 					'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
 					'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
 					'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
-					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
-					'tat4' => $tt['tat4'], 'dateupdated' => $today
+					 'dateupdated' => $today
 				);
+
+				if($type != 3){
+					$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
+					$data_array = array_merge($data_array, $turn);
+				}
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
@@ -656,7 +660,7 @@ class Eid extends Model
 		}
 		// End of summary
 
-		echo "Completed entry into {$column} summary at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into {$column} summary at " . date('d/m/Y h:i:s a', time());
 
 		if($type == 4){ 
 			return "Success";
@@ -748,7 +752,7 @@ class Eid extends Model
 		}
 		// End of months loop
 
-		echo "Completed entry into {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
 
 
 		// Start of infant regimen
@@ -793,7 +797,7 @@ class Eid extends Model
 		}
 		// End of infant regimen
 
-		echo "Completed entry into {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
 
 		// Start of mother regimen
 		$mregimen = $data = DB::connection('eid')
@@ -836,7 +840,7 @@ class Eid extends Model
 		}
 		// End of mother regimen
 
-		echo "Completed entry into {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
 
 		// Start of entrypoints
 		$entrypoints = $data = DB::connection('eid')
@@ -879,7 +883,7 @@ class Eid extends Model
 		}
 		// End of entrypoints
 
-		echo "Completed entry into {$column} entrypoints at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed entry into {$column} entrypoints at " . date('d/m/Y h:i:s a', time());
 
 		// End of division updator
     }
@@ -897,7 +901,7 @@ class Eid extends Model
     }
 
     public function update_facilities($year = null){
-    	return $this->division_updator($year, 4, 'ID', 'view_facilitys.ID', 'facilitys', 'site_summary');
+    	return $this->division_updator($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary');
     }
 
 
