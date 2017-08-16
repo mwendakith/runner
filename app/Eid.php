@@ -82,6 +82,7 @@ class Eid extends Model
 		$medage_a = $n->Getoverallmedianage($year);
 
 		$tat = $n->GetNatTATs($year);
+		// $tat = collect($tat);
 
 		$count = $pos_a->count();
 
@@ -164,7 +165,7 @@ class Eid extends Model
 
 			DB::table('national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
-			$sql = "UPDATE national_summary set avgage='$avgage', medage='$medage',received='$received' , alltests ='$alltests' , eqatests ='$eqatests' , tests ='$tests',firstdna='$firstdna',confirmdna='$confirmdna',repeatspos ='$posrepeats',confirmedPOs ='$confimPOS',infantsless2m='$infantsless2m'  ,infantsless2mPOs ='$infantsless2mPOS' ,infantsless2w='$infantsless2w'  ,infantsless2wPOs ='$infantsless2wPOS',infants4to6w='$infantsless46w'  ,infants4to6wPOs ='$infantsless46wPOS',infantsabove2m='$infantsabove2m', infantsabove2mPOs ='$infantsabove2mPOS',adults ='$adulttests',adultsPOs ='$adulttestsPOS' ,actualinfants ='$patienttests', actualinfantsPOs ='$patienttestsPOS',pos ='$pos',neg ='$neg',redraw='$redraw',rejected='$rej',enrolled='$enrolled',dead='$dead',ltfu='$ltfu',adult='$adult',transout='$transout',	 other='$other' ,validation_confirmedpos ='$v_cp',validation_repeattest='$v_ad',validation_viralload='$v_vl',validation_adult='$v_rp',validation_unknownsite='$v_uf',sitessending ='$sitesending', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',sorted=15   WHERE month='$month' AND year='$year' ";
+			// $sql = "UPDATE national_summary set avgage='$avgage', medage='$medage',received='$received' , alltests ='$alltests' , eqatests ='$eqatests' , tests ='$tests',firstdna='$firstdna',confirmdna='$confirmdna',repeatspos ='$posrepeats',confirmedPOs ='$confimPOS',infantsless2m='$infantsless2m'  ,infantsless2mPOs ='$infantsless2mPOS' ,infantsless2w='$infantsless2w'  ,infantsless2wPOs ='$infantsless2wPOS',infants4to6w='$infantsless46w'  ,infants4to6wPOs ='$infantsless46wPOS',infantsabove2m='$infantsabove2m', infantsabove2mPOs ='$infantsabove2mPOS',adults ='$adulttests',adultsPOs ='$adulttestsPOS' ,actualinfants ='$patienttests', actualinfantsPOs ='$patienttestsPOS',pos ='$pos',neg ='$neg',redraw='$redraw',rejected='$rej',enrolled='$enrolled',dead='$dead',ltfu='$ltfu',adult='$adult',transout='$transout',	 other='$other' ,validation_confirmedpos ='$v_cp',validation_repeattest='$v_ad',validation_viralload='$v_vl',validation_adult='$v_rp',validation_unknownsite='$v_uf',sitessending ='$sitesending', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',sorted=15   WHERE month='$month' AND year='$year' ";
 
 			
 
@@ -250,7 +251,7 @@ class Eid extends Model
 
 			DB::table('national_agebreakdown')->where('year', $year)->where('month', $month)->update($data_array);
 
-			$sql = "UPDATE national_agebreakdown set sixweekspos='$age1pos', sixweeksneg='$age1neg', sevento3mpos='$age2pos', sevento3mneg='$age2neg'	,threemto9mpos='$age3pos',threemto9mneg='$age3neg',ninemto18mpos='$age4pos',ninemto18mneg='$age4neg',above18mpos='$age5pos',above18mneg='$age5neg',nodatapos='$age6pos',nodataneg='$age6neg', less2wpos='$age9pos',less2wneg='$age9neg',twoto6wpos='$age10pos',twoto6wneg='$age10neg',sixto8wpos='$age11pos',sixto8wneg='$age11neg',sixmonthpos='$age12pos',sixmonthneg='$age12neg',ninemonthpos='$age13pos',ninemonthneg='$age13neg',twelvemonthpos='$age14pos',twelvemonthneg='$age14neg',sorted=9 WHERE month='$month' AND year='$year'";
+			// $sql = "UPDATE national_agebreakdown set sixweekspos='$age1pos', sixweeksneg='$age1neg', sevento3mpos='$age2pos', sevento3mneg='$age2neg'	,threemto9mpos='$age3pos',threemto9mneg='$age3neg',ninemto18mpos='$age4pos',ninemto18mneg='$age4neg',above18mpos='$age5pos',above18mneg='$age5neg',nodatapos='$age6pos',nodataneg='$age6neg', less2wpos='$age9pos',less2wneg='$age9neg',twoto6wpos='$age10pos',twoto6wneg='$age10neg',sixto8wpos='$age11pos',sixto8wneg='$age11neg',sixmonthpos='$age12pos',sixmonthneg='$age12neg',ninemonthpos='$age13pos',ninemonthneg='$age13neg',twelvemonthpos='$age14pos',twelvemonthneg='$age14neg',sorted=9 WHERE month='$month' AND year='$year'";
 
 		}
 		// End of for loop
@@ -288,7 +289,7 @@ class Eid extends Model
 
 				DB::table('national_iprophylaxis')->where('year', $year)->where('month', $month)->where('prophylaxis', $value->ID)->update($data_array);
 
-				$sql = "UPDATE national_iprophylaxis set tests='$itests', pos='$ipos', neg='$ineg', redraw='$iredraw',sorted=9 WHERE prophylaxis='$iaArray[$irow]' AND month='$month' AND year='$year'";
+				// $sql = "UPDATE national_iprophylaxis set tests='$itests', pos='$ipos', neg='$ineg', redraw='$iredraw',sorted=9 WHERE prophylaxis='$iaArray[$irow]' AND month='$month' AND year='$year'";
 
 			}
 			
@@ -327,7 +328,7 @@ class Eid extends Model
 
 				DB::table('national_mprophylaxis')->where('year', $year)->where('month', $month)->where('prophylaxis', $value->ID)->update($data_array);
 
-				$sql = "UPDATE national_mprophylaxis set tests='$tests', pos='$mpos', neg='$mneg', redraw='$mredraw',sorted=9 WHERE prophylaxis='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
+				// $sql = "UPDATE national_mprophylaxis set tests='$tests', pos='$mpos', neg='$mneg', redraw='$mredraw',sorted=9 WHERE prophylaxis='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
 
 			}
 			
@@ -366,7 +367,7 @@ class Eid extends Model
 
 				DB::table('national_entrypoint')->where('year', $year)->where('month', $month)->where('entrypoint', $value->ID)->update($data_array);
 
-				$sql = "UPDATE national_entrypoint set tests='$etests', pos='$epos', neg='$eneg', redraw='$eredraw',sorted=9 WHERE entrypoint='$aArray[$row]' AND month='$month' AND year='$year'  ";
+				// $sql = "UPDATE national_entrypoint set tests='$etests', pos='$epos', neg='$eneg', redraw='$eredraw',sorted=9 WHERE entrypoint='$aArray[$row]' AND month='$month' AND year='$year'  ";
 
 			}
 			
@@ -466,7 +467,7 @@ class Eid extends Model
 
 				DB::table("lab_summary")->where('year', $year)->where('month', $month)->where($lab, $div_array[$it])->update($data_array);
 
-				$sql = "UPDATE lab_summary set received='$received',alltests='$alltestedsamples', tests='$testedsamples' ,confirmdna='$confirmdna',repeatspos='$posrepeats',  pos='$positives', neg='$negatives', redraw='$failed',eqatests='$EQAtestedsamples',batches='$noofbatches', rejected='$rejectedsamples', sitessending='$facilityssupported', tat1='$t1',tat2='$t2',tat3='$t3',tat4='$t4',sorted=15  WHERE lab='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
+				// $sql = "UPDATE lab_summary set received='$received',alltests='$alltestedsamples', tests='$testedsamples' ,confirmdna='$confirmdna',repeatspos='$posrepeats',  pos='$positives', neg='$negatives', redraw='$failed',eqatests='$EQAtestedsamples',batches='$noofbatches', rejected='$rejectedsamples', sitessending='$facilityssupported', tat1='$t1',tat2='$t2',tat3='$t3',tat4='$t4',sorted=15  WHERE lab='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
 
 			}
 

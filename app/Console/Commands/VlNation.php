@@ -39,5 +39,12 @@ class VlNation extends Command
     public function handle()
     {
         //
+        $year = $this->argument('year');
+
+        $vl = new Vl;
+
+        $output = $vl->update_nation($year);
+
+        $this->info($output);
     }
 }
