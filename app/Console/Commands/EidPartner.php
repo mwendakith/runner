@@ -44,6 +44,7 @@ class EidPartner extends Command
         $eid = new Eid;
 
         $output = $eid->update_partners($year);
+        $output .= $eid->update_partners_yearly($year);
 
         $this->info($output);
     }

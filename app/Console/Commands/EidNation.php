@@ -44,6 +44,7 @@ class EidNation extends Command
         $eid = new Eid;
 
         $output = $eid->update_nation($year);
+        $output .= $eid->update_nation_yearly($year);
 
         $this->info($output);
     }

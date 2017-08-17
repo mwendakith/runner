@@ -379,6 +379,160 @@ class Eid extends Model
 		// End of national function
     }
 
+    public function update_nation_yearly($year = null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	// Instantiate new object
+    	$n = new EidNation;
+
+    	$today=date("Y-m-d");
+
+    	echo "\n Begin eid nation yearly update at " . date('d/m/Y h:i:s a', time());
+
+    	// Get collection instances of the data
+    	$alltests_a = $n->CumulativeTestedSamples($year, false);
+    	$eqatests_a = $n->OverallEQATestedSamples($year, false);
+
+    	$tests_a = $n->OverallTestedSamples($year, false);
+		
+		$patienttests_a = $n->OverallTestedPatients($year, false);
+		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, false);
+		$received_a = $n->OverallReceivedSamples($year, false);
+			
+		$firstdna_a = $n->OveralldnafirstTestedSamples($year, false);
+		$confirmdna_a = $n->OveralldnasecondTestedSamples($year, false);
+		$posrepeats_a = $n->OverallPosRepeatsTestedSamples($year, false);
+
+		$confirmdnaPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, false);
+		$posrepeatsPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, false);
+		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
+
+
+		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, false);
+		$infantsless2mPOS_a = 	$n->Gettestedsamplescountrange($year, 1, true, false);
+		$infantsless2w_a =		$n->Gettestedsamplescountrange($year, 3, false, false);
+		$infantsless2wPOS_a =	$n->Gettestedsamplescountrange($year, 3, true, false);
+		$infantsless46w_a =		$n->Gettestedsamplescountrange($year, 4, false, false);
+		$infantsless46wPOS_a =	$n->Gettestedsamplescountrange($year, 4, true, false);
+		$infantsabove2m_a =		$n->Gettestedsamplescountrange($year, 2, false, false);
+		$infantsabove2mPOS_a = 	$n->Gettestedsamplescountrange($year, 2, true, false);
+		$adulttests_a =			$n->Gettestedsamplescountrange($year, 5, false, false);
+		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true, false);
+		
+
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, false);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, false);
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, false);
+		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, false);
+		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, false);
+		// $redraw=$fail + $rd + $rdd;
+		
+		//echo $alltests;
+		$rej_a = $n->Getnationalrejectedsamples($year, false);
+		
+		$v = "samples.enrollmentstatus";
+		$enrolled_a = $n->GetHEIFollowUpNational($year, 1, $v, false);
+		$ltfu_a = $n->GetHEIFollowUpNational($year, 2, $v, false);
+		$dead_a = $n->GetHEIFollowUpNational($year, 3, $v, false);
+		$adult_a = $n->GetHEIFollowUpNational($year, 4, $v, false);
+		$transout_a = $n->GetHEIFollowUpNational($year, 5, $v, false);
+		$other_a = $n->GetHEIFollowUpNational($year, 6, $v, false);
+
+
+		$v = 'samples.hei_validation';
+		$v_cp_a = $n->GetHEIFollowUpNational($year, 1, $v, false); //confirmedpos	
+		$v_ad_a = $n->GetHEIFollowUpNational($year, 2, $v, false); //adult
+		$v_vl_a = $n->GetHEIFollowUpNational($year, 3, $v, false); //vl
+		$v_rp_a = $n->GetHEIFollowUpNational($year, 4, $v, false); //repeat
+		$v_uf_a = $n->GetHEIFollowUpNational($year, 5, $v, false); //unknownfacility		
+		
+		$sitesending_a = $n->GettotalEIDsitesbytimeperiod($year, false);
+		$avgage_a = $n->Getoverallaverageage($year, false);
+		$medage = $n->Getoverallmedianage($year, false);
+
+		$tat = $n->GetNatTATs($year, false);
+		// $tat = collect($tat);
+
+		$alltests = $this->checknull($alltests_a);
+		$eqatests = $this->checknull($eqatests_a);
+		$tests = $this->checknull($tests_a);
+		$patienttests = $this->checknull($patienttests_a);
+		$patienttestsPOS = $this->checknull($patienttestsPOS_a);
+
+		$received = $this->checknull($received_a);
+		$firstdna = $this->checknull($firstdna_a);
+		$confirmdna = $this->checknull($confirmdna_a);
+		$posrepeats = $this->checknull($posrepeats_a);
+		$confirmdnaPOS = $this->checknull($confirmdnaPOS_a);
+		$posrepeatsPOS = $this->checknull();
+		$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
+
+		$infantsless2m = $this->checknull($infantsless2m_a);
+		$infantsless2mPOS = $this->checknull($infantsless2mPOS_a);
+		$infantsless2w = $this->checknull($infantsless2w_a);
+		$infantsless2wPOS = $this->checknull($infantsless2wPOS_a);
+		$infantsless46w = $this->checknull($infantsless46w_a);
+		$infantsless46wPOS = $this->checknull($infantsless46wPOS_a);
+		$infantsabove2m = $this->checknull($infantsabove2m_a);
+		$infantsabove2mPOS = $this->checknull($infantsabove2mPOS_a);
+		$adulttests = $this->checknull($adulttests_a);
+		$adulttestsPOS = $this->checknull($adulttestsPOS_a);
+
+
+		$pos = $this->checknull($pos_a);
+		$neg = $this->checknull($neg_a);
+		$fail = $this->checknull($fail_a);
+		$rd = $this->checknull($rd_a);
+		$rdd = $this->checknull($rdd_a);
+		$redraw = $fail + $rd + $rdd;
+
+		$rej = $this->checknull($rej_a);
+		$enrolled = $this->checknull($enrolled_a);
+		$ltfu = $this->checknull($ltfu_a);
+		$dead = $this->checknull($dead_a);
+		$adult = $this->checknull($adult_a);
+		$transout = $this->checknull($transout_a);
+		$other = $this->checknull($other_a);
+
+		$v_cp = $this->checknull($v_cp_a);
+		$v_ad = $this->checknull($v_ad_a);
+		$v_vl = $this->checknull($v_vl_a);
+		$v_rp = $this->checknull($v_rp_a);
+		$v_uf = $this->checknull($v_uf_a);
+
+		$sitesending = $this->checknull($sitesending_a);
+		$avgage = $this->checknull($avgage_a);
+
+		$tt = $tat[0];			
+
+		$data_array = array(
+			'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
+			'alltests' => $alltests, 'eqatests' => $eqatests, 'tests' => $tests,
+			'firstdna' => $firstdna, 'confirmdna' => $confirmdna, 'repeatspos' => $posrepeats,
+			'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
+			'infantsless2m' => $infantsless2m,
+			'infantsless2mPOs' => $infantsless2mPOS, 'infantsless2w' => $infantsless2w,
+			'infantsless2mPOs' => $infantsless2wPOS, 'infantsabove2m' => $infantsabove2m,
+			'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
+			'adultsPOs' => $adulttestsPOS, 'actualinfants' => $patienttests,
+			'actualinfantsPOs' => $patienttestsPOS, 'pos' => $pos, 'neg' => $neg,
+			'redraw' => $redraw, 'rejected' => $rej, 'enrolled' => $enrolled, 'dead' => $dead,
+			'ltfu' => $ltfu, 'adult' => $adult, 'transout' => $transout, 'other' => $other,
+			'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
+			'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
+			'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
+			'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
+			'tat4' => $tt['tat4'], 'dateupdated' => $today
+		);
+
+		DB::table('national_summary_yearly')->where('year', $year)->update($data_array);
+			
+
+
+		echo "\n Completed entry into eid national summary yearly at " . date('d/m/Y h:i:s a', time());
+    }
+
     public function update_labs($year = null){
     	if($year == null){
     		$year = Date('Y');
@@ -403,6 +557,7 @@ class Eid extends Model
 		}
 
 		$division = "samples.labtestedin";
+		$column = "labtestedin";
 
 		$noofbatches= $n->GettotalbatchesPerlab($year, $division);
 
@@ -422,7 +577,7 @@ class Eid extends Model
 		
 		$facilityssupported = $n->GettotalEIDsitesbytimeperiod($year, $division);
 
-		$tat = $n->GetNatTATs($year, $division);
+		$tat = $n->GetNatTATs($year, $div_array, $division, $column);
 		$tat = collect($tat);
 
 		// Loop through the months and insert data into the division summary
@@ -560,11 +715,13 @@ class Eid extends Model
 		
 		$sitesending_a = $n->GettotalEIDsitesbytimeperiod($year, $division);
 		$avgage_a = $n->Getoverallaverageage($year, $division);
-		$medage_a = $n->Getoverallmedianage($year, $division);
+		$medage_a = $n->Getoverallmedianage($year, $div_array, $division, $column);
 		$medage_a = collect($medage_a);
 
-		$tat = $n->GetNatTATs($year, $division);
-		$tat = collect($tat);
+		if($type != 3){
+			$tat = $n->GetNatTATs($year, $div_array, $division, $column);
+			$tat = collect($tat);
+		}
 		
 
 		// Loop through the months and insert data into the division summary
@@ -624,9 +781,11 @@ class Eid extends Model
 
 				$sitesending = $this->checknull($sitesending_a->where('month', $month)->where($column, $div_array[$it]));
 				$avgage = $this->checknull($avgage_a->where('month', $month)->where($column, $div_array[$it]));
-				$medage = $this->checkmedage($medage_a->where('month', $month)->where($column, $div_array[$it]));
+				$medage = $this->checkmedage($medage_a->where('month', $month)->where('division', $div_array[$it]));
 
-				$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
+				if($type != 3){
+					$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
+				}
 
 				$data_array = array(
 					'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
@@ -888,6 +1047,185 @@ class Eid extends Model
 		// End of division updator
     }
 
+    // Will be used to enter data for yearly divisions except labs
+    // Types: 1=county, 2=subcounty, 3=partner, 4=sites
+    public function division_updator_yearly($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='county_summary_yearly'){
+
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+
+    	// Instantiate new object
+    	$n = new EidDivision;
+
+    	$today=date("Y-m-d");
+
+    	$div_array;
+    	$array_size = 0;
+
+    	$divs = $data = DB::connection('eid')
+		->table($div_table)->select('ID')->get();
+
+		foreach ($divs as $key => $value) {
+			$div_array[$key] = $value->ID;
+			$array_size++;
+		}
+
+		echo "\n Begin eid {$column} update at " . date('d/m/Y h:i:s a', time());
+
+		// Get collection instances of the data
+    	$alltests_a = $n->CumulativeTestedSamples($year, $division, false);
+    	$eqatests_a = $n->OverallEQATestedSamples($year, $division, false);
+
+    	$tests_a = $n->OverallTestedSamples($year, $division, false);
+		
+		$patienttests_a = $n->OverallTestedPatients($year, $division, false);
+		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, $division, false);
+		$received_a = $n->OverallReceivedSamples($year, $division, false);
+			
+		$firstdna_a = $n->OveralldnafirstTestedSamples($year, $division, false);
+		$confirmdna_a = $n->OveralldnasecondTestedSamples($year, $division, false);
+		$posrepeats_a = $n->OverallPosRepeatsTestedSamples($year, $division, false);
+
+		$confirmdnaPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division, false);
+		$posrepeatsPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division, false);
+		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
+
+
+		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, $division, false);
+		$infantsless2mPOS_a = 	$n->Gettestedsamplescountrange($year, 1, true, $division, false);
+		$infantsless2w_a =		$n->Gettestedsamplescountrange($year, 3, false, $division, false);
+		$infantsless2wPOS_a =	$n->Gettestedsamplescountrange($year, 3, true, $division, false);
+		$infantsless46w_a =		$n->Gettestedsamplescountrange($year, 4, false, $division, false);
+		$infantsless46wPOS_a =	$n->Gettestedsamplescountrange($year, 4, true, $division, false);
+		$infantsabove2m_a =		$n->Gettestedsamplescountrange($year, 2, false, $division, false);
+		$infantsabove2mPOS_a = 	$n->Gettestedsamplescountrange($year, 2, true, $division, false);
+		$adulttests_a =			$n->Gettestedsamplescountrange($year, 5, false, $division, false);
+		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true, $division, false);
+		
+
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, $division, false);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, $division, false);
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, $division, false);
+		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, $division, false);
+		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, $division, false);
+		// $redraw=$fail + $rd + $rdd;
+
+		$rej_a = $n->Getnationalrejectedsamples($year, $division, false);
+		
+		$v = "samples.enrollmentstatus";
+		$enrolled_a = $n->GetHEIFollowUpNational($year, 1, $v, $division), false;
+		$ltfu_a = $n->GetHEIFollowUpNational($year, 2, $v, $division, false);
+		$dead_a = $n->GetHEIFollowUpNational($year, 3, $v, $division, false);
+		$adult_a = $n->GetHEIFollowUpNational($year, 4, $v, $division, false);
+		$transout_a = $n->GetHEIFollowUpNational($year, 5, $v, $division, false);
+		$other_a = $n->GetHEIFollowUpNational($year, 6, $v, $division, false);
+
+
+		$v = 'samples.hei_validation';
+		$v_cp_a = $n->GetHEIFollowUpNational($year, 1, $v, $division, false); //confirmedpos	
+		$v_ad_a = $n->GetHEIFollowUpNational($year, 2, $v, $division, false); //adult
+		$v_vl_a = $n->GetHEIFollowUpNational($year, 3, $v, $division, false); //vl
+		$v_rp_a = $n->GetHEIFollowUpNational($year, 4, $v, $division, false); //repeat
+		$v_uf_a = $n->GetHEIFollowUpNational($year, 5, $v, $division, false); //unknownfacility		
+		
+		$sitesending_a = $n->GettotalEIDsitesbytimeperiod($year, $division, false);
+		$avgage_a = $n->Getoverallaverageage($year, $division, false);
+		$medage_a = $n->Getoverallmedianage($year, $div_array, $division, $column, false);
+		$medage_a = collect($medage_a);
+
+		$tat = $n->GetNatTATs($year, $div_array, $division, $column, false);
+		$tat = collect($tat);
+		
+
+		// Loop through divisions i.e. counties, subcounties, partners and sites
+		for ($it=0; $it < $array_size; $it++) { 
+			$alltests = $this->checknull($alltests_a->where($column, $div_array[$it]));
+			$eqatests = $this->checknull($eqatests_a->where($column, $div_array[$it]));
+			$tests = $this->checknull($tests_a->where($column, $div_array[$it]));
+			$patienttests = $this->checknull($patienttests_a->where($column, $div_array[$it]));
+			$patienttestsPOS = $this->checknull($patienttestsPOS_a->where($column, $div_array[$it]));
+
+			$received = $this->checknull($received_a->where($column, $div_array[$it]));
+			$firstdna = $this->checknull($firstdna_a->where($column, $div_array[$it]));
+			$confirmdna = $this->checknull($confirmdna_a->where($column, $div_array[$it]));
+			$posrepeats = $this->checknull($posrepeats_a->where($column, $div_array[$it]));
+			$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where($column, $div_array[$it]));
+			$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where($column, $div_array[$it]));
+			$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
+
+			$infantsless2m = $this->checknull($infantsless2m_a->where($column, $div_array[$it]));
+			$infantsless2mPOS = $this->checknull($infantsless2mPOS_a->where($column, $div_array[$it]));
+			$infantsless2w = $this->checknull($infantsless2w_a->where($column, $div_array[$it]));
+			$infantsless2wPOS = $this->checknull($infantsless2wPOS_a->where($column, $div_array[$it]));
+			$infantsless46w = $this->checknull($infantsless46w_a->where($column, $div_array[$it]));
+			$infantsless46wPOS = $this->checknull($infantsless46wPOS_a->where($column, $div_array[$it]));
+			$infantsabove2m = $this->checknull($infantsabove2m_a->where($column, $div_array[$it]));
+			$infantsabove2mPOS = $this->checknull($infantsabove2mPOS_a->where($column, $div_array[$it]));
+			$adulttests = $this->checknull($adulttests_a->where($column, $div_array[$it]));
+			$adulttestsPOS = $this->checknull($adulttestsPOS_a->where($column, $div_array[$it]));
+
+
+			$pos = $this->checknull($pos_a->where($column, $div_array[$it]));
+			$neg = $this->checknull($neg_a->where($column, $div_array[$it]));
+			$fail = $this->checknull($fail_a->where($column, $div_array[$it]));
+			$rd = $this->checknull($rd_a->where($column, $div_array[$it]));
+			$rdd = $this->checknull($rdd_a->where($column, $div_array[$it]));
+			$redraw = $fail + $rd + $rdd;
+
+			$rej = $this->checknull($rej_a->where($column, $div_array[$it]));
+			$enrolled = $this->checknull($enrolled_a->where($column, $div_array[$it]));
+			$ltfu = $this->checknull($ltfu_a->where($column, $div_array[$it]));
+			$dead = $this->checknull($dead_a->where($column, $div_array[$it]));
+			$adult = $this->checknull($adult_a->where($column, $div_array[$it]));
+			$transout = $this->checknull($transout_a->where($column, $div_array[$it]));
+			$other = $this->checknull($other_a->where($column, $div_array[$it]));
+
+			$v_cp = $this->checknull($v_cp_a->where($column, $div_array[$it]));
+			$v_ad = $this->checknull($v_ad_a->where($column, $div_array[$it]));
+			$v_vl = $this->checknull($v_vl_a->where($column, $div_array[$it]));
+			$v_rp = $this->checknull($v_rp_a->where($column, $div_array[$it]));
+			$v_uf = $this->checknull($v_uf_a->where($column, $div_array[$it]));
+
+			$sitesending = $this->checknull($sitesending_a->where($column, $div_array[$it]));
+			$avgage = $this->checknull($avgage_a->where($column, $div_array[$it]));
+			$medage = $this->checkmedage($medage_a->where('division', $div_array[$it]));
+
+			$tt = $this->checktat($tat->where('division', $div_array[$it]));
+
+			$data_array = array(
+				'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
+				'alltests' => $alltests, 'eqatests' => $eqatests, 'tests' => $tests,
+				'firstdna' => $firstdna, 'confirmdna' => $confirmdna, 'repeatspos' => $posrepeats,
+				'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
+				'infantsless2m' => $infantsless2m,
+				'infantsless2mPOs' => $infantsless2mPOS, 'infantsless2w' => $infantsless2w,
+				'infantsless2mPOs' => $infantsless2wPOS, 'infantsabove2m' => $infantsabove2m,
+				'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
+				'adultsPOs' => $adulttestsPOS, 'actualinfants' => $patienttests,
+				'actualinfantsPOs' => $patienttestsPOS, 'pos' => $pos, 'neg' => $neg,
+				'redraw' => $redraw, 'rejected' => $rej, 'enrolled' => $enrolled, 'dead' => $dead,
+				'ltfu' => $ltfu, 'adult' => $adult, 'transout' => $transout, 'other' => $other,
+				'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
+				'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
+				'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
+				 'dateupdated' => $today
+			);
+
+			if($type != 3){
+				$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
+				$data_array = array_merge($data_array, $turn);
+			}
+
+			DB::table($sum_table)->where('year', $year)->where($column, $div_array[$it])->update($data_array);
+
+		}
+		// End of division loop
+			
+
+		echo "\n Completed entry into eid {$column} summary yearly at " . date('d/m/Y h:i:s a', time());
+	}
+
     public function update_counties($year = null){
     	return $this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary', 'county_agebreakdown', 'county_iprophylaxis', 'county_mprophylaxis', 'county_entrypoint');
     }
@@ -902,6 +1240,23 @@ class Eid extends Model
 
     public function update_facilities($year = null){
     	return $this->division_updator($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary');
+    }
+
+
+    public function update_counties_yearly($year = null){
+    	return $this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary_yearly');
+    }
+
+    public function update_subcounties_yearly($year = null){
+    	return $this->division_updator($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'subcounty_summary_yearly');
+    }
+
+    public function update_partners_yearly($year = null){
+    	return $this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary_yearly');
+    }
+
+    public function update_facilities_yearly($year = null){
+    	return $this->division_updator($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary_yearly');
     }
 
 

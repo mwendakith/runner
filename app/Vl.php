@@ -228,7 +228,7 @@ class Vl extends Model
 					$sustx = $less5k +  $above5k;
 
 					$data_array = array(
-						'alltests' => $tested,
+						'tests' => $tested,
 						'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
 						'confirm2vl' => $conf2VL, 'rejected' => $rej, 'Undetected' => $ldl, 'less1000' => $less1k,
 						'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
@@ -289,9 +289,9 @@ class Vl extends Model
 
 			}
 			// End of looping through ids of each table e.g. agecategory
+			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
 		// End of looping of params
-		echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
     }
 
     public function checknull($var){

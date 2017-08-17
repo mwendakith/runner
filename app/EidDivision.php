@@ -11,7 +11,7 @@ class EidDivision extends Model
     //
 
     // Total number of batches
-    public function GettotalbatchesPerlab($year, $division='view_facilitys.county'){
+    public function GettotalbatchesPerlab($year, $division='view_facilitys.county', $monthly=true){
     	$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.batchno) as totals, month(datetested) as month"))
@@ -20,7 +20,14 @@ class EidDivision extends Model
 		->whereRaw("(samples.parentid=0  OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get();
 
 		return $data;
@@ -29,7 +36,7 @@ class EidDivision extends Model
     }
 
     //national ALL tests EQA + INFANTS
-	public function CumulativeTestedSamples($year, $division='view_facilitys.county')
+	public function CumulativeTestedSamples($year, $division='view_facilitys.county', $monthly=true)
 	{
 		$data = DB::connection('eid')
 		->table('samples')
@@ -40,7 +47,14 @@ class EidDivision extends Model
 		->whereRaw("(samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))")
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get();
 
 		return $data;
@@ -51,7 +65,7 @@ class EidDivision extends Model
 	
 
 	//national EQA tests
-	public function OverallEQATestedSamples($year, $division='view_facilitys.county')
+	public function OverallEQATestedSamples($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -64,7 +78,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 1)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get();
 
 		return $data;
@@ -74,7 +95,7 @@ class EidDivision extends Model
 	}
 
 	//national tests
-	public function OverallTestedSamples($year, $division='view_facilitys.county')
+	public function OverallTestedSamples($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -87,7 +108,14 @@ class EidDivision extends Model
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;  
@@ -98,7 +126,7 @@ class EidDivision extends Model
 	}
 
 	//national tests
-	public function OverallTestedPatients($year, $division='view_facilitys.county')
+	public function OverallTestedPatients($year, $division='view_facilitys.county', $monthly=true)
 	{
 		$data = DB::connection('eid')
 		->table('samples')
@@ -110,7 +138,14 @@ class EidDivision extends Model
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -121,7 +156,7 @@ class EidDivision extends Model
 	}
 
 	//national tests
-	public function OverallTestedPatientsPOS($year, $division='view_facilitys.county')
+	public function OverallTestedPatientsPOS($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -134,7 +169,14 @@ class EidDivision extends Model
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -145,7 +187,7 @@ class EidDivision extends Model
 	}
 
 	//national tests
-	public function OverallReceivedSamples($year, $division='view_facilitys.county')
+	public function OverallReceivedSamples($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -157,7 +199,14 @@ class EidDivision extends Model
 		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -168,7 +217,7 @@ class EidDivision extends Model
 	}
 
 	//national tests first pcr
-	public function OveralldnafirstTestedSamples($year, $division='view_facilitys.county')
+	public function OveralldnafirstTestedSamples($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -181,7 +230,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -192,7 +248,7 @@ class EidDivision extends Model
 	}
 
 	//national tests confirmatory
-	public function OveralldnasecondTestedSamples($year, $division='view_facilitys.county')
+	public function OveralldnasecondTestedSamples($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -205,7 +261,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -215,7 +278,7 @@ class EidDivision extends Model
 	}
 
 	//national tests confirmatory
-	public function OveralldnasecondTestedSamplesPOS($year, $division='view_facilitys.county')
+	public function OveralldnasecondTestedSamplesPOS($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -228,7 +291,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -238,7 +308,7 @@ class EidDivision extends Model
 	}
 
 	//national tests confirmatory
-	public function OverallPosRepeatsTestedSamples($year, $division='view_facilitys.county')
+	public function OverallPosRepeatsTestedSamples($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -251,7 +321,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -262,7 +339,7 @@ class EidDivision extends Model
 	}
 
 	//national tests confirmatory
-	public function OverallPosRepeatsTestedSamplesPOS($year, $division='view_facilitys.county')
+	public function OverallPosRepeatsTestedSamplesPOS($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -275,7 +352,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -285,7 +369,7 @@ class EidDivision extends Model
 	}
 
 	//samples for a particular range	
-	public function Gettestedsamplescountrange($year, $a, $pos=false, $division='view_facilitys.county')
+	public function Gettestedsamplescountrange($year, $a, $pos=false, $division='view_facilitys.county', $monthly=true)
 	{
 		$b = new BaseModel;
 		$age = $b->age_range($a);
@@ -309,7 +393,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -317,7 +408,7 @@ class EidDivision extends Model
 	}
 
 	//national outcomes	
-	public function OverallTestedSamplesOutcomes($year, $result_type, $division='view_facilitys.county')
+	public function OverallTestedSamplesOutcomes($year, $result_type, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -330,7 +421,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -342,7 +440,7 @@ class EidDivision extends Model
 
 
 	//national rejected	
-	public function Getnationalrejectedsamples($year, $division='view_facilitys.county')
+	public function Getnationalrejectedsamples($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -354,7 +452,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -365,7 +470,7 @@ class EidDivision extends Model
 
 
 	//national patients HEI follow up or validation status
-	public function GetHEIFollowUpNational($year, $estatus, $col="samples.enrollmentstatus", $division='view_facilitys.county')
+	public function GetHEIFollowUpNational($year, $estatus, $col="samples.enrollmentstatus", $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -379,7 +484,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -390,7 +502,7 @@ class EidDivision extends Model
 	}
 
 	//national sites by period
-	public function GettotalEIDsitesbytimeperiod($year, $division='view_facilitys.county')
+	public function GettotalEIDsitesbytimeperiod($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -400,7 +512,14 @@ class EidDivision extends Model
 		->whereYear('datereceived', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -411,7 +530,7 @@ class EidDivision extends Model
 	}
 
 	// Average age	
-	public function Getoverallaverageage($year, $division='view_facilitys.county')
+	public function Getoverallaverageage($year, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -425,7 +544,14 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -435,7 +561,7 @@ class EidDivision extends Model
 
 
 	// Median age	
-	public function Getoverallmedianage($year, $div_array, $division='view_facilitys.county', $col='county')
+	public function Getoverallmedianage($year, $div_array, $division='view_facilitys.county', $col='county', $monthly=true)
 	{
 		$data = DB::connection('eid')
 		->table('samples')
@@ -458,30 +584,53 @@ class EidDivision extends Model
 
 		$place = 0;
 
-		for ($i=0; $i < 12; $i++) { 
-			$month = $i + 1;
+		if($monthly){
 
+			for ($i=0; $i < 12; $i++) { 
+				$month = $i + 1;
+
+				for ($iterator=0; $iterator < count($div_array); $iterator++) { 
+					$c = $div_array[$iterator];
+					
+					$d = $data->where('month', $month)->where($col, $c);
+
+					if($d->isEmpty()){
+						$return[$place]['totals'] = 0;
+						$return[$place]['division'] = $c;
+						$return[$place]['month'] = $month;
+						continue;
+					}
+
+					$return[$place]['totals'] = $d->median('age');
+					$return[$place]['division'] = $c;
+					$return[$place]['month'] = $month;
+
+					$place++;
+
+				}
+
+
+			}
+		}
+
+		else{
 			for ($iterator=0; $iterator < count($div_array); $iterator++) { 
 				$c = $div_array[$iterator];
 				
-				$d = $data->where('month', $month)->where($col, $c);
+				$d = $data->where($col, $c);
 
 				if($d->isEmpty()){
 					$return[$place]['totals'] = 0;
-					$return[$place]['county'] = $c;
-					$return[$place]['month'] = $month;
+					$return[$place]['division'] = $c;
 					continue;
 				}
 
 				$return[$place]['totals'] = $d->median('age');
-				$return[$place]['county'] = $c;
-				$return[$place]['month'] = $month;
+				$return[$place]['division'] = $c;
 
 				$place++;
 
 			}
-
-
 		}
 
 		return $return;
@@ -489,7 +638,7 @@ class EidDivision extends Model
 	}
 
 	// infant proph nat summary
-	public function Getinfantprophpositivitycount($year, $drug, $result_type, $division='view_facilitys.county')
+	public function Getinfantprophpositivitycount($year, $drug, $result_type, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -504,7 +653,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -516,7 +672,7 @@ class EidDivision extends Model
 
 
 	// mother proph nat summary
-	public function Getinterventionspositivitycount($year, $drug, $result_type, $division='view_facilitys.county')
+	public function Getinterventionspositivitycount($year, $drug, $result_type, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -532,7 +688,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -542,7 +705,7 @@ class EidDivision extends Model
 	}
 
 	// entry point national summary
-	public function GetNationalResultbyEntrypoint($year, $entry_point, $result_type, $division='view_facilitys.county')
+	public function GetNationalResultbyEntrypoint($year, $entry_point, $result_type, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -558,7 +721,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get();
 
 		return $data; 
@@ -571,7 +741,7 @@ class EidDivision extends Model
 
 
 	//samples for a particular range	
-	public function GetTestOutcomesbyAgeBand($year, $a, $result_type, $division='view_facilitys.county')
+	public function GetTestOutcomesbyAgeBand($year, $a, $result_type, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$b = new BaseModel;
@@ -589,7 +759,14 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->groupBy('month', $division)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
 		->get(); 
 
 		return $data;
@@ -601,7 +778,7 @@ class EidDivision extends Model
 	}
 
 	// Average age	
-	public function GetNatTATs($year, $div_array, $division='view_facilitys.county', $col='county')
+	public function GetNatTATs($year, $div_array, $division='view_facilitys.county', $col='county', $monthly=true)
 	{
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
@@ -631,13 +808,60 @@ class EidDivision extends Model
 
 		$place = 0;
 
-		for ($i=0; $i < 12; $i++) { 
-			$month = $i + 1;
+		if($monthly){
 
+			for ($i=0; $i < 12; $i++) { 
+				$month = $i + 1;
+
+				for ($iterator=0; $iterator < count($div_array); $iterator++) { 
+					$c = $div_array[$iterator];
+					
+					$d = $data->where('month', $month)->where($col, $c);
+
+					if($d->isEmpty()){
+						$return[$place]['tat1'] = 0;
+						$return[$place]['tat2'] = 0;
+						$return[$place]['tat3'] = 0;
+						$return[$place]['tat4'] = 0;
+						$return[$place]['division'] = $c;
+						$return[$place]['month'] = $month;
+						continue;
+					}
+
+					$tat1 = $tat2 = $tat3 = $tat4 = 0;
+					$rows = $d->count();
+
+					$holidays = $b->getTotalHolidaysinMonth($month);
+
+					foreach ($d as $key => $value) {
+						
+						$tat1 += $b->get_days($value->datecollected, $value->datereceived, $holidays);
+						$tat2 += $b->get_days($value->datereceived, $value->datetested, $holidays);
+						$tat3 += $b->get_days($value->datetested, $value->datedispatched, $holidays);
+						$tat4 += $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+
+					}
+
+					$return[$place]['tat1'] = floor($tat1 / $rows);
+					$return[$place]['tat2'] = floor($tat2 / $rows);
+					$return[$place]['tat3'] = floor($tat3 / $rows);
+					$return[$place]['tat4'] = floor($tat4 / $rows);
+					$return[$place]['division'] = $c;
+					$return[$place]['month'] = $month;
+
+					$place++;
+
+				}
+
+
+			}
+		}
+
+		else{
 			for ($iterator=0; $iterator < count($div_array); $iterator++) { 
 				$c = $div_array[$iterator];
 				
-				$d = $data->where('month', $month)->where($col, $c);
+				$d = $data->where($col, $c);
 
 				if($d->isEmpty()){
 					$return[$place]['tat1'] = 0;
@@ -645,17 +869,17 @@ class EidDivision extends Model
 					$return[$place]['tat3'] = 0;
 					$return[$place]['tat4'] = 0;
 					$return[$place]['division'] = $c;
-					$return[$place]['month'] = $month;
 					continue;
 				}
 
 				$tat1 = $tat2 = $tat3 = $tat4 = 0;
 				$rows = $d->count();
 
-				$holidays = $b->getTotalHolidaysinMonth($month);
+				
 
 				foreach ($d as $key => $value) {
-					
+					$holidays = $b->getTotalHolidaysinMonth($value->month);
+
 					$tat1 += $b->get_days($value->datecollected, $value->datereceived, $holidays);
 					$tat2 += $b->get_days($value->datereceived, $value->datetested, $holidays);
 					$tat3 += $b->get_days($value->datetested, $value->datedispatched, $holidays);
@@ -667,14 +891,11 @@ class EidDivision extends Model
 				$return[$place]['tat2'] = floor($tat2 / $rows);
 				$return[$place]['tat3'] = floor($tat3 / $rows);
 				$return[$place]['tat4'] = floor($tat4 / $rows);
-				$return[$place]['county'] = $c;
-				$return[$place]['month'] = $month;
+				$return[$place]['division'] = $c;
 
 				$place++;
 
 			}
-
-
 		}
 
 		return $return;

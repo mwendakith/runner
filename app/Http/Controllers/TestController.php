@@ -27,17 +27,17 @@ class TestController extends Controller
 			$a[$key] = $value->ID;
 		}
 
-		$r = $t->GetNatTATs(2016, $a);
+		$r = $t->GetNatTATs(2016, $a, 'view_facilitys.county', 'county', false);
 		// $r = $t->GetNatTATs(2016);
 
 		$r = collect($r);
 
 
 
-	    $d = $r->where('month', 1)->where('county', 1);
-	    return $this->checknull($d);
+	    // $d = $r->where('month', 1)->where('county', 1);
+	    // return $this->checknull($d);
 
-	    dd($d);
+	    dd($r);
 
 	    // foreach ($r as $key => $value) {
 	    // 	echo $value->county . ' ' . $value->totals;

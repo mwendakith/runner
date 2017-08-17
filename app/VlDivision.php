@@ -646,10 +646,10 @@ class VlDivision extends Model
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
 
-		$age_column = 'viralsamples.age';
+		$age_column = 'viralsamples.age2';
 
 		if($age < 6){
-			$age_column = 'viralsamples.age2';
+			$age_column = 'viralsamples.age';
 		}
 
 		$data = DB::connection('vl')
@@ -707,8 +707,7 @@ class VlDivision extends Model
 				return $query
 				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
-				->where('viralsamples.justification', '!=', 10)
-				->whereBetween('viralsamples.rcategory', [1, 4]);
+				->where('viralsamples.justification', '!=', 10);
 			}				
 		})
 		->whereYear('datetested', $year)

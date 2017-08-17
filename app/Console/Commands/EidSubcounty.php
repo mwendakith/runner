@@ -44,6 +44,7 @@ class EidSubcounty extends Command
         $eid = new Eid;
 
         $output = $eid->update_subcounties($year);
+        $output .= $eid->update_subcounties($year_yearly);
 
         $this->info($output);
     }

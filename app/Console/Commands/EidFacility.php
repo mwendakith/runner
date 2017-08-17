@@ -44,6 +44,7 @@ class EidFacility extends Command
         $eid = new Eid;
 
         $output = $eid->update_facilities($year);
+        $output .= $eid->update_facilities_yearly($year);
 
         $this->info($output);
     }
