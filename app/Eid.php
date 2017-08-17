@@ -1244,19 +1244,19 @@ class Eid extends Model
 
 
     public function update_counties_yearly($year = null){
-    	return $this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary_yearly');
+    	return $this->division_updator_yearly($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary_yearly');
     }
 
     public function update_subcounties_yearly($year = null){
-    	return $this->division_updator($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'subcounty_summary_yearly');
+    	return $this->division_updator_yearly($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'subcounty_summary_yearly');
     }
 
     public function update_partners_yearly($year = null){
-    	return $this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary_yearly');
+    	return $this->division_updator_yearly($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary_yearly');
     }
 
     public function update_facilities_yearly($year = null){
-    	return $this->division_updator($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary_yearly');
+    	return $this->division_updator_yearly($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary_yearly');
     }
 
 
