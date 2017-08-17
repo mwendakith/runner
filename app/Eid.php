@@ -1114,7 +1114,7 @@ class Eid extends Model
 		$rej_a = $n->Getnationalrejectedsamples($year, $division, false);
 		
 		$v = "samples.enrollmentstatus";
-		$enrolled_a = $n->GetHEIFollowUpNational($year, 1, $v, $division), false;
+		$enrolled_a = $n->GetHEIFollowUpNational($year, 1, $v, $division, false);
 		$ltfu_a = $n->GetHEIFollowUpNational($year, 2, $v, $division, false);
 		$dead_a = $n->GetHEIFollowUpNational($year, 3, $v, $division, false);
 		$adult_a = $n->GetHEIFollowUpNational($year, 4, $v, $division, false);

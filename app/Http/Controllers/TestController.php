@@ -46,8 +46,8 @@ class TestController extends Controller
     }
 
     public function test2(){
-    	// $n = new Eid;
-    	// echo $n->update_nation(2016);
+    	$n = new Eid;
+    	echo $n->update_nation(2016);
 
     	$counties = $data = DB::connection('vl')
 		->table('viraljustifications')->select('ID')->get();
