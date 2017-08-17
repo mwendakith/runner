@@ -20,7 +20,7 @@ class EidDivision extends Model
 		->whereRaw("(samples.parentid=0  OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -47,7 +47,7 @@ class EidDivision extends Model
 		->whereRaw("(samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))")
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -78,7 +78,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 1)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -108,7 +108,7 @@ class EidDivision extends Model
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -138,7 +138,7 @@ class EidDivision extends Model
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -169,7 +169,7 @@ class EidDivision extends Model
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -199,7 +199,7 @@ class EidDivision extends Model
 		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -230,7 +230,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -261,7 +261,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -291,7 +291,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -321,7 +321,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -352,7 +352,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -393,7 +393,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -421,7 +421,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -452,7 +452,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -484,7 +484,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -512,7 +512,7 @@ class EidDivision extends Model
 		->whereYear('datereceived', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -544,7 +544,7 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -653,7 +653,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -688,7 +688,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -721,7 +721,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
@@ -759,7 +759,7 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
+		->when($monthly, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
 			}
