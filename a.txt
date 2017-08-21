@@ -1,5 +1,0 @@
-machine=10.230.50.13 crontab -e
-root / Nascop123.
-smtp = 10.230.30.103
-from: cron@nascop.org
-to: alerts@dataposit.co.ke
