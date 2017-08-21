@@ -322,7 +322,7 @@ class Vl extends Model
 
     	$rec_a = $n->getallreceivediraloadsamples($year, $division);
     	$tested_a = $n->getalltestedviraloadsamples($year, $division);
-    	$actualpatients_a = $n->getallactualpatients($year, $division);
+    	// $actualpatients_a = $n->getallactualpatients($year, $division);
     	$rej_a = $n->getallrejectedviraloadsamples($year, $division);
     	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year, $division);
 
@@ -377,7 +377,7 @@ class Vl extends Model
 			for ($it=0; $it < $array_size; $it++) { 
 				$rec = $this->checknull($rec_a->where('month', $month)->where($column, $div_array[$it]));
 				$tested = $this->checknull($tested_a->where('month', $month)->where($column, $div_array[$it]));
-				$actualpatients = $this->checknull($actualpatients_a->where('month', $month)->where($column, $div_array[$it]));
+				// $actualpatients = $this->checknull($actualpatients_a->where('month', $month)->where($column, $div_array[$it]));
 				$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 				$rs = $this->checknull($rs_a->where('month', $month)->where($column, $div_array[$it]));
 				$sites = $this->checknull($sites_a->where('month', $month)->where($column, $div_array[$it]));
@@ -399,7 +399,7 @@ class Vl extends Model
 					$adults = $less19 + $less24 + $over25;
 					$paeds = $less2 + $less9 + $less14;
 				}
-				
+
 				$ldl = $this->checknull($ldl_a->where('month', $month)->where($column, $div_array[$it]));
 				$less1k = $this->checknull($less1k_a->where('month', $month)->where($column, $div_array[$it]));
 				$less5k = $this->checknull($less5k_a->where('month', $month)->where($column, $div_array[$it]));
@@ -424,7 +424,7 @@ class Vl extends Model
 				}
 
 				$data_array = array(
-					'received' => $rec, 'alltests' => $tested, 'actualpatients' => $actualpatients,
+					'received' => $rec, 'alltests' => $tested,
 					'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
 					'confirm2vl' => $conf2VL, 'rejected' => $rej, 'dbs' => $dbs, 'plasma' => $plas,
 					'edta' => $edta, 'maletest' => $male, 'femaletest' => $female,
@@ -443,6 +443,7 @@ class Vl extends Model
 
 					$data_array = array_merge($age_array, $data_array);
 				}
+
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 			}
