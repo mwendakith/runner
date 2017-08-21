@@ -277,21 +277,21 @@ class VlDivision extends Model
 		$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 
 		$data = DB::connection('vl')
-		->table('samples')
+		->table('viralsamples')
 		->select($division, $division, DB::raw($sql))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
-		->whereYear('samples.datecollected', '>', 1980)
-		->whereYear('samples.datereceived', '>', 1980)
-		->whereYear('samples.datetested', '>', 1980)
-		->whereYear('samples.datedispatched', '>', 1980)
+		->whereYear('viralsamples.datecollected', '>', 1980)
+		->whereYear('viralsamples.datereceived', '>', 1980)
+		->whereYear('viralsamples.datetested', '>', 1980)
+		->whereYear('viralsamples.datedispatched', '>', 1980)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],
 			['datetested', '<=', 'datedispatched']
 		])
 		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.repeatt', 0)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
 		->get(); 
 
 
