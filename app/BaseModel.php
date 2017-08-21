@@ -278,8 +278,36 @@ class BaseModel extends Model
 		else if($type == 5){
 			return array('column' => 'viralsamples.justification', 'param' => $param);
 		}
+	}
 
+	public function get_viralparams($type=1, $param=6){
+		$data;
 
+		// Type 1 for age
+		if($type == 1){
+			return array('column' => 'viralsamples.age2', 'param' => $param);
+		}
+
+		// Type 2 for gender
+		else if($type == 2){
+			$gender = $this->get_gender($param);
+			return array('column' => 'viralpatients.gender', 'param' => $gender);
+		}
+
+		// Type 3 for regimen
+		else if($type == 3){
+			return array('column' => 'viralsamples.prophylaxis', 'param' => $param);
+		}
+
+		// Type 4 for sampletype
+		else if ($type == 4) {
+			return array('column' => 'viralsamples.sampletype', 'param' => $param);
+		}
+
+		// Type 5 for justification
+		else if($type == 5){
+			return array('column' => 'viralsamples.justification', 'param' => $param);
+		}
 	}
 
 	

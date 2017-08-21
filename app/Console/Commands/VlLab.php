@@ -39,5 +39,12 @@ class VlLab extends Command
     public function handle()
     {
         //
+        $year = $this->argument('year');
+
+        $vl = new Vl;
+
+        $output = $vl->update_labs($year);
+
+        $this->info($output);
     }
 }

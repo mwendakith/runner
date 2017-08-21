@@ -39,5 +39,12 @@ class VlPartner extends Command
     public function handle()
     {
         //
+        $year = $this->argument('year');
+
+        $vl = new Vl;
+
+        $output = $vl->update_partners($year);
+
+        $this->info($output);
     }
 }

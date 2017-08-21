@@ -39,5 +39,12 @@ class VlCounty extends Command
     public function handle()
     {
         //
+        $year = $this->argument('year');
+
+        $vl = new Vl;
+
+        $output = $vl->update_county($year);
+
+        $this->info($output);
     }
 }

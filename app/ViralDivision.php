@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use App\BaseModel;
 
-class VlDivision extends Model
+class ViralDivision extends Model
 {
     //
-
     public function getalltestedviraloadsamples($year, $division='view_facilitys.county'){
 
     	$data = DB::connection('vl')

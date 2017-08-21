@@ -39,5 +39,12 @@ class VlFacility extends Command
     public function handle()
     {
         //
+        $year = $this->argument('year');
+
+        $vl = new Vl;
+
+        $output = $vl->update_facilities($year);
+
+        $this->info($output);
     }
 }
