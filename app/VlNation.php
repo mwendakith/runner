@@ -241,11 +241,11 @@ class VlNation extends Model
     	$b = new BaseModel;
 		$age_band = $b->get_vlage($age);
 
-		$age_column = 'viralsamples.age';
+		$age_column = 'viralsamples.age2';
 		$sql = "COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month";
 
 		if($age < 6){
-			$age_column = 'viralsamples.age2';
+			$age_column = 'viralsamples.age';
 		}
 
 		if($all){
