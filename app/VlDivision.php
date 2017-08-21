@@ -30,7 +30,7 @@ class VlDivision extends Model
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
-		->select($division, DB::raw("COUNT(DISTINCT viralsamples.patient,viralviralsamples.facility) as totals, month(datetested) as month"))
+		->select($division, DB::raw("COUNT(DISTINCT viralsamples.patient,viralsamples.facility) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.rcategory', [1, 4])
@@ -77,10 +77,10 @@ class VlDivision extends Model
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
-		->select($division, DB::raw("COUNT(DISTINCT viralviralsamples.facility) as totals, month(datereceived) as month"))
+		->select($division, DB::raw("COUNT(DISTINCT viralsamples.facility) as totals, month(datereceived) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datereceived', $year)
-		->where('viralviralsamples.facility', '!=', 0)
+		->where('viralsamples.facility', '!=', 0)
 		->where('viralsamples.Flag', 1)
 		->groupBy('month', $division)
 		->get();
