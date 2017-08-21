@@ -622,7 +622,7 @@ class Eid extends Model
 					'tat4' => $tt['tat4'], 'dateupdated' => $today
 				);
 
-				DB::table("lab_summary")->where('year', $year)->where('month', $month)->where($lab, $div_array[$it])->update($data_array);
+				DB::table("lab_summary")->where('year', $year)->where('month', $month)->where("lab", $div_array[$it])->update($data_array);
 
 				// $sql = "UPDATE lab_summary set received='$received',alltests='$alltestedsamples', tests='$testedsamples' ,confirmdna='$confirmdna',repeatspos='$posrepeats',  pos='$positives', neg='$negatives', redraw='$failed',eqatests='$EQAtestedsamples',batches='$noofbatches', rejected='$rejectedsamples', sitessending='$facilityssupported', tat1='$t1',tat2='$t2',tat3='$t3',tat4='$t4',sorted=15  WHERE lab='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
 

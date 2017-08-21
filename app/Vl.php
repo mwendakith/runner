@@ -631,11 +631,11 @@ class Vl extends Model
     }
 
     public function update_facilities($year=null){
-    	return $this->update_division($year, 4, 'facility', 'samples.facility', 'facilitys', 'vl_site_summary');
+    	return $this->update_division($year, 4, 'facility', 'viralsamples.facility', 'facilitys', 'vl_site_summary');
     }
 
     public function update_labs($year=null){
-    	return $this->update_division($year, 5, 'labtestedin', "samples.labtestedin", 'labs', 'vl_lab_summary');
+    	return $this->update_division($year, 5, 'labtestedin', "viralsamples.labtestedin", 'labs', 'vl_lab_summary');
     }
 
     public function checknull($var){
