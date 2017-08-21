@@ -388,16 +388,18 @@ class Vl extends Model
 				$baseline = $this->checknull($baseline_a->where('month', $month)->where($column, $div_array[$it]));
 				$baselinefail = $this->checknull($baselinefail_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$noage = $this->checknull($noage_a->where('month', $month)->where($column, $div_array[$it]));
-				$less2 = $this->checknull($less2_a->where('month', $month)->where($column, $div_array[$it]));
-				$less9 = $this->checknull($less9_a->where('month', $month)->where($column, $div_array[$it]));
-				$less14 = $this->checknull($less14_a->where('month', $month)->where($column, $div_array[$it]));
-				$less19 = $this->checknull($less19_a->where('month', $month)->where($column, $div_array[$it]));
-				$less24 = $this->checknull($less24_a->where('month', $month)->where($column, $div_array[$it]));
-				$over25 = $this->checknull($over25_a->where('month', $month)->where($column, $div_array[$it]));
-				$adults = $less19 + $less24 + $over25;
-				$paeds = $less2 + $less9 + $less14;
-
+				if($type != 5){
+					$noage = $this->checknull($noage_a->where('month', $month)->where($column, $div_array[$it]));
+					$less2 = $this->checknull($less2_a->where('month', $month)->where($column, $div_array[$it]));
+					$less9 = $this->checknull($less9_a->where('month', $month)->where($column, $div_array[$it]));
+					$less14 = $this->checknull($less14_a->where('month', $month)->where($column, $div_array[$it]));
+					$less19 = $this->checknull($less19_a->where('month', $month)->where($column, $div_array[$it]));
+					$less24 = $this->checknull($less24_a->where('month', $month)->where($column, $div_array[$it]));
+					$over25 = $this->checknull($over25_a->where('month', $month)->where($column, $div_array[$it]));
+					$adults = $less19 + $less24 + $over25;
+					$paeds = $less2 + $less9 + $less14;
+				}
+				
 				$ldl = $this->checknull($ldl_a->where('month', $month)->where($column, $div_array[$it]));
 				$less1k = $this->checknull($less1k_a->where('month', $month)->where($column, $div_array[$it]));
 				$less5k = $this->checknull($less5k_a->where('month', $month)->where($column, $div_array[$it]));
