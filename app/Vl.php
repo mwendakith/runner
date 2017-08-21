@@ -331,10 +331,12 @@ class Vl extends Model
 		$rs_a = $n->getallrepeattviraloadsamples($year, $division);
     	
 
-    	$baseline_a = $n->GetNationalBaseline($year, $division);
-    	$baselinefail_a = $n->GetNationalBaselineFailure($year, $division);
+    	
 
     	if($type != 5){
+    		$baseline_a = $n->GetNationalBaseline($year, $division);
+	    	$baselinefail_a = $n->GetNationalBaselineFailure($year, $division);
+
 	    	$noage_a = $n->getalltestedviraloadsbyage($year, $division, 1);
 	    	$less2_a = $n->getalltestedviraloadsbyage($year, $division, 6);
 	    	$less9_a = $n->getalltestedviraloadsbyage($year, $division, 7);
@@ -385,10 +387,12 @@ class Vl extends Model
 				$conftx = $this->checknull($conftx_a->where('month', $month)->where($column, $div_array[$it]));
 				$conf2VL = $this->checknull($conf2VL_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$baseline = $this->checknull($baseline_a->where('month', $month)->where($column, $div_array[$it]));
-				$baselinefail = $this->checknull($baselinefail_a->where('month', $month)->where($column, $div_array[$it]));
+				
 
 				if($type != 5){
+					$baseline = $this->checknull($baseline_a->where('month', $month)->where($column, $div_array[$it]));
+					$baselinefail = $this->checknull($baselinefail_a->where('month', $month)->where($column, $div_array[$it]));
+
 					$noage = $this->checknull($noage_a->where('month', $month)->where($column, $div_array[$it]));
 					$less2 = $this->checknull($less2_a->where('month', $month)->where($column, $div_array[$it]));
 					$less9 = $this->checknull($less9_a->where('month', $month)->where($column, $div_array[$it]));
@@ -431,12 +435,12 @@ class Vl extends Model
 					'nogendertest' => $nogender, 'Undetected' => $ldl, 'less1000' => $less1k,
 					'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
 					'sitessending' => $sites, 'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'],
-					'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'], 'baseline' => $baseline,
-					'baselinesustxfail' => $baselinefail, 'dateupdated' => $today
+					'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'], 'dateupdated' => $today
 				);
 
 				if($type != 5){
-					$age_array = array('less2' => $less2, 'less9' => $less9,
+					$age_array = array('baseline' => $baseline,
+					'baselinesustxfail' => $baselinefail, 'less2' => $less2, 'less9' => $less9,
 					'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
 					'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
 					'noage' => $noage);
