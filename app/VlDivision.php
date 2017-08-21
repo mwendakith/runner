@@ -15,7 +15,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.Flag', 1)
@@ -30,8 +30,8 @@ class VlDivision extends Model
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
-		->select($division, DB::raw("COUNT(DISTINCT viralsamples.patient,viralsamples.facility) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->select($division, DB::raw("COUNT(DISTINCT viralsamples.patient,viralviralsamples.facility) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.Flag', 1)
@@ -47,7 +47,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datereceived', $year)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->where('viralsamples.Flag', 1)
@@ -62,7 +62,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datereceived', $year)
 		->where('viralsamples.receivedstatus', 2)
 		->where('viralsamples.Flag', 1)
@@ -77,10 +77,10 @@ class VlDivision extends Model
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
-		->select($division, DB::raw("COUNT(DISTINCT viralsamples.facility) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->select($division, DB::raw("COUNT(DISTINCT viralviralsamples.facility) as totals, month(datereceived) as month"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datereceived', $year)
-		->where('viralsamples.facility', '!=', 0)
+		->where('viralviralsamples.facility', '!=', 0)
 		->where('viralsamples.Flag', 1)
 		->groupBy('month', $division)
 		->get();
@@ -93,7 +93,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
@@ -111,7 +111,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.rcategory', [3, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
@@ -163,7 +163,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->where('viralsamples.receivedstatus', 3)
 		->where('viralsamples.Flag', 1)
@@ -179,7 +179,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
@@ -203,7 +203,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID')
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
@@ -237,7 +237,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
@@ -257,7 +257,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->where('viralsamples.rcategory', $result)
@@ -279,7 +279,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('samples')
 		->select($division, $division, DB::raw($sql))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('samples.datecollected', '>', 1980)
 		->whereYear('samples.datereceived', '>', 1980)
 		->whereYear('samples.datetested', '>', 1980)
@@ -370,7 +370,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -410,7 +410,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -441,7 +441,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -473,7 +473,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -506,7 +506,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -540,7 +540,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -572,7 +572,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -614,7 +614,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID')
 		->when($type, function($query) use ($type){
 			if($type < 4){
@@ -657,7 +657,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -698,7 +698,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
