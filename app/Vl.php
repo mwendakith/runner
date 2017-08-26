@@ -316,6 +316,8 @@ class Vl extends Model
 			$array_size++;
 		}
 
+		return $this->finish_division($year, $today, $div_array, $column, $division, $type);
+
     	echo "\n Begin  viralload {$column} update at " . date('d/m/Y h:i:s a', time());
 
     	// Get collection instances of the data
@@ -462,6 +464,7 @@ class Vl extends Model
 		}
 
 		echo $this->finish_division($year, $today, $div_array, $column, $division, $type);
+
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility

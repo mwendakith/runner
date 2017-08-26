@@ -700,7 +700,7 @@ class EidNation extends Model
 			$tat1 = $tat2 = $tat3 = $tat4 = 0;
 			$rows = $data->count();
 
-			foreach ($d as $key => $value) {
+			foreach ($data as $key => $value) {
 				$holidays = $b->getTotalHolidaysinMonth($value->month);
 
 				$tat1 += $b->get_days($value->datecollected, $value->datereceived, $holidays);
