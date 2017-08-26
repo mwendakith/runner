@@ -316,7 +316,7 @@ class Vl extends Model
 			$array_size++;
 		}
 
-		return $this->finish_division($year, $today, $div_array, $column, $division, $type);
+		return $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
 
     	echo "\n Begin  viralload {$column} update at " . date('d/m/Y h:i:s a', time());
 
