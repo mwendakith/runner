@@ -463,12 +463,12 @@ class Vl extends Model
 			return null;
 		}
 
-		echo $this->finish_division($year, $today, $div_array, $column, $division, $type);
+		echo $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
 
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility
-    private function finish_division($year, $today, &$div_array, $column, $division, $div_type){
+    private function finish_division($year, $today, &$div_array, $column, $division, $div_type, $array_size){
     	$n = new VlDivision;
     	for ($type=1; $type < 6; $type++) { 
 
