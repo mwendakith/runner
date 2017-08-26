@@ -43,7 +43,7 @@ class VlCounty extends Command
 
         $vl = new Vl;
 
-        $output = $vl->update_county($year);
+        $output = $vl->update_counties($year);
 
         $this->info($output);
     }

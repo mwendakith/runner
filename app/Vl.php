@@ -421,7 +421,7 @@ class Vl extends Model
 				$female = $this->checknull($female_a->where('month', $month)->where($column, $div_array[$it]));
 				$nogender = $this->checknull($nogender_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$tt = $this->checktat($tat->where('month', $month)->where($column, $div_array[$it]));
+				$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
 
 				if($type == 5){
 					$column = "lab";
