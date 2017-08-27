@@ -144,7 +144,7 @@ class Vl extends Model
 
     }
 
-    private function finish_nation($year, $today){
+    public function finish_nation($year, $today){
     	$n = new VlNation;
     	for ($type=1; $type < 6; $type++) { 
 			$table = $this->get_table(0, $type);
@@ -316,7 +316,7 @@ class Vl extends Model
 			$array_size++;
 		}
 
-		return $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
+		// return $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
 
     	echo "\n Begin  viralload {$column} update at " . date('d/m/Y h:i:s a', time());
 
@@ -468,7 +468,7 @@ class Vl extends Model
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility
-    private function finish_division($year, $today, &$div_array, $column, $division, $div_type, $array_size){
+    public function finish_division($year, $today, &$div_array, $column, $division, $div_type, $array_size){
     	$n = new VlDivision;
     	for ($type=1; $type < 6; $type++) { 
 
@@ -628,6 +628,8 @@ class Vl extends Model
 		// End of looping of params
     }
 
+
+
     public function update_counties($year=null){
     	return $this->update_division($year, 1, 'county', 'view_facilitys.county', 'countys', 'vl_county_summary');
     }
@@ -644,8 +646,51 @@ class Vl extends Model
     	return $this->update_division($year, 4, 'facility', 'viralsamples.facility', 'facilitys', 'vl_site_summary');
     }
 
+    public function finish_facilities($year=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	// Instantiate new object
+    	$n = new VlDivision;
+
+    	$today=date("Y-m-d");
+
+    	$div_array;
+    	$array_size = 0;
+
+    	$divs = $data = DB::connection('vl')
+		->table($div_table)->select('ID')->get();
+
+		foreach ($divs as $key => $value) {
+			$div_array[$key] = $value->ID;
+			$array_size++;
+		}
+
+		return $this->finish_division($year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
+    }
+
     public function update_labs($year=null){
     	return $this->update_division($year, 5, 'labtestedin', "viralsamples.labtestedin", 'labs', 'vl_lab_summary');
+
+    }
+
+    public function finish_labs(){
+    	$logdate=	date("Y-m-d");
+    	$datestatsupdated = date('Y-m-d H:i:s');
+
+    	$labs = $data = DB::->table('labs')->select('ID')->get();
+    	$testtypes = $data = DB::->table('testtype')->select('ID')->get();
+
+    	foreach ($labs as $key => $lab) {
+			foreach ($testtypes as $key2 => $ttype) {
+				DB::table('lablogs')->insert([
+					'lab' => $lab->ID, 'logdate' => $logdate, 'dateupdated' => $datestatsupdated,
+					'testtype' => $ttype->ID
+				]);
+			}
+		}
+
+
     }
 
     public function checknull($var){

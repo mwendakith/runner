@@ -11,7 +11,10 @@ class UpdateEid extends Command
      *
      * @var string
      */
-    protected $signature = 'update:eid {year?}';
+    protected $signature = 'update:eid {year?} {--type=2}';
+
+    // Type one does for everything other than facilities
+    // Type two does for everything
 
     /**
      * The console command description.
@@ -62,8 +65,13 @@ class UpdateEid extends Command
             'year' => $year
         ]);
 
-        $this->call('update:eid-facility', [
-            'year' => $year
-        ]);
+        $type = $this->option('type');
+
+        if($type == 2){
+           $this->call('update:eid-facility', [
+                'year' => $year
+            ]); 
+        }
+        
     }
 }

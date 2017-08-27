@@ -178,6 +178,7 @@ class Eid extends Model
 		// Set the following to null in order to free memory
 		$alltests_a = $eqatests_a = $tests_a = $patienttests_a = $patienttestsPOS_a = $received_a = $firstdna_a = $confirmdna_a = $posrepeats_a = $confirmdnaPOS_a = $posrepeatsPOS_a = $infantsless2m_a = $infantsless2mPOS_a = $infantsless2w_a = $infantsless2wPOS_a = $infantsless46w_a = $infantsless46wPOS_a = $infantsabove2m_a = $infantsabove2mPOS_a = $adulttests_a = $adulttestsPOS_a = $pos_a = $neg_a = $fail_a = $rd_a = $rdd_a = $rej_a = $enrolled_a = $ltfu_a = $dead_a = $adult_a = $transout_a = $other_a = $v_cp_a = $v_ad_a = $v_vl_a = $v_rp_a = $v_uf_a = $sitesending_a = $avgage_a = $medage_a = $tat = null;
 
+		echo "\n Begin eid nation age breakdown update at " . date('d/m/Y h:i:s a', time());
 
 		// Get national age_breakdown
 		$age1pos_a = $n->GetTestOutcomesbyAgeBand($year, 1, 2);
@@ -259,6 +260,8 @@ class Eid extends Model
 		echo "\n Completed entry into eid national age breakdown at " . date('d/m/Y h:i:s a', time());
 
 
+		echo "\n Begin eid nation infant regimen update at " . date('d/m/Y h:i:s a', time());
+
 		// Start of infant regimen
 		$iregimen = $data = DB::connection('eid')
 		->table('prophylaxis')->select('ID')->where('ptype', 2)->get();
@@ -297,6 +300,8 @@ class Eid extends Model
 		// End of infant regimen
 
 		echo "\n Completed entry into eid national infant regimen at " . date('d/m/Y h:i:s a', time());
+
+		echo "\n Begin eid nation mother regimen update at " . date('d/m/Y h:i:s a', time());
 
 		// Start of mother regimen
 		$mregimen = $data = DB::connection('eid')

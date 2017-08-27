@@ -32,6 +32,9 @@ class Kernel extends ConsoleKernel
         Commands\VlFacility::class,
         Commands\VlLab::class,
         Commands\VlPartner::class,
+
+        Commands\SendReport::class,
+        Commands\TestMail::class,
     ];
 
     /**
@@ -47,7 +50,8 @@ class Kernel extends ConsoleKernel
 
         $filePath = public_path('logs.txt');
 
-        $schedule->command('update:all')->dailyAt('20:00')->appendOutputTo($filePath);
+        // $schedule->command('update:all')->dailyAt('19:00')->withoutOverlapping()->appendOutputTo($filePath);
+        $schedule->command('update:all')->dailyAt('19:00')->withoutOverlapping()->emailOutputTo('joelkith@gmail.com');
     }
 
     /**

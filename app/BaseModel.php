@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UpdateReport;
 
 class BaseModel extends Model
 {
@@ -322,6 +324,19 @@ class BaseModel extends Model
     	$justification = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND justification='$justification'";
 
     	$sampletype = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND sampletype BETWEEN '$stype' AND '$ttype'";
+    }
+
+    public function send_report(){
+    	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com');
+    	Mail::to($mail_array)->send(new UpdateReport());
+
+    	$filePath = public_path('logs.txt');
+    	fclose(fopen($filePath, 'w'));
+    }
+
+    public function test_mail(){
+    	$mail_array = array('joelkith@gmail.com');
+    	Mail::to($mail_array)->send(new UpdateReport());
     }
 
 	

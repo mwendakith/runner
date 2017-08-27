@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Eid;
 
+
 class EidFacility extends Command
 {
     /**
@@ -12,7 +13,7 @@ class EidFacility extends Command
      *
      * @var string
      */
-    protected $signature = 'update:eid-facility {year?}';
+    protected $signature = 'update:eid-facility {year?} {--type=3}';
 
     /**
      * The console command description.
@@ -42,9 +43,24 @@ class EidFacility extends Command
         $year = $this->argument('year');
 
         $eid = new Eid;
+        $output="";
+        $type = $this->option('type');
 
-        $output = $eid->update_facilities($year);
-        $output .= $eid->update_facilities_yearly($year);
+        if ($type == 1) {
+            $output .= $eid->update_facilities($year);
+        }
+
+        else if ($type == 2) {
+            $output .= $eid->update_facilities_yearly($year);
+        }
+
+        else{
+            $output .= $eid->update_facilities($year);
+            $output .= $eid->update_facilities_yearly($year);
+
+        }
+
+        
 
         $this->info($output);
     }

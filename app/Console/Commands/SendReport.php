@@ -3,22 +3,23 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Eid;
 
-class UpdateDb extends Command
+class SendReport extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'update:all {year?}';
+    protected $signature = 'report:send';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Compile Summary Tables For Eid and Viralload';
+    protected $description = 'Send Report on the update of the database';
 
     /**
      * Create a new command instance.
@@ -38,18 +39,8 @@ class UpdateDb extends Command
     public function handle()
     {
         //
-        $year = $this->argument('year');
+        $eid = new Eid;
 
-        $this->info('Updating eid and viralload summary tables for the year ' . $year);
-
-        $this->call('update:eid', [
-            'year' => $year
-        ]);
-
-        $this->call('update:vl', [
-            'year' => $year
-        ]);
-
-        // $this->call('report:send');
+        $eid->send_report();
     }
 }

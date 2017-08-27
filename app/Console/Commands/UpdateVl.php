@@ -11,7 +11,7 @@ class UpdateVl extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl {year?}';
+    protected $signature = 'update:vl {year?} {--type=2}';
 
     /**
      * The console command description.
@@ -62,8 +62,12 @@ class UpdateVl extends Command
             'year' => $year
         ]);
         
-        $this->call('update:vl-facility', [
-            'year' => $year
-        ]);
+        $type = $this->option('type');
+
+        if($type == 2){
+            $this->call('update:vl-facility', [
+                'year' => $year
+            ]);
+        }
     }
 }

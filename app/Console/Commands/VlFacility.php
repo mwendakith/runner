@@ -12,7 +12,7 @@ class VlFacility extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl-facility {year?}';
+    protected $signature = 'update:vl-facility {year?} {--type=3}';
 
     /**
      * The console command description.
@@ -44,6 +44,25 @@ class VlFacility extends Command
         $vl = new Vl;
 
         $output = $vl->update_facilities($year);
+        $output .= $vl->finish_facilities($year);
+
+
+        $output="";
+        $type = $this->option('type');
+
+        if ($type == 1) {
+            $output .= $vl->update_facilities($year);
+        }
+
+        else if ($type == 2) {
+            $output .= $vl->finish_facilities($year);
+        }
+
+        else{
+            $output .= $vl->update_facilities($year);
+            $output .= $vl->finish_facilities($year);
+        }
+
 
         $this->info($output);
     }
