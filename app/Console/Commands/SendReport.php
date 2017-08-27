@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Eid;
+use App\BaseModel;
 
 class SendReport extends Command
 {
@@ -39,7 +39,7 @@ class SendReport extends Command
     public function handle()
     {
         //
-        $eid = new Eid;
+        $eid = new BaseModel;
 
         $eid->send_report();
     }

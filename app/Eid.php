@@ -470,7 +470,7 @@ class Eid extends Model
 		$confirmdna = $this->checknull($confirmdna_a);
 		$posrepeats = $this->checknull($posrepeats_a);
 		$confirmdnaPOS = $this->checknull($confirmdnaPOS_a);
-		$posrepeatsPOS = $this->checknull();
+		$posrepeatsPOS = $this->checknull($posrepeatsPOS_a);
 		$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
 
 		$infantsless2m = $this->checknull($infantsless2m_a);
