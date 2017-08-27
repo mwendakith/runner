@@ -690,6 +690,8 @@ class Vl extends Model
 			}
 		}
 
+		echo "\n Completed lablogs update at " . date('d/m/Y h:i:s a', time());
+
 
     }
 

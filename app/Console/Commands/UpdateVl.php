@@ -58,6 +58,8 @@ class UpdateVl extends Command
             'year' => $year
         ]);
 
+        $this->call('update:vl-lablogs');
+
         $this->call('update:vl-partner', [
             'year' => $year
         ]);
