@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Eid;
+use App\BaseModel;
 
 class TestMail extends Command
 {
@@ -39,7 +39,7 @@ class TestMail extends Command
     public function handle()
     {
         //
-        $eid = new Eid;
+        $eid = new BaseModel;
 
         $eid->test_mail();
     }
