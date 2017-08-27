@@ -509,7 +509,7 @@ class Eid extends Model
 		$sitesending = $this->checknull($sitesending_a);
 		$avgage = $this->checknull($avgage_a);
 
-		$tt = $tat[];			
+		$tt = $tat;			
 
 		$data_array = array(
 			'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
