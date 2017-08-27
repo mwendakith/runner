@@ -275,6 +275,7 @@ class VlDivision extends Model
 	{
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
+		ini_set("memory_limit", "-1");
 
 		$data = DB::connection('vl')
 		->table('viralsamples')

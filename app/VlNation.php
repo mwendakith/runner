@@ -297,6 +297,7 @@ class VlNation extends Model
 
     public function GetNatTATs($year){
     	$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
+    	ini_set("memory_limit", "-1");
 
 		$data = DB::connection('vl')
 		->table('viralsamples')
