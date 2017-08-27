@@ -679,7 +679,7 @@ class Vl extends Model
     	$datestatsupdated = date('Y-m-d H:i:s');
 
     	$labs = $data = DB::table('labs')->select('ID')->get();
-    	$testtypes = $data = DB::->table('testtype')->select('ID')->get();
+    	$testtypes = $data = DB::table('testtype')->select('ID')->get();
 
     	foreach ($labs as $key => $lab) {
 			foreach ($testtypes as $key2 => $ttype) {
