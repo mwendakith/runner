@@ -29,7 +29,7 @@ class UpdateReport extends Mailable
     public function build()
     {
         $filePath = public_path('logs.txt');
-        return $this->view('report');
-
+        return $this->view('report')->attach($filePath);
+        
     }
 }
