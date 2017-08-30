@@ -355,6 +355,30 @@ class VlNation extends Model
 		return $return;
     }
 
+    public function get_tat($year){
+    	$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
+
+		$data = DB::connection('vl')
+		->table('viralsamples')
+		->select(DB::raw($sql))
+		->whereYear('viralsamples.datecollected', '>', 1980)
+		->whereYear('viralsamples.datereceived', '>', 1980)
+		->whereYear('viralsamples.datetested', '>', 1980)
+		->whereYear('viralsamples.datedispatched', '>', 1980)
+		->whereColumn([
+			['datecollected', '<=', 'datereceived'],
+			['datereceived', '<=', 'datetested'],
+			['datetested', '<=', 'datedispatched']
+		])
+		->whereYear('viralsamples.datetested', $year)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month')
+		->get(); 
+
+		return $data;
+    }
+
     public function compare_alltestedviralloadsamples(){
     	$age = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND repeatt=0 and Flag=1 AND $colmn ='$age' and viralsamples.rcategory BETWEEN 1 AND 4";
 
@@ -770,7 +794,58 @@ class VlNation extends Model
     }
 
 
+    // Update samples tats	
+	public function update_tats()
+	{
+		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
+		
+		$sql = "viralsamples.ID, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
+		$b = new BaseModel;
 
+		$curyear = date("Y");
+		ini_set("memory_limit", "-1");
+
+		for ($year=2011; $year < $curyear; $year++) { 
+
+			echo "\n Begin vl samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
+
+			$data = DB::connection('vl')
+			->table('viralsamples')
+			->select(DB::raw($sql))
+			->whereYear('viralsamples.datecollected', '>', 1980)
+			->whereYear('viralsamples.datereceived', '>', 1980)
+			->whereYear('viralsamples.datetested', '>', 1980)
+			->whereYear('viralsamples.datedispatched', '>', 1980)
+			->whereColumn([
+				['datecollected', '<=', 'datereceived'],
+				['datereceived', '<=', 'datetested'],
+				['datetested', '<=', 'datedispatched']
+			])
+			->whereYear('datetested', $year)
+			->where('viralsamples.Flag', 1)
+			->where('viralsamples.repeatt', 0)
+			->get(); 
+
+			if($data->isEmpty()){
+				continue;
+			}		
+
+			foreach ($data as $key => $value) {
+				$holidays = $b->getTotalHolidaysinMonth($value->month);
+
+				$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
+				$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
+				$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
+				$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+
+				$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+
+				DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+
+			}
+			echo "\n Completed vl samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
+		}
+	}
 
 
 

@@ -571,7 +571,8 @@ class EidDivision extends Model
 		->where('patients.age', '<', 24)
 		->where('samples.result', '>', 0)
 		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
+		->where('samp
+			les.Flag', 1)
 		->where('samples.eqa', 0)
 		->get(); 
 
@@ -776,7 +777,7 @@ class EidDivision extends Model
   
 	}
 
-	// Average age	
+	// Tat
 	public function GetNatTATs($year, $div_array, $division='view_facilitys.county', $col='county', $monthly=true)
 	{
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
@@ -898,8 +899,42 @@ class EidDivision extends Model
 		return $return;
 	}
 
+	// Tat
+	public function get_tat($year, $division='view_facilitys.county', $monthly=true)
+	{
+		$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw($sql))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->whereYear('samples.datecollected', '>', 1980)
+		->whereYear('samples.datereceived', '>', 1980)
+		->whereYear('samples.datetested', '>', 1980)
+		->whereYear('samples.datedispatched', '>', 1980)
+		->whereColumn([
+			['datecollected', '<=', 'datereceived'],
+			['datereceived', '<=', 'datetested'],
+			['datetested', '<=', 'datedispatched']
+		])
+		->whereYear('datetested', $year)
+		->where('samples.Flag', 1)
+		->where('samples.repeatt', 0)
+		->when($monthly, function($query) use ($monthly, $division){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
 	public function update_patients(){
-		$sql = "samples.ID, samples.patient, samples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, patients.age, patients.gender, patients.prophylaxis as infantproph, mothers.entry_point, mothers.feeding, mothers.prophylaxis, samples.datecollected, samples.receivedstatus, samples.pcrtype, samples.rejectedreason, samples.reason_for_repeat, samples.datereceived, samples.datetested, samples.result, samples.datedispatched, samples.labtestedin";
+		$sql = "samples.ID, samples.patient, samples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, patients.age, patients.gender, patients.prophylaxis as infantproph, mothers.entry_point, mothers.feeding, mothers.prophylaxis, samples.datecollected, samples.receivedstatus, samples.pcrtype, samples.rejectedreason, samples.reason_for_repeat, samples.datereceived, samples.datetested, samples.result, samples.datedispatched, samples.labtestedin, month(datetested) as month";
 
 		$data = DB::connection('eid')
 		->table('samples')
@@ -913,6 +948,8 @@ class EidDivision extends Model
 		->get();
 
 		$today=date('Y-m-d');
+
+		$b = new BaseModel;
 
 		foreach ($data as $key => $value) {
 			$data_array = array(
@@ -931,7 +968,14 @@ class EidDivision extends Model
 
 			DB::table('patients_eid')->insert($data_array);
 
-			$update_array = array('synched' => 0, 'datesynched' => $today);
+			$holidays = $b->getTotalHolidaysinMonth($value->month);
+
+			$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
+			$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
+			$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
+			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+
+			$update_array = array('synched' => 0, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
 			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
 		}

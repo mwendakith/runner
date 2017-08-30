@@ -37,6 +37,9 @@ class Kernel extends ConsoleKernel
         Commands\EidPatients::class,
         Commands\VlPatients::class,
 
+        Commands\EidTat::class,
+        Commands\VlTat::class,
+
         Commands\SendReport::class,
         Commands\TestMail::class,
     ];

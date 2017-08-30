@@ -81,8 +81,9 @@ class Eid extends Model
 		$avgage_a = $n->Getoverallaverageage($year);
 		$medage_a = $n->Getoverallmedianage($year);
 
+		// $tat = $n->get_tat($year);
 		$tat = $n->GetNatTATs($year);
-		// $tat = collect($tat);
+		$tat = collect($tat);
 
 		$count = $pos_a->count();
 
@@ -142,6 +143,7 @@ class Eid extends Model
 			$medage = $medage_a[$i];
 
 			$tt = $tat[$i];			
+			// $tt = $this->check_tat($tat->where('month', $month));			
 
 			$data_array = array(
 				'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
@@ -458,8 +460,9 @@ class Eid extends Model
 		$avgage_a = $n->Getoverallaverageage($year, false);
 		$medage = $n->Getoverallmedianage($year, false);
 
+		// $tat = $n->get_tat($year, false);
 		$tat = $n->GetNatTATs($year, false);
-		// $tat = collect($tat);
+		$tat = collect($tat);
 
 		$alltests = $this->checknull($alltests_a);
 		$eqatests = $this->checknull($eqatests_a);
@@ -511,7 +514,7 @@ class Eid extends Model
 		$sitesending = $this->checknull($sitesending_a);
 		$avgage = $this->checknull($avgage_a);
 
-		$tt = $tat;			
+		$tt = $this->check_tat($tat);			
 
 		$data_array = array(
 			'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
@@ -584,6 +587,7 @@ class Eid extends Model
 		
 		$facilityssupported = $n->GettotalEIDsitesbytimeperiod($year, $division);
 
+		// $tat = $n->get_tat($year, $division);
 		$tat = $n->GetNatTATs($year, $div_array, $division, $column);
 		$tat = collect($tat);
 
@@ -617,6 +621,7 @@ class Eid extends Model
 
 				$sitesending = $this->checknull($facilityssupported->where('month', $month)->where($column, $div_array[$it]));
 
+				// $tt = $this->check_tat($tat->where('month', $month)->where($column, $div_array[$it]));
 				$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
 
 				$data_array = array(
@@ -727,10 +732,11 @@ class Eid extends Model
 		$medage_a = $n->Getoverallmedianage($year, $div_array, $division, $column);
 		$medage_a = collect($medage_a);
 
-		if($type != 3){
+		// if($type != 3){
+			// $tat = $n->get_tat($year, $division);
 			$tat = $n->GetNatTATs($year, $div_array, $division, $column);
 			$tat = collect($tat);
-		}
+		// }
 		
 
 		// Loop through the months and insert data into the division summary
@@ -792,9 +798,10 @@ class Eid extends Model
 				$avgage = $this->checknull($avgage_a->where('month', $month)->where($column, $div_array[$it]));
 				$medage = $this->checkmedage($medage_a->where('month', $month)->where('division', $div_array[$it]));
 
-				if($type != 3){
+				// if($type != 3){
+					// $tt = $this->check_tat($tat->where('month', $month)->where($column, $div_array[$it]));
 					$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
-				}
+				// }
 
 				$data_array = array(
 					'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
@@ -815,10 +822,10 @@ class Eid extends Model
 					 'dateupdated' => $today
 				);
 
-				if($type != 3){
+				// if($type != 3){
 					$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
 					$data_array = array_merge($data_array, $turn);
-				}
+				// }
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
@@ -1149,6 +1156,7 @@ class Eid extends Model
 		$medage_a = $n->Getoverallmedianage($year, $div_array, $division, $column, false);
 		$medage_a = collect($medage_a);
 
+		// $tat = $n->get_tat($year, $division, false);
 		$tat = $n->GetNatTATs($year, $div_array, $division, $column, false);
 		$tat = collect($tat);
 		
@@ -1206,7 +1214,7 @@ class Eid extends Model
 			$avgage = $this->checknull($avgage_a->where($column, $div_array[$it]));
 			$medage = $this->checkmedage($medage_a->where('division', $div_array[$it]));
 
-			$tt = $this->checktat($tat->where('division', $div_array[$it]));
+			
 
 			$data_array = array(
 				'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
@@ -1227,10 +1235,12 @@ class Eid extends Model
 				 'dateupdated' => $today
 			);
 
-			if($type != 3){
+			// if($type != 3){
+				// $tt = $this->check_tat($tat->where($column, $div_array[$it]));
+				$tt = $this->checktat($tat->where('division', $div_array[$it]));
 				$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
 				$data_array = array_merge($data_array, $turn);
-			}
+			// }
 
 			DB::table($sum_table)->where('year', $year)->where($column, $div_array[$it])->update($data_array);
 
@@ -1285,6 +1295,13 @@ class Eid extends Model
     	echo "\n Completed entry into eid patients at " . date('d/m/Y h:i:s a', time()); 
     }
 
+    public function update_tat(){
+    	// Instantiate new object
+    	$n = new EidNation;
+
+    	echo $n->update_tats();
+    }
+
 
 
     public function checknull($var){
@@ -1300,6 +1317,16 @@ class Eid extends Model
     		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
     	}else{
     		return $var->first();
+    	}
+    }
+
+    public function check_tat($var){
+    	if($var->isEmpty()){
+    		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
+    	}else{
+    		// $t = $var->first();
+    		// return array('tat1' => $t->tat1, 'tat2' => $t->tat2, 'tat3' => $t->tat3, 'tat4' => $t->tat4);
+    		return $var->first()->toArray();
     	}
     }
 

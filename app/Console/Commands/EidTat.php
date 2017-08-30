@@ -3,23 +3,23 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Vl;
+use App\Eid;
 
-class VlPatients extends Command
+class EidTat extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'update:vl-patients';
+    protected $signature = 'update:eid-tat';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update vl patients table.';
+    protected $description = 'Update eid tat on the sample table.';
 
     /**
      * Create a new command instance.
@@ -39,9 +39,9 @@ class VlPatients extends Command
     public function handle()
     {
         //
-        $vl = new Vl;
+        $eid = new Eid;
 
-        $output = $vl->update_patients();
+        $output = $eid->update_tat();
 
         $this->info($output);
     }

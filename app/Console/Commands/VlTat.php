@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Vl;
 
-class VlPatients extends Command
+class VlTat extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'update:vl-patients';
+    protected $signature = 'update:vl-tat';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update vl patients table.';
+    protected $description = 'Update vl tat on samples table.';
 
     /**
      * Create a new command instance.
@@ -41,7 +41,7 @@ class VlPatients extends Command
         //
         $vl = new Vl;
 
-        $output = $vl->update_patients();
+        $output = $vl->update_tat();
 
         $this->info($output);
     }

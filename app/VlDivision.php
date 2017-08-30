@@ -279,7 +279,7 @@ class VlDivision extends Model
 
 		$data = DB::connection('vl')
 		->table('viralsamples')
-		->select($division, $division, DB::raw($sql))
+		->select($division, DB::raw($sql))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('viralsamples.datecollected', '>', 1980)
 		->whereYear('viralsamples.datereceived', '>', 1980)
@@ -350,6 +350,33 @@ class VlDivision extends Model
 
 		return $return;
 	}
+
+	public function get_tat($year, $division='view_facilitys.county')
+    	$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
+
+		$data = DB::connection('vl')
+		->table('viralsamples')
+		->select($division, DB::raw($sql))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
+		->whereYear('viralsamples.datecollected', '>', 1980)
+		->whereYear('viralsamples.datereceived', '>', 1980)
+		->whereYear('viralsamples.datetested', '>', 1980)
+		->whereYear('viralsamples.datedispatched', '>', 1980)
+		->whereColumn([
+			['datecollected', '<=', 'datereceived'],
+			['datereceived', '<=', 'datetested'],
+			['datetested', '<=', 'datedispatched']
+		])
+		->whereYear('datetested', $year)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month', $division)
+		->get(); 
+
+		return $data;
+	}
+
+
 
     public function compare_alltestedviralloadsamples(){
     	$age = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND repeatt=0 and Flag=1 AND $colmn ='$age' and viralsamples.rcategory BETWEEN 1 AND 4";
@@ -732,8 +759,7 @@ class VlDivision extends Model
     }
 
     public function update_patients(){
-		$sql = "viralsamples.ID, viralsamples.patient, viralsamples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, viralpatients.age, viralpatients.gender, viralpatients.prophylaxis, viralsamples.justification, viralsamples.datecollected, viralsamples.receivedstatus, viralsamples.sampletype, viralsamples.rejectedreason, viralsamples.reason_for_repeat, viralsamples.datereceived, viralsamples.datetested, viralsamples.result, viralsamples.datedispatched, viralsamples.labtestedin";
-
+		$sql = "viralsamples.ID, viralsamples.patient, viralsamples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, viralpatients.age, viralpatients.gender, viralpatients.prophylaxis, viralsamples.justification, viralsamples.datecollected, viralsamples.receivedstatus, viralsamples.sampletype, viralsamples.rejectedreason, viralsamples.reason_for_repeat, viralsamples.datereceived, viralsamples.datetested, viralsamples.result, viralsamples.datedispatched, viralsamples.labtestedin, month(datetested) as month";
 
 		$data = DB::connection('vl')
 		->table('viralsamples')
@@ -746,6 +772,8 @@ class VlDivision extends Model
 		->get();
 
 		$today=date('Y-m-d');
+
+		$b = new BaseModel;
 
 		foreach ($data as $key => $value) {
 			$data_array = array(
@@ -763,7 +791,14 @@ class VlDivision extends Model
 
 			DB::table('patients')->insert($data_array);
 
-			$update_array = array('synched' => 0, 'datesynched' => $today);
+			$holidays = $b->getTotalHolidaysinMonth($value->month);
+
+			$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
+			$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
+			$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
+			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+
+			$update_array = array('synched' => 0, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
 			DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
 		}

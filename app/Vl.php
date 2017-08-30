@@ -64,6 +64,7 @@ class Vl extends Model
 		$female_a = $n->getalltestedviraloadbygender($year, 2);
 		$nogender_a = $n->getalltestedviraloadbygender($year, 3);
 
+		// $tat = $n->get_tat($year);
 		$tat = $n->GetNatTATs($year);
 		$tat = collect($tat);
 
@@ -113,6 +114,7 @@ class Vl extends Model
 			$female = $this->checknull($female_a->where('month', $month));
 			$nogender = $this->checknull($nogender_a->where('month', $month));
 
+			// $tt = $this->check_tat($tat->where('month', $month));
 			$tt = $this->checktat($tat->where('month', $month));
 
 			$data_array = array(
@@ -331,9 +333,6 @@ class Vl extends Model
     	$conftx_a = $n->GetNationalConfirmed2VLs($year, $division);
     	$conf2VL_a = $n->GetNationalConfirmedFailure($year, $division);
 		$rs_a = $n->getallrepeattviraloadsamples($year, $division);
-    	
-
-    	
 
     	if($type != 5){
     		$baseline_a = $n->GetNationalBaseline($year, $division);
@@ -367,6 +366,7 @@ class Vl extends Model
 		$female_a = $n->getalltestedviraloadbygender($year, $division, 2);
 		$nogender_a = $n->getalltestedviraloadbygender($year, $division, 3);
 
+		// $tat = $n->get_tat($year, $division);
 		$tat = $n->GetNatTATs($year, $div_array, $division, $column);
 		$tat = collect($tat);
 
@@ -423,6 +423,7 @@ class Vl extends Model
 				$female = $this->checknull($female_a->where('month', $month)->where($column, $div_array[$it]));
 				$nogender = $this->checknull($nogender_a->where('month', $month)->where($column, $div_array[$it]));
 
+				// $tt = $this->check_tat($tat->where('month', $month)->where($column, $div_array[$it]));
 				$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
 
 				if($type == 5){
@@ -707,6 +708,13 @@ class Vl extends Model
     	echo "\n Completed entry into vl patients at " . date('d/m/Y h:i:s a', time()); 
     }
 
+    public function update_tat(){
+    	// Instantiate new object
+    	$n = new VlNation;
+
+    	echo $n->update_tats();
+    }
+
 
     public function checknull($var){
     	if($var->isEmpty()){
@@ -721,6 +729,16 @@ class Vl extends Model
     		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
     	}else{
     		return $var->first();
+    	}
+    }
+
+     public function check_tat($var){
+    	if($var->isEmpty()){
+    		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
+    	}else{
+    		// $t = $var->first();
+    		// return array('tat1' => $t->tat1, 'tat2' => $t->tat2, 'tat3' => $t->tat3, 'tat4' => $t->tat4);
+    		return $var->first()->toArray();
     	}
     }
 
