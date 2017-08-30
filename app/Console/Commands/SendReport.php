@@ -39,8 +39,8 @@ class SendReport extends Command
     public function handle()
     {
         //
-        $eid = new BaseModel;
+        $b = new BaseModel;
 
-        $eid->send_report();
+        $b->send_report();
     }
 }

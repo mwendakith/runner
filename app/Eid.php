@@ -342,6 +342,8 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid national mother regimen " . date('d/m/Y h:i:s a', time());
 
+		echo "\n Begin entry into eid national entrypoint " . date('d/m/Y h:i:s a', time());
+
 		// Start of entrypoints
 		$entrypoints = $data = DB::connection('eid')
 		->table('entry_points')->select('ID')->get();
@@ -837,7 +839,7 @@ class Eid extends Model
 		// Set the following to null in order to free memory
 		$alltests_a = $eqatests_a = $tests_a = $patienttests_a = $patienttestsPOS_a = $received_a = $firstdna_a = $confirmdna_a = $posrepeats_a = $confirmdnaPOS_a = $posrepeatsPOS_a = $infantsless2m_a = $infantsless2mPOS_a = $infantsless2w_a = $infantsless2wPOS_a = $infantsless46w_a = $infantsless46wPOS_a = $infantsabove2m_a = $infantsabove2mPOS_a = $adulttests_a = $adulttestsPOS_a = $pos_a = $neg_a = $fail_a = $rd_a = $rdd_a = $rej_a = $enrolled_a = $ltfu_a = $dead_a = $adult_a = $transout_a = $other_a = $v_cp_a = $v_ad_a = $v_vl_a = $v_rp_a = $v_uf_a = $sitesending_a = $avgage_a = $medage_a = $tat = null;
 
-
+		echo "\n Begin entry into eid {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
 		// Get national age_breakdown
 		$age1pos_a = $n->GetTestOutcomesbyAgeBand($year, 1, 2, $division);
 		$age1neg_a = $n->GetTestOutcomesbyAgeBand($year, 1, 1, $division);
@@ -920,6 +922,8 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
 
+		echo "\n Begin entry into eid {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
+
 
 		// Start of infant regimen
 		$iregimen = $data = DB::connection('eid')
@@ -965,6 +969,8 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
 
+		echo "\n Begin entry into eid {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
+
 		// Start of mother regimen
 		$mregimen = $data = DB::connection('eid')
 		->table('prophylaxis')->select('ID')->where('ptype', 1)->get();
@@ -1007,6 +1013,8 @@ class Eid extends Model
 		// End of mother regimen
 
 		echo "\n Completed entry into eid {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
+
+		echo "\n Begin entry into eid {$column} entrypoint at " . date('d/m/Y h:i:s a', time());
 
 		// Start of entrypoints
 		$entrypoints = $data = DB::connection('eid')
@@ -1264,6 +1272,17 @@ class Eid extends Model
 
     public function update_facilities_yearly($year = null){
     	return $this->division_updator_yearly($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary_yearly');
+    }
+
+    public function update_patients(){
+    	echo "\n Begin entry into eid patients at " . date('d/m/Y h:i:s a', time()); 
+
+    	// Instantiate new object
+    	$n = new EidDivision;
+
+    	echo $n->update_patients();
+
+    	echo "\n Completed entry into eid patients at " . date('d/m/Y h:i:s a', time()); 
     }
 
 

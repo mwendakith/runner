@@ -40,7 +40,7 @@ class UpdateVl extends Command
         //
         $year = $this->argument('year');
 
-        $this->info('Updating viralload summary tables for the year ' . $year);
+        $this->info('Updating viralload summary tables for the year ' . $year . '\n');
 
         $this->call('update:vl-nation', [
             'year' => $year

@@ -3,6 +3,6 @@
     </head>
     <body>
 <div>
-	Email for report.
+	Report email.
 </div>
 </body>

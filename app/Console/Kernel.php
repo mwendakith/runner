@@ -34,6 +34,9 @@ class Kernel extends ConsoleKernel
         Commands\VlLablog::class,
         Commands\VlPartner::class,
 
+        Commands\EidPatient::class,
+        Commands\VlPatient::class,
+
         Commands\SendReport::class,
         Commands\TestMail::class,
     ];

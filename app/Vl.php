@@ -675,6 +675,8 @@ class Vl extends Model
     }
 
     public function finish_labs(){
+    	echo "\n Begin lablogs update at " . date('d/m/Y h:i:s a', time());
+
     	$logdate=	date("Y-m-d");
     	$datestatsupdated = date('Y-m-d H:i:s');
 
@@ -692,8 +694,19 @@ class Vl extends Model
 
 		echo "\n Completed lablogs update at " . date('d/m/Y h:i:s a', time());
 
-
     }
+
+    public function update_patients(){
+    	echo "\n Begin entry into vl patients at " . date('d/m/Y h:i:s a', time()); 
+
+    	// Instantiate new object
+    	$n = new VlDivision;
+
+    	echo $n->update_patients();
+
+    	echo "\n Completed entry into vl patients at " . date('d/m/Y h:i:s a', time()); 
+    }
+
 
     public function checknull($var){
     	if($var->isEmpty()){
