@@ -730,4 +730,42 @@ class VlDivision extends Model
 
 		return $data;
     }
+
+    public function update_patients(){
+		$sql = "viralsamples.ID, viralsamples.patient, viralsamples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, viralpatients.age, viralpatients.gender, viralpatients.prophylaxis, viralsamples.justification, viralsamples.datecollected, viralsamples.receivedstatus, viralsamples.sampletype, viralsamples.rejectedreason, viralsamples.reason_for_repeat, viralsamples.datereceived, viralsamples.datetested, viralsamples.result, viralsamples.datedispatched, viralsamples.labtestedin";
+
+
+		$data = DB::connection('vl')
+		->table('viralsamples')
+		->select(DB::raw($sql))
+		->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID')
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->where('viralsamples.synched', 0)
+		->get();
+
+		$today=date('Y-m-d');
+
+		foreach ($data as $key => $value) {
+			$data_array = array(
+				'labid' => $value->ID, 'FacilityMFLcode' => $value->facilitycode, 
+				'FacilityDHISCode' => $value->DHIScode, 'batchno' => $value->batchno,
+				'patientID' => $value->patient, 'Age' => $value->age, 'Gender' => $value->gender,
+				'Regimen' => $value->prophylaxis,	'datecollected' => $value->datecollected,
+				'SampleType' => $value->sampletype, 'Justification' => $value->justification, 
+				'receivedstatus' => $value->receivedstatus, 'result' => $value->result, 
+				'rejectedreason' => $value->rejectedreason, 
+				'reason_for_repeat' => $value->reason_for_repeat,
+				'datereceived' => $value->datereceived, 'datetested' => $value->datetested,
+				'datedispatched' => $value->datedispatched, 'labtestedin' => $value->labtestedin
+			);
+
+			DB::table('patients')->insert($data_array);
+
+			$update_array = array('synched' => 0, 'datesynched' => $today);
+
+			DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+		}
+	}
 }

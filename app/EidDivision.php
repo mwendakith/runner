@@ -874,8 +874,6 @@ class EidDivision extends Model
 				$tat1 = $tat2 = $tat3 = $tat4 = 0;
 				$rows = $d->count();
 
-				
-
 				foreach ($d as $key => $value) {
 					$holidays = $b->getTotalHolidaysinMonth($value->month);
 
@@ -898,6 +896,45 @@ class EidDivision extends Model
 		}
 
 		return $return;
+	}
+
+	public function update_patients(){
+		$sql = "samples.ID, samples.patient, samples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, patients.age, patients.gender, patients.prophylaxis as infantproph, mothers.entry_point, mothers.feeding, mothers.prophylaxis, samples.datecollected, samples.receivedstatus, samples.pcrtype, samples.rejectedreason, samples.reason_for_repeat, samples.datereceived, samples.datetested, samples.result, samples.datedispatched, samples.labtestedin";
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select(DB::raw($sql))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
+		->join('mothers', 'patients.mother', '=', 'mothers.ID')
+		->where('samples.Flag', 1)
+		->where('samples.repeatt', 0)
+		->where('samples.synched', 0)
+		->get();
+
+		$today=date('Y-m-d');
+
+		foreach ($data as $key => $value) {
+			$data_array = array(
+				'labid' => $value->ID, 'FacilityMFLcode' => $value->facilitycode, 
+				'FacilityDHISCode' => $value->DHIScode, 'batchno' => $value->batchno,
+				'patientID' => $value->patient, 'Age' => $value->age, 'Gender' => $value->gender,
+				'infantregimen' => $value->infantproph, 'motherregimen' => $value->prophylaxis,
+				'entrypoint' => $value->entry_point, 'feedingtype' => $value->feeding, 
+				'datecollected' => $value->datecollected, 'pcrtype' => $value->pcrtype,
+				'receivedstatus' => $value->receivedstatus, 'result' => $value->result, 
+				'rejectedreason' => $value->rejectedreason, 
+				'reason_for_repeat' => $value->reason_for_repeat,
+				'datereceived' => $value->datereceived, 'datetested' => $value->datetested,
+				'datedispatched' => $value->datedispatched, 'labtestedin' => $value->labtestedin
+			);
+
+			DB::table('patients_eid')->insert($data_array);
+
+			$update_array = array('synched' => 0, 'datesynched' => $today);
+
+			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
+		}
 	}
 
 	
