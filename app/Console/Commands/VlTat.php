@@ -12,7 +12,7 @@ class VlTat extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl-tat';
+    protected $signature = 'update:vl-tat {year?}';
 
     /**
      * The console command description.
@@ -41,7 +41,9 @@ class VlTat extends Command
         //
         $vl = new Vl;
 
-        $output = $vl->update_tat();
+        $year = $this->argument('year');
+
+        $output = $vl->update_tat($year);
 
         $this->info($output);
 

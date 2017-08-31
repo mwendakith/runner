@@ -706,11 +706,14 @@ class Vl extends Model
     	echo "\n Completed entry into vl patients at " . date('d/m/Y h:i:s a', time()); 
     }
 
-    public function update_tat(){
+    public function update_tat($year=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
     	// Instantiate new object
     	$n = new VlNation;
 
-    	echo $n->update_tats();
+    	echo $n->update_tats($year);
     }
 
 
