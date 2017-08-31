@@ -43,8 +43,8 @@ class VlFacility extends Command
 
         $vl = new Vl;
 
-        $output = $vl->update_facilities($year);
-        $output .= $vl->finish_facilities($year);
+        // $output = $vl->update_facilities($year);
+        // $output .= $vl->finish_facilities($year);
 
 
         $output="";
