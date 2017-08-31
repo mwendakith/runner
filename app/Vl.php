@@ -658,7 +658,7 @@ class Vl extends Model
     	$array_size = 0;
 
     	$divs = $data = DB::connection('vl')
-		->table($div_table)->select('ID')->get();
+		->table('facilitys')->select('ID')->get();
 
 		foreach ($divs as $key => $value) {
 			$div_array[$key] = $value->ID;
