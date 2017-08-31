@@ -336,6 +336,7 @@ class BaseModel extends Model
 
     public function test_mail(){
     	$mail_array = array('joelkith@gmail.com');
+    	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com');
     	$up = new UpdateReport;
     	Mail::to('joelkith@gmail.com')->send($up);
     }

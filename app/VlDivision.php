@@ -129,6 +129,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
@@ -146,6 +147,7 @@ class VlDivision extends Model
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.rcategory', [3, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
@@ -761,6 +763,8 @@ class VlDivision extends Model
     public function update_patients(){
 		$sql = "viralsamples.ID, viralsamples.patient, viralsamples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, viralpatients.age, viralpatients.gender, viralpatients.prophylaxis, viralsamples.justification, viralsamples.datecollected, viralsamples.receivedstatus, viralsamples.sampletype, viralsamples.rejectedreason, viralsamples.reason_for_repeat, viralsamples.datereceived, viralsamples.datetested, viralsamples.result, viralsamples.datedispatched, viralsamples.labtestedin, month(datetested) as month";
 
+		ini_set("memory_limit", "-1");
+
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw($sql))
@@ -791,14 +795,15 @@ class VlDivision extends Model
 
 			DB::table('patients')->insert($data_array);
 
-			$holidays = $b->getTotalHolidaysinMonth($value->month);
+			// $holidays = $b->getTotalHolidaysinMonth($value->month);
 
-			$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
-			$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
-			$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
-			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+			// $tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
+			// $tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
+			// $tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
+			// $tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
 
-			$update_array = array('synched' => 0, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+			// $update_array = array('synched' => 0, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+			$update_array = array('synched' => 0, 'datesynched' => $today);
 
 			DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
 		}

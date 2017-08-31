@@ -552,6 +552,7 @@ class Eid extends Model
 
     	// Instantiate new object
     	$n = new EidDivision;
+    	
 
     	$today=date("Y-m-d");
 
