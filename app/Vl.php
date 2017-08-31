@@ -734,9 +734,9 @@ class Vl extends Model
     	if($var->isEmpty()){
     		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
     	}else{
-    		// $t = $var->first();
-    		// return array('tat1' => $t->tat1, 'tat2' => $t->tat2, 'tat3' => $t->tat3, 'tat4' => $t->tat4);
-    		return $var->first()->toArray();
+    		$t = $var->first();
+    		return array('tat1' => $t->tat1, 'tat2' => $t->tat2, 'tat3' => $t->tat3, 'tat4' => $t->tat4);
+    		// return $var->first()->toArray();
     	}
     }
 
