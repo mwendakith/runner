@@ -64,9 +64,9 @@ class Vl extends Model
 		$female_a = $n->getalltestedviraloadbygender($year, 2);
 		$nogender_a = $n->getalltestedviraloadbygender($year, 3);
 
-		// $tat = $n->get_tat($year);
-		$tat = $n->GetNatTATs($year);
-		$tat = collect($tat);
+		$tat = $n->get_tat($year);
+		// $tat = $n->GetNatTATs($year);
+		// $tat = collect($tat);
 
 		// $count = $rec_a->count();
 
@@ -114,8 +114,8 @@ class Vl extends Model
 			$female = $this->checknull($female_a->where('month', $month));
 			$nogender = $this->checknull($nogender_a->where('month', $month));
 
-			// $tt = $this->check_tat($tat->where('month', $month));
-			$tt = $this->checktat($tat->where('month', $month));
+			$tt = $this->check_tat($tat->where('month', $month));
+			// $tt = $this->checktat($tat->where('month', $month));
 
 			$data_array = array(
 				'received' => $rec, 'alltests' => $tested, 'actualpatients' => $actualpatients,
@@ -366,9 +366,9 @@ class Vl extends Model
 		$female_a = $n->getalltestedviraloadbygender($year, $division, 2);
 		$nogender_a = $n->getalltestedviraloadbygender($year, $division, 3);
 
-		// $tat = $n->get_tat($year, $division);
-		$tat = $n->GetNatTATs($year, $div_array, $division, $column);
-		$tat = collect($tat);
+		$tat = $n->get_tat($year, $division);
+		// $tat = $n->GetNatTATs($year, $div_array, $division, $column);
+		// $tat = collect($tat);
 
 		// $count = $rec_a->count();
 
@@ -423,8 +423,8 @@ class Vl extends Model
 				$female = $this->checknull($female_a->where('month', $month)->where($column, $div_array[$it]));
 				$nogender = $this->checknull($nogender_a->where('month', $month)->where($column, $div_array[$it]));
 
-				// $tt = $this->check_tat($tat->where('month', $month)->where($column, $div_array[$it]));
-				$tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
+				$tt = $this->check_tat($tat->where('month', $month)->where($column, $div_array[$it]));
+				// $tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
 
 				if($type == 5){
 					$column = "lab";
@@ -460,11 +460,9 @@ class Vl extends Model
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
 
-		if ($type > 3) {
-			return null;
+		if ($type < 4) {
+			echo $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
 		}
-
-		echo $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
 
     }
 
