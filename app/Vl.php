@@ -460,7 +460,7 @@ class Vl extends Model
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
 
-		if ($type == 5) {
+		if ($type > 3) {
 			return null;
 		}
 
