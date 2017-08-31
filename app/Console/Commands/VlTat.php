@@ -45,8 +45,6 @@ class VlTat extends Command
 
         $this->info($output);
 
-        $this->call('report:send', [
-            'year' => $year
-        ]);
+        $this->call('report:send');
     }
 }
