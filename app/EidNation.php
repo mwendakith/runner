@@ -760,7 +760,7 @@ class EidNation extends Model
 		$sql = "samples.ID, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$b = new BaseModel;
 
-		$curyear = date("Y");
+		$curyear = date("Y")+1;
 
 		for ($year=2007; $year < $curyear; $year++) { 
 

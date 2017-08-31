@@ -82,9 +82,6 @@ class Eid extends Model
 		$medage_a = $n->Getoverallmedianage($year);
 
 		$tat = $n->get_tat($year);
-		foreach ($tat as $key => $value) {
-			echo ' Tat is ' . $value->tat4;
-		}
 		// $tat = $n->GetNatTATs($year);
 		// $tat = collect($tat);
 

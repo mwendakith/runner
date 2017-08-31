@@ -802,49 +802,58 @@ class VlNation extends Model
 		$sql = "viralsamples.ID, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$b = new BaseModel;
 
-		$curyear = date("Y");
+		// $curyear = date("Y")+1;
 		ini_set("memory_limit", "-1");
 
-		for ($year=2011; $year < $curyear; $year++) { 
-
+		// for ($year=2011; $year < $curyear; $year++) { 
+			$year=2017;
 			echo "\n Begin vl samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 
-			$data = DB::connection('vl')
-			->table('viralsamples')
-			->select(DB::raw($sql))
-			->whereYear('viralsamples.datecollected', '>', 1980)
-			->whereYear('viralsamples.datereceived', '>', 1980)
-			->whereYear('viralsamples.datetested', '>', 1980)
-			->whereYear('viralsamples.datedispatched', '>', 1980)
-			->whereColumn([
-				['datecollected', '<=', 'datereceived'],
-				['datereceived', '<=', 'datetested'],
-				['datetested', '<=', 'datedispatched']
-			])
-			->whereYear('datetested', $year)
-			->where('viralsamples.Flag', 1)
-			->where('viralsamples.repeatt', 0)
-			->get(); 
+			for($month=1; $month<13; $month++){
 
-			if($data->isEmpty()){
-				continue;
-			}		
+				echo "\n Begin vl samples tat update for {$year} {$month} at " . date('d/m/Y h:i:s a', time());
 
-			foreach ($data as $key => $value) {
-				$holidays = $b->getTotalHolidaysinMonth($value->month);
+				$data = DB::connection('vl')
+				->table('viralsamples')
+				->select(DB::raw($sql))
+				->whereYear('viralsamples.datecollected', '>', 1980)
+				->whereYear('viralsamples.datereceived', '>', 1980)
+				->whereYear('viralsamples.datetested', '>', 1980)
+				->whereYear('viralsamples.datedispatched', '>', 1980)
+				->whereColumn([
+					['datecollected', '<=', 'datereceived'],
+					['datereceived', '<=', 'datetested'],
+					['datetested', '<=', 'datedispatched']
+				])
+				->whereYear('datetested', $year)
+				->whereMonth('datetested', $month)
+				->where('viralsamples.Flag', 1)
+				->where('viralsamples.repeatt', 0)
+				->get(); 
 
-				$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
-				$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
-				$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
-				$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+				if($data->isEmpty()){
+					continue;
+				}	
 
-				$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+				$holidays = $b->getTotalHolidaysinMonth($month);	
 
-				DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+				foreach ($data as $key => $value) {
+
+					$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
+					$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
+					$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
+					$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+
+					$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+
+					DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+
+				}
+				echo "\n Completed vl samples tat update for {$year} {$month} at " . date('d/m/Y h:i:s a', time());
 
 			}
 			echo "\n Completed vl samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
-		}
+		// }
 	}
 
 
