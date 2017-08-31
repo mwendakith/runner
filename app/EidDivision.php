@@ -571,8 +571,7 @@ class EidDivision extends Model
 		->where('patients.age', '<', 24)
 		->where('samples.result', '>', 0)
 		->whereYear('datetested', $year)
-		->where('samp
-			les.Flag', 1)
+		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->get(); 
 

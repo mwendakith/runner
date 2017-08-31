@@ -327,7 +327,7 @@ class BaseModel extends Model
     }
 
     public function send_report(){
-    	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com');
+    	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com', 'baksajoshua09@gmail.com');
     	Mail::to($mail_array)->send(new UpdateReport());
 
     	// $filePath = public_path('logs.txt');
@@ -335,10 +335,9 @@ class BaseModel extends Model
     }
 
     public function test_mail(){
-    	$mail_array = array('joelkith@gmail.com');
-    	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com');
+    	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com', 'baksajoshua09@gmail.com');
     	$up = new UpdateReport;
-    	Mail::to('joelkith@gmail.com')->send($up);
+    	Mail::to($mail_array)->send($up);
     }
 
 	
