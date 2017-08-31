@@ -974,7 +974,7 @@ class EidDivision extends Model
 			$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
 			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
 
-			$update_array = array('synched' => 0, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+			$update_array = array('synched' => 1, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
 			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
 		}
