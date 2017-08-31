@@ -353,7 +353,7 @@ class VlDivision extends Model
 		return $return;
 	}
 
-	public function get_tat($year, $division='view_facilitys.county')
+	public function get_tat($year, $division='view_facilitys.county'){
     	$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
 
 		$data = DB::connection('vl')
@@ -760,10 +760,18 @@ class VlDivision extends Model
 		return $data;
     }
 
-    public function update_patients(){
-		$sql = "viralsamples.ID, viralsamples.patient, viralsamples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, viralpatients.age, viralpatients.gender, viralpatients.prophylaxis, viralsamples.justification, viralsamples.datecollected, viralsamples.receivedstatus, viralsamples.sampletype, viralsamples.rejectedreason, viralsamples.reason_for_repeat, viralsamples.datereceived, viralsamples.datetested, viralsamples.result, viralsamples.datedispatched, viralsamples.labtestedin, month(datetested) as month";
+    public function update_patients()
+    {
+    	ini_set("memory_limit", "-1");
 
-		ini_set("memory_limit", "-1");
+		$sql = "viralsamples.ID, viralsamples.patient, viralsamples.batchno, view_facilitys.name,
+		 view_facilitys.facilitycode, view_facilitys.DHIScode, viralpatients.age, viralpatients.gender,
+		  viralpatients.prophylaxis, viralsamples.justification, viralsamples.datecollected,
+		   viralsamples.receivedstatus, viralsamples.sampletype, viralsamples.rejectedreason,
+		    viralsamples.reason_for_repeat, viralsamples.datereceived, viralsamples.datetested,
+		     viralsamples.result, viralsamples.datedispatched, viralsamples.labtestedin, month(datetested) as month";
+
+		
 
 		$data = DB::connection('vl')
 		->table('viralsamples')
