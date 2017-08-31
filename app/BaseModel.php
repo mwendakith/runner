@@ -330,8 +330,8 @@ class BaseModel extends Model
     	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com');
     	Mail::to($mail_array)->send(new UpdateReport());
 
-    	$filePath = public_path('logs.txt');
-    	fclose(fopen($filePath, 'w'));
+    	// $filePath = public_path('logs.txt');
+    	// fclose(fopen($filePath, 'w'));
     }
 
     public function test_mail(){
