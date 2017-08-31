@@ -54,11 +54,11 @@ class VlFacility extends Command
             $output .= $vl->update_facilities($year);
         }
 
-        else if ($type == 2) {
+        if ($type == 2) {
             $output .= $vl->finish_facilities($year);
         }
 
-        else{
+        if ($type == 3) {
             $output .= $vl->update_facilities($year);
             $output .= $vl->finish_facilities($year);
         }
