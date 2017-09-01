@@ -458,8 +458,11 @@ class Vl extends Model
 					$data_array = array_merge($age_array, $data_array);
 				}
 
+				echo "\n Column - {$column} ID - {$div_array[$it]}";
+
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+
 				if ($type==2) {
 					$column = $column2;
 				}
