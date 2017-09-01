@@ -430,6 +430,12 @@ class Vl extends Model
 					$column = "lab";
 				}
 
+				$column2="";
+				if ($type==2) {
+					$column2 = $column;
+					$column="subcounty";
+				}
+
 				$data_array = array(
 					'received' => $rec, 'alltests' => $tested,
 					'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
@@ -453,6 +459,9 @@ class Vl extends Model
 
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+				if ($type==2) {
+					$column = $column2;
+				}
 			}
 
 		}
@@ -612,6 +621,10 @@ class Vl extends Model
 
 							$data_array = array_merge($gender_array, $data_array);
 						}
+
+						if($column == "district"){
+							$column = "subcounty";
+						}
 						
 
 						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
@@ -634,7 +647,7 @@ class Vl extends Model
     }
 
     public function update_subcounties($year=null){
-    	return $this->update_division($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'vl_subcounty_summary');
+    	return $this->update_division($year, 2, 'district', 'view_facilitys.district', 'districts', 'vl_subcounty_summary');
     }
 
     public function update_partners($year=null){

@@ -654,6 +654,12 @@ class Eid extends Model
     		$year = Date('Y');
     	}
 
+    	$column2="";
+		if ($type==2) {
+			$column2 = $column;
+			// $column="subcounty";
+		}
+
     	// Instantiate new object
     	$n = new EidDivision;
 
@@ -670,7 +676,7 @@ class Eid extends Model
 			$array_size++;
 		}
 
-		echo "\n Begin {$column} update at " . date('d/m/Y h:i:s a', time());
+		echo "\n Begin eid {$column} update at " . date('d/m/Y h:i:s a', time());
 
 		// Get collection instances of the data
     	$alltests_a = $n->CumulativeTestedSamples($year, $division);
@@ -823,13 +829,20 @@ class Eid extends Model
 					 'dateupdated' => $today
 				);
 
-				// if($type != 3){
-					$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
-					$data_array = array_merge($data_array, $turn);
-				// }
+				
+				$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
+				$data_array = array_merge($data_array, $turn);
+
+				
+				if ($type==2) {
+					$column="subcounty";
+				}
+				
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
-
+				if ($type==2) {
+					$column = $column2;
+				}
 			}
 			// End of division loop
 			
@@ -839,7 +852,7 @@ class Eid extends Model
 		echo "\n Completed entry into eid {$column} summary at " . date('d/m/Y h:i:s a', time());
 
 		if($type == 4){ 
-			return "Success";
+			return "";
 		}
 
 
@@ -921,8 +934,15 @@ class Eid extends Model
 					'ninemonthneg' => $age13neg, 'twelvemonthpos' => $age14pos,
 					'twelvemonthneg' => $age14neg, 'dateupdated' => $today
 				);
+				if ($type==2) {
+					$column="subcounty";
+				}
 
 				DB::table($age_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+				
+				if ($type==2) {
+					$column = $column2;
+				}
 			}
 			// End of division loop
 		}
@@ -966,8 +986,15 @@ class Eid extends Model
 						'dateupdated' => $today
 					);
 
+					if ($type==2) {
+						$column="subcounty";
+					}
+
 					DB::table($ir_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
 
+					if ($type==2) {
+						$column = $column2;
+					}
 				}
 				// End of loop through divisions
 			}
@@ -1011,8 +1038,15 @@ class Eid extends Model
 						'dateupdated' => $today
 					);
 
+					if ($type==2) {
+						$column="subcounty";
+					}
+
 					DB::table($mr_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
 
+					if ($type==2) {
+						$column = $column2;
+					}
 				}
 
 			}
@@ -1056,8 +1090,15 @@ class Eid extends Model
 						'dateupdated' => $today
 					);
 
+					if ($type==2) {
+						$column="subcounty";
+					}
+
 					DB::table($ent_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('entrypoint', $value->ID)->update($data_array);
 
+					if ($type==2) {
+						$column = $column2;
+					}
 				}
 
 			}
@@ -1242,8 +1283,17 @@ class Eid extends Model
 			$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
 			$data_array = array_merge($data_array, $turn);
 			
+			$column2="";
+			if ($type==2) {
+				$column2 = $column;
+				$column="subcounty";
+			}
 
 			DB::table($sum_table)->where('year', $year)->where($column, $div_array[$it])->update($data_array);
+
+			if ($type==2) {
+				$column = $column2;
+			}
 
 		}
 		// End of division loop
@@ -1257,7 +1307,7 @@ class Eid extends Model
     }
 
     public function update_subcounties($year = null){
-    	return $this->division_updator($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_iprophylaxis', 'subcounty_mprophylaxis', 'subcounty_entrypoint');
+    	return $this->division_updator($year, 2, 'district', 'view_facilitys.district', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_iprophylaxis', 'subcounty_mprophylaxis', 'subcounty_entrypoint');
     }
 
     public function update_partners($year = null){
