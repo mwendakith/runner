@@ -464,7 +464,7 @@ class Vl extends Model
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
-				if ($type==2 || 5) {
+				if ($type == 2 || $type == 5) {
 					$column = $column2;
 				}
 			}
@@ -483,6 +483,7 @@ class Vl extends Model
     // Div type is the type of division eg county, subcounty, partner and facility
     public function finish_division($year, $today, &$div_array, $column, $division, $div_type, $array_size){
     	$n = new VlDivision;
+    	$column2 = $column;
     	for ($type=1; $type < 6; $type++) { 
 
     		if($type == 3 && $column == "facility"){
@@ -633,6 +634,7 @@ class Vl extends Model
 						
 
 						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+						$column = $column2;
 					}
 
 				}

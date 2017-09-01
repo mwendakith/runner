@@ -654,16 +654,12 @@ class Eid extends Model
     		$year = Date('Y');
     	}
 
-    	$column2="";
-		if ($type==2) {
-			$column2 = $column;
-			// $column="subcounty";
-		}
-
     	// Instantiate new object
     	$n = new EidDivision;
 
     	$today=date("Y-m-d");
+
+    	$column2 = $column;
 
     	$div_array;
     	$array_size = 0;
