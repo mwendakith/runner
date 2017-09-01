@@ -445,7 +445,7 @@ class Vl extends Model
 					'nogendertest' => $nogender, 'Undetected' => $ldl, 'less1000' => $less1k,
 					'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
 					'sitessending' => $sites, 'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'],
-					'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'], 
+					'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'],   'dateupdated' => $today,
 					'less2' => $less2, 'less9' => $less9,
 					'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
 					'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
@@ -453,7 +453,7 @@ class Vl extends Model
 				);
 
 				if($type != 5){
-					$age_array = array('baseline' => $baseline,  'dateupdated' => $today,
+					$age_array = array('baseline' => $baseline,
 					'baselinesustxfail' => $baselinefail);
 
 					$data_array = array_merge($age_array, $data_array);
