@@ -322,6 +322,8 @@ class Vl extends Model
 
     	echo "\n Begin  viralload {$column} update at " . date('d/m/Y h:i:s a', time());
 
+    	$column2=$column;
+
     	// Get collection instances of the data
 
     	$rec_a = $n->getallreceivediraloadsamples($year, $division);
@@ -430,9 +432,8 @@ class Vl extends Model
 					$column = "lab";
 				}
 
-				$column2="";
+				
 				if ($type==2) {
-					$column2 = $column;
 					$column="subcounty";
 				}
 
@@ -458,12 +459,12 @@ class Vl extends Model
 					$data_array = array_merge($age_array, $data_array);
 				}
 
-				echo "\n Column - {$column} ID - {$div_array[$it]}";
+				// echo "\n Column - {$column} ID - {$div_array[$it]}";
 
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
-				if ($type==2) {
+				if ($type==2 || 5) {
 					$column = $column2;
 				}
 			}
