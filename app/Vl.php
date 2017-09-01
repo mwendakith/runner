@@ -334,18 +334,18 @@ class Vl extends Model
     	$conf2VL_a = $n->GetNationalConfirmedFailure($year, $division);
 		$rs_a = $n->getallrepeattviraloadsamples($year, $division);
 
-    	if($type != 5){
-    		$baseline_a = $n->GetNationalBaseline($year, $division);
-	    	$baselinefail_a = $n->GetNationalBaselineFailure($year, $division);
+    	
+		$baseline_a = $n->GetNationalBaseline($year, $division);
+    	$baselinefail_a = $n->GetNationalBaselineFailure($year, $division);
 
-	    	$noage_a = $n->getalltestedviraloadsbyage($year, $division, 1);
-	    	$less2_a = $n->getalltestedviraloadsbyage($year, $division, 6);
-	    	$less9_a = $n->getalltestedviraloadsbyage($year, $division, 7);
-	    	$less14_a = $n->getalltestedviraloadsbyage($year, $division, 8);
-	    	$less19_a = $n->getalltestedviraloadsbyage($year, $division, 9);
-	    	$less24_a = $n->getalltestedviraloadsbyage($year, $division, 10);
-	    	$over25_a = $n->getalltestedviraloadsbyage($year, $division, 11);
-	    }
+    	$noage_a = $n->getalltestedviraloadsbyage($year, $division, 1);
+    	$less2_a = $n->getalltestedviraloadsbyage($year, $division, 6);
+    	$less9_a = $n->getalltestedviraloadsbyage($year, $division, 7);
+    	$less14_a = $n->getalltestedviraloadsbyage($year, $division, 8);
+    	$less19_a = $n->getalltestedviraloadsbyage($year, $division, 9);
+    	$less24_a = $n->getalltestedviraloadsbyage($year, $division, 10);
+    	$over25_a = $n->getalltestedviraloadsbyage($year, $division, 11);
+	    
     	// $adults=$less19 +$less24 + $over25 ;
 		// $paeds=$less2 + $less9 + $less14;
 
@@ -391,20 +391,20 @@ class Vl extends Model
 
 				
 
-				if($type != 5){
-					$baseline = $this->checknull($baseline_a->where('month', $month)->where($column, $div_array[$it]));
-					$baselinefail = $this->checknull($baselinefail_a->where('month', $month)->where($column, $div_array[$it]));
+				
+				$baseline = $this->checknull($baseline_a->where('month', $month)->where($column, $div_array[$it]));
+				$baselinefail = $this->checknull($baselinefail_a->where('month', $month)->where($column, $div_array[$it]));
 
-					$noage = $this->checknull($noage_a->where('month', $month)->where($column, $div_array[$it]));
-					$less2 = $this->checknull($less2_a->where('month', $month)->where($column, $div_array[$it]));
-					$less9 = $this->checknull($less9_a->where('month', $month)->where($column, $div_array[$it]));
-					$less14 = $this->checknull($less14_a->where('month', $month)->where($column, $div_array[$it]));
-					$less19 = $this->checknull($less19_a->where('month', $month)->where($column, $div_array[$it]));
-					$less24 = $this->checknull($less24_a->where('month', $month)->where($column, $div_array[$it]));
-					$over25 = $this->checknull($over25_a->where('month', $month)->where($column, $div_array[$it]));
-					$adults = $less19 + $less24 + $over25;
-					$paeds = $less2 + $less9 + $less14;
-				}
+				$noage = $this->checknull($noage_a->where('month', $month)->where($column, $div_array[$it]));
+				$less2 = $this->checknull($less2_a->where('month', $month)->where($column, $div_array[$it]));
+				$less9 = $this->checknull($less9_a->where('month', $month)->where($column, $div_array[$it]));
+				$less14 = $this->checknull($less14_a->where('month', $month)->where($column, $div_array[$it]));
+				$less19 = $this->checknull($less19_a->where('month', $month)->where($column, $div_array[$it]));
+				$less24 = $this->checknull($less24_a->where('month', $month)->where($column, $div_array[$it]));
+				$over25 = $this->checknull($over25_a->where('month', $month)->where($column, $div_array[$it]));
+				$adults = $less19 + $less24 + $over25;
+				$paeds = $less2 + $less9 + $less14;
+				
 
 				$ldl = $this->checknull($ldl_a->where('month', $month)->where($column, $div_array[$it]));
 				$less1k = $this->checknull($less1k_a->where('month', $month)->where($column, $div_array[$it]));
@@ -444,15 +444,16 @@ class Vl extends Model
 					'nogendertest' => $nogender, 'Undetected' => $ldl, 'less1000' => $less1k,
 					'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
 					'sitessending' => $sites, 'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'],
-					'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'], 'dateupdated' => $today
+					'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'], 'dateupdated' => $today, 
+					'less2' => $less2, 'less9' => $less9,
+					'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
+					'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
+					'noage' => $noage
 				);
 
 				if($type != 5){
 					$age_array = array('baseline' => $baseline,
-					'baselinesustxfail' => $baselinefail, 'less2' => $less2, 'less9' => $less9,
-					'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
-					'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
-					'noage' => $noage);
+					'baselinesustxfail' => $baselinefail);
 
 					$data_array = array_merge($age_array, $data_array);
 				}
