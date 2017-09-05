@@ -44,6 +44,7 @@ class EidPartner extends Command
         $eid = new Eid;
 
         $output="";
+        $type = $this->option('type');
 
         if($type==1){
             $output .= $eid->update_partners($year);
