@@ -12,7 +12,7 @@ class EidPartner extends Command
      *
      * @var string
      */
-    protected $signature = 'update:eid-partner {year?}';
+    protected $signature = 'update:eid-partner {year?} {--type=1}';
 
     /**
      * The console command description.
@@ -43,8 +43,19 @@ class EidPartner extends Command
 
         $eid = new Eid;
 
-        $output = $eid->update_partners($year);
-        $output .= $eid->update_partners_yearly($year);
+        $output="";
+
+        if($type==1){
+            $output .= $eid->update_partners($year);
+            $output .= $eid->update_partners_yearly($year);
+        }
+
+        else{
+            $output .= $eid->update_partners_yearly($year);
+        }
+
+        
+
 
         $this->info($output);
     }
