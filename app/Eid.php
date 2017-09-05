@@ -1254,7 +1254,7 @@ class Eid extends Model
 			$avgage = $this->checknull($avgage_a->where($column, $div_array[$it]));
 			$medage = $this->checkmedage($medage_a->where('division', $div_array[$it]));
 
-			echo "\n Column - {$column} Partner - {$div_array[$it]} Tests {$alltests}";
+			// echo "\n Column - {$column} Partner - {$div_array[$it]} Tests {$alltests}";
 
 			
 

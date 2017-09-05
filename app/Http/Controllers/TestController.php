@@ -27,10 +27,14 @@ class TestController extends Controller
 			$a[$key] = $value->ID;
 		}
 
-		$r = $t->GetNatTATs(2016, $a, 'view_facilitys.county', 'county', false);
+		// $r = $t->get_tat(2016, 'view_facilitys.county', false);
+		// $r = $t->get_tat(2016, 'view_facilitys.county', false);
+		$r = $t->CumulativeTestedSamples(2016, 'view_facilitys.county', false);
+		// $r = $t->CumulativeTestedSamples(2016, false);
+
 		// $r = $t->GetNatTATs(2016);
 
-		$r = collect($r);
+		// $r = collect($r);
 
 
 
