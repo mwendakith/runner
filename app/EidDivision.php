@@ -776,6 +776,32 @@ class EidDivision extends Model
   
 	}
 
+	//National rejections
+	public function national_rejections($year, $rejected_reason, $division='view_facilitys.county', $monthly=true){
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->where('receivedstatus', 2)
+		->where('rejected_reason', $rejected_reason)
+		->whereYear('datetested', $year)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->where('samples.repeatt', 0)
+		->when($division, function($query) use ($monthly, $division){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
 	// Tat
 	public function GetNatTATs($year, $div_array, $division='view_facilitys.county', $col='county', $monthly=true)
 	{

@@ -9,6 +9,23 @@ use App\BaseModel;
 class VlDivision extends Model
 {
     //
+    //National rejections
+	public function national_rejections($year, $division='view_facilitys.county', $rejected_reason){
+
+		$data = DB::connection('vl')
+		->table('viralsamples')
+		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->where('receivedstatus', 2)
+		->where('rejected_reason', $rejected_reason)
+		->whereYear('datetested', $year)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month')
+		->get(); 
+
+		return $data;
+	}
+	
 
     public function getalltestedviraloadsamples($year, $division='view_facilitys.county'){
 

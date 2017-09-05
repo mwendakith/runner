@@ -14,6 +14,16 @@ class CreateVlPartnerRejections extends Migration
     public function up()
     {
         //
+        Schema::create('vl_partner_rejections', function (Blueprint $table) {
+            $table->increments('ID');
+            $table->date('dateupdated')->nullable();
+            $table->integer('partner')->unsigned();
+            $table->integer('month')->unsigned();
+            $table->integer('year')->unsigned();
+            $table->integer('rejected_reason')->unsigned();
+            $table->integer('total')->unsigned()->default(0)->nullable();
+            $table->index(['month', 'year', 'rejected_reason', 'partner']);
+        });
     }
 
     /**
@@ -24,5 +34,6 @@ class CreateVlPartnerRejections extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('vl_partner_rejections');
     }
 }

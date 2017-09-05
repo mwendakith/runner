@@ -636,6 +636,29 @@ class EidNation extends Model
   
 	}
 
+	//National rejections
+	public function national_rejections($year, $rejected_reason, $monthly=true){
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->where('receivedstatus', 2)
+		->where('rejected_reason', $rejected_reason)
+		->whereYear('datetested', $year)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->where('samples.repeatt', 0)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month');
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
+
 	// National Tat	
 	public function GetNatTATs($year, $monthly=true)
 	{

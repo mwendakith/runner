@@ -8,8 +8,25 @@ use App\BaseModel;
 
 class VlNation extends Model
 {
-    //
+    
+	//National rejections
+	public function national_rejections($year, $rejected_reason){
 
+		$data = DB::connection('vl')
+		->table('viralsamples')
+		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->where('receivedstatus', 2)
+		->where('rejected_reason', $rejected_reason)
+		->whereYear('datetested', $year)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month')
+		->get(); 
+
+		return $data;
+	}
+
+    //
     public function getalltestedviraloadsamples($year){
 
     	$data = DB::connection('vl')
@@ -852,8 +869,4 @@ class VlNation extends Model
 		echo "\n Completed vl samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 		
 	}
-
-
-
-    
 }
