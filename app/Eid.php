@@ -1115,6 +1115,8 @@ class Eid extends Model
     		$year = Date('Y');
     	}
 
+    	$column2 = $column;
+
     	// Instantiate new object
     	$n = new EidDivision;
 
@@ -1279,9 +1281,7 @@ class Eid extends Model
 			$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
 			$data_array = array_merge($data_array, $turn);
 			
-			$column2="";
 			if ($type==2) {
-				$column2 = $column;
 				$column="subcounty";
 			}
 
