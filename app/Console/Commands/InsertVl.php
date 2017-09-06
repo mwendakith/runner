@@ -48,7 +48,7 @@ class InsertVl extends Command
         $month = $this->option('month');
 
         if ($type == 1) {
-            for ($i=1; $i < 12; $i++) { 
+            for ($i=1; $i < 13; $i++) { 
                  $output .= $vl->rejections($year, $i);
             }
         }
