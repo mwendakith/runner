@@ -693,7 +693,7 @@ class Eid extends Model
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 
-					echo "\n Begin entry into eid lab rejections " . date('d/m/Y h:i:s a', time());
+					echo "\n Total - {$rej} Lab - {$div_array[$it]}";
 
 					$data_array = array(
 						'total' => $rej, 'dateupdated' => $today
