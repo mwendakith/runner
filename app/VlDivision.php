@@ -16,7 +16,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->where('receivedstatus', 2)
-		->where('rejected_reason', $rejected_reason)
+		->where('rejectedreason', $rejected_reason)
 		->whereYear('datetested', $year)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)

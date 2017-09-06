@@ -643,7 +643,7 @@ class EidNation extends Model
 		->table('samples')
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->where('receivedstatus', 2)
-		->where('rejected_reason', $rejected_reason)
+		->where('rejectedreason', $rejected_reason)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)

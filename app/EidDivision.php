@@ -784,7 +784,7 @@ class EidDivision extends Model
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->where('receivedstatus', 2)
-		->where('rejected_reason', $rejected_reason)
+		->where('rejectedreason', $rejected_reason)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
