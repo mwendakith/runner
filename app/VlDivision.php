@@ -14,10 +14,10 @@ class VlDivision extends Model
 
 		$data = DB::connection('vl')
 		->table('viralsamples')
-		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
-		->whereYear('datetested', $year)
+		->whereYear('datereceived', $year)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')

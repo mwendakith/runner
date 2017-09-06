@@ -693,7 +693,7 @@ class Eid extends Model
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 
-					echo "\n Total - {$rej} Lab - {$div_array[$it]}";
+					// echo "\n Total - {$rej} Lab - {$div_array[$it]}";
 
 					$data_array = array(
 						'total' => $rej, 'dateupdated' => $today

@@ -369,8 +369,8 @@ class EidNation extends Model
 
 		$data = DB::connection('eid')
 		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->whereYear('datetested', $year)
+		->select(DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
+		->whereYear('datereceived', $year)
 		->where('samples.receivedstatus', 2)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
@@ -641,10 +641,10 @@ class EidNation extends Model
 
 		$data = DB::connection('eid')
 		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->select(DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
-		->whereYear('datetested', $year)
+		->whereYear('datereceived', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
