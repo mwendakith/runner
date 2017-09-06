@@ -385,6 +385,35 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid national entrypoints at " . date('d/m/Y h:i:s a', time());
 
+		echo "\n Begin entry into eid national rejections " . date('d/m/Y h:i:s a', time());
+
+		// Start of rejections
+		$reasons = $data = DB::connection('eid')
+		->table('rejectedreasons')->select('ID')->get();
+
+		// Loop through reasons
+		foreach ($reasons as $key => $value) {
+			$rej_a = $n->national_rejections($year, $value->ID);
+
+			// Loop through each month and update reason
+			for ($i=0; $i < $count; $i++) { 
+				$month = $i + 1;
+
+				$rej = $this->checknull($rej_a->where('month', $month));
+
+				$data_array = array(
+					'total' => $rej, 'dateupdated' => $today
+				);
+
+				DB::table('national_rejections')->where('year', $year)->where('month', $month)->where('rejected_reason', $value->ID)->update($data_array);
+
+			}
+			
+		}
+		// End of rejections
+
+		echo "\n Completed entry into eid national rejections at " . date('d/m/Y h:i:s a', time());
+
 		// End of national function
     }
 
@@ -642,13 +671,46 @@ class Eid extends Model
 			}
 
 		}
-		echo "\n Completed eid lab update at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed eid lab summary update at " . date('d/m/Y h:i:s a', time());
+
+		echo "\n Begin entry into eid lab rejections " . date('d/m/Y h:i:s a', time());
+
+		// Start of rejections
+		$reasons = $data = DB::connection('eid')
+		->table('rejectedreasons')->select('ID')->get();
+
+		// Loop through reasons
+		foreach ($reasons as $key => $value) {
+			$rej_a = $n->national_rejections($year, $value->ID);
+
+			// Loop through each month and update reason
+			for ($i=0; $i < $count; $i++) { 
+				$month = $i + 1;
+				if($year == Date('Y') && $month > Date('m')){ break; }
+
+				// Loop through labs
+				for ($it=0; $it < $array_size; $it++) {
+
+					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
+
+					$data_array = array(
+						'total' => $rej, 'dateupdated' => $today
+					);
+
+					DB::table('lab_rejections')->where('year', $year)->where('month', $month)->where("lab", $div_array[$it])->where('rejected_reason', $value->ID)->update($data_array);
+				}
+			}
+			
+		}
+		// End of rejections
+
+		echo "\n Completed entry into eid lab rejections at " . date('d/m/Y h:i:s a', time());
     }
 
 
     // Will be used to enter data for divisions except labs
     // Types: 1=county, 2=subcounty, 3=partner, 4=sites
-    public function division_updator($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='county_summary', $age_table='county_agebreakdown', $ir_table='county_iprophylaxis', $mr_table='county_mprophylaxis', $ent_table='county_entrypoint'){
+    public function division_updator($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='county_summary', $age_table='county_agebreakdown', $ir_table='county_iprophylaxis', $mr_table='county_mprophylaxis', $ent_table='county_entrypoint', $rej_table='county_rejections'){
 
     	if($year == null){
     		$year = Date('Y');
@@ -1104,6 +1166,44 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid {$column} entrypoints at " . date('d/m/Y h:i:s a', time());
 
+		echo "\n Begin entry into eid {$column} rejections " . date('d/m/Y h:i:s a', time());
+
+		// Start of rejections
+		$reasons = $data = DB::connection('eid')
+		->table('rejectedreasons')->select('ID')->get();
+
+		// Loop through reasons
+		foreach ($reasons as $key => $value) {
+			$rej_a = $n->national_rejections($year, $value->ID);
+
+			// Loop through each month and update reason
+			for ($i=0; $i < $count; $i++) { 
+				$month = $i + 1;
+				if($year == Date('Y') && $month > Date('m')){ break; }
+
+				// Loop through divisions
+				for ($it=0; $it < $array_size; $it++) {
+
+					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
+
+					$data_array = array(
+						'total' => $rej, 'dateupdated' => $today
+					);
+
+					if ($type==2) {
+						$column="subcounty";
+					}
+
+					DB::table('lab_rejections')->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('rejected_reason', $value->ID)->update($data_array);
+					$column = $column2;
+				}
+			}
+			
+		}
+		// End of rejections
+
+		echo "\n Completed entry into eid {$column} rejections at " . date('d/m/Y h:i:s a', time());
+
 		// End of division updator
     }
 
@@ -1301,15 +1401,15 @@ class Eid extends Model
 	}
 
     public function update_counties($year = null){
-    	return $this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary', 'county_agebreakdown', 'county_iprophylaxis', 'county_mprophylaxis', 'county_entrypoint');
+    	return $this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary', 'county_agebreakdown', 'county_iprophylaxis', 'county_mprophylaxis', 'county_entrypoint', 'county_rejections');
     }
 
     public function update_subcounties($year = null){
-    	return $this->division_updator($year, 2, 'district', 'view_facilitys.district', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_iprophylaxis', 'subcounty_mprophylaxis', 'subcounty_entrypoint');
+    	return $this->division_updator($year, 2, 'district', 'view_facilitys.district', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_iprophylaxis', 'subcounty_mprophylaxis', 'subcounty_entrypoint', 'subcounty_rejections');
     }
 
     public function update_partners($year = null){
-    	return $this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_iprophylaxis', 'ip_mprophylaxis', 'ip_entrypoint');
+    	return $this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_iprophylaxis', 'ip_mprophylaxis', 'ip_entrypoint', 'ip_rejections');
     }
 
     public function update_facilities($year = null){

@@ -142,8 +142,42 @@ class Vl extends Model
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
 		echo $this->finish_nation($year, $today);
+		echo $this->nation_rejections($year, $today);
+    }
 
+    public function nation_rejections($year=null){
 
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	// Instantiate new object
+    	$n = new VlNation;
+
+    	$today=date("Y-m-d");
+
+    	echo "\n Begin viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
+
+    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
+
+    	foreach ($reasons as $key => $value) {
+    		$rej_a = $n->national_rejections($year, $value->ID);
+
+    		// Loop through the months and insert data into the national summary
+			for ($i=0; $i < 12; $i++) { 
+				$month = $i + 1;
+				if($year == Date('Y') && $month > Date('m')){ break; }
+
+				$rej = $this->checknull($rej_a->where('month', $month));
+
+				$data_array = array(
+					'dateupdated' => $today, 'total' => $rej
+				);
+				DB::table('vl_national_rejections')->where('year', $year)->where('month', $month)
+				->where('rejected_reason', $value->ID)->update($data_array);	
+			}
+    	}
+
+    	echo "\n Completed viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
     }
 
     public function finish_nation($year, $today){
@@ -298,7 +332,7 @@ class Vl extends Model
 		// End of looping of params
     }
 
-    public function update_division($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='vl_county_summary'){
+    public function update_division($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='vl_county_summary', $rej_table='vl_county_rejections'){
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -475,8 +509,60 @@ class Vl extends Model
 
 		if ($type < 4) {
 			echo $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
+			echo $this->division_rejections($year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
+		}
+		if($type == 5){
+			echo $this->division_rejections($year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);			
 		}
 
+    }
+
+    public function division_rejections($year=null, $today, &$div_array, $column, $division, $div_type, $array_size, $rej_table){
+
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	// Instantiate new object
+    	$n = new VlDivision;
+
+    	$column2 = $column;
+
+    	$today=date("Y-m-d");
+
+    	echo "\n Begin viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
+
+    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
+
+    	foreach ($reasons as $key => $value) {
+    		$rej_a = $n->national_rejections($year, $division, $value->ID)->where($column, $div_array[$it]));
+
+    		// Loop through the months and insert data into the national summary
+			for ($i=0; $i < 12; $i++) { 
+				$month = $i + 1;
+				if($year == Date('Y') && $month > Date('m')){ break; }
+
+				// Loop through divisions i.e. counties, subcounties, partners and sites
+				for ($it=0; $it < $array_size; $it++) { 
+
+					$rej = $this->checknull($rej_a->where('month', $month));
+
+					$data_array = array(
+						'dateupdated' => $today, 'total' => $rej
+					);
+
+					if ($div_type==2) {
+						$column="subcounty";
+					}
+
+					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it]))
+					->where('rejected_reason', $value->ID)->update($data_array);
+
+					$column = $column2;
+				}		
+			}
+    	}
+
+    	echo "\n Completed viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility
@@ -649,19 +735,19 @@ class Vl extends Model
 
 
     public function update_counties($year=null){
-    	return $this->update_division($year, 1, 'county', 'view_facilitys.county', 'countys', 'vl_county_summary');
+    	return $this->update_division($year, 1, 'county', 'view_facilitys.county', 'countys', 'vl_county_summary', 'vl_county', 'vl_county_rejections');
     }
 
     public function update_subcounties($year=null){
-    	return $this->update_division($year, 2, 'district', 'view_facilitys.district', 'districts', 'vl_subcounty_summary');
+    	return $this->update_division($year, 2, 'district', 'view_facilitys.district', 'districts', 'vl_subcounty_summary', 'vl_subcounty_rejections');
     }
 
     public function update_partners($year=null){
-    	return $this->update_division($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'vl_partner_summary');
+    	return $this->update_division($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
     }
 
     public function update_facilities($year=null){
-    	return $this->update_division($year, 4, 'facility', 'viralsamples.facility', 'facilitys', 'vl_site_summary');
+    	return $this->update_division($year, 4, 'facility', 'viralsamples.facility', 'facilitys', 'vl_site_summary', 'vl_site_rejections');
     }
 
     public function finish_facilities($year=null){
@@ -688,7 +774,7 @@ class Vl extends Model
     }
 
     public function update_labs($year=null){
-    	return $this->update_division($year, 5, 'labtestedin', "viralsamples.labtestedin", 'labs', 'vl_lab_summary');
+    	return $this->update_division($year, 5, 'labtestedin', "viralsamples.labtestedin", 'labs', 'vl_lab_summary', 'vl_lab_rejections');
 
     }
 

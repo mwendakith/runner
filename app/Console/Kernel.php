@@ -39,6 +39,9 @@ class Kernel extends ConsoleKernel
 
         Commands\EidTat::class,
         Commands\VlTat::class,
+        
+        Commands\InsertEid::class,
+        Commands\InsertVl::class,
 
         Commands\SendReport::class,
         Commands\TestMail::class,

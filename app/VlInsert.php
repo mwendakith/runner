@@ -8,6 +8,12 @@ class VlInsert extends Model
 {
     //
     public function rejections($year=null, $month=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	if($month == null){
+    		$month = Date('m');
+    	}
     	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
     	$counties = DB::connection('vl')->table('countys')->select('ID')->get();
     	$subcounties = DB::connection('vl')->table('districts')->select('ID')->get();

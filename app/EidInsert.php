@@ -9,6 +9,12 @@ class EidInsert extends Model
 {
     //
     public function rejections($year=null, $month=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	if($month == null){
+    		$month = Date('m');
+    	}
     	$reasons =  DB::connection('eid')->table('rejectedreasons')->select('ID')->get();
     	$counties =  DB::connection('eid')->table('countys')->select('ID')->get();
     	$subcounties =  DB::connection('eid')->table('districts')->select('ID')->get();
