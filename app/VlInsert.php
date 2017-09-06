@@ -14,6 +14,9 @@ class VlInsert extends Model
     	if($month == null){
     		$month = Date('m');
     	}
+
+    	echo "\n Begin vl rejection insert at " . date('d/m/Y h:i:s a', time());
+
     	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
     	$counties = DB::connection('vl')->table('countys')->select('ID')->get();
     	$subcounties = DB::connection('vl')->table('districts')->select('ID')->get();
@@ -85,5 +88,6 @@ class VlInsert extends Model
 		// }
 		// DB::table('site_rejections')->insert($data_array);
 
+		echo "\n Completed vl rejection insert at " . date('d/m/Y h:i:s a', time());
     }
 }

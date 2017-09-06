@@ -15,6 +15,9 @@ class EidInsert extends Model
     	if($month == null){
     		$month = Date('m');
     	}
+
+    	echo "\n Begin eid rejection insert at " . date('d/m/Y h:i:s a', time());
+
     	$reasons =  DB::connection('eid')->table('rejectedreasons')->select('ID')->get();
     	$counties =  DB::connection('eid')->table('countys')->select('ID')->get();
     	$subcounties =  DB::connection('eid')->table('districts')->select('ID')->get();
@@ -86,5 +89,6 @@ class EidInsert extends Model
 		// }
 		// DB::table('site_rejections')->insert($data_array);
 
+		echo "\n Completed eid rejection insert at " . date('d/m/Y h:i:s a', time());
     }
 }

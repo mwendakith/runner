@@ -13,7 +13,7 @@ class InsertVl extends Command
      *
      * @var string
      */
-    protected $signature = 'insert:vl {year?} {--type=3} {--month--1}';
+    protected $signature = 'insert:vl {year?} {--type=3} {--month=1}';
 
     /**
      * The console command description.

@@ -13,7 +13,7 @@ class InsertEid extends Command
      *
      * @var string
      */
-    protected $signature = 'insert:eid {year?} {--type=3} {--month--1}';
+    protected $signature = 'insert:eid {year?} {--type=3} {--month=1}';
 
     /**
      * The console command description.
