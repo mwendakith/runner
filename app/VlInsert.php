@@ -18,12 +18,12 @@ class VlInsert extends Model
 
     	echo "\n Begin vl rejection insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
-    	$counties = DB::connection('vl')->table('countys')->select('ID')->get();
-    	$subcounties = DB::connection('vl')->table('districts')->select('ID')->get();
-    	$partners = DB::connection('vl')->table('partners')->select('ID')->get();
-    	$labs = DB::connection('vl')->table('labs')->select('ID')->get();
-    	$sites = DB::connection('vl')->table('facilitys')->select('ID')->get();
+    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->orderBy('ID')->get();
+    	$counties = DB::connection('vl')->table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
+    	$labs = DB::connection('vl')->table('labs')->select('ID')->orderBy('ID')->get();
+    	// $sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
 
     	$data_array=null;
     	$i=0;

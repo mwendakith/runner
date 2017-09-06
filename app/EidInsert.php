@@ -18,12 +18,12 @@ class EidInsert extends Model
 
     	echo "\n Begin eid rejection insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons =  DB::connection('eid')->table('rejectedreasons')->select('ID')->get();
-    	$counties =  DB::connection('eid')->table('countys')->select('ID')->get();
-    	$subcounties =  DB::connection('eid')->table('districts')->select('ID')->get();
-    	$partners =  DB::connection('eid')->table('partners')->select('ID')->get();
-    	$labs = DB::connection('eid')->table('labs')->select('ID')->get();
-    	$sites = DB::connection('eid')->table('facilitys')->select('ID')->get();
+    	$reasons =  DB::connection('eid')->table('rejectedreasons')->select('ID')->orderBy('ID')->get();
+    	$counties =  DB::connection('eid')->table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties =  DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners =  DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
+    	$labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
+    	// $sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
 
     	$data_array=null;
     	$i=0;
