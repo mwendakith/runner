@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\EidInsert;
+use App\VlInsert;
 
 
 class InsertVl extends Command
