@@ -684,7 +684,7 @@ class Eid extends Model
 			$rej_a = $n->national_rejections($year, $value->ID);
 
 			// Loop through each month and update reason
-			for ($i=0; $i < $count; $i++) { 
+			for ($i=0; $i < 12; $i++) { 
 				$month = $i + 1;
 				if($year == Date('Y') && $month > Date('m')){ break; }
 
@@ -1177,7 +1177,7 @@ class Eid extends Model
 			$rej_a = $n->national_rejections($year, $value->ID);
 
 			// Loop through each month and update reason
-			for ($i=0; $i < $count; $i++) { 
+			for ($i=0; $i < 12; $i++) { 
 				$month = $i + 1;
 				if($year == Date('Y') && $month > Date('m')){ break; }
 
