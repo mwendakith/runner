@@ -681,7 +681,7 @@ class Eid extends Model
 
 		// Loop through reasons
 		foreach ($reasons as $key => $value) {
-			$rej_a = $n->national_rejections($year, $value->ID);
+			$rej_a = $n->national_rejections($year, $value->ID, $division);
 
 			// Loop through each month and update reason
 			for ($i=0; $i < 12; $i++) { 
@@ -692,6 +692,8 @@ class Eid extends Model
 				for ($it=0; $it < $array_size; $it++) {
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
+
+					echo "\n Begin entry into eid lab rejections " . date('d/m/Y h:i:s a', time());
 
 					$data_array = array(
 						'total' => $rej, 'dateupdated' => $today
@@ -1174,7 +1176,7 @@ class Eid extends Model
 
 		// Loop through reasons
 		foreach ($reasons as $key => $value) {
-			$rej_a = $n->national_rejections($year, $value->ID);
+			$rej_a = $n->national_rejections($year, $value->ID, $division);
 
 			// Loop through each month and update reason
 			for ($i=0; $i < 12; $i++) { 
