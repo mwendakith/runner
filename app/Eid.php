@@ -1322,7 +1322,7 @@ class Eid extends Model
     }
 
     public function update_subcounties_yearly($year = null){
-    	return $this->division_updator_yearly($year, 2, 'subcounty', 'view_facilitys.subcounty', 'districts', 'subcounty_summary_yearly');
+    	return $this->division_updator_yearly($year, 2, 'district', 'view_facilitys.district', 'districts', 'subcounty_summary_yearly');
     }
 
     public function update_partners_yearly($year = null){

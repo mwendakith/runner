@@ -464,9 +464,8 @@ class Vl extends Model
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
-				if ($type == 2 || $type == 5) {
-					$column = $column2;
-				}
+				$column = $column2;
+				
 			}
 
 		}
@@ -628,7 +627,7 @@ class Vl extends Model
 							$data_array = array_merge($gender_array, $data_array);
 						}
 
-						if($column == "district"){
+						if($div_type == 2){
 							$column = "subcounty";
 						}
 						
