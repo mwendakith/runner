@@ -1196,7 +1196,7 @@ class Eid extends Model
 						$column="subcounty";
 					}
 
-					DB::table('lab_rejections')->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('rejected_reason', $value->ID)->update($data_array);
+					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('rejected_reason', $value->ID)->update($data_array);
 					$column = $column2;
 				}
 			}

@@ -534,7 +534,7 @@ class Vl extends Model
     	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
 
     	foreach ($reasons as $key => $value) {
-    		$rej_a = $n->national_rejections($year, $division, $value->ID)->where($column, $div_array[$it]));
+    		$rej_a = $n->national_rejections($year, $division, $value->ID);
 
     		// Loop through the months and insert data into the national summary
 			for ($i=0; $i < 12; $i++) { 
@@ -544,7 +544,7 @@ class Vl extends Model
 				// Loop through divisions i.e. counties, subcounties, partners and sites
 				for ($it=0; $it < $array_size; $it++) { 
 
-					$rej = $this->checknull($rej_a->where('month', $month));
+					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 
 					$data_array = array(
 						'dateupdated' => $today, 'total' => $rej
