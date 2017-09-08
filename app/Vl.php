@@ -554,6 +554,10 @@ class Vl extends Model
 						$column="subcounty";
 					}
 
+					if ($div_type==5) {
+						$column="lab";
+					}
+
 					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
 					->where('rejected_reason', $value->ID)->update($data_array);
 
