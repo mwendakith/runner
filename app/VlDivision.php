@@ -15,6 +15,7 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
 		->whereYear('datereceived', $year)
