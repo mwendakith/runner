@@ -739,7 +739,7 @@ class Vl extends Model
 
 
     public function update_counties($year=null){
-    	return $this->update_division($year, 1, 'county', 'view_facilitys.county', 'countys', 'vl_county_summary', 'vl_county', 'vl_county_rejections');
+    	return $this->update_division($year, 1, 'county', 'view_facilitys.county', 'countys', 'vl_county_summary', 'vl_county_rejections');
     }
 
     public function update_subcounties($year=null){
