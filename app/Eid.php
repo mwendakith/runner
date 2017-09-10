@@ -401,6 +401,10 @@ class Eid extends Model
 
 				$rej = $this->checknull($rej_a->where('month', $month));
 
+				if($rej == 0){
+					continue;
+				}
+
 				$data_array = array(
 					'total' => $rej, 'dateupdated' => $today
 				);
@@ -693,7 +697,9 @@ class Eid extends Model
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 
-					// echo "\n Total - {$rej} Lab - {$div_array[$it]}";
+					if($rej == 0){
+						continue;
+					}
 
 					$data_array = array(
 						'total' => $rej, 'dateupdated' => $today
@@ -1187,6 +1193,10 @@ class Eid extends Model
 				for ($it=0; $it < $array_size; $it++) {
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
+
+					if($rej == 0){
+						continue;
+					}
 
 					$data_array = array(
 						'total' => $rej, 'dateupdated' => $today

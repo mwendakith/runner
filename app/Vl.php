@@ -169,6 +169,10 @@ class Vl extends Model
 
 				$rej = $this->checknull($rej_a->where('month', $month));
 
+				if($rej == 0){
+					continue;
+				}
+
 				$data_array = array(
 					'dateupdated' => $today, 'total' => $rej
 				);
@@ -545,6 +549,10 @@ class Vl extends Model
 				for ($it=0; $it < $array_size; $it++) { 
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
+
+					if($rej == 0){
+						continue;
+					}
 
 					$data_array = array(
 						'dateupdated' => $today, 'total' => $rej
