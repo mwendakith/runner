@@ -43,7 +43,7 @@ class UpdateEid extends Command
         //
         $year = $this->argument('year');
 
-        $this->info('Updating eid summary tables for the year ' . $year . '\n');
+        // $this->info('Updating eid summary tables for the year ' . $year . '\n');
 
         $this->call('update:eid-nation', [
             'year' => $year
