@@ -421,6 +421,11 @@ class Vl extends Model
 			for ($it=0; $it < $array_size; $it++) { 
 				$rec = $this->checknull($rec_a->where('month', $month)->where($column, $div_array[$it]));
 				$tested = $this->checknull($tested_a->where('month', $month)->where($column, $div_array[$it]));
+
+				if($rec == 0 && $tested == 0){
+					continue;
+				}
+
 				// $actualpatients = $this->checknull($actualpatients_a->where('month', $month)->where($column, $div_array[$it]));
 				$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 				$rs = $this->checknull($rs_a->where('month', $month)->where($column, $div_array[$it]));
@@ -659,6 +664,11 @@ class Vl extends Model
 					for ($it=0; $it < $array_size; $it++) { 
 						// $rec = $this->checknull($rec_a->where('month', $month));
 						$tested = $this->checknull($tested_a->where('month', $month)->where($column, $div_array[$it]));
+
+						if($tested == 0){
+							continue;
+						}
+
 						$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 
 						$conftx = $this->checknull($conftx_a->where('month', $month)->where($column, $div_array[$it]));
