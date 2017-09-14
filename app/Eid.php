@@ -1493,7 +1493,7 @@ class Eid extends Model
     		$tat2 = $var->avg('tat2');
     		$tat3 = $var->avg('tat3');
     		$tat4 = $var->avg('tat4');
-    		return array('tat1' => $t->tat1, 'tat2' => $t->tat2, 'tat3' => $t->tat3, 'tat4' => $t->tat4);
+    		return array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
     		// return $var->first()->toArray();
     	}
     }
