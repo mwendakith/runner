@@ -892,7 +892,7 @@ class Eid extends Model
 					'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
 					'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
 					'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
-					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']
+					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'],
 					 'dateupdated' => $today
 				);
 
@@ -1385,7 +1385,7 @@ class Eid extends Model
 				'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
 				'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
 				'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
-				'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']
+				'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'],
 				 'dateupdated' => $today
 			);
 
