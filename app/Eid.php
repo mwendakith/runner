@@ -1316,6 +1316,7 @@ class Eid extends Model
 			$eqatests = $this->checknull($eqatests_a->where($column, $div_array[$it]));
 			$tests = $this->checknull($tests_a->where($column, $div_array[$it]));
 			$patienttests = $this->checknull($patienttests_a->where($column, $div_array[$it]));
+			$new_count = $this->check_null($patienttests_a->where($column, $div_array[$it]));
 			$patienttestsPOS = $this->checknull($patienttestsPOS_a->where($column, $div_array[$it]));
 
 			$received = $this->checknull($received_a->where($column, $div_array[$it]));
@@ -1365,7 +1366,7 @@ class Eid extends Model
 
 			$tt = $this->check_tat($tat->where($column, $div_array[$it]));
 
-			echo "\n Column - {$column} Subcounty - {$div_array[$it]} Actual {$patienttests} Actual pos {$patienttestsPOS}";
+			echo "\n Count - {$new_count} Subcounty - {$div_array[$it]} Actual {$patienttests} Actual pos {$patienttestsPOS}";
 
 			
 
@@ -1465,6 +1466,14 @@ class Eid extends Model
     		return 0;
     	}else{
     		return $var->first()->totals;
+    	}
+    }
+
+    public function check_null($var){
+    	if($var->isEmpty()){
+    		return 0;
+    	}else{
+    		return $var->count();
     	}
     }
 
