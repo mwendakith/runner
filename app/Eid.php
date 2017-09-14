@@ -1465,7 +1465,7 @@ class Eid extends Model
     	if($var->isEmpty()){
     		return 0;
     	}else{
-    		return $var->first()->totals;
+    		return $var->sum('totals');
     	}
     }
 
