@@ -892,12 +892,9 @@ class Eid extends Model
 					'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
 					'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
 					'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
+					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']
 					 'dateupdated' => $today
 				);
-
-				
-				$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
-				$data_array = array_merge($data_array, $turn);
 
 				
 				if ($type==2) {
@@ -1366,7 +1363,9 @@ class Eid extends Model
 			$avgage = $this->checknull($avgage_a->where($column, $div_array[$it]));
 			$medage = $this->checkmedage($medage_a->where('division', $div_array[$it]));
 
-			// echo "\n Column - {$column} Partner - {$div_array[$it]} Tests {$alltests}";
+			$tt = $this->check_tat($tat->where($column, $div_array[$it]));
+
+			echo "\n Column - {$column} Subcounty - {$div_array[$it]} Actual {$patienttests} Actual pos {$patienttestsPOS}";
 
 			
 
@@ -1386,14 +1385,10 @@ class Eid extends Model
 				'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
 				'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
 				'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
+				'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']
 				 'dateupdated' => $today
 			);
 
-			
-			$tt = $this->check_tat($tat->where($column, $div_array[$it]));
-			// $tt = $this->checktat($tat->where('division', $div_array[$it]));
-			$turn = array('tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4']);
-			$data_array = array_merge($data_array, $turn);
 			
 			if ($type==2) {
 				$column="subcounty";

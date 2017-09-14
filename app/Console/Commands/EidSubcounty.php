@@ -12,7 +12,7 @@ class EidSubcounty extends Command
      *
      * @var string
      */
-    protected $signature = 'update:eid-subcounty {year?}';
+    protected $signature = 'update:eid-subcounty {year?} {--type=3}';
 
     /**
      * The console command description.
@@ -40,11 +40,28 @@ class EidSubcounty extends Command
     {
         //
         $year = $this->argument('year');
+        $type = $this->option('type');
 
         $eid = new Eid;
+        $output="";
 
-        $output = $eid->update_subcounties($year);
-        $output .= $eid->update_subcounties_yearly($year);
+        // $output = $eid->update_subcounties($year);
+        // $output .= $eid->update_subcounties_yearly($year);
+
+        if ($type == 1) {
+            $output .= $eid->update_subcounties($year);
+        }
+
+        else if ($type == 2) {
+            $output .= $eid->update_subcounties_yearly($year);
+        }
+
+        else{
+            $output .= $eid->update_subcounties($year);
+            $output .= $eid->update_subcounties_yearly($year);
+
+        }
+
 
         $this->info($output);
     }
