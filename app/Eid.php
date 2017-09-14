@@ -1316,7 +1316,7 @@ class Eid extends Model
 			$eqatests = $this->checknull($eqatests_a->where($column, $div_array[$it]));
 			$tests = $this->checknull($tests_a->where($column, $div_array[$it]));
 			$patienttests = $this->checknull($patienttests_a->where($column, $div_array[$it]));
-			$new_count = $this->check_null($patienttests_a->where($column, $div_array[$it]));
+			// $new_count = $this->check_null($patienttests_a->where($column, $div_array[$it]));
 			$patienttestsPOS = $this->checknull($patienttestsPOS_a->where($column, $div_array[$it]));
 
 			$received = $this->checknull($received_a->where($column, $div_array[$it]));
@@ -1366,7 +1366,7 @@ class Eid extends Model
 
 			$tt = $this->check_tat($tat->where($column, $div_array[$it]));
 
-			echo "\n Count - {$new_count} Subcounty - {$div_array[$it]} Actual {$patienttests} Actual pos {$patienttestsPOS}";
+			// echo "\n Count - {$new_count} Subcounty - {$div_array[$it]} Actual {$patienttests} Actual pos {$patienttestsPOS}";
 
 			
 
@@ -1489,7 +1489,10 @@ class Eid extends Model
     	if($var->isEmpty()){
     		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
     	}else{
-    		$t = $var->first();
+    		$tat1 = $var->avg('tat1');
+    		$tat2 = $var->avg('tat2');
+    		$tat3 = $var->avg('tat3');
+    		$tat4 = $var->avg('tat4');
     		return array('tat1' => $t->tat1, 'tat2' => $t->tat2, 'tat3' => $t->tat3, 'tat4' => $t->tat4);
     		// return $var->first()->toArray();
     	}
