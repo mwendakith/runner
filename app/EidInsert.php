@@ -79,6 +79,8 @@ class EidInsert extends Model
 		}
 		DB::table('lab_rejections')->insert($data_array);
 
+		echo "\n Completed eid else rejection insert at " . date('d/m/Y h:i:s a', time());
+
 		$data_array=null;
     	$i=0;
 
@@ -87,8 +89,11 @@ class EidInsert extends Model
 				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
 				$i++;
 			}
+			DB::table('site_rejections')->insert($data_array);
+			$data_array=null;
+	    	$i=0;
 		}
-		DB::table('site_rejections')->insert($data_array);
+		
 
 		echo "\n Completed eid rejection insert at " . date('d/m/Y h:i:s a', time());
     }
