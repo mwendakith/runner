@@ -22,7 +22,7 @@ class CreateVlPartnerRejections extends Migration
             $table->integer('year')->unsigned();
             $table->integer('rejected_reason')->unsigned();
             $table->integer('total')->unsigned()->default(0)->nullable();
-            $table->index(['month', 'year', 'rejected_reason', 'partner']);
+            // $table->index(['month', 'year', 'rejected_reason', 'partner']);
         });
     }
 

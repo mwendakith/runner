@@ -22,7 +22,7 @@ class CreateVlSubcountyRejections extends Migration
             $table->integer('year')->unsigned();
             $table->integer('rejected_reason')->unsigned();
             $table->integer('total')->unsigned()->default(0)->nullable();
-            $table->index(['month', 'year', 'rejected_reason', 'subcounty'], 'unique_subcounty_rejection');
+            // $table->index(['month', 'year', 'rejected_reason', 'subcounty'], 'unique_subcounty_rejection');
         });
     }
 

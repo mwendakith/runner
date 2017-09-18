@@ -39,7 +39,7 @@ class CreateNationalRejections extends Migration
             // $table->integer('scratched_dbs_spots')->unsigned()->default(0)->nullable();
             // $table->integer('double_entry')->unsigned()->default(0)->nullable();
             // $table->integer('insufficient_sample_volume')->unsigned()->default(0)->nullable();
-            $table->index(['month', 'year', 'rejected_reason']);
+            // $table->index(['month', 'year', 'rejected_reason']);
         });
     }
 

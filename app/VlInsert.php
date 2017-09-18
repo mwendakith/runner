@@ -78,16 +78,16 @@ class VlInsert extends Model
 		}
 		DB::table('vl_lab_rejections')->insert($data_array);
 
-		// $data_array=null;
-    	// $i=0;
+		$data_array=null;
+    	$i=0;
 
-		// foreach ($reasons as $key => $value) {
-		// 	foreach ($sites as $k => $val) {
-		// 		$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
-		// 		$i++;
-		// 	}
-		// }
-		// DB::table('site_rejections')->insert($data_array);
+		foreach ($reasons as $key => $value) {
+			foreach ($sites as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('site_rejections')->insert($data_array);
 
 		echo "\n Completed vl rejection insert at " . date('d/m/Y h:i:s a', time());
     }
