@@ -19,7 +19,7 @@ class VlInsert extends Model
 
     	echo "\n Begin vl rejection insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->orderBy('ID')->get();
+    	// $reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->orderBy('ID')->get();
     	$counties = DB::connection('vl')->table('countys')->select('ID')->orderBy('ID')->get();
     	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
     	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
@@ -30,32 +30,37 @@ class VlInsert extends Model
     	$i=0;
 
 		foreach ($reasons as $key => $value) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID);
+			// $data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID);
+			$data_array[$i] = array('year' => $year, 'month' => $month);
 			$i++;
 		}
-		DB::table('vl_national_rejections')->insert($data_array);
+		DB::table('vl_national_summary')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
 
 		foreach ($reasons as $key => $value) {
 			foreach ($counties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'county' => $val->ID);
+				// $data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'county' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'county' => $val->ID);
 				$i++;
 			}
 		}
-		DB::table('vl_county_rejections')->insert($data_array);
+		DB::table('vl_county_summary')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
 
 		foreach ($reasons as $key => $value) {
 			foreach ($subcounties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'subcounty' => $val->ID);
+				// $data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'subcounty' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'subcounty' => $val->ID);
 				$i++;
 			}
 		}
-		DB::table('vl_subcounty_rejections')->insert($data_array);
+		DB::table('vl_subcounty_summary')->insert($data_array);
+
+		return "";
 
 		$data_array=null;
     	$i=0;
