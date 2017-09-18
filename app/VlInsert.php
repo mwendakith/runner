@@ -15,6 +15,7 @@ class VlInsert extends Model
     	if($month == null){
     		$month = Date('m');
     	}
+		ini_set("memory_limit", "-1");
 
     	echo "\n Begin vl rejection insert at " . date('d/m/Y h:i:s a', time());
 
