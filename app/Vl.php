@@ -848,7 +848,8 @@ class Vl extends Model
     	if($var->isEmpty()){
     		return 0;
     	}else{
-    		return $var->sum('totals');
+    		// return $var->sum('totals');
+    		return $var->first()->totals;
     	}
     }
 
@@ -864,11 +865,13 @@ class Vl extends Model
     	if($var->isEmpty()){
     		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
     	}else{
-    		$tat1 = $var->avg('tat1');
-    		$tat2 = $var->avg('tat2');
-    		$tat3 = $var->avg('tat3');
-    		$tat4 = $var->avg('tat4');
-    		return array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+    		// $tat1 = $var->avg('tat1');
+    		// $tat2 = $var->avg('tat2');
+    		// $tat3 = $var->avg('tat3');
+    		// $tat4 = $var->avg('tat4');
+    		$t = $var->first();
+    		return array('tat1' => $t->tat1, 'tat2' => $t->tat2, 'tat3' => $t->tat3, 'tat4' => $t->tat4);
+    		// return array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
     		// return $var->first()->toArray();
     	}
     }
