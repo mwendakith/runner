@@ -29,35 +29,35 @@ class VlInsert extends Model
     	$data_array=null;
     	$i=0;
 
-		foreach ($reasons as $key => $value) {
+		// foreach ($reasons as $key => $value) {
 			// $data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID);
 			$data_array[$i] = array('year' => $year, 'month' => $month);
 			$i++;
-		}
+		// }
 		DB::table('vl_national_summary')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
 
-		foreach ($reasons as $key => $value) {
+		// foreach ($reasons as $key => $value) {
 			foreach ($counties as $k => $val) {
 				// $data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'county' => $val->ID);
 				$data_array[$i] = array('year' => $year, 'month' => $month, 'county' => $val->ID);
 				$i++;
 			}
-		}
+		// }
 		DB::table('vl_county_summary')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
 
-		foreach ($reasons as $key => $value) {
+		// foreach ($reasons as $key => $value) {
 			foreach ($subcounties as $k => $val) {
 				// $data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'subcounty' => $val->ID);
 				$data_array[$i] = array('year' => $year, 'month' => $month, 'subcounty' => $val->ID);
 				$i++;
 			}
-		}
+		// }
 		DB::table('vl_subcounty_summary')->insert($data_array);
 
 		return "";
