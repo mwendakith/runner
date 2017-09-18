@@ -23,7 +23,7 @@ class VlInsert extends Model
     	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
     	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
     	$labs = DB::connection('vl')->table('labs')->select('ID')->orderBy('ID')->get();
-    	// $sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
 
     	$data_array=null;
     	$i=0;

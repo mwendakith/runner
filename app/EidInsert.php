@@ -23,7 +23,7 @@ class EidInsert extends Model
     	$subcounties =  DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
     	$partners =  DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
     	$labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
-    	// $sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
 
     	$data_array=null;
     	$i=0;
