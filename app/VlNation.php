@@ -593,7 +593,7 @@ class VlNation extends Model
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
-		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"), $p['column'])
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
