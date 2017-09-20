@@ -429,12 +429,12 @@ class VlNation extends Model
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}
-			if($type == 5){
+			if($type == 4){
 				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
 			}					
 		})
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -468,7 +468,7 @@ class VlNation extends Model
 		->whereYear('datereceived', $year)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -499,7 +499,7 @@ class VlNation extends Model
 		})
 		->whereYear('datereceived', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -533,7 +533,7 @@ class VlNation extends Model
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -568,7 +568,7 @@ class VlNation extends Model
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->whereBetween('viralsamples.rcategory', [3, 4])
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -593,7 +593,7 @@ class VlNation extends Model
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
-		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"), $p['column'])
+		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
 			if($type == 2){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
@@ -601,7 +601,7 @@ class VlNation extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -636,7 +636,7 @@ class VlNation extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -671,7 +671,7 @@ class VlNation extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -713,7 +713,7 @@ class VlNation extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -755,13 +755,13 @@ class VlNation extends Model
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}
-			if($type == 5){
+			if($type == 4){
 				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
 			}					
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -812,13 +812,13 @@ class VlNation extends Model
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}
-			if($type == 5){
+			if($type == 4){
 				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
 			}					
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -865,7 +865,7 @@ class VlNation extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{

@@ -432,12 +432,12 @@ class VlDivision extends Model
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}
-			if($type == 5){
+			if($type == 4){
 				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
 			}					
 		})
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -470,7 +470,7 @@ class VlDivision extends Model
 		->whereYear('datereceived', $year)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -500,7 +500,7 @@ class VlDivision extends Model
 		})
 		->whereYear('datereceived', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -533,7 +533,7 @@ class VlDivision extends Model
 		->whereYear('datetested', $year)
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -567,7 +567,7 @@ class VlDivision extends Model
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->whereBetween('viralsamples.rcategory', [3, 4])
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -599,7 +599,7 @@ class VlDivision extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -635,7 +635,7 @@ class VlDivision extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -671,7 +671,7 @@ class VlDivision extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -709,13 +709,13 @@ class VlDivision extends Model
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}
-			if($type == 5){
+			if($type == 4){
 				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
 			}					
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -750,13 +750,13 @@ class VlDivision extends Model
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}
-			if($type == 5){
+			if($type == 4){
 				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
 			}					
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -800,13 +800,13 @@ class VlDivision extends Model
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
 			}
-			if($type == 5){
+			if($type == 4){
 				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
 			}					
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{
@@ -846,7 +846,7 @@ class VlDivision extends Model
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
-			if($type == 5 && $p['param'] == 3){
+			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
 			}
 			else{

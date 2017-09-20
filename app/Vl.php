@@ -186,8 +186,8 @@ class Vl extends Model
 
     public function finish_nation($year, $today){
     	$n = new VlNation;
-    	//for ($type=1; $type < 6; $type++) { 
-    		$type=5;
+    	for ($type=1; $type < 6; $type++) { 
+    		
 			$table = $this->get_table(0, $type);
 
 			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
@@ -331,7 +331,7 @@ class Vl extends Model
 
 					if ($type != 5) {
 					
-						$sample = $this->check_sample($baseline_a->where('month', $month));
+						// $sample = $this->check_sample($baseline_a->where('month', $month));
 						$baseline = $this->checknull($baseline_a->where('month', $month));
 						$baselinefail = $this->checknull($baselinefail_a->where('month', $month));
 
@@ -340,7 +340,7 @@ class Vl extends Model
 						$data_array = array_merge($baseline_array, $data_array);
 					}
 
-					echo "\n Sample - {$value->ID}  Actual - {$sample} ";
+					// echo "\n Sample - {$value->ID}  Actual - {$sample} ";
 					
 
 					DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->update($data_array);
@@ -348,7 +348,7 @@ class Vl extends Model
 				}
 				// End of for loop for months
 
-			//}
+			}
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
