@@ -733,7 +733,17 @@ class VlNation extends Model
 				return $query->where($p['column'], $p['param']);
 			}				
 		})
-		->where('viralsamples.sampletype', $sampletype)
+		->when($sampletype, function($query) use ($sampletype){
+			if($sampletype == 2){
+				return $query->whereBetween('viralsamples.sampletype', [3, 4]);
+			}
+			else if($sampletype == 3){
+				return $query->where('viralsamples.sampletype', 2);
+			}
+			else{
+				return $query->where('viralsamples.sampletype', 1);
+			}				
+		})
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')

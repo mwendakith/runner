@@ -238,10 +238,8 @@ class Vl extends Model
 				if($type != 4){
 
 					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 1);
-					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 2);
-					$dcap_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 3);
-					$dven_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 4);
-					// $dbs=$dcap + $dven;
+					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 3);
+					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 2);
 				}
 
 				if($type != 2){
@@ -309,9 +307,7 @@ class Vl extends Model
 
 						$plas = $this->checknull($plas_a->where('month', $month));
 						$edta = $this->checknull($edta_a->where('month', $month));
-						$dcap = $this->checknull($dcap_a->where('month', $month));
-						$dven = $this->checknull($dven_a->where('month', $month));
-						$dbs=$dcap + $dven;
+						$dbs = $this->checknull($dbs_a->where('month', $month));
 
 						$sample_array = array('dbs' => $dbs, 'plasma' => $plas, 'edta' => $edta);
 
@@ -667,10 +663,8 @@ class Vl extends Model
 				if($type != 4){
 
 					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 1);
-					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 2);
-					$dcap_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 3);
-					$dven_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 4);
-					// $dbs=$dcap + $dven;
+					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 3);
+					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 2);
 				}
 
 				if($type != 2){
@@ -745,9 +739,7 @@ class Vl extends Model
 
 							$plas = $this->checknull($plas_a->where('month', $month)->where($column, $div_array[$it]));
 							$edta = $this->checknull($edta_a->where('month', $month)->where($column, $div_array[$it]));
-							$dcap = $this->checknull($dcap_a->where('month', $month)->where($column, $div_array[$it]));
-							$dven = $this->checknull($dven_a->where('month', $month)->where($column, $div_array[$it]));
-							$dbs=$dcap + $dven;
+							$dbs = $this->checknull($dbs_a->where('month', $month)->where($column, $div_array[$it]));
 
 							$sample_array = array('dbs' => $dbs, 'plasma' => $plas, 'edta' => $edta);
 
