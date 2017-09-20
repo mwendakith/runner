@@ -243,7 +243,7 @@ class BaseModel extends Model
 		return $age_b;
 	}
 
-	public function get_vlparams($type=1, $param=6){
+	public function get_vlparams($type, $param){
 		$data;
 		$param = (int) $param;
 

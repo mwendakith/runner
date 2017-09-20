@@ -431,7 +431,10 @@ class VlDivision extends Model
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
-			}				
+			}
+			if($type == 5){
+				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
+			}					
 		})
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 5 && $p['param'] == 3){
@@ -633,7 +636,10 @@ class VlDivision extends Model
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
-			}				
+			}
+			if($type == 5){
+				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
+			}					
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
@@ -671,7 +677,10 @@ class VlDivision extends Model
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
-			}				
+			}
+			if($type == 5){
+				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
+			}					
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
@@ -718,7 +727,10 @@ class VlDivision extends Model
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
-			}				
+			}
+			if($type == 5){
+				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
+			}					
 		})
 		->whereYear('datetested', $year)
 		->when($type, function($query) use ($type, $param, $p){
