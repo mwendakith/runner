@@ -342,6 +342,7 @@ class Vl extends Model
     	}
     	// Instantiate new object
     	$n = new VlDivision;
+    	ini_set("memory_limit", "-1");
 
     	$today=date("Y-m-d");
 
@@ -433,8 +434,6 @@ class Vl extends Model
 
 				$conftx = $this->checknull($conftx_a->where('month', $month)->where($column, $div_array[$it]));
 				$conf2VL = $this->checknull($conf2VL_a->where('month', $month)->where($column, $div_array[$it]));
-
-				
 
 				
 				$baseline = $this->checknull($baseline_a->where('month', $month)->where($column, $div_array[$it]));
