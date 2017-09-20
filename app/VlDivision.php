@@ -194,7 +194,7 @@ class VlDivision extends Model
 		return $data;
     }
 
-    public function getalltestedviraloadsamplesbytypedetails($year, $division='view_facilitys.county', $sampletype){
+    public function getalltestedviraloadsamplesbytypedetails($year, $division='view_facilitys.county', $sampletype, $routine=true){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
@@ -203,9 +203,22 @@ class VlDivision extends Model
 		->whereYear('datetested', $year)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
-		->where('viralsamples.sampletype', $sampletype)
-		->where('viralsamples.justification', '!=', 2)
-		->where('viralsamples.justification', '!=', 10)
+		->when($routine, function($query) use ($routine){
+			return $query
+			->where('viralsamples.justification', '!=', 2)
+			->where('viralsamples.justification', '!=', 10);
+		})
+		->when($sampletype, function($query) use ($sampletype){
+			if($sampletype == 2){
+				return $query->whereBetween('viralsamples.sampletype', [3, 4]);
+			}
+			else if($sampletype == 3){
+				return $query->where('viralsamples.sampletype', 2);
+			}
+			else{
+				return $query->where('viralsamples.sampletype', 1);
+			}				
+		})
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month', $division)

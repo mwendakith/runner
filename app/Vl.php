@@ -55,20 +55,18 @@ class Vl extends Model
 		// $sustx=$less5k +  $above5k;
 
 		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, 1);
-		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, 2);
-		$dcap_a = $n->getalltestedviraloadsamplesbytypedetails($year, 3);
-		$dven_a = $n->getalltestedviraloadsamplesbytypedetails($year, 4);
-		// $dbs=$dcap + $dven;
+		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, 3);
+		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, 2);
+
+		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, 1, false);
+		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, 3, false);
+		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, 2, false);
 
 		$male_a = $n->getalltestedviraloadbygender($year, 1);
 		$female_a = $n->getalltestedviraloadbygender($year, 2);
 		$nogender_a = $n->getalltestedviraloadbygender($year, 3);
 
 		$tat = $n->get_tat($year);
-		// $tat = $n->GetNatTATs($year);
-		// $tat = collect($tat);
-
-		// $count = $rec_a->count();
 
 		// Loop through the months and insert data into the national summary
 		for ($i=0; $i < 12; $i++) { 
@@ -106,9 +104,11 @@ class Vl extends Model
 
 			$plas = $this->checknull($plas_a->where('month', $month));
 			$edta = $this->checknull($edta_a->where('month', $month));
-			$dcap = $this->checknull($dcap_a->where('month', $month));
-			$dven = $this->checknull($dven_a->where('month', $month));
-			$dbs=$dcap + $dven;
+			$dbs = $this->checknull($dbs_a->where('month', $month));
+
+			$aplas = $this->checknull($aplas_a->where('month', $month));
+			$aedta = $this->checknull($aedta_a->where('month', $month));
+			$adbs = $this->checknull($adbs_a->where('month', $month));
 
 			$male = $this->checknull($male_a->where('month', $month));
 			$female = $this->checknull($female_a->where('month', $month));
@@ -121,7 +121,8 @@ class Vl extends Model
 				'received' => $rec, 'alltests' => $tested, 'actualpatients' => $actualpatients,
 				'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
 				'confirm2vl' => $conf2VL, 'rejected' => $rej, 'dbs' => $dbs, 'plasma' => $plas,
-				'edta' => $edta, 'maletest' => $male, 'femaletest' => $female,
+				'edta' => $edta, 'alldbs' => $adbs, 'allplasma' => $aplas, 'alledta' => $aedta,
+				 'maletest' => $male, 'femaletest' => $female,
 				'nogendertest' => $nogender, 'adults' => $adults, 'paeds' => $paeds,
 				'noage' => $noage, 'Undetected' => $ldl, 'less1000' => $less1k,
 				'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
@@ -187,7 +188,7 @@ class Vl extends Model
     public function finish_nation($year, $today){
     	$n = new VlNation;
     	for ($type=1; $type < 6; $type++) { 
-    		
+
 			$table = $this->get_table(0, $type);
 
 			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
@@ -417,10 +418,12 @@ class Vl extends Model
 		// $sustx=$less5k +  $above5k;
 
 		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 1);
-		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 2);
-		$dcap_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 3);
-		$dven_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 4);
-		// $dbs=$dcap + $dven;
+		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 3);
+		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 2);
+
+		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 1, false);
+		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 3, false);
+		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 2, false);
 
 		$male_a = $n->getalltestedviraloadbygender($year, $division, 1);
 		$female_a = $n->getalltestedviraloadbygender($year, $division, 2);
@@ -478,9 +481,13 @@ class Vl extends Model
 
 				$plas = $this->checknull($plas_a->where('month', $month)->where($column, $div_array[$it]));
 				$edta = $this->checknull($edta_a->where('month', $month)->where($column, $div_array[$it]));
-				$dcap = $this->checknull($dcap_a->where('month', $month)->where($column, $div_array[$it]));
-				$dven = $this->checknull($dven_a->where('month', $month)->where($column, $div_array[$it]));
-				$dbs=$dcap + $dven;
+				$dbs = $this->checknull($dbs_a->where('month', $month)->where($column, $div_array[$it]));
+
+				$aplas = $this->checknull($aplas_a->where('month', $month)->where($column, $div_array[$it]));
+				$aedta = $this->checknull($aedta_a->where('month', $month)->where($column, $div_array[$it]));
+				$adbs = $this->checknull($adbs_a->where('month', $month)->where($column, $div_array[$it]));
+
+
 
 				$male = $this->checknull($male_a->where('month', $month)->where($column, $div_array[$it]));
 				$female = $this->checknull($female_a->where('month', $month)->where($column, $div_array[$it]));
@@ -502,7 +509,8 @@ class Vl extends Model
 					'received' => $rec, 'alltests' => $tested,
 					'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
 					'confirm2vl' => $conf2VL, 'rejected' => $rej, 'dbs' => $dbs, 'plasma' => $plas,
-					'edta' => $edta, 'maletest' => $male, 'femaletest' => $female,
+					'edta' => $edta, 'alldbs' => $adbs, 'allplasma' => $aplas, 'alledta' => $aedta,
+					'maletest' => $male, 'femaletest' => $female,
 					'nogendertest' => $nogender, 'Undetected' => $ldl, 'less1000' => $less1k,
 					'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
 					'sitessending' => $sites, 'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'],
