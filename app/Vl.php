@@ -250,6 +250,11 @@ class Vl extends Model
 
 				}
 
+				if ($type != 5) {
+					$baseline_a = $n->GetNationalBaselinebydash($year, $type, $value->ID);
+					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $type, $value->ID);
+				}
+
 				// Loop through the months and insert data into the national summary
 				for ($i=0; $i < 12; $i++) { 
 					$month = $i + 1;
@@ -321,6 +326,16 @@ class Vl extends Model
 						$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
 
 						$data_array = array_merge($gender_array, $data_array);
+					}
+
+					if ($type != 5) {
+					
+						$baseline = $this->checknull($baseline_a->where('month', $month));
+						$baselinefail = $this->checknull($baselinefail_a->where('month', $month));
+
+						$baseline_array = array('baseline' => $baseline, 'baselinesustxfail' => $baselinefail);
+
+						$data_array = array_merge($baseline_array, $data_array);
 					}
 					
 
@@ -654,6 +669,11 @@ class Vl extends Model
 
 				}
 
+				if ($type != 5) {
+					$baseline_a = $n->GetNationalBaselinebydash($year, $division, $type, $value->ID);
+					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $division, $type, $value->ID);
+				}
+
 				// Loop through the months and insert data
 				for ($i=0; $i < 12; $i++) { 
 					$month = $i + 1;
@@ -732,6 +752,16 @@ class Vl extends Model
 							$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
 
 							$data_array = array_merge($gender_array, $data_array);
+						}
+
+						if ($type != 5) {
+						
+							$baseline = $this->checknull($baseline_a->where('month', $month)->where($column, $div_array[$it]));
+							$baselinefail = $this->checknull($baselinefail_a->where('month', $month)->where($column, $div_array[$it]));
+
+							$baseline_array = array('baseline' => $baseline, 'baselinesustxfail' => $baselinefail);
+
+							$data_array = array_merge($baseline_array, $data_array);
 						}
 
 						if($div_type == 2){

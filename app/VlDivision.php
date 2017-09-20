@@ -583,6 +583,78 @@ class VlDivision extends Model
 		return $data;
     }
 
+    public function GetNationalBaselinebydash($year, $division='view_facilitys.county', $type, $param){
+
+    	$b = new BaseModel;
+		$p = $b->get_vlparams($type, $param);
+
+    	$data = DB::connection('vl')
+		->table('viralsamples')
+		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
+		->when($type, function($query) use ($type){
+			if($type == 2){
+				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
+			}			
+		})
+		->whereYear('datetested', $year)
+		->when($type, function($query) use ($type, $param, $p){
+			if($type == 5 && $p['param'] == 3){
+				return $query->whereBetween($p['column'], [3, 4]);
+			}
+			else{
+				return $query->where($p['column'], $p['param']);
+			}				
+		})
+		->whereBetween('viralsamples.rcategory', [1, 4])
+		->whereBetween('viralsamples.sampletype', [1, 4])
+		->where('viralsamples.justification', 10)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month', $division)
+		->get();
+
+		return $data;
+
+    	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=10 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year'   AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1 and rcategory between 1 and 4";
+    }
+
+    public function GetNationalBaselineFailurebydash($year, $division='view_facilitys.county', $type, $param){
+
+    	$b = new BaseModel;
+		$p = $b->get_vlparams($type, $param);
+
+    	$data = DB::connection('vl')
+		->table('viralsamples')
+		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
+		->when($type, function($query) use ($type){
+			if($type == 2){
+				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
+			}			
+		})
+		->whereYear('datetested', $year)
+		->when($type, function($query) use ($type, $param, $p){
+			if($type == 5 && $p['param'] == 3){
+				return $query->whereBetween($p['column'], [3, 4]);
+			}
+			else{
+				return $query->where($p['column'], $p['param']);
+			}				
+		})
+		->whereBetween('viralsamples.rcategory', [3, 4])
+		->whereBetween('viralsamples.sampletype', [1, 4])
+		->where('viralsamples.justification', 10)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month', $division)
+		->get();
+
+		return $data;
+
+    	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=10 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND viralsamples.rcategory BETWEEN 3 AND 4  AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1";
+    }
+
     public function getallrepeattviraloadsamplesbydash($year, $division='view_facilitys.county', $type, $param){
 
     	$b = new BaseModel;
