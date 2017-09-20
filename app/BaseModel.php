@@ -245,6 +245,7 @@ class BaseModel extends Model
 
 	public function get_vlparams($type=1, $param=6){
 		$data;
+		$param = (int) $param;
 
 		// Type 1 for age
 		if($type == 1){
@@ -273,7 +274,10 @@ class BaseModel extends Model
 			else if ($param == 3) {
 				return array('column' => 'viralsamples.sampletype', 'param' => 2);
 			}
-			return array('column' => 'viralsamples.sampletype', 'param' => $param);
+			else{
+				return array('column' => 'viralsamples.sampletype', 'param' => $param);
+			}
+			
 		}
 
 		// Type 5 for justification
