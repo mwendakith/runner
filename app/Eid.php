@@ -914,120 +914,41 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid {$column} summary at " . date('d/m/Y h:i:s a', time());
 
-		if($type == 4){ 
-			return "";
-		}
+		// Enter if not facility
+		if($type != 4){ 
 
+			// Set the following to null in order to free memory
+			$alltests_a = $eqatests_a = $tests_a = $patienttests_a = $patienttestsPOS_a = $received_a = $firstdna_a = $confirmdna_a = $posrepeats_a = $confirmdnaPOS_a = $posrepeatsPOS_a = $infantsless2m_a = $infantsless2mPOS_a = $infantsless2w_a = $infantsless2wPOS_a = $infantsless46w_a = $infantsless46wPOS_a = $infantsabove2m_a = $infantsabove2mPOS_a = $adulttests_a = $adulttestsPOS_a = $pos_a = $neg_a = $fail_a = $rd_a = $rdd_a = $rej_a = $enrolled_a = $ltfu_a = $dead_a = $adult_a = $transout_a = $other_a = $v_cp_a = $v_ad_a = $v_vl_a = $v_rp_a = $v_uf_a = $sitesending_a = $avgage_a = $medage_a = $tat = null;
 
+			echo "\n Begin entry into eid {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
+			// Get national age_breakdown
+			$age1pos_a = $n->GetTestOutcomesbyAgeBand($year, 1, 2, $division);
+			$age1neg_a = $n->GetTestOutcomesbyAgeBand($year, 1, 1, $division);
+			$age2pos_a = $n->GetTestOutcomesbyAgeBand($year, 2, 2, $division);
+			$age2neg_a = $n->GetTestOutcomesbyAgeBand($year, 2, 1, $division);
+			$age3pos_a = $n->GetTestOutcomesbyAgeBand($year, 3, 2, $division);
+			$age3neg_a = $n->GetTestOutcomesbyAgeBand($year, 3, 1, $division);
+			$age4pos_a = $n->GetTestOutcomesbyAgeBand($year, 4, 2, $division);
+			$age4neg_a = $n->GetTestOutcomesbyAgeBand($year, 4, 1, $division);
+			$age5pos = 0;
+			$age5neg = 0;
+			$age6pos_a = $n->GetTestOutcomesbyAgeBand($year, 6, 2, $division);
+			$age6neg_a = $n->GetTestOutcomesbyAgeBand($year, 6, 1, $division);
+			
+			$age9pos_a = $n->GetTestOutcomesbyAgeBand($year, 9, 2, $division);
+			$age9neg_a = $n->GetTestOutcomesbyAgeBand($year, 9, 1, $division);
+			$age10pos_a = $n->GetTestOutcomesbyAgeBand($year, 10, 2, $division);
+			$age10neg_a = $n->GetTestOutcomesbyAgeBand($year, 10, 1, $division);
+			$age11pos_a = $n->GetTestOutcomesbyAgeBand($year, 11, 2, $division);
+			$age11neg_a = $n->GetTestOutcomesbyAgeBand($year, 11, 1, $division);
+			$age12pos_a = $n->GetTestOutcomesbyAgeBand($year, 12, 2, $division);
+			$age12neg_a = $n->GetTestOutcomesbyAgeBand($year, 12, 1, $division);
+			$age13pos_a = $n->GetTestOutcomesbyAgeBand($year, 13, 2, $division);
+			$age13neg_a = $n->GetTestOutcomesbyAgeBand($year, 13, 1, $division);
+			$age14pos_a = $n->GetTestOutcomesbyAgeBand($year, 14, 2, $division);
+			$age14neg_a = $n->GetTestOutcomesbyAgeBand($year, 14, 1, $division);
 
-		// Set the following to null in order to free memory
-		$alltests_a = $eqatests_a = $tests_a = $patienttests_a = $patienttestsPOS_a = $received_a = $firstdna_a = $confirmdna_a = $posrepeats_a = $confirmdnaPOS_a = $posrepeatsPOS_a = $infantsless2m_a = $infantsless2mPOS_a = $infantsless2w_a = $infantsless2wPOS_a = $infantsless46w_a = $infantsless46wPOS_a = $infantsabove2m_a = $infantsabove2mPOS_a = $adulttests_a = $adulttestsPOS_a = $pos_a = $neg_a = $fail_a = $rd_a = $rdd_a = $rej_a = $enrolled_a = $ltfu_a = $dead_a = $adult_a = $transout_a = $other_a = $v_cp_a = $v_ad_a = $v_vl_a = $v_rp_a = $v_uf_a = $sitesending_a = $avgage_a = $medage_a = $tat = null;
-
-		echo "\n Begin entry into eid {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
-		// Get national age_breakdown
-		$age1pos_a = $n->GetTestOutcomesbyAgeBand($year, 1, 2, $division);
-		$age1neg_a = $n->GetTestOutcomesbyAgeBand($year, 1, 1, $division);
-		$age2pos_a = $n->GetTestOutcomesbyAgeBand($year, 2, 2, $division);
-		$age2neg_a = $n->GetTestOutcomesbyAgeBand($year, 2, 1, $division);
-		$age3pos_a = $n->GetTestOutcomesbyAgeBand($year, 3, 2, $division);
-		$age3neg_a = $n->GetTestOutcomesbyAgeBand($year, 3, 1, $division);
-		$age4pos_a = $n->GetTestOutcomesbyAgeBand($year, 4, 2, $division);
-		$age4neg_a = $n->GetTestOutcomesbyAgeBand($year, 4, 1, $division);
-		$age5pos = 0;
-		$age5neg = 0;
-		$age6pos_a = $n->GetTestOutcomesbyAgeBand($year, 6, 2, $division);
-		$age6neg_a = $n->GetTestOutcomesbyAgeBand($year, 6, 1, $division);
-		
-		$age9pos_a = $n->GetTestOutcomesbyAgeBand($year, 9, 2, $division);
-		$age9neg_a = $n->GetTestOutcomesbyAgeBand($year, 9, 1, $division);
-		$age10pos_a = $n->GetTestOutcomesbyAgeBand($year, 10, 2, $division);
-		$age10neg_a = $n->GetTestOutcomesbyAgeBand($year, 10, 1, $division);
-		$age11pos_a = $n->GetTestOutcomesbyAgeBand($year, 11, 2, $division);
-		$age11neg_a = $n->GetTestOutcomesbyAgeBand($year, 11, 1, $division);
-		$age12pos_a = $n->GetTestOutcomesbyAgeBand($year, 12, 2, $division);
-		$age12neg_a = $n->GetTestOutcomesbyAgeBand($year, 12, 1, $division);
-		$age13pos_a = $n->GetTestOutcomesbyAgeBand($year, 13, 2, $division);
-		$age13neg_a = $n->GetTestOutcomesbyAgeBand($year, 13, 1, $division);
-		$age14pos_a = $n->GetTestOutcomesbyAgeBand($year, 14, 2, $division);
-		$age14neg_a = $n->GetTestOutcomesbyAgeBand($year, 14, 1, $division);
-
-		// Loop through the months and insert data into the national agebreakdown
-		for ($i=0; $i < 12; $i++) { 
-			$month = $i + 1;
-
-			if($year == Date('Y') && $month > Date('m')){ break; }
-
-			// Loop through divisions
-			for ($it=0; $it < $array_size; $it++) {
-				$age1pos = $this->checknull($age1pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age1neg = $this->checknull($age1neg_a->where('month', $month)->where($column, $div_array[$it]));
-				$age2pos = $this->checknull($age2pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age2neg = $this->checknull($age2neg_a->where('month', $month)->where($column, $div_array[$it]));
-				$age3pos = $this->checknull($age3pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age3neg = $this->checknull($age3neg_a->where('month', $month)->where($column, $div_array[$it]));
-				$age4pos = $this->checknull($age4pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age4neg = $this->checknull($age4neg_a->where('month', $month)->where($column, $div_array[$it]));
-
-				$age6pos = $this->checknull($age6pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age6neg = $this->checknull($age6neg_a->where('month', $month)->where($column, $div_array[$it]));
-
-				$age9pos = $this->checknull($age9pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age9neg = $this->checknull($age9neg_a->where('month', $month)->where($column, $div_array[$it]));
-				$age10pos = $this->checknull($age10pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age10neg = $this->checknull($age10neg_a->where('month', $month)->where($column, $div_array[$it]));
-				$age11pos = $this->checknull($age11pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age11neg = $this->checknull($age11neg_a->where('month', $month)->where($column, $div_array[$it]));
-				$age12pos = $this->checknull($age12pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age12neg = $this->checknull($age12neg_a->where('month', $month)->where($column, $div_array[$it]));
-				$age13pos = $this->checknull($age13pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age13neg = $this->checknull($age13neg_a->where('month', $month)->where($column, $div_array[$it]));
-				$age14pos = $this->checknull($age14pos_a->where('month', $month)->where($column, $div_array[$it]));
-				$age14neg = $this->checknull($age14neg_a->where('month', $month)->where($column, $div_array[$it]));
-
-
-				$data_array = array(
-					'sixweekspos' => $age1pos, 'sixweeksneg' => $age1neg, 'sevento3mpos' => $age2pos,
-					'sevento3mneg' => $age2neg, 'threemto9mpos' => $age3pos, 
-					'threemto9mneg' => $age3neg, 'ninemto18mpos' => $age4pos,
-					'ninemto18mneg' => $age4neg, 'above18mpos' => $age5pos, 'above18mneg' => $age5neg,
-					'nodatapos' => $age6pos, 'nodataneg' => $age6neg, 'less2wpos' => $age9pos,
-					'less2wneg' => $age9neg, 'twoto6wpos' => $age10pos, 'twoto6wneg' => $age10neg,
-					'sixto8wpos' => $age11pos, 'sixto8wneg' => $age11neg, 'sixmonthpos' => $age12pos,
-					'sixmonthneg' => $age12neg, 'ninemonthpos' => $age13pos, 
-					'ninemonthneg' => $age13neg, 'twelvemonthpos' => $age14pos,
-					'twelvemonthneg' => $age14neg, 'dateupdated' => $today
-				);
-				if ($type==2) {
-					$column="subcounty";
-				}
-
-				DB::table($age_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
-				
-				if ($type==2) {
-					$column = $column2;
-				}
-			}
-			// End of division loop
-		}
-		// End of months loop
-
-		echo "\n Completed entry into eid {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
-
-		echo "\n Begin entry into eid {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
-
-
-		// Start of infant regimen
-		$iregimen = $data = DB::connection('eid')
-		->table('prophylaxis')->select('ID')->where('ptype', 2)->get();
-
-		// Loop through infant regimen
-		foreach ($iregimen as $key => $value) {
-			$ipos_a = $n->Getinfantprophpositivitycount($year, $value->ID, 2, $division);
-			$ineg_a = $n->Getinfantprophpositivitycount($year, $value->ID, 1, $division);
-			$ifail_a = $n->Getinfantprophpositivitycount($year, $value->ID, 3, $division);
-			$ird_a = $n->Getinfantprophpositivitycount($year, $value->ID, 5, $division);
-
-			// Loop through each month and update iprophylaxis
+			// Loop through the months and insert data into the national agebreakdown
 			for ($i=0; $i < 12; $i++) { 
 				$month = $i + 1;
 
@@ -1035,141 +956,220 @@ class Eid extends Model
 
 				// Loop through divisions
 				for ($it=0; $it < $array_size; $it++) {
+					$age1pos = $this->checknull($age1pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age1neg = $this->checknull($age1neg_a->where('month', $month)->where($column, $div_array[$it]));
+					$age2pos = $this->checknull($age2pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age2neg = $this->checknull($age2neg_a->where('month', $month)->where($column, $div_array[$it]));
+					$age3pos = $this->checknull($age3pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age3neg = $this->checknull($age3neg_a->where('month', $month)->where($column, $div_array[$it]));
+					$age4pos = $this->checknull($age4pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age4neg = $this->checknull($age4neg_a->where('month', $month)->where($column, $div_array[$it]));
 
-					$ipos = $this->checknull($ipos_a->where('month', $month)->where($column, $div_array[$it]));
-					$ineg = $this->checknull($ineg_a->where('month', $month)->where($column, $div_array[$it]));
-					$ifail = $this->checknull($ifail_a->where('month', $month)->where($column, $div_array[$it]));
-					$ird = $this->checknull($ird_a->where('month', $month)->where($column, $div_array[$it]));
+					$age6pos = $this->checknull($age6pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age6neg = $this->checknull($age6neg_a->where('month', $month)->where($column, $div_array[$it]));
 
-					$iredraw = $ifail + $ird;
-					$itests = $ipos + $ineg +  $iredraw;
+					$age9pos = $this->checknull($age9pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age9neg = $this->checknull($age9neg_a->where('month', $month)->where($column, $div_array[$it]));
+					$age10pos = $this->checknull($age10pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age10neg = $this->checknull($age10neg_a->where('month', $month)->where($column, $div_array[$it]));
+					$age11pos = $this->checknull($age11pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age11neg = $this->checknull($age11neg_a->where('month', $month)->where($column, $div_array[$it]));
+					$age12pos = $this->checknull($age12pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age12neg = $this->checknull($age12neg_a->where('month', $month)->where($column, $div_array[$it]));
+					$age13pos = $this->checknull($age13pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age13neg = $this->checknull($age13neg_a->where('month', $month)->where($column, $div_array[$it]));
+					$age14pos = $this->checknull($age14pos_a->where('month', $month)->where($column, $div_array[$it]));
+					$age14neg = $this->checknull($age14neg_a->where('month', $month)->where($column, $div_array[$it]));
+
 
 					$data_array = array(
-						'tests' => $itests, 'pos' => $ipos, 'neg' => $ineg, 'redraw' => $iredraw,
-						'dateupdated' => $today
+						'sixweekspos' => $age1pos, 'sixweeksneg' => $age1neg, 'sevento3mpos' => $age2pos,
+						'sevento3mneg' => $age2neg, 'threemto9mpos' => $age3pos, 
+						'threemto9mneg' => $age3neg, 'ninemto18mpos' => $age4pos,
+						'ninemto18mneg' => $age4neg, 'above18mpos' => $age5pos, 'above18mneg' => $age5neg,
+						'nodatapos' => $age6pos, 'nodataneg' => $age6neg, 'less2wpos' => $age9pos,
+						'less2wneg' => $age9neg, 'twoto6wpos' => $age10pos, 'twoto6wneg' => $age10neg,
+						'sixto8wpos' => $age11pos, 'sixto8wneg' => $age11neg, 'sixmonthpos' => $age12pos,
+						'sixmonthneg' => $age12neg, 'ninemonthpos' => $age13pos, 
+						'ninemonthneg' => $age13neg, 'twelvemonthpos' => $age14pos,
+						'twelvemonthneg' => $age14neg, 'dateupdated' => $today
 					);
-
 					if ($type==2) {
 						$column="subcounty";
 					}
 
-					DB::table($ir_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
-
+					DB::table($age_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+					
 					if ($type==2) {
 						$column = $column2;
 					}
 				}
-				// End of loop through divisions
+				// End of division loop
 			}
-			// End of loop through months			
-		}
-		// End of infant regimen
+			// End of months loop
 
-		echo "\n Completed entry into eid {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
+			echo "\n Completed entry into eid {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
 
-		echo "\n Begin entry into eid {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
+			echo "\n Begin entry into eid {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
 
-		// Start of mother regimen
-		$mregimen = $data = DB::connection('eid')
-		->table('prophylaxis')->select('ID')->where('ptype', 1)->get();
 
-		// Loop through mother regimen
-		foreach ($mregimen as $key => $value) {
-			$mpos_a = $n->Getinterventionspositivitycount($year, $value->ID, 2, $division);
-			$mneg_a = $n->Getinterventionspositivitycount($year, $value->ID, 1, $division);
-			$mfail_a = $n->Getinterventionspositivitycount($year, $value->ID, 3, $division);
-			$mrd_a = $n->Getinterventionspositivitycount($year, $value->ID, 5, $division);
+			// Start of infant regimen
+			$iregimen = $data = DB::connection('eid')
+			->table('prophylaxis')->select('ID')->where('ptype', 2)->get();
 
-			// Loop through each month and update mprophylaxis
-			for ($i=0; $i < 12; $i++) { 
-				$month = $i + 1;
+			// Loop through infant regimen
+			foreach ($iregimen as $key => $value) {
+				$ipos_a = $n->Getinfantprophpositivitycount($year, $value->ID, 2, $division);
+				$ineg_a = $n->Getinfantprophpositivitycount($year, $value->ID, 1, $division);
+				$ifail_a = $n->Getinfantprophpositivitycount($year, $value->ID, 3, $division);
+				$ird_a = $n->Getinfantprophpositivitycount($year, $value->ID, 5, $division);
 
-				if($year == Date('Y') && $month > Date('m')){ break; }
+				// Loop through each month and update iprophylaxis
+				for ($i=0; $i < 12; $i++) { 
+					$month = $i + 1;
 
-				for ($it=0; $it < $array_size; $it++) {
+					if($year == Date('Y') && $month > Date('m')){ break; }
 
-					$mpos = $this->checknull($mpos_a->where('month', $month)->where($column, $div_array[$it]));
-					$mneg = $this->checknull($mneg_a->where('month', $month)->where($column, $div_array[$it]));
-					$mfail = $this->checknull($mfail_a->where('month', $month)->where($column, $div_array[$it]));
-					$mrd = $this->checknull($mrd_a->where('month', $month)->where($column, $div_array[$it]));
+					// Loop through divisions
+					for ($it=0; $it < $array_size; $it++) {
 
-					$mredraw=$mfail + $mrd;
-					$tests=$mpos + $mneg +  $mredraw;
+						$ipos = $this->checknull($ipos_a->where('month', $month)->where($column, $div_array[$it]));
+						$ineg = $this->checknull($ineg_a->where('month', $month)->where($column, $div_array[$it]));
+						$ifail = $this->checknull($ifail_a->where('month', $month)->where($column, $div_array[$it]));
+						$ird = $this->checknull($ird_a->where('month', $month)->where($column, $div_array[$it]));
 
-					$data_array = array(
-						'tests' => $itests, 'pos' => $mpos, 'neg' => $mneg, 'redraw' => $mredraw,
-						'dateupdated' => $today
-					);
+						$iredraw = $ifail + $ird;
+						$itests = $ipos + $ineg +  $iredraw;
 
-					if ($type==2) {
-						$column="subcounty";
+						$data_array = array(
+							'tests' => $itests, 'pos' => $ipos, 'neg' => $ineg, 'redraw' => $iredraw,
+							'dateupdated' => $today
+						);
+
+						if ($type==2) {
+							$column="subcounty";
+						}
+
+						DB::table($ir_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
+
+						if ($type==2) {
+							$column = $column2;
+						}
 					}
-
-					DB::table($mr_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
-
-					if ($type==2) {
-						$column = $column2;
-					}
+					// End of loop through divisions
 				}
-
+				// End of loop through months			
 			}
-			
-		}
-		// End of mother regimen
+			// End of infant regimen
 
-		echo "\n Completed entry into eid {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
+			echo "\n Completed entry into eid {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
 
-		echo "\n Begin entry into eid {$column} entrypoint at " . date('d/m/Y h:i:s a', time());
+			echo "\n Begin entry into eid {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
 
-		// Start of entrypoints
-		$entrypoints = $data = DB::connection('eid')
-		->table('entry_points')->select('ID')->get();
+			// Start of mother regimen
+			$mregimen = $data = DB::connection('eid')
+			->table('prophylaxis')->select('ID')->where('ptype', 1)->get();
 
-		// Loop through entrypoints
-		foreach ($entrypoints as $key => $value) {
-			$epos_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 2, $division);
-			$eneg_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 1, $division);
-			$efail_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 3, $division);
-			$erd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5, $division);
+			// Loop through mother regimen
+			foreach ($mregimen as $key => $value) {
+				$mpos_a = $n->Getinterventionspositivitycount($year, $value->ID, 2, $division);
+				$mneg_a = $n->Getinterventionspositivitycount($year, $value->ID, 1, $division);
+				$mfail_a = $n->Getinterventionspositivitycount($year, $value->ID, 3, $division);
+				$mrd_a = $n->Getinterventionspositivitycount($year, $value->ID, 5, $division);
 
-			// Loop through each month and update entrypoints
-			for ($i=0; $i < 12; $i++) { 
-				$month = $i + 1;
+				// Loop through each month and update mprophylaxis
+				for ($i=0; $i < 12; $i++) { 
+					$month = $i + 1;
 
-				if($year == Date('Y') && $month > Date('m')){ break; }
+					if($year == Date('Y') && $month > Date('m')){ break; }
 
-				for ($it=0; $it < $array_size; $it++) {
+					for ($it=0; $it < $array_size; $it++) {
 
-					$epos = $this->checknull($epos_a->where('month', $month)->where($column, $div_array[$it]));
-					$eneg = $this->checknull($eneg_a->where('month', $month)->where($column, $div_array[$it]));
-					$efail = $this->checknull($efail_a->where('month', $month)->where($column, $div_array[$it]));
-					$erd = $this->checknull($erd_a->where('month', $month)->where($column, $div_array[$it]));
+						$mpos = $this->checknull($mpos_a->where('month', $month)->where($column, $div_array[$it]));
+						$mneg = $this->checknull($mneg_a->where('month', $month)->where($column, $div_array[$it]));
+						$mfail = $this->checknull($mfail_a->where('month', $month)->where($column, $div_array[$it]));
+						$mrd = $this->checknull($mrd_a->where('month', $month)->where($column, $div_array[$it]));
 
-					$eredraw = $efail + $erd;
-					$etests = $epos + $eneg +  $eredraw;
+						$mredraw=$mfail + $mrd;
+						$tests=$mpos + $mneg +  $mredraw;
 
-					$data_array = array(
-						'tests' => $etests, 'pos' => $epos, 'neg' => $eneg, 'redraw' => $eredraw,
-						'dateupdated' => $today
-					);
+						$data_array = array(
+							'tests' => $itests, 'pos' => $mpos, 'neg' => $mneg, 'redraw' => $mredraw,
+							'dateupdated' => $today
+						);
 
-					if ($type==2) {
-						$column="subcounty";
+						if ($type==2) {
+							$column="subcounty";
+						}
+
+						DB::table($mr_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
+
+						if ($type==2) {
+							$column = $column2;
+						}
 					}
 
-					DB::table($ent_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('entrypoint', $value->ID)->update($data_array);
-
-					if ($type==2) {
-						$column = $column2;
-					}
 				}
-
+				
 			}
-			
-		}
-		// End of entrypoints
+			// End of mother regimen
 
-		echo "\n Completed entry into eid {$column} entrypoints at " . date('d/m/Y h:i:s a', time());
+			echo "\n Completed entry into eid {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
+
+			echo "\n Begin entry into eid {$column} entrypoint at " . date('d/m/Y h:i:s a', time());
+
+			// Start of entrypoints
+			$entrypoints = $data = DB::connection('eid')
+			->table('entry_points')->select('ID')->get();
+
+			// Loop through entrypoints
+			foreach ($entrypoints as $key => $value) {
+				$epos_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 2, $division);
+				$eneg_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 1, $division);
+				$efail_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 3, $division);
+				$erd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5, $division);
+
+				// Loop through each month and update entrypoints
+				for ($i=0; $i < 12; $i++) { 
+					$month = $i + 1;
+
+					if($year == Date('Y') && $month > Date('m')){ break; }
+
+					for ($it=0; $it < $array_size; $it++) {
+
+						$epos = $this->checknull($epos_a->where('month', $month)->where($column, $div_array[$it]));
+						$eneg = $this->checknull($eneg_a->where('month', $month)->where($column, $div_array[$it]));
+						$efail = $this->checknull($efail_a->where('month', $month)->where($column, $div_array[$it]));
+						$erd = $this->checknull($erd_a->where('month', $month)->where($column, $div_array[$it]));
+
+						$eredraw = $efail + $erd;
+						$etests = $epos + $eneg +  $eredraw;
+
+						$data_array = array(
+							'tests' => $etests, 'pos' => $epos, 'neg' => $eneg, 'redraw' => $eredraw,
+							'dateupdated' => $today
+						);
+
+						if ($type==2) {
+							$column="subcounty";
+						}
+
+						DB::table($ent_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('entrypoint', $value->ID)->update($data_array);
+
+						if ($type==2) {
+							$column = $column2;
+						}
+					}
+
+				}
+				
+			}
+			// End of entrypoints
+
+			echo "\n Completed entry into eid {$column} entrypoints at " . date('d/m/Y h:i:s a', time());
+		}
+		// End of functions that do not have a facility equivalent
+
 
 		echo "\n Begin entry into eid {$column} rejections " . date('d/m/Y h:i:s a', time());
 
@@ -1421,7 +1421,7 @@ class Eid extends Model
     }
 
     public function update_facilities($year = null){
-    	return $this->division_updator($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary');
+    	return $this->division_updator($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary', '', '', '', '', 'site_rejections');
     }
 
 
