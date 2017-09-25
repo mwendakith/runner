@@ -12,7 +12,7 @@ class VlPartner extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl-partner {year?}';
+    protected $signature = 'update:vl-partner {year?} {--month=0}';
 
     /**
      * The console command description.
@@ -40,10 +40,11 @@ class VlPartner extends Command
     {
         //
         $year = $this->argument('year');
+        $month = $this->option('month');
 
         $vl = new Vl;
 
-        $output = $vl->update_partners($year);
+        $output = $vl->update_partners($month, $year);
 
         $this->info($output);
     }

@@ -12,7 +12,7 @@ class VlLab extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl-lab {year?}';
+    protected $signature = 'update:vl-lab {year?} {--month=0}';
 
     /**
      * The console command description.
@@ -40,10 +40,11 @@ class VlLab extends Command
     {
         //
         $year = $this->argument('year');
+        $month = $this->option('month');
 
         $vl = new Vl;
 
-        $output = $vl->update_labs($year);
+        $output = $vl->update_labs($month, $year);
 
         $this->info($output);
     }

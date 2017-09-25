@@ -10,7 +10,7 @@ class VlNation extends Model
 {
     
 	//National rejections
-	public function national_rejections($year, $rejected_reason){
+	public function national_rejections($year, $start_month, $rejected_reason){
 
 		$data = DB::connection('vl')
 		->table('viralsamples')
@@ -18,6 +18,7 @@ class VlNation extends Model
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
 		->whereYear('datereceived', $year)
+		->whereMonth('datereceived', '>', $start_month)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -27,12 +28,13 @@ class VlNation extends Model
 	}
 
     //
-    public function getalltestedviraloadsamples($year){
+    public function getalltestedviraloadsamples($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
@@ -45,12 +47,13 @@ class VlNation extends Model
     	// $sql="select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' and Flag=1 and viralsamples.repeatt=0 AND viralsamples.rcategory  BETWEEN 1 AND 4";
     }
 
-    public function getallactualpatients($year){
+    public function getallactualpatients($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.patient,viralsamples.facility) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
@@ -64,12 +67,13 @@ class VlNation extends Model
     	// $sql = "select COUNT(DISTINCT viralsamples.patient,viralsamples.facility)  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2	 AND viralsamples.repeatt=0 and viralsamples.Flag=1 AND viralsamples.rcategory  BETWEEN 1 AND 4";
     }
 
-    public function getallreceivediraloadsamples($year){
+    public function getallreceivediraloadsamples($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->whereYear('datereceived', $year)
+		->whereMonth('datereceived', '>', $start_month)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->where('viralsamples.Flag', 1)
 		->groupBy('month')
@@ -80,12 +84,13 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where   MONTH(datereceived)='$month' and YEAR(datereceived)='$year'   AND ((parentid=0)||(parentid IS NULL)) and Flag=1";
     }
 
-    public function getallrejectedviraloadsamples($year){
+    public function getallrejectedviraloadsamples($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->whereYear('datereceived', $year)
+		->whereMonth('datereceived', '>', $start_month)
 		->where('viralsamples.receivedstatus', 2)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
@@ -97,12 +102,13 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where   MONTH(datereceived)='$month' and YEAR(datereceived)='$year'  and viralsamples.receivedstatus=2 AND repeatt=0 and Flag=1";
     }
 
-    public function GetSupportedfacilitysFORViralLoad($year){
+    public function GetSupportedfacilitysFORViralLoad($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.facility) as totals, month(datereceived) as month"))
 		->whereYear('datereceived', $year)
+		->whereMonth('datereceived', '>', $start_month)
 		->where('viralsamples.facility', '!=', 0)
 		->where('viralsamples.Flag', 1)
 		->groupBy('month')
@@ -113,12 +119,13 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(facility))  as numsamples from viralsamples where  MONTH(datereceived)='$month' and YEAR(datereceived)='$year'  and viralsamples.Flag=1 and viralsamples.facility !=0";
     }
 
-    public function GetNationalConfirmed2VLs($year){
+    public function GetNationalConfirmed2VLs($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->where('viralsamples.justification', 2)
@@ -132,12 +139,13 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=2 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year'   AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1 and rcategory between 1 and 4";
     }
 
-    public function GetNationalConfirmedFailure($year){
+    public function GetNationalConfirmedFailure($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.rcategory', [3, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->where('viralsamples.justification', 2)
@@ -151,12 +159,13 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=2 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND viralsamples.rcategory BETWEEN 3 AND 4  AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1";
     }
 
-    public function GetNationalBaseline($year){
+    public function GetNationalBaseline($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->where('viralsamples.justification', 10)
@@ -170,12 +179,13 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=10 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year'   AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1 and rcategory between 1 and 4";
     }
 
-    public function GetNationalBaselineFailure($year){
+    public function GetNationalBaselineFailure($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.rcategory', [3, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->where('viralsamples.justification', 10)
@@ -190,12 +200,13 @@ class VlNation extends Model
     }
 
 
-    public function getallrepeattviraloadsamples($year){
+    public function getallrepeattviraloadsamples($year, $start_month){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->where('viralsamples.receivedstatus', 3)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
@@ -207,12 +218,13 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND receivedstatus=3";
     }
 
-    public function getalltestedviraloadsamplesbytypedetails($year, $sampletype, $routine=true){
+    public function getalltestedviraloadsamplesbytypedetails($year, $start_month, $sampletype, $routine=true){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->when($routine, function($query) use ($routine){
@@ -241,7 +253,7 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(viralsamples.ID))  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND viralsamples.repeatt=0 AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 and viralsamples.Flag=1 AND viralsamples.sampletype='$sampletype' and viralsamples.rcategory BETWEEN 1 AND 4";
     }
 
-    public function getalltestedviraloadbygender($year, $sex){
+    public function getalltestedviraloadbygender($year, $start_month, $sex){
 
     	$b = new BaseModel;
 		$gender = $b->get_gender($sex);
@@ -251,6 +263,7 @@ class VlNation extends Model
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID')
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralpatients.gender', $gender)
@@ -266,7 +279,7 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(viralsamples.ID))  as numsamples from viralsamples,viralpatients where viralsamples.patientid=viralpatients.AutoID AND viralpatients.gender='$sex' AND MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND viralsamples.repeatt=0 and viralsamples.Flag=1 and viralsamples.rcategory BETWEEN 1 AND 4";
     }
 
-    public function getalltestedviraloadsbyage($year, $age, $all=false){
+    public function getalltestedviraloadsbyage($year, $start_month, $age, $all=false){
 
     	$b = new BaseModel;
 		$age_band = $b->get_vlage($age);
@@ -286,6 +299,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where($age_column, $age)
@@ -305,12 +319,13 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(viralsamples.ID))  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND viralsamples.repeatt=0 and viralsamples.Flag=1 AND viralsamples.age2='$age' and viralsamples.rcategory BETWEEN 1 AND 4";
     }
 
-    public function getalltestedviraloadsbyresult($year, $result){
+    public function getalltestedviraloadsbyresult($year, $start_month, $result){
 
     	$data = DB::connection('vl')
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->where('viralsamples.rcategory', $result)
 		->where('viralsamples.justification', '!=', 2)
@@ -325,7 +340,7 @@ class VlNation extends Model
 		// $sql = "select count(DISTINCT(viralsamples.ID))  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND viralsamples.repeatt=0 and viralsamples.Flag=1 AND viralsamples.rcategory ='$rcategory'";
     }
 
-    public function GetNatTATs($year){
+    public function GetNatTATs($year, $start_month){
     	$sql = "datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
     	ini_set("memory_limit", "-1");
 
@@ -385,7 +400,7 @@ class VlNation extends Model
 		return $return;
     }
 
-    public function get_tat($year){
+    public function get_tat($year, $start_month){
     	$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
 
 		$data = DB::connection('vl')
@@ -421,7 +436,7 @@ class VlNation extends Model
     	$sampletype = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND sampletype BETWEEN '$stype' AND '$ttype'";
     }
 
-    public function getalltestedviraloadsamplesbydash($year, $type, $param){
+    public function getalltestedviraloadsamplesbydash($year, $start_month, $type, $param){
 
 		$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -455,6 +470,7 @@ class VlNation extends Model
 			}				
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -465,7 +481,7 @@ class VlNation extends Model
 		// $sql = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND repeatt=0 and Flag=1 AND $colmn ='$age' and viralsamples.rcategory BETWEEN 1 AND 4";
     }
 
-    public function getallreceivediraloadsamplesbydash($year, $type, $param){
+    public function getallreceivediraloadsamplesbydash($year, $start_month, $type, $param){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -479,6 +495,7 @@ class VlNation extends Model
 			}			
 		})
 		->whereYear('datereceived', $year)
+		->whereMonth('datereceived', '>', $start_month)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
@@ -497,7 +514,7 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where   MONTH(datereceived)='$month' and YEAR(datereceived)='$year'   AND ((parentid=0)||(parentid IS NULL)) and Flag=1 AND $colmn='$age'";
     }
 
-    public function getallrejectedviraloadsamplesbydash($year, $type, $param){
+    public function getallrejectedviraloadsamplesbydash($year, $start_month, $type, $param){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -511,6 +528,7 @@ class VlNation extends Model
 			}			
 		})
 		->whereYear('datereceived', $year)
+		->whereMonth('datereceived', '>', $start_month)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
@@ -530,7 +548,7 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where   MONTH(datereceived)='$month' and YEAR(datereceived)='$year'  and viralsamples.receivedstatus=2 AND repeatt=0 and Flag=1 AND $colmn='$age'";
     }
 
-    public function GetNationalConfirmed2VLsbydash($year, $type, $param){
+    public function GetNationalConfirmed2VLsbydash($year, $start_month, $type, $param){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -544,6 +562,7 @@ class VlNation extends Model
 			}			
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
@@ -564,7 +583,7 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where  viralsamples.justification=2  AND  MONTH(datetested)='$month' and YEAR(datetested)='$year'   AND viralsamples.sampletype BETWEEN 1 and 4  AND repeatt=0 and Flag=1 AND $colmn='$age'";
     }
 
-    public function GetNationalConfirmedFailurebydash($year, $type, $param){
+    public function GetNationalConfirmedFailurebydash($year, $start_month, $type, $param){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -578,6 +597,7 @@ class VlNation extends Model
 			}			
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.sampletype', [1, 4])
 		->whereBetween('viralsamples.rcategory', [3, 4])
 		->when($type, function($query) use ($type, $param, $p){
@@ -599,7 +619,7 @@ class VlNation extends Model
 		// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where  viralsamples.justification=2  AND  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND viralsamples.rcategory BETWEEN 3 AND 4 AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1 AND $colmn='$age'";
     }
 
-    public function GetNationalBaselinebydash($year, $type, $param){
+    public function GetNationalBaselinebydash($year, $start_month, $type, $param){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -613,6 +633,7 @@ class VlNation extends Model
 			}			
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
@@ -634,7 +655,7 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=10 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year'   AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1 and rcategory between 1 and 4";
     }
 
-    public function GetNationalBaselineFailurebydash($year, $type, $param){
+    public function GetNationalBaselineFailurebydash($year, $start_month, $type, $param){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -648,6 +669,7 @@ class VlNation extends Model
 			}			
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
@@ -669,7 +691,7 @@ class VlNation extends Model
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=10 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND viralsamples.rcategory BETWEEN 3 AND 4  AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1";
     }
 
-    public function getallrepeattviraloadsamplesbydash($year, $type, $param){
+    public function getallrepeattviraloadsamplesbydash($year, $start_month, $type, $param){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -683,6 +705,7 @@ class VlNation extends Model
 			}			
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
@@ -702,7 +725,7 @@ class VlNation extends Model
 		// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND receivedstatus=3 AND $colmn='$age'";
     }
 
-    public function getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $param, $sampletype){
+    public function getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $param, $sampletype){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -725,6 +748,7 @@ class VlNation extends Model
 			}				
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
@@ -760,7 +784,7 @@ class VlNation extends Model
 		// $sql = "select count(DISTINCT(viralsamples.ID))  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND viralsamples.repeatt=0 and viralsamples.Flag=1 AND viralsamples.sampletype='$sampletype' AND justification='$justification'";
     }
 
-    public function getalltestedviraloadsamplesbygenderbydash($year, $type, $param, $gender){
+    public function getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $param, $gender){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -783,6 +807,7 @@ class VlNation extends Model
 			}					
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
@@ -808,7 +833,7 @@ class VlNation extends Model
 		// $sql = "select count(DISTINCT(viralsamples.ID))  as numsamples from viralsamples,viralpatients where viralsamples.patientid=viralpatients.AutoID AND viralpatients.gender='$sex' AND MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND viralsamples.repeatt=0 and viralsamples.Flag=1  AND sampletype BETWEEN '$stype' AND '$ttype'";
     }
 
-    public function getalltestedviraloadsamplesbyagebydash($year, $type, $param, $age){
+    public function getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $param, $age){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -840,6 +865,7 @@ class VlNation extends Model
 			}					
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
@@ -865,7 +891,7 @@ class VlNation extends Model
 		// $sql = "select count(DISTINCT(viralsamples.ID))  as numsamples from viralsamples,viralpatients where viralsamples.patientid=viralpatients.AutoID AND viralpatients.gender='$sex' AND MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND viralsamples.repeatt=0 and viralsamples.Flag=1  AND sampletype BETWEEN '$stype' AND '$ttype'";
     }
 
-    public function getalltestedviraloadsamplesbyresultbydash($year, $type, $param, $result){
+    public function getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $param, $result){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -887,6 +913,7 @@ class VlNation extends Model
 			}				
 		})
 		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
 				return $query->whereBetween($p['column'], [3, 4]);
@@ -914,7 +941,7 @@ class VlNation extends Model
 
 
     // Update samples tats	
-	public function update_tats($year)
+	public function update_tats($year, $start_month)
 	{
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		
@@ -942,6 +969,7 @@ class VlNation extends Model
 				['datetested', '<=', 'datedispatched']
 			])
 			->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
 			->whereMonth('datetested', $month)
 			->where('viralsamples.Flag', 1)
 			->where('viralsamples.repeatt', 0)

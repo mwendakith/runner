@@ -11,7 +11,7 @@ class UpdateVl extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl {year?} {--type=2}';
+    protected $signature = 'update:vl {year?} {--type=2} {--month=0}';
 
     /**
      * The console command description.
@@ -39,36 +39,37 @@ class UpdateVl extends Command
     {
         //
         $year = $this->argument('year');
+        $month = $this->option('month');        
 
         // $this->info('Updating viralload summary tables for the year ' . $year . '\n');
 
         $this->call('update:vl-nation', [
-            'year' => $year
+            'year' => $year, '--month' => $month
         ]);
 
         $this->call('update:vl-county', [
-            'year' => $year
+            'year' => $year, '--month' => $month
         ]);
 
         $this->call('update:vl-subcounty', [
-            'year' => $year
+            'year' => $year, '--month' => $month
         ]);
 
         $this->call('update:vl-lab', [
-            'year' => $year
+            'year' => $year, '--month' => $month
         ]);
 
         // $this->call('update:vl-lablogs');
 
         $this->call('update:vl-partner', [
-            'year' => $year
+            'year' => $year, '--month' => $month
         ]);
         
         $type = $this->option('type');
 
         if($type == 2){
             $this->call('update:vl-facility', [
-                'year' => $year
+                'year' => $year, '--month' => $month
             ]);
         }
     }

@@ -12,7 +12,7 @@ class VlCounty extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl-county {year?}';
+    protected $signature = 'update:vl-county {year?} {--month=0}';
 
     /**
      * The console command description.
@@ -40,10 +40,11 @@ class VlCounty extends Command
     {
         //
         $year = $this->argument('year');
+        $month = $this->option('month');
 
         $vl = new Vl;
 
-        $output = $vl->update_counties($year);
+        $output = $vl->update_counties($month, $year);
 
         $this->info($output);
     }

@@ -12,7 +12,7 @@ class VlSubcounty extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl-subcounty {year?}';
+    protected $signature = 'update:vl-subcounty {year?} {--month=0}';
 
     /**
      * The console command description.
@@ -40,10 +40,11 @@ class VlSubcounty extends Command
     {
         //
         $year = $this->argument('year');
+        $month = $this->option('month');
 
         $vl = new Vl;
 
-        $output = $vl->update_subcounties($year);
+        $output = $vl->update_subcounties($month, $year);
 
         $this->info($output);
     }

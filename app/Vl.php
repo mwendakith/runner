@@ -10,7 +10,7 @@ use DB;
 class Vl extends Model
 {
     //
-    public function update_nation($year = null){
+    public function update_nation($start_month, $year=null){
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -36,40 +36,40 @@ class Vl extends Model
     	$baseline_a = $n->GetNationalBaseline($year);
     	$baselinefail_a = $n->GetNationalBaselineFailure($year);
 
-    	$noage_a = $n->getalltestedviraloadsbyage($year, 1);
-    	$less2_a = $n->getalltestedviraloadsbyage($year, 6);
-    	$less9_a = $n->getalltestedviraloadsbyage($year, 7);
-    	$less14_a = $n->getalltestedviraloadsbyage($year, 8);
-    	$less19_a = $n->getalltestedviraloadsbyage($year, 9);
-    	$less24_a = $n->getalltestedviraloadsbyage($year, 10);
-    	$over25_a = $n->getalltestedviraloadsbyage($year, 11);
+    	$noage_a = $n->getalltestedviraloadsbyage($year, $start_month, 1);
+    	$less2_a = $n->getalltestedviraloadsbyage($year, $start_month, 6);
+    	$less9_a = $n->getalltestedviraloadsbyage($year, $start_month, 7);
+    	$less14_a = $n->getalltestedviraloadsbyage($year, $start_month, 8);
+    	$less19_a = $n->getalltestedviraloadsbyage($year, $start_month, 9);
+    	$less24_a = $n->getalltestedviraloadsbyage($year, $start_month, 10);
+    	$over25_a = $n->getalltestedviraloadsbyage($year, $start_month, 11);
 
     	// $adults=$less19 +$less24 + $over25 ;
 		// $paeds=$less2 + $less9 + $less14;
 
-		$ldl_a = $n->getalltestedviraloadsbyresult($year, 1);
-		$less1k_a = $n->getalltestedviraloadsbyresult($year, 2);
-		$less5k_a = $n->getalltestedviraloadsbyresult($year, 3);
-		$above5k_a = $n->getalltestedviraloadsbyresult($year, 4);
-		$invalids_a = $n->getalltestedviraloadsbyresult($year, 5);
+		$ldl_a = $n->getalltestedviraloadsbyresult($year, $start_month, 1);
+		$less1k_a = $n->getalltestedviraloadsbyresult($year, $start_month, 2);
+		$less5k_a = $n->getalltestedviraloadsbyresult($year, $start_month, 3);
+		$above5k_a = $n->getalltestedviraloadsbyresult($year, $start_month, 4);
+		$invalids_a = $n->getalltestedviraloadsbyresult($year, $start_month, 5);
 		// $sustx=$less5k +  $above5k;
 
-		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, 1);
-		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, 3);
-		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, 2);
+		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 1);
+		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 3);
+		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 2);
 
-		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, 1, false);
-		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, 3, false);
-		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, 2, false);
+		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 1, false);
+		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 3, false);
+		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 2, false);
 
-		$male_a = $n->getalltestedviraloadbygender($year, 1);
-		$female_a = $n->getalltestedviraloadbygender($year, 2);
-		$nogender_a = $n->getalltestedviraloadbygender($year, 3);
+		$male_a = $n->getalltestedviraloadbygender($year, $start_month, 1);
+		$female_a = $n->getalltestedviraloadbygender($year, $start_month, 2);
+		$nogender_a = $n->getalltestedviraloadbygender($year, $start_month, 3);
 
 		$tat = $n->get_tat($year);
 
 		// Loop through the months and insert data into the national summary
-		for ($i=0; $i < 12; $i++) { 
+		for ($i=$start_month; $i < 12; $i++) { 
 			$month = $i + 1;
 			if($year == Date('Y') && $month > Date('m')){ break; }
 
@@ -142,11 +142,11 @@ class Vl extends Model
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
-		echo $this->finish_nation($year, $today);
-		echo $this->nation_rejections($year, $today);
+		echo $this->finish_nation($start_month, $year, $today);
+		echo $this->nation_rejections($start_month, $year, $today);
     }
 
-    public function nation_rejections($year=null){
+    public function nation_rejections($start_month, $year=null){
 
     	if($year == null){
     		$year = Date('Y');
@@ -161,10 +161,10 @@ class Vl extends Model
     	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
 
     	foreach ($reasons as $key => $value) {
-    		$rej_a = $n->national_rejections($year, $value->ID);
+    		$rej_a = $n->national_rejections($year, $start_month, $value->ID);
 
     		// Loop through the months and insert data into the national summary
-			for ($i=0; $i < 12; $i++) { 
+			for ($i=$start_month; $i < 12; $i++) { 
 				$month = $i + 1;
 				if($year == Date('Y') && $month > Date('m')){ break; }
 
@@ -185,7 +185,7 @@ class Vl extends Model
     	echo "\n Completed viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
     }
 
-    public function finish_nation($year, $today){
+    public function finish_nation($start_month, $year, $today){
     	$n = new VlNation;
     	for ($type=1; $type < 6; $type++) { 
 
@@ -206,57 +206,57 @@ class Vl extends Model
 			foreach ($divs as $key => $value) {	
 
 				// Get collection instances of the data
-		    	$rec_a = $n->getallreceivediraloadsamplesbydash($year, $type, $value->ID);
-		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $type, $value->ID);
-		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $type, $value->ID);
+		    	$rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $type, $value->ID);
+		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $type, $value->ID);
+		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $type, $value->ID);
 
-		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $type, $value->ID);
-		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $type, $value->ID);
-		    	$rs = $n->getallrepeattviraloadsamplesbydash($year, $type, $value->ID);
+		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $start_month, $type, $value->ID);
+		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $type, $value->ID);
+		    	$rs = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $type, $value->ID);
 
 		    	if ($type != 1) {
 
-			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $type, $value->ID, 1);
-			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $type, $value->ID, 6);
-			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $type, $value->ID, 7);
-			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $type, $value->ID, 8);
-			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $type, $value->ID, 9);
-			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $type, $value->ID, 10);
-			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $type, $value->ID, 11);
+			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 1);
+			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 6);
+			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 7);
+			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 8);
+			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 9);
+			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 10);
+			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 11);
 			    }
 
 		    	// $adults=$less19 +$less24 + $over25 ;
 				// $paeds=$less2 + $less9 + $less14;
 
-				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $type, $value->ID, 1);
-				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $type, $value->ID, 2);
-				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $type, $value->ID, 3);
-				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $type, $value->ID, 4);
-				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $type, $value->ID, 5);
+				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 1);
+				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 2);
+				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 3);
+				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 4);
+				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 5);
 				// $sustx=$less5k +  $above5k;
 
 				if($type != 4){
 
-					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 1);
-					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 3);
-					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $type, $value->ID, 2);
+					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 1);
+					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 3);
+					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 2);
 				}
 
 				if($type != 2){
 
-					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $type, $value->ID, 1);
-					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $type, $value->ID, 2);
-					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $type, $value->ID, 3);
+					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 1);
+					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 2);
+					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 3);
 
 				}
 
 				if ($type != 5) {
-					$baseline_a = $n->GetNationalBaselinebydash($year, $type, $value->ID);
-					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $type, $value->ID);
+					$baseline_a = $n->GetNationalBaselinebydash($year, $start_month, $type, $value->ID);
+					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $start_month, $type, $value->ID);
 				}
 
 				// Loop through the months and insert data into the national summary
-				for ($i=0; $i < 12; $i++) { 
+				for ($i=$start_month; $i < 12; $i++) { 
 					$month = $i + 1;
 					if($year == Date('Y') && $month > Date('m')){ break; }
 
@@ -352,7 +352,7 @@ class Vl extends Model
 		// End of looping of params
     }
 
-    public function update_division($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='vl_county_summary', $rej_table='vl_county_rejections'){
+    public function update_division($start_month, $year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='vl_county_summary', $rej_table='vl_county_rejections'){
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -373,66 +373,64 @@ class Vl extends Model
 			$array_size++;
 		}
 
-		// return $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
-
     	echo "\n Begin  viralload {$column} update at " . date('d/m/Y h:i:s a', time());
 
     	$column2=$column;
 
     	// Get collection instances of the data
 
-    	$rec_a = $n->getallreceivediraloadsamples($year, $division);
-    	$tested_a = $n->getalltestedviraloadsamples($year, $division);
-    	// $actualpatients_a = $n->getallactualpatients($year, $division);
-    	$rej_a = $n->getallrejectedviraloadsamples($year, $division);
-    	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year, $division);
+    	$rec_a = $n->getallreceivediraloadsamples($year, $start_month, $division);
+    	$tested_a = $n->getalltestedviraloadsamples($year, $start_month, $division);
+    	// $actualpatients_a = $n->getallactualpatients($year, $start_month, $division);
+    	$rej_a = $n->getallrejectedviraloadsamples($year, $start_month, $division);
+    	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year, $start_month, $division);
 
-    	$conftx_a = $n->GetNationalConfirmed2VLs($year, $division);
-    	$conf2VL_a = $n->GetNationalConfirmedFailure($year, $division);
-		$rs_a = $n->getallrepeattviraloadsamples($year, $division);
+    	$conftx_a = $n->GetNationalConfirmed2VLs($year, $start_month, $division);
+    	$conf2VL_a = $n->GetNationalConfirmedFailure($year, $start_month, $division);
+		$rs_a = $n->getallrepeattviraloadsamples($year, $start_month, $division);
 
     	
-		$baseline_a = $n->GetNationalBaseline($year, $division);
-    	$baselinefail_a = $n->GetNationalBaselineFailure($year, $division);
+		$baseline_a = $n->GetNationalBaseline($year, $start_month, $division);
+    	$baselinefail_a = $n->GetNationalBaselineFailure($year, $start_month, $division);
 
-    	$noage_a = $n->getalltestedviraloadsbyage($year, $division, 1);
-    	$less2_a = $n->getalltestedviraloadsbyage($year, $division, 6);
-    	$less9_a = $n->getalltestedviraloadsbyage($year, $division, 7);
-    	$less14_a = $n->getalltestedviraloadsbyage($year, $division, 8);
-    	$less19_a = $n->getalltestedviraloadsbyage($year, $division, 9);
-    	$less24_a = $n->getalltestedviraloadsbyage($year, $division, 10);
-    	$over25_a = $n->getalltestedviraloadsbyage($year, $division, 11);
+    	$noage_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 1);
+    	$less2_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 6);
+    	$less9_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 7);
+    	$less14_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 8);
+    	$less19_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 9);
+    	$less24_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 10);
+    	$over25_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 11);
 	    
     	// $adults=$less19 +$less24 + $over25 ;
 		// $paeds=$less2 + $less9 + $less14;
 
-		$ldl_a = $n->getalltestedviraloadsbyresult($year, $division, 1);
-		$less1k_a = $n->getalltestedviraloadsbyresult($year, $division, 2);
-		$less5k_a = $n->getalltestedviraloadsbyresult($year, $division, 3);
-		$above5k_a = $n->getalltestedviraloadsbyresult($year, $division, 4);
-		$invalids_a = $n->getalltestedviraloadsbyresult($year, $division, 5);
+		$ldl_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 1);
+		$less1k_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 2);
+		$less5k_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 3);
+		$above5k_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 4);
+		$invalids_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 5);
 		// $sustx=$less5k +  $above5k;
 
-		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 1);
-		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 3);
-		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 2);
+		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 1);
+		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 3);
+		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 2);
 
-		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 1, false);
-		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 3, false);
-		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $division, 2, false);
+		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 1, false);
+		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 3, false);
+		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 2, false);
 
-		$male_a = $n->getalltestedviraloadbygender($year, $division, 1);
-		$female_a = $n->getalltestedviraloadbygender($year, $division, 2);
-		$nogender_a = $n->getalltestedviraloadbygender($year, $division, 3);
+		$male_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 1);
+		$female_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 2);
+		$nogender_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 3);
 
-		$tat = $n->get_tat($year, $division);
-		// $tat = $n->GetNatTATs($year, $div_array, $division, $column);
+		$tat = $n->get_tat($year, $start_month, $division);
+		// $tat = $n->GetNatTATs($year, $start_month, $div_array, $division, $column);
 		// $tat = collect($tat);
 
 		// $count = $rec_a->count();
 
 		// Loop through the months and insert data into the national summary
-		for ($i=0; $i < 12; $i++) { 
+		for ($i=$start_month; $i < 12; $i++) { 
 			$month = $i + 1;
 			if($year == Date('Y') && $month > Date('m')){ break; }
 
@@ -506,7 +504,7 @@ class Vl extends Model
 					'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
 					'confirm2vl' => $conf2VL, 'rejected' => $rej, 'dbs' => $dbs, 'plasma' => $plas,
 					'edta' => $edta, 'alldbs' => $adbs, 'allplasma' => $aplas, 'alledta' => $aedta,
-					'maletest' => $male, 'femaletest' => $female,
+					'maleteststart_month' => $male, 'femaletest' => $female,
 					'nogendertest' => $nogender, 'Undetected' => $ldl, 'less1000' => $less1k,
 					'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
 					'sitessending' => $sites, 'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'],
@@ -539,16 +537,16 @@ class Vl extends Model
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
 
 		if ($type < 4) {
-			echo $this->finish_division($year, $today, $div_array, $column, $division, $type, $array_size);
-			echo $this->division_rejections($year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
+			echo $this->finish_division($start_month, $year, $today, $div_array, $column, $division, $type, $array_size);
+			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
 		}
 		if($type > 3){
-			echo $this->division_rejections($year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);			
+			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);			
 		}
 
     }
 
-    public function division_rejections($year=null, $today, &$div_array, $column, $division, $div_type, $array_size, $rej_table){
+    public function division_rejections($start_month, $year=null, $today, &$div_array, $column, $division, $div_type, $array_size, $rej_table){
 
     	if($year == null){
     		$year = Date('Y');
@@ -565,10 +563,10 @@ class Vl extends Model
     	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
 
     	foreach ($reasons as $key => $value) {
-    		$rej_a = $n->national_rejections($year, $division, $value->ID);
+    		$rej_a = $n->national_rejections($year, $start_month, $division, $value->ID);
 
     		// Loop through the months and insert data into the national summary
-			for ($i=0; $i < 12; $i++) { 
+			for ($i=$start_month; $i < 12; $i++) { 
 				$month = $i + 1;
 				if($year == Date('Y') && $month > Date('m')){ break; }
 
@@ -605,7 +603,7 @@ class Vl extends Model
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility
-    public function finish_division($year, $today, &$div_array, $column, $division, $div_type, $array_size){
+    public function finish_division($start_month, $year, $today, &$div_array, $column, $division, $div_type, $array_size){
     	$n = new VlDivision;
     	$column2 = $column;
     	for ($type=1; $type < 6; $type++) { 
@@ -631,57 +629,57 @@ class Vl extends Model
 			foreach ($divs as $key => $value) {	
 
 				// Get collection instances of the data
-		    	$rec_a = $n->getallreceivediraloadsamplesbydash($year, $division, $type, $value->ID);
-		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $division, $type, $value->ID);
-		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $division, $type, $value->ID);
+		    	$rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
+		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
+		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 
-		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $division, $type, $value->ID);
-		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $division, $type, $value->ID);
-		    	$rs = $n->getallrepeattviraloadsamplesbydash($year, $division, $type, $value->ID);
+		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $start_month, $division, $type, $value->ID);
+		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $division, $type, $value->ID);
+		    	$rs = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 
 		    	if ($type != 1) {
 
-			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $division, $type, $value->ID, 1);
-			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $division, $type, $value->ID, 6);
-			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $division, $type, $value->ID, 7);
-			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $division, $type, $value->ID, 8);
-			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $division, $type, $value->ID, 9);
-			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $division, $type, $value->ID, 10);
-			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $division, $type, $value->ID, 11);
+			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 1);
+			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 6);
+			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 7);
+			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 8);
+			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 9);
+			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 10);
+			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 11);
 			    }
 
 		    	// $adults=$less19 +$less24 + $over25 ;
 				// $paeds=$less2 + $less9 + $less14;
 
-				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $division, $type, $value->ID, 1);
-				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $division, $type, $value->ID, 2);
-				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $division, $type, $value->ID, 3);
-				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $division, $type, $value->ID, 4);
-				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $division, $type, $value->ID, 5);
+				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 1);
+				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 2);
+				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 3);
+				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 4);
+				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 5);
 				// $sustx=$less5k +  $above5k;
 
 				if($type != 4){
 
-					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 1);
-					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 3);
-					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $division, $type, $value->ID, 2);
+					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 1);
+					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 3);
+					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 2);
 				}
 
 				if($type != 2){
 
-					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $division, $type, $value->ID, 1);
-					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $division, $type, $value->ID, 2);
-					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $division, $type, $value->ID, 3);
+					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->ID, 1);
+					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->ID, 2);
+					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->ID, 3);
 
 				}
 
 				if ($type != 5) {
-					$baseline_a = $n->GetNationalBaselinebydash($year, $division, $type, $value->ID);
-					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $division, $type, $value->ID);
+					$baseline_a = $n->GetNationalBaselinebydash($year, $start_month, $division, $type, $value->ID);
+					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $start_month, $division, $type, $value->ID);
 				}
 
 				// Loop through the months and insert data
-				for ($i=0; $i < 12; $i++) { 
+				for ($i=$start_month; $i < 12; $i++) { 
 					$month = $i + 1;
 					if($year == Date('Y') && $month > Date('m')){ break; }
 
@@ -789,23 +787,23 @@ class Vl extends Model
 
 
 
-    public function update_counties($year=null){
-    	return $this->update_division($year, 1, 'county', 'view_facilitys.county', 'countys', 'vl_county_summary', 'vl_county_rejections');
+    public function update_counties($start_month, $year=null){
+    	return $this->update_division($start_month, $year, 1, 'county', 'view_facilitys.county', 'countys', 'vl_county_summary', 'vl_county_rejections');
     }
 
-    public function update_subcounties($year=null){
-    	return $this->update_division($year, 2, 'district', 'view_facilitys.district', 'districts', 'vl_subcounty_summary', 'vl_subcounty_rejections');
+    public function update_subcounties($start_month, $year=null){
+    	return $this->update_division($start_month, $year, 2, 'district', 'view_facilitys.district', 'districts', 'vl_subcounty_summary', 'vl_subcounty_rejections');
     }
 
-    public function update_partners($year=null){
-    	return $this->update_division($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
+    public function update_partners($start_month, $year=null){
+    	return $this->update_division($start_month, $year, 3, 'partner', 'view_facilitys.partner', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
     }
 
-    public function update_facilities($year=null){
-    	return $this->update_division($year, 4, 'facility', 'viralsamples.facility', 'facilitys', 'vl_site_summary', 'vl_site_rejections');
+    public function update_facilities($start_month, $year=null){
+    	return $this->update_division($start_month, $year, 4, 'facility', 'viralsamples.facility', 'facilitys', 'vl_site_summary', 'vl_site_rejections');
     }
 
-    public function finish_facilities($year=null){
+    public function finish_facilities($start_month, $year=null){
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -825,11 +823,11 @@ class Vl extends Model
 			$array_size++;
 		}
 
-		return $this->finish_division($year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
+		return $this->finish_division($start_month, $year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
     }
 
-    public function update_labs($year=null){
-    	return $this->update_division($year, 5, 'labtestedin', "viralsamples.labtestedin", 'labs', 'vl_lab_summary', 'vl_lab_rejections');
+    public function update_labs($start_month, $year=null){
+    	return $this->update_division($start_month, $year, 5, 'labtestedin', "viralsamples.labtestedin", 'labs', 'vl_lab_summary', 'vl_lab_rejections');
 
     }
 

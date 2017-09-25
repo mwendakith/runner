@@ -12,7 +12,7 @@ class VlNation extends Command
      *
      * @var string
      */
-    protected $signature = 'update:vl-nation {year?}';
+    protected $signature = 'update:vl-nation {year?} {--month=0}';
 
     /**
      * The console command description.
@@ -40,10 +40,11 @@ class VlNation extends Command
     {
         //
         $year = $this->argument('year');
+        $month = $this->option('month');
 
         $vl = new Vl;
 
-        $output = $vl->update_nation($year);
+        $output = $vl->update_nation($month, $year);
 
         $this->info($output);
     }
