@@ -23,18 +23,18 @@ class Vl extends Model
 
     	// Get collection instances of the data
 
-    	$rec_a = $n->getallreceivediraloadsamples($year);
-    	$tested_a = $n->getalltestedviraloadsamples($year);
-    	$actualpatients_a = $n->getallactualpatients($year);
-    	$rej_a = $n->getallrejectedviraloadsamples($year);
-    	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year);
+    	$rec_a = $n->getallreceivediraloadsamples($year, $start_month);
+    	$tested_a = $n->getalltestedviraloadsamples($year, $start_month);
+    	$actualpatients_a = $n->getallactualpatients($year, $start_month);
+    	$rej_a = $n->getallrejectedviraloadsamples($year, $start_month);
+    	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year, $start_month);
 
-    	$conftx_a = $n->GetNationalConfirmed2VLs($year);
-    	$conf2VL_a = $n->GetNationalConfirmedFailure($year);
+    	$conftx_a = $n->GetNationalConfirmed2VLs($year, $start_month);
+    	$conf2VL_a = $n->GetNationalConfirmedFailure($year, $start_month);
     	$rs=0;
 
-    	$baseline_a = $n->GetNationalBaseline($year);
-    	$baselinefail_a = $n->GetNationalBaselineFailure($year);
+    	$baseline_a = $n->GetNationalBaseline($year, $start_month);
+    	$baselinefail_a = $n->GetNationalBaselineFailure($year, $start_month);
 
     	$noage_a = $n->getalltestedviraloadsbyage($year, $start_month, 1);
     	$less2_a = $n->getalltestedviraloadsbyage($year, $start_month, 6);
