@@ -968,6 +968,8 @@ class VlDivision extends Model
 
 		$b = new BaseModel;
 
+		$p=0;
+
 		foreach ($data as $key => $value) {
 			$data_array = array(
 				'labid' => $value->ID, 'FacilityMFLcode' => $value->facilitycode, 
@@ -995,6 +997,8 @@ class VlDivision extends Model
 			// $update_array = array('synched' => 0, 'datesynched' => $today);
 
 			DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+			$p++;
 		}
+		echo "\n {$p} patients synched.";
 	}
 }

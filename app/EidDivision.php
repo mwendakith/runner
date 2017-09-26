@@ -980,6 +980,8 @@ class EidDivision extends Model
 
 		$b = new BaseModel;
 
+		$p=0;
+
 		foreach ($data as $key => $value) {
 			$data_array = array(
 				'labid' => $value->ID, 'FacilityMFLcode' => $value->facilitycode, 
@@ -1008,7 +1010,9 @@ class EidDivision extends Model
 			// $update_array = array('synched' => 1, 'datesynched' => $today);
 
 			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
+			$p++;
 		}
+		echo "\n {$p} patients synched.";
 	}
 
 	
