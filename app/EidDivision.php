@@ -998,14 +998,15 @@ class EidDivision extends Model
 
 			DB::table('patients_eid')->insert($data_array);
 
-			$holidays = $b->getTotalHolidaysinMonth($value->month);
+			// $holidays = $b->getTotalHolidaysinMonth($value->month);
 
-			$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
-			$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
-			$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
-			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+			// $tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
+			// $tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
+			// $tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
+			// $tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
 
-			$update_array = array('synched' => 1, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+			// $update_array = array('synched' => 1, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+			$update_array = array('synched' => 1, 'datesynched' => $today);
 
 			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
 		}
