@@ -966,6 +966,8 @@ class EidDivision extends Model
 	public function update_patients(){
 		$sql = "samples.ID, samples.patient, samples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, patients.age, patients.gender, patients.prophylaxis as infantproph, mothers.entry_point, mothers.feeding, mothers.prophylaxis, samples.datecollected, samples.receivedstatus, samples.pcrtype, samples.rejectedreason, samples.reason_for_repeat, samples.datereceived, samples.datetested, samples.result, samples.datedispatched, samples.labtestedin, month(datetested) as month";
 
+		ini_set("memory_limit", "-1");
+		
 		$data = DB::connection('eid')
 		->table('samples')
 		->select(DB::raw($sql))
