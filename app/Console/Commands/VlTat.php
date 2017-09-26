@@ -46,7 +46,5 @@ class VlTat extends Command
         $output = $vl->update_tat($year);
 
         $this->info($output);
-
-        $this->call('report:send');
     }
 }

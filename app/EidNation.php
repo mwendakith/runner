@@ -781,55 +781,51 @@ class EidNation extends Model
 	}
 
 	// Update samples tats	
-	public function update_tats()
+	public function update_tats($year)
 	{
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		
 		$sql = "samples.ID, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$b = new BaseModel;
 
-		$curyear = date("Y")+1;
 
-		for ($year=2016; $year < $curyear; $year++) { 
+		echo "\n Begin eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 
-			echo "\n Begin eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
+		$data = DB::connection('eid')
+		->table('samples')
+		->select(DB::raw($sql))
+		->whereYear('samples.datecollected', '>', 1980)
+		->whereYear('samples.datereceived', '>', 1980)
+		->whereYear('samples.datetested', '>', 1980)
+		->whereYear('samples.datedispatched', '>', 1980)
+		->whereColumn([
+			['datecollected', '<=', 'datereceived'],
+			['datereceived', '<=', 'datetested'],
+			['datetested', '<=', 'datedispatched']
+		])
+		->whereYear('datetested', $year)
+		->where('samples.Flag', 1)
+		->where('samples.repeatt', 0)
+		->get(); 
 
-			$data = DB::connection('eid')
-			->table('samples')
-			->select(DB::raw($sql))
-			->whereYear('samples.datecollected', '>', 1980)
-			->whereYear('samples.datereceived', '>', 1980)
-			->whereYear('samples.datetested', '>', 1980)
-			->whereYear('samples.datedispatched', '>', 1980)
-			->whereColumn([
-				['datecollected', '<=', 'datereceived'],
-				['datereceived', '<=', 'datetested'],
-				['datetested', '<=', 'datedispatched']
-			])
-			->whereYear('datetested', $year)
-			->where('samples.Flag', 1)
-			->where('samples.repeatt', 0)
-			->get(); 
+		if($data->isEmpty()){
+			continue;
+		}		
 
-			if($data->isEmpty()){
-				continue;
-			}		
+		foreach ($data as $key => $value) {
+			$holidays = $b->getTotalHolidaysinMonth($value->month);
 
-			foreach ($data as $key => $value) {
-				$holidays = $b->getTotalHolidaysinMonth($value->month);
+			$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
+			$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
+			$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
+			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
 
-				$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
-				$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
-				$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
-				$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+			$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
-				$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
 
-				DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
-
-			}
-			echo "\n Completed eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 		}
+		echo "\n Completed eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 	}
 
 	

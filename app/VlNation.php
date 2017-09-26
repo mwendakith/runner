@@ -941,7 +941,7 @@ class VlNation extends Model
 
 
     // Update samples tats	
-	public function update_tats($year, $start_month)
+	public function update_tats($year)
 	{
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		

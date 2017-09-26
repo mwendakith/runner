@@ -12,7 +12,7 @@ class EidTat extends Command
      *
      * @var string
      */
-    protected $signature = 'update:eid-tat';
+    protected $signature = 'update:eid-tat {year?}';
 
     /**
      * The console command description.
@@ -41,7 +41,9 @@ class EidTat extends Command
         //
         $eid = new Eid;
 
-        $output = $eid->update_tat();
+        $year = $this->argument('year');
+
+        $output = $eid->update_tat($year);
 
         $this->info($output);
     }

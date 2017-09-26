@@ -1452,11 +1452,15 @@ class Eid extends Model
     	echo "\n Completed entry into eid patients at " . date('d/m/Y h:i:s a', time()); 
     }
 
-    public function update_tat(){
+    public function update_tat($year){
     	// Instantiate new object
     	$n = new EidNation;
 
-    	echo $n->update_tats();
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+
+    	echo $n->update_tats($year);
     }
 
 
