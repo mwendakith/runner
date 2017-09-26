@@ -504,7 +504,7 @@ class Vl extends Model
 					'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
 					'confirm2vl' => $conf2VL, 'rejected' => $rej, 'dbs' => $dbs, 'plasma' => $plas,
 					'edta' => $edta, 'alldbs' => $adbs, 'allplasma' => $aplas, 'alledta' => $aedta,
-					'maleteststart_month' => $male, 'femaletest' => $female,
+					'maletest' => $male, 'femaletest' => $female,
 					'nogendertest' => $nogender, 'Undetected' => $ldl, 'less1000' => $less1k,
 					'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
 					'sitessending' => $sites, 'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'],
