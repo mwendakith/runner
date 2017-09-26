@@ -808,10 +808,6 @@ class EidNation extends Model
 		->where('samples.repeatt', 0)
 		->get(); 
 
-		if($data->isEmpty()){
-			continue;
-		}		
-
 		foreach ($data as $key => $value) {
 			$holidays = $b->getTotalHolidaysinMonth($value->month);
 
