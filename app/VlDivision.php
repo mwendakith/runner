@@ -408,9 +408,6 @@ class VlDivision extends Model
 		->select($division, DB::raw($sql))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->whereYear('viralsamples.datecollected', '>', 1980)
-		->whereYear('viralsamples.datereceived', '>', 1980)
-		->whereYear('viralsamples.datetested', '>', 1980)
-		->whereYear('viralsamples.datedispatched', '>', 1980)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],

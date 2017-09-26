@@ -759,9 +759,6 @@ class EidNation extends Model
 		->table('samples')
 		->select(DB::raw($sql))
 		->whereYear('samples.datecollected', '>', 1980)
-		->whereYear('samples.datereceived', '>', 1980)
-		->whereYear('samples.datetested', '>', 1980)
-		->whereYear('samples.datedispatched', '>', 1980)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],

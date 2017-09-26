@@ -939,9 +939,6 @@ class EidDivision extends Model
 		->select($division, DB::raw($sql))
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->whereYear('samples.datecollected', '>', 1980)
-		->whereYear('samples.datereceived', '>', 1980)
-		->whereYear('samples.datetested', '>', 1980)
-		->whereYear('samples.datedispatched', '>', 1980)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],

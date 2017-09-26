@@ -407,9 +407,6 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw($sql))
 		->whereYear('viralsamples.datecollected', '>', 1980)
-		->whereYear('viralsamples.datereceived', '>', 1980)
-		->whereYear('viralsamples.datetested', '>', 1980)
-		->whereYear('viralsamples.datedispatched', '>', 1980)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],
