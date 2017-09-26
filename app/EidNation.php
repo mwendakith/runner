@@ -790,7 +790,7 @@ class EidNation extends Model
 
 		$curyear = date("Y")+1;
 
-		for ($year=2007; $year < $curyear; $year++) { 
+		for ($year=2016; $year < $curyear; $year++) { 
 
 			echo "\n Begin eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 
