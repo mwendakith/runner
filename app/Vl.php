@@ -66,7 +66,7 @@ class Vl extends Model
 		$female_a = $n->getalltestedviraloadbygender($year, $start_month, 2);
 		$nogender_a = $n->getalltestedviraloadbygender($year, $start_month, 3);
 
-		$tat = $n->get_tat($year);
+		$tat = $n->get_tat($year, $start_month);
 
 		// Loop through the months and insert data into the national summary
 		for ($i=$start_month; $i < 12; $i++) { 
