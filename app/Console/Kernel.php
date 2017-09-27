@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
         Commands\VlPartner::class,
         Commands\VlLablog::class,
         Commands\VlSamples::class,
+        Commands\VlSuppression::class,
 
         Commands\EidPatients::class,
         Commands\VlPatients::class,

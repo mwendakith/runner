@@ -864,6 +864,42 @@ class Vl extends Model
     	echo "\n Completed entry into vl patients at " . date('d/m/Y h:i:s a', time()); 
     }
 
+    public function update_suppression(){
+    	echo "\n Begin entry into vl suppression at " . date('d/m/Y h:i:s a', time()); 
+
+    	// Instantiate new object
+    	$n = new VlDivision;
+
+    	$data = $n->suppression();
+
+    	$today=date('Y-m-d');
+
+    	$divs = $data = DB::connection('vl')
+		->table('facilitys')->select('ID')->get();
+
+		foreach ($divs as $key => $value) {
+
+			$suppressed = 
+			$this->checknull($data->where('facility', $value->ID)->where('rcategory', 1)) + 
+			$this->checknull($data->where('facility', $value->ID)->where('rcategory', 2));
+
+			$nonsuppressed = 
+			$this->checknull($data->where('facility', $value->ID)->where('rcategory', 3)) + 
+			$this->checknull($data->where('facility', $value->ID)->where('rcategory', 4));
+
+			$suppression = ($suppressed * 100) / ($suppressed + $nonsuppressed);
+
+			$data_array = array('facility' => $value->ID, 'dateupdated' => $today,
+			'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
+			// $data_array = array('dateupdated' => $today,'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
+
+			DB::table('vl_site_suppression')->insert($data_array);
+			// DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
+		}
+
+    	echo "\n Completed entry into vl suppression at " . date('d/m/Y h:i:s a', time()); 
+    }
+
     public function update_tat($year=null){
     	if($year == null){
     		$year = Date('Y');

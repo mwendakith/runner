@@ -911,7 +911,7 @@ class VlDivision extends Model
 		return $data;
     }
 
-    public function suppressions($year=null){
+    public function supp($year=null){
 
     	$sql = 'SELECT v.facility, v.rcategory, month(datetested) AS month ';
     	$sql .= 'FROM viralsamples v ';
@@ -923,9 +923,10 @@ class VlDivision extends Model
     	$sql .= 'GROUP BY patient, facility) gv ';
     	$sql .= 'ON v.ID=gv.ID AND gv.maxdate=v.datetested ';
 
-		$newsql .= 'SELECT tb.facility, tb.month, tb.rcategory, count(*) as tests ';
+		$newsql = 'SELECT tb.facility, tb.month, tb.rcategory, count(*) as tests ';
 		$newsql .= 'FROM ';
-		$newsql .= '(SELECT v.facility, v.rcategory, month(datetested) AS month '; $newsql .= 'FROM viralsamples v ';
+		$newsql .= '(SELECT v.facility, v.rcategory, month(datetested) AS month ';
+		$newsql .= 'FROM viralsamples v ';
 		$newsql .= 'INNER JOIN ';
 		$newsql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$newsql .= 'FROM viralsamples ';
@@ -936,9 +937,32 @@ class VlDivision extends Model
 		$newsql .= 'GROUP BY tb.facility, tb.month, tb.rcategory ';
 		$newsql .= 'ORDER BY tb.facility, tb.month, tb.rcategory ';
 
-		$data = DB::connection('vl')->statement($newsql);
+		// $data = DB::connection('vl')->select($newsql);
 
 		// return $data;
+    }
+
+    public function suppression(){
+    	ini_set("memory_limit", "-1");
+
+    	$year = Date('Y') - 2;
+    	$sql = 'SELECT tb.facility, tb.rcategory, count(*) as totals ';
+		$sql .= 'FROM ';
+		$sql .= '(SELECT v.facility, v.rcategory ';
+		$sql .= 'FROM viralsamples v ';
+		$sql .= 'INNER JOIN ';
+		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
+		$sql .= 'FROM viralsamples ';
+		$sql .= 'WHERE year(datetested) > {$year} ';
+		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
+		$sql .= 'GROUP BY patient, facility) gv ';
+		$sql .= 'ON v.ID=gv.ID AND gv.maxdate=v.datetested) tb ';
+		$sql .= 'GROUP BY tb.facility, tb.rcategory ';
+		$sql .= 'ORDER BY tb.facility, tb.rcategory ';
+
+		$data = DB::connection('vl')->select($sql);
+
+		return $data;
     }
 
     public function update_patients()
@@ -999,6 +1023,6 @@ class VlDivision extends Model
 			DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
 			$p++;
 		}
-		echo "\n {$p} patients synched.";
+		echo "\n {$p} vl patients synched.";
 	}
 }

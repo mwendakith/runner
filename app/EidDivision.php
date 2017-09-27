@@ -970,7 +970,7 @@ class EidDivision extends Model
 		->select(DB::raw($sql))
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->join('mothers', 'patients.mother', '=', 'mothers.ID')
+		->leftJoin('mothers', 'patients.mother', '=', 'mothers.ID')
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)
 		->where('samples.synched', 0)
@@ -1012,7 +1012,7 @@ class EidDivision extends Model
 			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
 			$p++;
 		}
-		echo "\n {$p} patients synched.";
+		echo "\n {$p} eid patients synched.";
 	}
 
 	
