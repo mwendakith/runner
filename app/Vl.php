@@ -898,12 +898,12 @@ class Vl extends Model
 				$suppression = ($suppressed * 100) / $tests;
 			}
 
-			$data_array = array('facility' => $value->ID, 'dateupdated' => $today,
-			'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
-			// $data_array = array('dateupdated' => $today,'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
+			// $data_array = array('facility' => $value->ID, 'dateupdated' => $today,
+			// 'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
+			$data_array = array('dateupdated' => $today,'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
 
-			DB::table('vl_site_suppression')->insert($data_array);
-			// DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
+			// DB::table('vl_site_suppression')->insert($data_array);
+			DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
 		}
 
     	echo "\n Completed entry into vl suppression at " . date('d/m/Y h:i:s a', time()); 
