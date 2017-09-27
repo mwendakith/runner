@@ -956,7 +956,7 @@ class VlDivision extends Model
 		$sql .= 'WHERE year(datetested) > ' . $year . ' ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
-		$sql .= 'ON v.facility=gv.ID AND gv.maxdate=v.datetested) tb ';
+		$sql .= 'ON v.facility=gv.facility AND gv.maxdate=v.datetested) tb ';
 		$sql .= 'GROUP BY tb.facility, tb.rcategory ';
 		$sql .= 'ORDER BY tb.facility, tb.rcategory ';
 
