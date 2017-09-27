@@ -959,21 +959,21 @@ class VlDivision extends Model
 		// ORDER BY facility, rcategory;
 
     	$year = ((int) Date('Y')) - 2;
-    	$sql = 'SELECT facility, rcategory, count(*) as totals ';
+    	$sql = 'SELECT facility, rcategory, count(*) as tests ';
 		$sql .= 'FROM ';
-		$sql .= '(SELECT v.facility, v.rcategory ';
+		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
 		$sql .= 'FROM viralsamples v ';
 		$sql .= 'INNER JOIN ';
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
-		$sql .= 'WHERE year(datetested)=2017 ';
+		$sql .= 'WHERE year(datetested) > ? ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID AND gv.maxdate=v.datetested) tb ';
 		$sql .= 'GROUP BY facility, rcategory ';
-		$sql .= 'ORDER BY facility, rcategory; ';
+		$sql .= 'ORDER BY facility, rcategory ';
 
-		$data = DB::connection('vl')->select($sql);
+		$data = DB::connection('vl')->select($sql, [$year]);
 
 		return $data;
     }

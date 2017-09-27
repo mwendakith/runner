@@ -874,14 +874,14 @@ class Vl extends Model
 
     	$today=date('Y-m-d');
 
-    	$divs = $data = DB::connection('vl')
-		->table('facilitys')->select('ID')->get();
+  //   	$divs = $data = DB::connection('vl')
+		// ->table('facilitys')->select('ID')->get();
 
-		// foreach ($data as $key => $value) {
-		// 	echo "\n Facility - {$value->facility} Result - {$value->rcategory} Total - {$value->totals} ";
-		// }
+		foreach ($data as $key => $value) {
+			echo "\n Facility - {$value->facility} Result - {$value->rcategory} Total - {$value->totals} ";
+		}
 
-		print_r($data->toArray());
+		// print_r($data->toArray());
 
 		// foreach ($divs as $key => $value) {
 
