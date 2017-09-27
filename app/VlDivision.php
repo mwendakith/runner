@@ -946,7 +946,7 @@ class VlDivision extends Model
     	ini_set("memory_limit", "-1");
 
     	$year = ((int) Date('Y')) - 2;
-    	$sql = 'SELECT tb.facility, tb.rcategory, count(*) as totals ';
+    	$sql = 'SELECT facility, rcategory, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.facility, v.rcategory ';
 		$sql .= 'FROM viralsamples v ';
@@ -956,9 +956,9 @@ class VlDivision extends Model
 		$sql .= 'WHERE year(datetested) > ' . $year . ' ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
-		$sql .= 'ON v.facility=gv.facility AND gv.maxdate=v.datetested) tb ';
-		$sql .= 'GROUP BY tb.facility, tb.rcategory ';
-		$sql .= 'ORDER BY tb.facility, tb.rcategory ';
+		$sql .= 'ON v.ID=gv.ID AND gv.maxdate=v.datetested) tb ';
+		$sql .= 'GROUP BY facility, rcategory ';
+		$sql .= 'ORDER BY facility, rcategory ';
 
 		$data = DB::connection('vl')->select($sql);
 
