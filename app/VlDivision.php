@@ -953,7 +953,7 @@ class VlDivision extends Model
 		$sql .= 'INNER JOIN ';
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
-		$sql .= 'WHERE year(datetested) > 2015 ';
+		$sql .= 'WHERE year(datetested) > ' . $year . ' ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.facility=gv.ID AND gv.maxdate=v.datetested) tb ';
