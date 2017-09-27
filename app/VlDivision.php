@@ -945,7 +945,7 @@ class VlDivision extends Model
     public function suppression(){
     	ini_set("memory_limit", "-1");
 
-    	$year = Date('Y') - 2;
+    	$year = ((int) Date('Y')) - 2;
     	$sql = 'SELECT tb.facility, tb.rcategory, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.facility, v.rcategory ';
