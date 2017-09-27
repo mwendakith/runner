@@ -944,19 +944,19 @@ class VlDivision extends Model
 
     public function suppression(){
     	ini_set("memory_limit", "-1");
-    	SELECT facility, rcategory, count(*) as tests
-		FROM
-		(SELECT v.facility, v.rcategory
-		FROM viralsamples v
-		INNER JOIN
-		(SELECT ID, patient, facility, max(datetested) as maxdate
-		FROM viralsamples
-		WHERE year(datetested)=2017
-		AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 
-		GROUP BY patient, facility) gv
-		ON v.ID=gv.ID AND gv.maxdate=v.datetested) tb
-		GROUP BY facility, rcategory
-		ORDER BY facility, rcategory;
+    	// SELECT facility, rcategory, count(*) as tests
+		// FROM
+		// (SELECT v.facility, v.rcategory
+		// FROM viralsamples v
+		// INNER JOIN
+		// (SELECT ID, patient, facility, max(datetested) as maxdate
+		// FROM viralsamples
+		// WHERE year(datetested)=2017
+		// AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 
+		// GROUP BY patient, facility) gv
+		// ON v.ID=gv.ID AND gv.maxdate=v.datetested) tb
+		// GROUP BY facility, rcategory
+		// ORDER BY facility, rcategory;
 
     	$year = ((int) Date('Y')) - 2;
     	$sql = 'SELECT facility, rcategory, count(*) as totals ';
