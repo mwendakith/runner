@@ -815,7 +815,7 @@ class Vl extends Model
     	$div_array;
     	$array_size = 0;
 
-    	$divs = $data = DB::connection('vl')
+    	$divs = DB::connection('vl')
 		->table('facilitys')->select('ID')->get();
 
 		foreach ($divs as $key => $value) {
@@ -877,7 +877,7 @@ class Vl extends Model
     	$divs = DB::connection('vl')
 		->table('facilitys')->select('ID')->get();
 
-		// print_r($data->toArray());
+		$data = collect($data);
 
 		foreach ($divs as $key => $value) {
 
