@@ -880,14 +880,23 @@ class Vl extends Model
 		foreach ($divs as $key => $value) {
 
 			$suppressed = 
-			$this->checknull($data->where('facility', $value->ID)->where('rcategory', 1)) + 
-			$this->checknull($data->where('facility', $value->ID)->where('rcategory', 2));
+			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 1)) + 
+			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 2));
 
 			$nonsuppressed = 
-			$this->checknull($data->where('facility', $value->ID)->where('rcategory', 3)) + 
-			$this->checknull($data->where('facility', $value->ID)->where('rcategory', 4));
+			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 3)) + 
+			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 4));
 
-			$suppression = ($suppressed * 100) / ($suppressed + $nonsuppressed);
+			$suppression;
+
+			$tests =  ($suppressed + $nonsuppressed);
+
+			if($tests == 0){
+				$suppression = 0;
+			}
+			else{
+				$suppression = ($suppressed * 100) / $tests;
+			}
 
 			$data_array = array('facility' => $value->ID, 'dateupdated' => $today,
 			'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
