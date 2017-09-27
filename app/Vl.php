@@ -874,44 +874,40 @@ class Vl extends Model
 
     	$today=date('Y-m-d');
 
-  //   	$divs = $data = DB::connection('vl')
-		// ->table('facilitys')->select('ID')->get();
-
-		foreach ($data as $key => $value) {
-			echo "\n Facility - {$value->facility} Result - {$value->rcategory} Total - {$value->totals} ";
-		}
+    	$divs = DB::connection('vl')
+		->table('facilitys')->select('ID')->get();
 
 		// print_r($data->toArray());
 
-		// foreach ($divs as $key => $value) {
+		foreach ($divs as $key => $value) {
 
-		// 	$suppressed = 
-		// 	(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 1)) + 
-		// 	(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 2));
+			$suppressed = 
+			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 1)) + 
+			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 2));
 
-		// 	$nonsuppressed = 
-		// 	(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 3)) + 
-		// 	(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 4));
+			$nonsuppressed = 
+			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 3)) + 
+			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 4));
 
-		// 	$suppression;
+			$suppression;
 
-		// 	$tests =  ($suppressed + $nonsuppressed);
+			$tests =  ($suppressed + $nonsuppressed);
 
-		// 	if($tests == 0){
-		// 		$suppression = 0;
-		// 	}
-		// 	else{
-		// 		$suppression = ($suppressed * 100) / $tests;
-		// 	}
+			if($tests == 0){
+				$suppression = 0;
+			}
+			else{
+				$suppression = ($suppressed * 100) / $tests;
+			}
 
-		// 	// $data_array = array('facility' => $value->ID, 'dateupdated' => $today,
-		// 	// 'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
-		// 	$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
-		// 		'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
+			// $data_array = array('facility' => $value->ID, 'dateupdated' => $today,
+			// 'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
+			$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
+				'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
 
-		// 	// DB::table('vl_site_suppression')->insert($data_array);
-		// 	DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
-		// }
+			// DB::table('vl_site_suppression')->insert($data_array);
+			DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
+		}
 
     	echo "\n Completed entry into vl suppression at " . date('d/m/Y h:i:s a', time()); 
     }
