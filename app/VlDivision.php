@@ -959,7 +959,7 @@ class VlDivision extends Model
 		// ORDER BY facility, rcategory;
 
     	$year = ((int) Date('Y')) - 2;
-    	$sql = 'SELECT facility, rcategory, count(*) as tests ';
+    	$sql = 'SELECT facility, rcategory, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
 		$sql .= 'FROM viralsamples v ';
