@@ -20,7 +20,7 @@ class CreateVlSiteSuppression extends Migration
             $table->integer('facility')->unsigned();
             $table->integer('suppressed')->unsigned()->default(0)->nullable();
             $table->integer('nonsuppressed')->unsigned()->default(0)->nullable();
-            $table->double('suppression', 5, 4)->unsigned()->default(0)->nullable();
+            $table->double('suppression', 7, 4)->unsigned()->default(0)->nullable();
         });
     }
 

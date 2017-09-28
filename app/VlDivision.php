@@ -963,13 +963,13 @@ class VlDivision extends Model
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
 		$sql .= 'FROM viralsamples v ';
-		$sql .= 'INNER JOIN ';
+		$sql .= 'RIGHT JOIN ';
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
 		$sql .= 'WHERE year(datetested) > ? ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
-		$sql .= 'ON v.ID=gv.ID AND gv.maxdate=v.datetested) tb ';
+		$sql .= 'ON v.ID=gv.ID) tb ';
 		$sql .= 'GROUP BY facility, rcategory ';
 		$sql .= 'ORDER BY facility, rcategory ';
 
