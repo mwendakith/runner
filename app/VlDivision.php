@@ -958,7 +958,8 @@ class VlDivision extends Model
 		// GROUP BY facility, rcategory
 		// ORDER BY facility, rcategory;
 
-    	$year = ((int) Date('Y')) - 2;
+    	// $year = ((int) Date('Y')) - 2;
+    	$year = ((int) Date('Y'));
     	$sql = 'SELECT facility, rcategory, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
@@ -966,7 +967,7 @@ class VlDivision extends Model
 		$sql .= 'RIGHT JOIN ';
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
-		$sql .= 'WHERE year(datetested) > ? ';
+		$sql .= 'WHERE year(datetested) = ? ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
