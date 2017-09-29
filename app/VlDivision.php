@@ -958,10 +958,11 @@ class VlDivision extends Model
 		// GROUP BY facility, rcategory
 		// ORDER BY facility, rcategory;
 
-    	// $year = ((int) Date('Y')) - 2;
-
     	$year = ((int) Date('Y'));
-    	$year2 = ((int) Date('Y')) - 1;
+    	$prev_year = ((int) Date('Y')) - 1;
+    	$month = ((int) Date('m'));
+    	$prev_month = ((int) Date('m')) - 1;
+
     	$sql = 'SELECT facility, rcategory, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
@@ -969,14 +970,15 @@ class VlDivision extends Model
 		$sql .= 'RIGHT JOIN ';
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
-		$sql .= 'WHERE ( (year(datetested) = 2016 and month(datetested) > 9) || (year(datetested) = 2017) ) ';
+		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
+		$sql .= 'AND justification != 10 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
 		$sql .= 'GROUP BY facility, rcategory ';
 		$sql .= 'ORDER BY facility, rcategory ';
 
-		$data = DB::connection('vl')->select($sql);
+		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
 
 		return $data;
     }
