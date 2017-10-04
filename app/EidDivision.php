@@ -481,7 +481,7 @@ class EidDivision extends Model
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 1)
+		->whereBetween('samples.pcrtype', [1, 2])
 		->where($col, $estatus)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)

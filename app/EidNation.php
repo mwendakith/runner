@@ -401,7 +401,7 @@ class EidNation extends Model
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 1)
+		->whereBetween('samples.pcrtype', [1, 2])
 		->where($col, $estatus)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
