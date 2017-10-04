@@ -248,6 +248,13 @@ class Vl extends Model
 					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 2);
 					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 3);
 
+					if($type == 1){
+						$males_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 1, true);
+						$females_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 2, true);
+						$nogenders_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 3, true);
+
+					}
+
 				}
 
 				if ($type != 5) {
@@ -322,6 +329,15 @@ class Vl extends Model
 						$nogender = $this->checknull($nogender_a->where('month', $month));
 
 						$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
+
+						if($type == 1){
+							$males = $this->checknull($males_a->where('month', $month));
+							$females = $this->checknull($females_a->where('month', $month));
+							$nogenders = $this->checknull($nogenders_a->where('month', $month));
+
+							$gender_array2 = array('malenonsuppressed' => $males, 'femalenonsuppressed' => $females, 'nogendernonsuppressed' => $nogenders);
+							$gender_array = array_merge($gender_array, $gender_array2);
+						}
 
 						$data_array = array_merge($gender_array, $data_array);
 					}

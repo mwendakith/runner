@@ -781,7 +781,7 @@ class VlNation extends Model
 		// $sql = "select count(DISTINCT(viralsamples.ID))  as numsamples from viralsamples where MONTH(viralsamples.datetested)='$month'  AND  YEAR(viralsamples.datetested)='$year' AND viralsamples.repeatt=0 and viralsamples.Flag=1 AND viralsamples.sampletype='$sampletype' AND justification='$justification'";
     }
 
-    public function getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $param, $gender){
+    public function getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $param, $gender, $nonsuppressed=false){
 
     	$b = new BaseModel;
 		$p = $b->get_vlparams($type, $param);
@@ -802,6 +802,9 @@ class VlNation extends Model
 			if($type == 4){
 				return $query->whereBetween('viralsamples.rcategory', [1, 4]);
 			}					
+		})
+		->when($nonsuppressed, function($query) use ($nonsuppressed){
+			return $query->whereBetween('viralsamples.rcategory', [3, 4]);
 		})
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
