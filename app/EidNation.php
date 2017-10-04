@@ -314,7 +314,7 @@ class EidNation extends Model
 		->select(DB::raw("COUNT(patients.ID) as totals, month(datetested) as month"))
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->whereBetween('patients.age', $age)
-		->when($pos, function($query) use ($pos){
+		->when(true, function($query) use ($pos){
 			if($pos){
 				return $query->where('samples.result', 2);
 			}

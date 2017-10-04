@@ -966,7 +966,6 @@ class VlNation extends Model
 				['datetested', '<=', 'datedispatched']
 			])
 			->whereYear('datetested', $year)
-		->whereMonth('datetested', '>', $start_month)
 			->whereMonth('datetested', $month)
 			->where('viralsamples.Flag', 1)
 			->where('viralsamples.repeatt', 0)

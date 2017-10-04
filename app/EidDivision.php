@@ -382,7 +382,7 @@ class EidDivision extends Model
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->whereBetween('patients.age', $age)
-		->when($pos, function($query) use ($pos){
+		->when(true, function($query) use ($pos){
 			if($pos){
 				return $query->where('samples.result', 2);
 			}
