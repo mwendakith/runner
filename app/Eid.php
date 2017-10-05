@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\EidNation;
 use App\EidDivision;
+use App\EidPoc;
 use DB;
 
 class Eid extends Model
@@ -585,6 +586,7 @@ class Eid extends Model
 
     	// Instantiate new object
     	$n = new EidDivision;
+    	$poc = new EidPoc;
 
 
     	$today=date("Y-m-d");
@@ -603,7 +605,8 @@ class Eid extends Model
 		$division = "samples.labtestedin";
 		$column = "labtestedin";
 
-		$noofbatches= $n->GettotalbatchesPerlab($year, $division);
+		// Normal Labs data
+		$noofbatches = $n->GettotalbatchesPerlab($year, $division);
 
 		$received_a = $n->OverallReceivedSamples($year, $division);
 		$testedsamples = $n->OverallTestedSamples($year, $division);
@@ -622,6 +625,29 @@ class Eid extends Model
 		$facilityssupported = $n->GettotalEIDsitesbytimeperiod($year, $division);
 
 		$tat = $n->get_tat($year, $division);
+
+		// POC data
+		$noofbatches2 = $poc->GettotalbatchesPerlab($year);
+
+		$received_a2 = $poc->OverallReceivedSamples($year);
+		$testedsamples2 = $poc->OverallTestedSamples($year);
+		$alltestedsamples2 = $poc->CumulativeTestedSamples($year);
+		$EQAtestedsamples2 = $poc->OverallEQATestedSamples($year);
+		$posrepeats_a2 = $poc->OveralldnasecondTestedSamples($year);
+
+		$confirmdna_a2 = $poc->OverallPosRepeatsTestedSamples($year);
+		$rejectedsamples2 = $poc->Getnationalrejectedsamples($year);
+
+		$pos_a2 = $poc->OverallTestedSamplesOutcomes($year, 2);
+		$neg_a2 = $poc->OverallTestedSamplesOutcomes($year, 1);
+		$fail_a2 = $poc->OverallTestedSamplesOutcomes($year, 5);
+		$redraws_a2 = $poc->OverallTestedSamplesOutcomes($year, 3);
+		
+		$facilityssupported2 = $poc->GettotalEIDsitesbytimeperiod($year);
+
+		$tat2 = $poc->get_tat($year);
+
+
 		// $tat = $n->GetNatTATs($year, $div_array, $division, $column);
 		// $tat = collect($tat);
 
@@ -673,6 +699,42 @@ class Eid extends Model
 				// $sql = "UPDATE lab_summary set received='$received',alltests='$alltestedsamples', tests='$testedsamples' ,confirmdna='$confirmdna',repeatspos='$posrepeats',  pos='$positives', neg='$negatives', redraw='$failed',eqatests='$EQAtestedsamples',batches='$noofbatches', rejected='$rejectedsamples', sitessending='$facilityssupported', tat1='$t1',tat2='$t2',tat3='$t3',tat4='$t4',sorted=15  WHERE lab='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
 
 			}
+
+			// Update POC sites data
+			$received = $this->checknull($received_a2->where('month', $month));
+			$alltests = $this->checknull($alltestedsamples2->where('month', $month));
+			$tests = $this->checknull($testedsamples2->where('month', $month));
+			$confirmdna = $this->checknull($confirmdna_a2->where('month', $month));
+			$posrepeats = $this->checknull($posrepeats_a2->where('month', $month));
+			
+			$eqatests = $this->checknull($EQAtestedsamples2->where('month', $month));
+
+			$pos = $this->checknull($pos_a2->where('month', $month));
+			$neg = $this->checknull($neg_a2->where('month', $month));
+			$fail = $this->checknull($fail_a2->where('month', $month));
+			$redraws = $this->checknull($redraws_a2->where('month', $month));
+			$failed = $fail+$redraws;
+
+			$batches = $this->checknull($noofbatches2->where('month', $month));
+
+			$rej = $this->checknull($rejectedsamples2->where('month', $month));
+
+			$sitesending = $this->checknull($facilityssupported2->where('month', $month));
+
+			$tt = $this->check_tat($tat2->where('month', $month));
+			// $tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
+
+			$data_array = array(
+				'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
+				'confirmdna' => $confirmdna, 'eqatests' => $eqatests, 
+				'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
+				'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
+				'sitessending' => $sitesending,
+				'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
+				'tat4' => $tt['tat4'], 'dateupdated' => $today
+			);
+
+			DB::table("lab_summary")->where('year', $year)->where('month', $month)->where("lab", 11)->update($data_array);
 
 		}
 		echo "\n Completed eid lab summary update at " . date('d/m/Y h:i:s a', time());
