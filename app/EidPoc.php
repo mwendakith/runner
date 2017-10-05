@@ -16,7 +16,7 @@ class EidPoc extends Model
 
 		$data = DB::connection('eid')
 		->table('samples')
-		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->where('samples.result', $result_type)
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
@@ -42,7 +42,7 @@ class EidPoc extends Model
     public function GettotalbatchesPerlab($year, $monthly=true){
     	$data = DB::connection('eid')
 		->table('samples')
-		->select($division, DB::raw("COUNT(samples.batchno) as totals, month(datetested) as month"))
+		->select(DB::raw("COUNT(samples.batchno) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
 		->whereRaw("(samples.parentid=0  OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
@@ -66,7 +66,7 @@ class EidPoc extends Model
 
 		$data = DB::connection('eid')
 		->table('samples')
-		->select($division, DB::raw("COUNT(DISTINCT samples.facility) as totals, month(datereceived) as month"))
+		->select(DB::raw("COUNT(DISTINCT samples.facility) as totals, month(datereceived) as month"))
 		->whereYear('datereceived', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
@@ -92,7 +92,7 @@ class EidPoc extends Model
 
 		$data = DB::connection('eid')
 		->table('samples')
-		->select($division, DB::raw($sql))
+		->select(DB::raw($sql))
 		->whereYear('samples.datecollected', '>', 1980)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
