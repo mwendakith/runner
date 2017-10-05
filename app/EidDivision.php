@@ -378,7 +378,7 @@ class EidDivision extends Model
 
 		$data = DB::connection('eid')
 		->table('samples')
-		->select($division, DB::raw("COUNT(patients.ID) as totals, month(datetested) as month"))
+		->select($division, DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->whereBetween('patients.age', $age)
