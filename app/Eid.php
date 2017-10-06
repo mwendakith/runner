@@ -262,129 +262,7 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid national age breakdown at " . date('d/m/Y h:i:s a', time());
 
-
-		echo "\n Begin eid nation infant regimen update at " . date('d/m/Y h:i:s a', time());
-
-		// Start of infant regimen
-		$iregimen = $data = DB::connection('eid')
-		->table('prophylaxis')->select('ID')->where('ptype', 2)->get();
-
-		// Loop through infant regimen
-		foreach ($iregimen as $key => $value) {
-			$ipos_a = $n->Getinfantprophpositivitycount($year, $value->ID, 2);
-			$ineg_a = $n->Getinfantprophpositivitycount($year, $value->ID, 1);
-			$ifail_a = $n->Getinfantprophpositivitycount($year, $value->ID, 3);
-			$ird_a = $n->Getinfantprophpositivitycount($year, $value->ID, 5);
-
-			// Loop through each month and update iprophylaxis
-			for ($i=0; $i < $count; $i++) { 
-				$month = $i + 1;
-
-				$ipos = $this->checknull($ipos_a->where('month', $month));
-				$ineg = $this->checknull($ineg_a->where('month', $month));
-				$ifail = $this->checknull($ifail_a->where('month', $month));
-				$ird = $this->checknull($ird_a->where('month', $month));
-
-				$iredraw = $ifail + $ird;
-				$itests = $ipos + $ineg +  $iredraw;
-
-				$data_array = array(
-					'tests' => $itests, 'pos' => $ipos, 'neg' => $ineg, 'redraw' => $iredraw,
-					'dateupdated' => $today
-				);
-
-				DB::table('national_iprophylaxis')->where('year', $year)->where('month', $month)->where('prophylaxis', $value->ID)->update($data_array);
-
-				// $sql = "UPDATE national_iprophylaxis set tests='$itests', pos='$ipos', neg='$ineg', redraw='$iredraw',sorted=9 WHERE prophylaxis='$iaArray[$irow]' AND month='$month' AND year='$year'";
-
-			}
-			
-		}
-		// End of infant regimen
-
-		echo "\n Completed entry into eid national infant regimen at " . date('d/m/Y h:i:s a', time());
-
-		echo "\n Begin eid nation mother regimen update at " . date('d/m/Y h:i:s a', time());
-
-		// Start of mother regimen
-		$mregimen = $data = DB::connection('eid')
-		->table('prophylaxis')->select('ID')->where('ptype', 1)->get();
-
-		// Loop through mother regimen
-		foreach ($mregimen as $key => $value) {
-			$mpos_a = $n->Getinterventionspositivitycount($year, $value->ID, 2);
-			$mneg_a = $n->Getinterventionspositivitycount($year, $value->ID, 1);
-			$mfail_a = $n->Getinterventionspositivitycount($year, $value->ID, 3);
-			$mrd_a = $n->Getinterventionspositivitycount($year, $value->ID, 5);
-
-			// Loop through each month and update mprophylaxis
-			for ($i=0; $i < $count; $i++) { 
-				$month = $i + 1;
-
-				$mpos = $this->checknull($mpos_a->where('month', $month));
-				$mneg = $this->checknull($mneg_a->where('month', $month));
-				$mfail = $this->checknull($mfail_a->where('month', $month));
-				$mrd = $this->checknull($mrd_a->where('month', $month));
-
-				$mredraw=$mfail + $mrd;
-				$tests=$mpos + $mneg +  $mredraw;
-
-				$data_array = array(
-					'tests' => $itests, 'pos' => $mpos, 'neg' => $mneg, 'redraw' => $mredraw,
-					'dateupdated' => $today
-				);
-
-				DB::table('national_mprophylaxis')->where('year', $year)->where('month', $month)->where('prophylaxis', $value->ID)->update($data_array);
-
-				// $sql = "UPDATE national_mprophylaxis set tests='$tests', pos='$mpos', neg='$mneg', redraw='$mredraw',sorted=9 WHERE prophylaxis='$maArray[$mrow]' AND  month='$month' AND year='$year'  ";
-
-			}
-			
-		}
-		// End of mother regimen
-
-		echo "\n Completed entry into eid national mother regimen " . date('d/m/Y h:i:s a', time());
-
-		echo "\n Begin entry into eid national entrypoint " . date('d/m/Y h:i:s a', time());
-
-		// Start of entrypoints
-		$entrypoints = $data = DB::connection('eid')
-		->table('entry_points')->select('ID')->get();
-
-		// Loop through entrypoints
-		foreach ($entrypoints as $key => $value) {
-			$epos_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 2);
-			$eneg_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 1);
-			$efail_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 3);
-			$erd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5);
-
-			// Loop through each month and update entrypoints
-			for ($i=0; $i < $count; $i++) { 
-				$month = $i + 1;
-
-				$epos = $this->checknull($epos_a->where('month', $month));
-				$eneg = $this->checknull($eneg_a->where('month', $month));
-				$efail = $this->checknull($efail_a->where('month', $month));
-				$erd = $this->checknull($erd_a->where('month', $month));
-
-				$eredraw = $efail + $erd;
-				$etests = $epos + $eneg +  $eredraw;
-
-				$data_array = array(
-					'tests' => $etests, 'pos' => $epos, 'neg' => $eneg, 'redraw' => $eredraw,
-					'dateupdated' => $today
-				);
-
-				DB::table('national_entrypoint')->where('year', $year)->where('month', $month)->where('entrypoint', $value->ID)->update($data_array);
-
-				// $sql = "UPDATE national_entrypoint set tests='$etests', pos='$epos', neg='$eneg', redraw='$eredraw',sorted=9 WHERE entrypoint='$aArray[$row]' AND month='$month' AND year='$year'  ";
-
-			}
-			
-		}
-		// End of entrypoints
-
-		echo "\n Completed entry into eid national entrypoints at " . date('d/m/Y h:i:s a', time());
+		echo $this->continue_nation($year, $today);
 
 		echo "\n Begin entry into eid national rejections " . date('d/m/Y h:i:s a', time());
 
@@ -420,6 +298,78 @@ class Eid extends Model
 		echo "\n Completed entry into eid national rejections at " . date('d/m/Y h:i:s a', time());
 
 		// End of national function
+    }
+
+    public function continue_nation($year, $today){
+    	$n = new EidNation;
+    	for ($type=1; $type < 4; $type++) { 
+
+			$table = $this->get_table(0, $type);
+
+			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+			
+			// Get ids of the necessary table
+			$divs = $data = DB::connection('eid')
+			->table($table[1])->select('ID')
+			->when($type, function($query) use ($type){
+				if($type == 1){
+					return $query->where('ptype', 2);
+				}
+				if($type == 2){
+					return $query->where('ptype', 1);
+				}								
+			})
+			->get();
+
+			foreach ($divs as $key => $value) {
+
+				if($type == 1){
+					$pos_a = $n->Getinfantprophpositivitycount($year, $value->ID, 2);
+					$neg_a = $n->Getinfantprophpositivitycount($year, $value->ID, 1);
+					$fail_a = $n->Getinfantprophpositivitycount($year, $value->ID, 3);
+					$rd_a = $n->Getinfantprophpositivitycount($year, $value->ID, 5);
+				}
+
+				if($type == 2){
+					$pos_a = $n->Getinterventionspositivitycount($year, $value->ID, 2);
+					$neg_a = $n->Getinterventionspositivitycount($year, $value->ID, 1);
+					$fail_a = $n->Getinterventionspositivitycount($year, $value->ID, 3);
+					$rd_a = $n->Getinterventionspositivitycount($year, $value->ID, 5);
+				}
+
+				if($type == 3){
+					$pos_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 2);
+					$neg_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 1);
+					$fail_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 3);
+					$rd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5);
+				}
+
+				// Loop through each month and update entrypoints
+				for ($i=0; $i < 12; $i++) { 
+					$month = $i + 1;
+					if($year == Date('Y') && $month > Date('m')){ break; }
+
+					$pos = $this->checknull($pos_a->where('month', $month));
+					$neg = $this->checknull($neg_a->where('month', $month));
+					$fail = $this->checknull($fail_a->where('month', $month));
+					$rd = $this->checknull($rd_a->where('month', $month));
+
+					$redraw = $fail + $rd;
+					$tests = $pos + $neg +  $redraw;
+
+					$data_array = array(
+						'tests' => $tests, 'pos' => $pos, 'neg' => $neg, 'redraw' => $redraw,
+						'dateupdated' => $today
+					);
+
+					DB::table($table[0])->where('year', $year)->where('month', $month)
+					->where($table[2], $value->ID)->update($data_array);
+				}
+
+			}
+			// End of looping through ids of each table e.g. agecategory
+			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+		}
     }
 
     public function update_nation_yearly($year = null){
@@ -1072,163 +1022,7 @@ class Eid extends Model
 
 			echo "\n Completed entry into eid {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
 
-			echo "\n Begin entry into eid {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
-
-
-			// Start of infant regimen
-			$iregimen = $data = DB::connection('eid')
-			->table('prophylaxis')->select('ID')->where('ptype', 2)->get();
-
-			// Loop through infant regimen
-			foreach ($iregimen as $key => $value) {
-				$ipos_a = $n->Getinfantprophpositivitycount($year, $value->ID, 2, $division);
-				$ineg_a = $n->Getinfantprophpositivitycount($year, $value->ID, 1, $division);
-				$ifail_a = $n->Getinfantprophpositivitycount($year, $value->ID, 3, $division);
-				$ird_a = $n->Getinfantprophpositivitycount($year, $value->ID, 5, $division);
-
-				// Loop through each month and update iprophylaxis
-				for ($i=0; $i < 12; $i++) { 
-					$month = $i + 1;
-
-					if($year == Date('Y') && $month > Date('m')){ break; }
-
-					// Loop through divisions
-					for ($it=0; $it < $array_size; $it++) {
-
-						$ipos = $this->checknull($ipos_a->where('month', $month)->where($column, $div_array[$it]));
-						$ineg = $this->checknull($ineg_a->where('month', $month)->where($column, $div_array[$it]));
-						$ifail = $this->checknull($ifail_a->where('month', $month)->where($column, $div_array[$it]));
-						$ird = $this->checknull($ird_a->where('month', $month)->where($column, $div_array[$it]));
-
-						$iredraw = $ifail + $ird;
-						$itests = $ipos + $ineg +  $iredraw;
-
-						$data_array = array(
-							'tests' => $itests, 'pos' => $ipos, 'neg' => $ineg, 'redraw' => $iredraw,
-							'dateupdated' => $today
-						);
-
-						if ($type==2) {
-							$column="subcounty";
-						}
-
-						DB::table($ir_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
-
-						if ($type==2) {
-							$column = $column2;
-						}
-					}
-					// End of loop through divisions
-				}
-				// End of loop through months			
-			}
-			// End of infant regimen
-
-			echo "\n Completed entry into eid {$column} infant regimen at " . date('d/m/Y h:i:s a', time());
-
-			echo "\n Begin entry into eid {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
-
-			// Start of mother regimen
-			$mregimen = $data = DB::connection('eid')
-			->table('prophylaxis')->select('ID')->where('ptype', 1)->get();
-
-			// Loop through mother regimen
-			foreach ($mregimen as $key => $value) {
-				$mpos_a = $n->Getinterventionspositivitycount($year, $value->ID, 2, $division);
-				$mneg_a = $n->Getinterventionspositivitycount($year, $value->ID, 1, $division);
-				$mfail_a = $n->Getinterventionspositivitycount($year, $value->ID, 3, $division);
-				$mrd_a = $n->Getinterventionspositivitycount($year, $value->ID, 5, $division);
-
-				// Loop through each month and update mprophylaxis
-				for ($i=0; $i < 12; $i++) { 
-					$month = $i + 1;
-
-					if($year == Date('Y') && $month > Date('m')){ break; }
-
-					for ($it=0; $it < $array_size; $it++) {
-
-						$mpos = $this->checknull($mpos_a->where('month', $month)->where($column, $div_array[$it]));
-						$mneg = $this->checknull($mneg_a->where('month', $month)->where($column, $div_array[$it]));
-						$mfail = $this->checknull($mfail_a->where('month', $month)->where($column, $div_array[$it]));
-						$mrd = $this->checknull($mrd_a->where('month', $month)->where($column, $div_array[$it]));
-
-						$mredraw=$mfail + $mrd;
-						$tests=$mpos + $mneg +  $mredraw;
-
-						$data_array = array(
-							'tests' => $itests, 'pos' => $mpos, 'neg' => $mneg, 'redraw' => $mredraw,
-							'dateupdated' => $today
-						);
-
-						if ($type==2) {
-							$column="subcounty";
-						}
-
-						DB::table($mr_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('prophylaxis', $value->ID)->update($data_array);
-
-						if ($type==2) {
-							$column = $column2;
-						}
-					}
-
-				}
-				
-			}
-			// End of mother regimen
-
-			echo "\n Completed entry into eid {$column} mother regimen at " . date('d/m/Y h:i:s a', time());
-
-			echo "\n Begin entry into eid {$column} entrypoint at " . date('d/m/Y h:i:s a', time());
-
-			// Start of entrypoints
-			$entrypoints = $data = DB::connection('eid')
-			->table('entry_points')->select('ID')->get();
-
-			// Loop through entrypoints
-			foreach ($entrypoints as $key => $value) {
-				$epos_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 2, $division);
-				$eneg_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 1, $division);
-				$efail_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 3, $division);
-				$erd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5, $division);
-
-				// Loop through each month and update entrypoints
-				for ($i=0; $i < 12; $i++) { 
-					$month = $i + 1;
-
-					if($year == Date('Y') && $month > Date('m')){ break; }
-
-					for ($it=0; $it < $array_size; $it++) {
-
-						$epos = $this->checknull($epos_a->where('month', $month)->where($column, $div_array[$it]));
-						$eneg = $this->checknull($eneg_a->where('month', $month)->where($column, $div_array[$it]));
-						$efail = $this->checknull($efail_a->where('month', $month)->where($column, $div_array[$it]));
-						$erd = $this->checknull($erd_a->where('month', $month)->where($column, $div_array[$it]));
-
-						$eredraw = $efail + $erd;
-						$etests = $epos + $eneg +  $eredraw;
-
-						$data_array = array(
-							'tests' => $etests, 'pos' => $epos, 'neg' => $eneg, 'redraw' => $eredraw,
-							'dateupdated' => $today
-						);
-
-						if ($type==2) {
-							$column="subcounty";
-						}
-
-						DB::table($ent_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('entrypoint', $value->ID)->update($data_array);
-
-						if ($type==2) {
-							$column = $column2;
-						}
-					}
-
-				}
-				
-			}
-			// End of entrypoints
-
-			echo "\n Completed entry into eid {$column} entrypoints at " . date('d/m/Y h:i:s a', time());
+			echo $this->continue_division($year, $today, $div_array, $division, $column, $type, $array_size);
 		}
 		// End of functions that do not have a facility equivalent
 
@@ -1276,6 +1070,89 @@ class Eid extends Model
 		echo "\n Completed entry into eid {$column} rejections at " . date('d/m/Y h:i:s a', time());
 
 		// End of division updator
+    }
+
+    public function continue_division($year, $today, &$div_array, $division, $column, $div_type, $array_size){
+    	$n = new EidDivision;
+    	$column2 = $column;
+    	for ($type=1; $type < 4; $type++) { 
+
+			$table = $this->get_table($div_type, $type);
+
+			echo "\n Begin eid " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+			
+			// Get ids of the necessary table
+			$divs = $data = DB::connection('eid')
+			->table($table[1])->select('ID')
+			->when($type, function($query) use ($type){
+				if($type == 1){
+					return $query->where('ptype', 2);
+				}
+				if($type == 2){
+					return $query->where('ptype', 1);
+				}								
+			})
+			->get();
+
+			foreach ($divs as $key => $value) {
+
+				if($type == 1){
+					$pos_a = $n->Getinfantprophpositivitycount($year, $value->ID, 2, $division);
+					$neg_a = $n->Getinfantprophpositivitycount($year, $value->ID, 1, $division);
+					$fail_a = $n->Getinfantprophpositivitycount($year, $value->ID, 3, $division);
+					$rd_a = $n->Getinfantprophpositivitycount($year, $value->ID, 5, $division);
+				}
+
+				if($type == 2){
+					$pos_a = $n->Getinterventionspositivitycount($year, $value->ID, 2, $division);
+					$neg_a = $n->Getinterventionspositivitycount($year, $value->ID, 1, $division);
+					$fail_a = $n->Getinterventionspositivitycount($year, $value->ID, 3, $division);
+					$rd_a = $n->Getinterventionspositivitycount($year, $value->ID, 5, $division);
+				}
+
+				if($type == 3){
+					$pos_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 2, $division);
+					$neg_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 1, $division);
+					$fail_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 3, $division);
+					$rd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5, $division);
+				}
+
+				// Loop through each month and update entrypoints
+				for ($i=0; $i < 12; $i++) { 
+					$month = $i + 1;
+					if($year == Date('Y') && $month > Date('m')){ break; }
+
+					// Loop through divisions i.e. counties, subcounties, partners and sites
+					for ($it=0; $it < $array_size; $it++) { 
+
+						$pos = $this->checknull($pos_a->where('month', $month)->where($column, $div_array[$it]));
+						$neg = $this->checknull($neg_a->where('month', $month)->where($column, $div_array[$it]));
+						$fail = $this->checknull($fail_a->where('month', $month)->where($column, $div_array[$it]));
+						$rd = $this->checknull($rd_a->where('month', $month)->where($column, $div_array[$it]));
+
+						$redraw = $fail + $rd;
+						$tests = $pos + $neg +  $redraw;
+
+						if ($type==2) {
+							$column="subcounty";
+						}
+
+						$data_array = array(
+							'tests' => $tests, 'pos' => $pos, 'neg' => $neg, 'redraw' => $redraw,
+							'dateupdated' => $today
+						);
+
+						DB::table($table[0])->where('year', $year)->where('month', $month)
+						->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+						$column = $column2;
+					}
+					// End of looping through divisions
+				}
+				//End of looping through months
+			}
+			// End of looping through ids of each table e.g. entry_points
+			echo "\n Completed eid " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+		}
     }
 
     // Will be used to enter data for yearly divisions except labs
@@ -1577,7 +1454,94 @@ class Eid extends Model
 
 
 
+    private function get_table($division, $type){
+    	$name;
+    	if ($division == 0) {
+    		switch ($type) {
+    			case 1:
+    				$name = array("national_iprophylaxis", "prophylaxis", "prophylaxis");
+    				break;
+    			case 2:
+    				$name = array("national_mprophylaxis", "prophylaxis", "prophylaxis");
+    				break;
+    			case 3:
+    				$name = array("national_entrypoint", "entry_points", "entrypoint");
+    				break;
+    			default:
+    				break;
+    		}
+    	}
+    	else if ($division == 1) {
+    		switch ($type) {
+    			case 1:
+    				$name = array("county_iprophylaxis", "prophylaxis", "prophylaxis");
+    				break;
+    			case 2:
+    				$name = array("county_mprophylaxis", "prophylaxis", "prophylaxis");
+    				break;
+    			case 3:
+    				$name = array("county_entrypoint", "entry_points", "entrypoint");
+    				break;
+    			default:
+    				break;
+    		}
+    	}
 
+    	else if ($division == 2) {
+    		switch ($type) {
+    			case 1:
+    				$name = array("subcounty_iprophylaxis", "prophylaxis", "prophylaxis");
+    				break;
+    			case 2:
+    				$name = array("subcounty_mprophylaxis", "prophylaxis", "prophylaxis");
+    				break;
+    			case 3:
+    				$name = array("subcounty_entrypoint", "entry_points", "entrypoint");
+    				break;
+    			default:
+    				break;
+    		}
+    	}
+
+    	else if ($division == 3) {
+    		switch ($type) {
+    			case 1:
+    				$name = array("ip_iprophylaxis", "prophylaxis", "prophylaxis");
+    				break;
+    			case 2:
+    				$name = array("ip_mprophylaxis", "prophylaxis", "prophylaxis");
+    				break;
+    			case 3:
+    				$name = array("ip_entrypoint", "entry_points", "entrypoint");
+    				break;
+    			default:
+    				break;
+    		}
+    	}
+
+    	else if ($division == 4) {
+    		switch ($type) {
+    			case 1:
+    				$name = array("vl_site_age", "agecategory", "age");
+    				break;
+    			case 2:
+    				$name = array("vl_site_gender", "gender", "gender");
+    				break;
+    			case 3:
+    				$name = array("vl_site_regimen", "viralprophylaxis", "regimen");
+    				break;
+    			case 4:
+    				$name = array("vl_site_sampletype", "viralsampletypedetails", "sampletype");
+    				break;
+    			case 5:
+    				$name = array("vl_site_justification", "viraljustifications", "justification");
+    				break;
+    			default:
+    				break;
+    		}
+    	}
+    	return $name;
+    }
 
 
 
