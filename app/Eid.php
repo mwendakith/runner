@@ -1518,28 +1518,7 @@ class Eid extends Model
     				break;
     		}
     	}
-
-    	else if ($division == 4) {
-    		switch ($type) {
-    			case 1:
-    				$name = array("vl_site_age", "agecategory", "age");
-    				break;
-    			case 2:
-    				$name = array("vl_site_gender", "gender", "gender");
-    				break;
-    			case 3:
-    				$name = array("vl_site_regimen", "viralprophylaxis", "regimen");
-    				break;
-    			case 4:
-    				$name = array("vl_site_sampletype", "viralsampletypedetails", "sampletype");
-    				break;
-    			case 5:
-    				$name = array("vl_site_justification", "viraljustifications", "justification");
-    				break;
-    			default:
-    				break;
-    		}
-    	}
+    	
     	return $name;
     }
 
