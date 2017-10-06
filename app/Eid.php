@@ -833,12 +833,18 @@ class Eid extends Model
 			// Loop through divisions i.e. counties, subcounties, partners and sites
 			for ($it=0; $it < $array_size; $it++) { 
 				$alltests = $this->checknull($alltests_a->where('month', $month)->where($column, $div_array[$it]));
+				$received = $this->checknull($received_a->where('month', $month)->where($column, $div_array[$it]));
+
+				if($alltests == 0 && $received == 0){
+					continue;
+				}
+
 				$eqatests = $this->checknull($eqatests_a->where('month', $month)->where($column, $div_array[$it]));
 				$tests = $this->checknull($tests_a->where('month', $month)->where($column, $div_array[$it]));
 				$patienttests = $this->checknull($patienttests_a->where('month', $month)->where($column, $div_array[$it]));
 				$patienttestsPOS = $this->checknull($patienttestsPOS_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$received = $this->checknull($received_a->where('month', $month)->where($column, $div_array[$it]));
+				
 				$firstdna = $this->checknull($firstdna_a->where('month', $month)->where($column, $div_array[$it]));
 				$confirmdna = $this->checknull($confirmdna_a->where('month', $month)->where($column, $div_array[$it]));
 				$posrepeats = $this->checknull($posrepeats_a->where('month', $month)->where($column, $div_array[$it]));
@@ -1252,13 +1258,20 @@ class Eid extends Model
 		// Loop through divisions i.e. counties, subcounties, partners and sites
 		for ($it=0; $it < $array_size; $it++) { 
 			$alltests = $this->checknull($alltests_a->where($column, $div_array[$it]));
+			$received = $this->checknull($received_a->where($column, $div_array[$it]));
+
+			if($alltests == 0 && $received == 0){
+				continue;
+			}
+
 			$eqatests = $this->checknull($eqatests_a->where($column, $div_array[$it]));
+
 			$tests = $this->checknull($tests_a->where($column, $div_array[$it]));
 			$patienttests = $this->checknull($patienttests_a->where($column, $div_array[$it]));
 			// $new_count = $this->check_null($patienttests_a->where($column, $div_array[$it]));
 			$patienttestsPOS = $this->checknull($patienttestsPOS_a->where($column, $div_array[$it]));
 
-			$received = $this->checknull($received_a->where($column, $div_array[$it]));
+			
 			$firstdna = $this->checknull($firstdna_a->where($column, $div_array[$it]));
 			$confirmdna = $this->checknull($confirmdna_a->where($column, $div_array[$it]));
 			$posrepeats = $this->checknull($posrepeats_a->where($column, $div_array[$it]));
@@ -1518,7 +1531,7 @@ class Eid extends Model
     				break;
     		}
     	}
-    	
+
     	return $name;
     }
 
