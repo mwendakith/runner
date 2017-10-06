@@ -1133,7 +1133,7 @@ class Eid extends Model
 						$redraw = $fail + $rd;
 						$tests = $pos + $neg +  $redraw;
 
-						if ($type==2) {
+						if ($div_type==2) {
 							$column="subcounty";
 						}
 
