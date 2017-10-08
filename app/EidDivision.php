@@ -47,6 +47,11 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+		})
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -75,6 +80,7 @@ class EidDivision extends Model
 		->where('result', '>', 0)
 		->whereYear('datetested', $year)
 		->whereRaw("(samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))")
+		->where('samples.facility', 7148)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 1)
 		->where('samples.repeatt', 0)
@@ -107,6 +113,11 @@ class EidDivision extends Model
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+		})
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -201,6 +212,11 @@ class EidDivision extends Model
 		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+		})
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -422,6 +438,11 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
 		->whereBetween('patients.age', [0.0001, 24])
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+		})
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
