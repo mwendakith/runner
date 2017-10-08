@@ -223,7 +223,6 @@ class VlNation extends Model
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
-		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->when($routine, function($query) use ($routine){
 			return $query
@@ -262,7 +261,6 @@ class VlNation extends Model
 		->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID')
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
-		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralpatients.gender', $gender)
 		->where('viralsamples.justification', '!=', 2)
@@ -298,7 +296,6 @@ class VlNation extends Model
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
-		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where($age_column, $age)
 		->where('viralsamples.justification', '!=', 2)
@@ -324,10 +321,14 @@ class VlNation extends Model
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
-		->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 		->where('viralsamples.rcategory', $result)
-		->where('viralsamples.justification', '!=', 2)
-		->where('viralsamples.justification', '!=', 10)
+		->when($result, function($query) use ($result){
+			if($result != 5){
+				return $query
+				->where('viralsamples.justification', '!=', 2)
+				->where('viralsamples.justification', '!=', 10);
+			}
+		})
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
@@ -447,7 +448,6 @@ class VlNation extends Model
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
@@ -736,7 +736,6 @@ class VlNation extends Model
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
@@ -792,7 +791,6 @@ class VlNation extends Model
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
@@ -853,7 +851,6 @@ class VlNation extends Model
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10)
 				->whereBetween('viralsamples.rcategory', [1, 4]);
@@ -905,7 +902,6 @@ class VlNation extends Model
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->whereRaw("(viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection'))")
 				->where('viralsamples.justification', '!=', 2)
 				->where('viralsamples.justification', '!=', 10);
 			}				
