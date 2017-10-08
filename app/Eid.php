@@ -932,6 +932,10 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid {$column} summary at " . date('d/m/Y h:i:s a', time());
 
+		if($type == 4){
+			return "";
+		}
+
 		// Enter if not facility
 		if($type != 4){ 
 

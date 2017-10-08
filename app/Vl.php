@@ -567,7 +567,7 @@ class Vl extends Model
 			echo $this->finish_division($start_month, $year, $today, $div_array, $column, $division, $type, $array_size);
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
 		}
-		if($type > 3){
+		if($type == 5){
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);			
 		}
 
