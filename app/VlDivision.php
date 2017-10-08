@@ -22,7 +22,7 @@ class VlDivision extends Model
 		->whereMonth('datereceived', '>', $start_month)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
-		->groupBy('month')
+		->groupBy('month', $division)
 		->get(); 
 
 		return $data;
@@ -38,7 +38,9 @@ class VlDivision extends Model
 		->where('facility', 7148)
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
-		->groupBy('month')
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month', $division)
 		->get(); 
 
 		return $data;
