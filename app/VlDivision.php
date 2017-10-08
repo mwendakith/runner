@@ -27,6 +27,22 @@ class VlDivision extends Model
 
 		return $data;
 	}
+
+	//National rejections
+	public function get_eqa_tests($year, $start_month, $division='view_facilitys.county'){
+
+		$data = DB::connection('vl')
+		->table('viralsamples')
+		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
+		->where('facility', 7148)
+		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
+		->groupBy('month')
+		->get(); 
+
+		return $data;
+	}
 	
 
     public function getalltestedviraloadsamples($year, $start_month, $division='view_facilitys.county'){

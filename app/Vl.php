@@ -439,6 +439,10 @@ class Vl extends Model
 		$female_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 2);
 		$nogender_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 3);
 
+		if($type == 5){
+			$eqa_a = $n->get_eqa_tests($year, $start_month, $division);
+		}
+
 		$tat = $n->get_tat($year, $start_month, $division);
 		// $tat = $n->GetNatTATs($year, $start_month, $div_array, $division, $column);
 		// $tat = collect($tat);
@@ -506,14 +510,7 @@ class Vl extends Model
 				$tt = $this->check_tat($tat->where('month', $month)->where($column, $div_array[$it]));
 				// $tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
 
-				if($type == 5){
-					$column = "lab";
-				}
-
 				
-				if ($type==2) {
-					$column="subcounty";
-				}
 
 				$data_array = array(
 					'received' => $rec, 'alltests' => $tested,
@@ -531,11 +528,25 @@ class Vl extends Model
 					'noage' => $noage
 				);
 
+
+
 				if($type != 5){
 					$age_array = array('baseline' => $baseline,
 					'baselinesustxfail' => $baselinefail);
 
 					$data_array = array_merge($age_array, $data_array);
+				}
+
+				if($type == 5){
+					$eqa = $this->checknull($eqa_a->where('month', $month)->where($column, $div_array[$it]));
+					$data_array = array_merge(['eqa' => $eqa], $data_array);
+
+					$column = "lab";
+				}
+
+				
+				if ($type==2) {
+					$column="subcounty";
 				}
 
 				// echo "\n Column - {$column} ID - {$div_array[$it]}";
