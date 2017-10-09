@@ -46,9 +46,11 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($division){
 			if($division == "samples.labtestedin"){
+				return $query->where('samples.repeatt', 0);
+			}
+			else{
 				return $query->where('samples.facility', '!=', 7148);
 			}
 		})
