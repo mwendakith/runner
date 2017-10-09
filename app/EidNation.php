@@ -171,6 +171,34 @@ class EidNation extends Model
 
 	}
 
+	public function getbypcr($year, $pcr=1, $pos=false, $monthly=true){
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->when(true, function($query) use ($pos){
+			if($pos){
+				return $query->where('samples.result', 2);
+			}
+			else{
+				return $query->whereBetween('samples.result', [1, 2]);
+			}			
+		})
+		->whereYear('datetested', $year)
+		->where('samples.pcrtype', $pcr)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->where('samples.repeatt', 0)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month');
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
 	//national tests first pcr
 	public function OveralldnafirstTestedSamples($year, $monthly=true)
 	{

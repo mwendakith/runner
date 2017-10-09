@@ -267,6 +267,45 @@ class EidDivision extends Model
 
 	}
 
+	public function getbypcr($year, $pcr=1, $pos=false, $division='view_facilitys.county', $monthly=true){
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
+		->when(true, function($query) use ($pos){
+			if($pos){
+				return $query->where('samples.result', 2);
+			}
+			else{
+				return $query->whereBetween('samples.result', [1, 2]);
+			}			
+		})
+		->whereYear('datetested', $year)
+		->where('samples.pcrtype', $pcr)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->where('samples.repeatt', 0)
+		->when($division, function($query) use ($monthly, $division){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
 	//national tests first pcr
 	public function OveralldnafirstTestedSamples($year, $division='view_facilitys.county', $monthly=true)
 	{
