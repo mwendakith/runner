@@ -525,17 +525,17 @@ class Vl extends Model
 					'less2' => $less2, 'less9' => $less9,
 					'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
 					'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
-					'noage' => $noage
+					'noage' => $noage, 'baseline' => $baseline, 'baselinesustxfail' => $baselinefail
 				);
 
 
 
-				if($type != 5){
-					$age_array = array('baseline' => $baseline,
-					'baselinesustxfail' => $baselinefail);
+				// if($type != 5){
+				// 	$age_array = array('baseline' => $baseline,
+				// 	'baselinesustxfail' => $baselinefail);
 
-					$data_array = array_merge($age_array, $data_array);
-				}
+				// 	$data_array = array_merge($age_array, $data_array);
+				// }
 
 				if($type == 5){
 					$eqa = $this->checknull($eqa_a->where('month', $month)->where($column, $div_array[$it]));
