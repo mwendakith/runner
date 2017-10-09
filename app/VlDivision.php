@@ -147,6 +147,8 @@ class VlDivision extends Model
 			}
 		})
 		->whereYear('datereceived', $year)
+		->whereYear('datereceived', $year)
+		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->whereMonth('datereceived', '>', $start_month)
 		->where('viralsamples.receivedstatus', 2)
 		->where('viralsamples.Flag', 1)
@@ -171,6 +173,7 @@ class VlDivision extends Model
 			}
 		})
 		->whereYear('datereceived', $year)
+		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->whereMonth('datereceived', '>', $start_month)
 		->where('viralsamples.facility', '!=', 0)
 		->where('viralsamples.Flag', 1)

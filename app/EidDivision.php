@@ -96,10 +96,8 @@ class EidDivision extends Model
 		})
 		->where('result', '>', 0)
 		->whereYear('datetested', $year)
-		->whereRaw("(samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))")
 		->where('samples.facility', 7148)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 1)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -322,7 +320,7 @@ class EidDivision extends Model
 				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
 			}
 		})
-		->where('samples.result', '>', 0)
+		->whereBetween('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 2)
 		->where('samples.Flag', 1)
@@ -396,7 +394,7 @@ class EidDivision extends Model
 				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
 			}
 		})
-		->where('samples.result', '>', 0)
+		->whereBetween('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 3)
 		->where('samples.Flag', 1)
