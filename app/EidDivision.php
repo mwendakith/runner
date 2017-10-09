@@ -553,7 +553,6 @@ class EidDivision extends Model
 		->where('samples.receivedstatus', 2)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
