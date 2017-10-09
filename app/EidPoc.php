@@ -274,6 +274,62 @@ class EidPoc extends Model
   
 	}
 
+	//national tests confirmatory
+	public function OveralldnasecondTestedSamplesPOS($year, $division='view_facilitys.county', $monthly=true)
+	{
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->where('samples.result', 2)
+		->whereYear('datetested', $year)
+		->where('samples.pcrtype', 2)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->where('samples.repeatt', 0)
+		->where('samples.siteentry', 2)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month');
+			}			
+		})
+		->get(); 
+
+		return $data;
+
+		// $sql=mysql_query("SELECT COUNT(samples.ID) as totals  FROM samples WHERE result =2 AND YEAR(datetested)='$year' AND samples.receivedstatus=3 AND samples.reason_for_repeat='Confirmatory PCR at 9 Mths' AND repeatt=0  AND Flag=1 AND eqa=0") or die(mysql_error());        
+  
+	}
+
+	//national tests confirmatory
+	public function OverallPosRepeatsTestedSamplesPOS($year, $division='view_facilitys.county', $monthly=true)
+	{
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->where('samples.result', 2)
+		->whereYear('datetested', $year)
+		->where('samples.pcrtype', 3)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->where('samples.repeatt', 0)
+		->where('samples.siteentry', 2)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month');
+			}			
+		})
+		->get(); 
+
+		return $data;
+
+		// $sql=mysql_query("SELECT COUNT(samples.ID) as totals  FROM samples WHERE result =2 AND YEAR(datetested)='$year' and receivedstatus=3 and reason_for_repeat !='Confirmatory PCR at 9 Mths'  and reason_for_repeat !='Repeat For Rejection' AND repeatt=0  AND Flag=1 AND eqa=0") or die(mysql_error()); 
+  
+	}
+
 	//national rejected	
 	public function Getnationalrejectedsamples($year, $monthly=true)
 	{

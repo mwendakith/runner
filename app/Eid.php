@@ -567,6 +567,9 @@ class Eid extends Model
 		$confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division);
 		$rejectedsamples = $n->Getnationalrejectedsamples($year, $division);
 
+		$posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division);
+		$confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division);
+
 		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, $division);
 		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, $division);
 		$fail_a = $n->OverallTestedSamplesOutcomes($year, 5, $division);
@@ -617,6 +620,9 @@ class Eid extends Model
 				$confirmdna = $this->checknull($confirmdna_a->where('month', $month)->where($column, $div_array[$it]));
 				$posrepeats = $this->checknull($posrepeats_a->where('month', $month)->where($column, $div_array[$it]));
 				
+				$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where('month', $month)->where($column, $div_array[$it]));
+				$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month)->where($column, $div_array[$it]));
+				
 				$eqatests = $this->checknull($EQAtestedsamples->where('month', $month)->where($column, $div_array[$it]));
 
 				$pos = $this->checknull($pos_a->where('month', $month)->where($column, $div_array[$it]));
@@ -637,6 +643,7 @@ class Eid extends Model
 				$data_array = array(
 					'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
 					'confirmdna' => $confirmdna, 'eqatests' => $eqatests, 
+					'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
 					'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
 					'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
 					'sitessending' => $sitesending,
