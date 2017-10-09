@@ -550,6 +550,7 @@ class EidDivision extends Model
 			}
 		})
 		->whereYear('datereceived', $year)
+		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
 		->where('samples.receivedstatus', 2)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)

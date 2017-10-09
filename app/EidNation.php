@@ -375,6 +375,7 @@ class EidNation extends Model
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
 		->whereYear('datereceived', $year)
 		->where('samples.receivedstatus', 2)
+		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->when($monthly, function($query) use ($monthly){
