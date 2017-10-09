@@ -50,7 +50,7 @@ class EidDivision extends Model
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
 			if($division == "samples.labtestedin"){
-				return $query->where('samples.facility', '!=', 7148);
+				// return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
 				return $query
