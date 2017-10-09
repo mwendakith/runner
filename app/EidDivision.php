@@ -435,11 +435,9 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->where('samples.result', $result_type)
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
-		->whereBetween('patients.age', [0.0001, 24])
 		->when($division, function($query) use ($division){
 			if($division == "samples.labtestedin"){
 				return $query->where('samples.facility', '!=', 7148);
