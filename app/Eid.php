@@ -591,6 +591,10 @@ class Eid extends Model
 		$confirmdna_a2 = $poc->OverallPosRepeatsTestedSamples($year);
 		$rejectedsamples2 = $poc->Getnationalrejectedsamples($year);
 
+		$posrepeatsPOS_a2 = $poc->OveralldnasecondTestedSamplesPOS($year, $division);
+		$confirmdnaPOS_a2 = $poc->OverallPosRepeatsTestedSamplesPOS($year, $division);
+
+
 		$pos_a2 = $poc->OverallTestedSamplesOutcomes($year, 2);
 		$neg_a2 = $poc->OverallTestedSamplesOutcomes($year, 1);
 		$fail_a2 = $poc->OverallTestedSamplesOutcomes($year, 5);
@@ -619,7 +623,7 @@ class Eid extends Model
 				$tests = $this->checknull($testedsamples->where('month', $month)->where($column, $div_array[$it]));
 				$confirmdna = $this->checknull($confirmdna_a->where('month', $month)->where($column, $div_array[$it]));
 				$posrepeats = $this->checknull($posrepeats_a->where('month', $month)->where($column, $div_array[$it]));
-				
+
 				$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where('month', $month)->where($column, $div_array[$it]));
 				$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month)->where($column, $div_array[$it]));
 				
@@ -663,6 +667,9 @@ class Eid extends Model
 			$tests = $this->checknull($testedsamples2->where('month', $month));
 			$confirmdna = $this->checknull($confirmdna_a2->where('month', $month));
 			$posrepeats = $this->checknull($posrepeats_a2->where('month', $month));
+
+			$confirmdnaPOS = $this->checknull($confirmdnaPOS_a2->where('month', $month));
+			$posrepeatsPOS = $this->checknull($posrepeatsPOS_a2->where('month', $month));
 			
 			$eqatests = $this->checknull($EQAtestedsamples2->where('month', $month));
 
@@ -684,6 +691,7 @@ class Eid extends Model
 			$data_array = array(
 				'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
 				'confirmdna' => $confirmdna, 'eqatests' => $eqatests, 
+				'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
 				'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
 				'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
 				'sitessending' => $sitesending,
