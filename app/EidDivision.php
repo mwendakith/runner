@@ -15,7 +15,14 @@ class EidDivision extends Model
     	$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.batchno) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->whereYear('datetested', $year)
 		->whereRaw("(samples.parentid=0  OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
@@ -41,19 +48,20 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query
+				->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+				->where('samples.repeatt', 0);
+			}
+		})
 		->where('result', '>', 0)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
-				return $query->where('samples.repeatt', 0);
-			}
-			else{
-				return $query->where('samples.facility', '!=', 7148);
-			}
-		})
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -78,7 +86,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				// return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->where('result', '>', 0)
 		->whereYear('datetested', $year)
 		->whereRaw("(samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))")
@@ -109,17 +124,19 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->whereBetween('result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
-		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
-				return $query->where('samples.facility', '!=', 7148);
-			}
-		})
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -143,8 +160,15 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->whereBetween('patients.age', [0.0001, 24])
 		->whereBetween('samples.pcrtype', [1, 2])
 		->whereBetween('samples.result', [1, 2])
@@ -176,8 +200,15 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->whereBetween('patients.age', [0.0001, 24])
 		->whereBetween('samples.pcrtype', [1, 2])
 		->where('samples.result', 2)
@@ -209,16 +240,18 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
-		->whereYear('datereceived', $year)
-		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
-		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($division){
 			if($division == "samples.labtestedin"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
 		})
+		->whereYear('datereceived', $year)
+		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -243,7 +276,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->whereBetween('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
@@ -274,7 +314,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->where('samples.result', '>', 0)
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 2)
@@ -304,7 +351,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 2)
@@ -334,7 +388,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->where('samples.result', '>', 0)
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 3)
@@ -365,7 +426,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 3)
@@ -434,15 +502,17 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
-		->where('samples.result', $result_type)
-		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 1)
 		->when($division, function($query) use ($division){
 			if($division == "samples.labtestedin"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
 		})
+		->where('samples.result', $result_type)
+		->whereYear('datetested', $year)
+		->where('samples.pcrtype', 1)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
@@ -471,7 +541,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->whereYear('datereceived', $year)
 		->where('samples.receivedstatus', 2)
 		->where('samples.Flag', 1)
@@ -533,7 +610,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(DISTINCT samples.facility) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->whereYear('datereceived', $year)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
@@ -561,8 +645,15 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("AVG(patients.age) as totals, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->where('samples.pcrtype', 1)
 		->where('patients.age', '>', 0)
 		->where('patients.age', '<', 24)
@@ -592,8 +683,15 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("patients.age, month(datetested) as month"))
-		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
 		->where('samples.pcrtype', 1)
 		->where('patients.age', '>', 0)
 		->where('patients.age', '<', 24)
