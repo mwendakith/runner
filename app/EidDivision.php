@@ -55,13 +55,13 @@ class EidDivision extends Model
 			else{
 				return $query
 				->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
-				->where('samples.repeatt', 0);
+				->where('samples.repeatt', 0)
+				->where('samples.eqa', 0);
 			}
 		})
 		->where('result', '>', 0)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
