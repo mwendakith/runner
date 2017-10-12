@@ -35,7 +35,7 @@ class VlDivision extends Model
 		return $data;
 	}
 
-	//National rejections
+	//National eqa
 	public function get_eqa_tests($year, $start_month, $division='view_facilitys.county'){
 
 		$data = DB::connection('vl')
@@ -53,7 +53,6 @@ class VlDivision extends Model
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
 		->where('viralsamples.Flag', 1)
-		->where('viralsamples.repeatt', 0)
 		->groupBy('month', $division)
 		->get(); 
 
@@ -76,9 +75,7 @@ class VlDivision extends Model
 		})
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
-		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.Flag', 1)
-		->where('viralsamples.repeatt', 0)
 		->groupBy('month', $division)
 		->get();
 

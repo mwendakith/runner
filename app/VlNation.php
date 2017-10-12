@@ -35,9 +35,7 @@ class VlNation extends Model
 		->select(DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
 		->whereYear('datetested', $year)
 		->whereMonth('datetested', '>', $start_month)
-		->whereBetween('viralsamples.rcategory', [1, 4])
 		->where('viralsamples.Flag', 1)
-		->where('viralsamples.repeatt', 0)
 		->groupBy('month')
 		->get();
 
