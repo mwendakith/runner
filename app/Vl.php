@@ -631,6 +631,7 @@ class Vl extends Model
 
     // Div type is the type of division eg county, subcounty, partner and facility
     public function finish_division($start_month, $year, $today, &$div_array, $column, $division, $div_type, $array_size){
+    	ini_set("memory_limit", "-1");
     	$n = new VlDivision;
     	$column2 = $column;
     	for ($type=1; $type < 6; $type++) { 
