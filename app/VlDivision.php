@@ -15,7 +15,6 @@ class VlDivision extends Model
 		$data = DB::connection('vl')
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
-		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($division, function($query) use ($division){
 			if($division == "viralsamples.labtestedin"){
 				return $query->where('viralsamples.facility', '!=', 7148);
