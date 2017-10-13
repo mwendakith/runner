@@ -32,20 +32,20 @@ class Eid extends Model
 		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year);
 		$received_a = $n->OverallReceivedSamples($year);
 			
-		$firstdna_a = $n->OveralldnafirstTestedSamples($year);
-		$posrepeats_a = $n->OveralldnasecondTestedSamples($year);
-		$confirmdna_a = $n->OverallPosRepeatsTestedSamples($year);
+		// $firstdna_a = $n->OveralldnafirstTestedSamples($year);
+		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year);
+		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year);
 
-		// $firstdna_a = $n->getbypcr($year, 1);
-		// $posrepeats_a = $n->getbypcr($year, 2);
-		// $confirmdna_a = $n->getbypcr($year, 3);
-
-		// $posrepeatsPOS_a = $n->getbypcr($year, 2, true);
-		// $confirmdnaPOS_a = $n->getbypcr($year, 3, true);
-
-		$posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year);
-		$confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year);
+		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year);
+		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year);
 		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
+
+		$firstdna_a = $n->getbypcr($year, 1);
+		$posrepeats_a = $n->getbypcr($year, 2);
+		$confirmdna_a = $n->getbypcr($year, 3);
+
+		$posrepeatsPOS_a = $n->getbypcr($year, 2, true);
+		$confirmdnaPOS_a = $n->getbypcr($year, 3, true);
 
 
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1);
@@ -400,21 +400,21 @@ class Eid extends Model
 		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, false);
 		$received_a = $n->OverallReceivedSamples($year, false);
 			
-		$firstdna_a = $n->OveralldnafirstTestedSamples($year, false);
-		$posrepeats_a = $n->OveralldnasecondTestedSamples($year, false);
-		$confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, false);
+		// $firstdna_a = $n->OveralldnafirstTestedSamples($year, false);
+		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year, false);
+		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, false);
 
-
-		// $firstdna_a = $n->getbypcr($year, 1, false, false);
-		// $posrepeats_a = $n->getbypcr($year, 2, false, false);
-		// $confirmdna_a = $n->getbypcr($year, 3, false, false);
-
-		// $posrepeatsPOS_a = $n->getbypcr($year, 2, true, false);
-		// $confirmdnaPOS_a = $n->getbypcr($year, 3, true, false);
-
-		$posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, false);
-		$confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, false);
+		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, false);
+		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, false);
 		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
+
+
+		$firstdna_a = $n->getbypcr($year, 1, false, false);
+		$posrepeats_a = $n->getbypcr($year, 2, false, false);
+		$confirmdna_a = $n->getbypcr($year, 3, false, false);
+
+		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, false);
+		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, false);
 
 
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, false);
@@ -574,23 +574,25 @@ class Eid extends Model
 		$noofbatches = $n->GettotalbatchesPerlab($year, $division);
 
 		$received_a = $n->OverallReceivedSamples($year, $division);
+		$rejectedsamples = $n->Getnationalrejectedsamples($year, $division);
 		$testedsamples = $n->OverallTestedSamples($year, $division);
 		$alltestedsamples = $n->CumulativeTestedSamples($year, $division);
 		$EQAtestedsamples = $n->OverallEQATestedSamples($year, $division);
-		$posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division);
 
-		$confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division);
-		$rejectedsamples = $n->Getnationalrejectedsamples($year, $division);
+
+		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division);
+		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division);
+
+		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division);
+		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division);
+
 
 		// $firstdna_a = $n->getbypcr($year, 1, false, $division);
-		// $posrepeats_a = $n->getbypcr($year, 2, false, $division);
-		// $confirmdna_a = $n->getbypcr($year, 3, false, $division);
+		$posrepeats_a = $n->getbypcr($year, 2, false, $division);
+		$confirmdna_a = $n->getbypcr($year, 3, false, $division);
 
-		// $posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
-		// $confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
-
-		$posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division);
-		$confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division);
+		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
+		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
 
 		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, $division);
 		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, $division);
@@ -606,15 +608,22 @@ class Eid extends Model
 
 		$received_a2 = $poc->OverallReceivedSamples($year);
 		$testedsamples2 = $poc->OverallTestedSamples($year);
+		$rejectedsamples2 = $poc->Getnationalrejectedsamples($year);
 		$alltestedsamples2 = $poc->CumulativeTestedSamples($year);
 		$EQAtestedsamples2 = $poc->OverallEQATestedSamples($year);
-		$posrepeats_a2 = $poc->OveralldnasecondTestedSamples($year);
 
-		$confirmdna_a2 = $poc->OverallPosRepeatsTestedSamples($year);
-		$rejectedsamples2 = $poc->Getnationalrejectedsamples($year);
+		// $confirmdna_a2 = $poc->OverallPosRepeatsTestedSamples($year);
+		// $posrepeats_a2 = $poc->OveralldnasecondTestedSamples($year);
 
-		$posrepeatsPOS_a2 = $poc->OveralldnasecondTestedSamplesPOS($year, $division);
-		$confirmdnaPOS_a2 = $poc->OverallPosRepeatsTestedSamplesPOS($year, $division);
+		// $posrepeatsPOS_a2 = $poc->OveralldnasecondTestedSamplesPOS($year, $division);
+		// $confirmdnaPOS_a2 = $poc->OverallPosRepeatsTestedSamplesPOS($year, $division);
+
+		// $firstdna_a = $poc->getbypcr($year, 1, false);
+		$posrepeats_a2 = $poc->getbypcr($year, 2, false);
+		$confirmdna_a2 = $poc->getbypcr($year, 3, false);
+
+		$posrepeatsPOS_a2 = $poc->getbypcr($year, 2, true);
+		$confirmdnaPOS_a2 = $poc->getbypcr($year, 3, true);
 
 
 		$pos_a2 = $poc->OverallTestedSamplesOutcomes($year, 2);
@@ -803,21 +812,21 @@ class Eid extends Model
 		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, $division);
 		$received_a = $n->OverallReceivedSamples($year, $division);
 			
-		$firstdna_a = $n->OveralldnafirstTestedSamples($year, $division);
-		$posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division);
-		$confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division);
-
-		// $firstdna_a = $n->getbypcr($year, 1, false, $division);
-		// $posrepeats_a = $n->getbypcr($year, 2, false, $division);
-		// $confirmdna_a = $n->getbypcr($year, 3, false, $division);
-
-		// $posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
-		// $confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
+		// $firstdna_a = $n->OveralldnafirstTestedSamples($year, $division);
+		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division);
+		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division);
 
 
-		$posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division);
-		$confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division);
+		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division);
+		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division);
 		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
+
+		$firstdna_a = $n->getbypcr($year, 1, false, $division);
+		$posrepeats_a = $n->getbypcr($year, 2, false, $division);
+		$confirmdna_a = $n->getbypcr($year, 3, false, $division);
+
+		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
+		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
 
 
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, $division);
@@ -1248,20 +1257,20 @@ class Eid extends Model
 		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, $division, false);
 		$received_a = $n->OverallReceivedSamples($year, $division, false);
 			
-		$firstdna_a = $n->OveralldnafirstTestedSamples($year, $division, false);
-		$posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division, false);
-		$confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division, false);
+		// $firstdna_a = $n->OveralldnafirstTestedSamples($year, $division, false);
+		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division, false);
+		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division, false);
 
-		// $firstdna_a = $n->getbypcr($year, 1, false, $division, false);
-		// $posrepeats_a = $n->getbypcr($year, 2, false, $division, false);
-		// $confirmdna_a = $n->getbypcr($year, 3, false, $division, false);
-
-		// $posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division, false);
-		// $confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division, false);
-
-		$posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division, false);
-		$confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division, false);
+		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division, false);
+		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division, false);
 		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
+
+		$firstdna_a = $n->getbypcr($year, 1, false, $division, false);
+		$posrepeats_a = $n->getbypcr($year, 2, false, $division, false);
+		$confirmdna_a = $n->getbypcr($year, 3, false, $division, false);
+
+		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division, false);
+		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division, false);
 
 
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, $division, false);

@@ -330,6 +330,38 @@ class EidPoc extends Model
   
 	}
 
+	public function getbypcr($year, $pcr=1, $pos=false, $monthly=true){
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->when(true, function($query) use ($pos){
+			if($pos){
+				return $query->where('samples.result', 2);
+			}
+			else{
+				return $query->whereBetween('samples.result', [1, 2]);
+			}			
+		})
+		->whereYear('datetested', $year)
+		->where('samples.pcrtype', $pcr)
+		->where('samples.siteentry', 2)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->where('samples.repeatt', 0)
+		->when($division, function($query) use ($monthly, $division){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
 	//national rejected	
 	public function Getnationalrejectedsamples($year, $monthly=true)
 	{
