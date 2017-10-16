@@ -109,7 +109,7 @@ class VlInsert extends Model
 
     	echo "\n Begin vl pmtct insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralpmtctype')->select('ID')->where('subID', 1)->orderBy('ID')->get();
+    	$reasons = DB::connection('vl')->table('viralpmtcttype')->select('ID')->where('subID', 1)->orderBy('ID')->get();
     	$counties = DB::connection('vl')->table('countys')->select('ID')->orderBy('ID')->get();
     	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
     	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
