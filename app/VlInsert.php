@@ -169,7 +169,7 @@ class VlInsert extends Model
 		// }
 		// DB::table('vl_lab_pmtct')->insert($data_array);
 
-		echo "\n Completed vl else rejection insert at " . date('d/m/Y h:i:s a', time());
+		echo "\n Completed vl else pmtct insert at " . date('d/m/Y h:i:s a', time());
 
 		$data_array=null;
     	$i=0;
