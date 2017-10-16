@@ -443,7 +443,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -487,7 +487,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -520,7 +520,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -554,7 +554,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -589,7 +589,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -625,7 +625,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -661,7 +661,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -697,7 +697,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -731,7 +731,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -846,7 +846,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -897,7 +897,7 @@ class VlNation extends Model
 		->table('viralsamples')
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})

@@ -187,7 +187,7 @@ class Vl extends Model
 
     public function finish_nation($start_month, $year, $today){
     	$n = new VlNation;
-    	for ($type=1; $type < 6; $type++) { 
+    	for ($type=6; $type > 0; $type--) { 
 
 			$table = $this->get_table(0, $type);
 
@@ -206,15 +206,17 @@ class Vl extends Model
 			foreach ($divs as $key => $value) {	
 
 				// Get collection instances of the data
-		    	$rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $type, $value->ID);
+
+		    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $type, $value->ID);
 		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $type, $value->ID);
 		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $type, $value->ID);
+		    	$rs_a = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $type, $value->ID);
+				
 
 		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $start_month, $type, $value->ID);
 		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $type, $value->ID);
-		    	$rs = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $type, $value->ID);
 
-		    	if ($type != 1) {
+		    	if ($type != 1 && $type != 6) {
 
 			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 1);
 			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 6);
@@ -235,14 +237,15 @@ class Vl extends Model
 				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 5);
 				// $sustx=$less5k +  $above5k;
 
-				if($type != 4){
+
+				if($type != 4 && $type != 6){
 
 					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 1);
 					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 3);
 					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 2);
 				}
 
-				if($type != 2){
+				if($type != 2 && $type != 6){
 
 					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 1);
 					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 2);
@@ -267,9 +270,15 @@ class Vl extends Model
 					$month = $i + 1;
 					if($year == Date('Y') && $month > Date('m')){ break; }
 
-					// $rec = $this->checknull($rec_a->where('month', $month));
 					$tested = $this->checknull($tested_a->where('month', $month));
+
+					if($tested == 0){
+						continue;
+					}
+
+					// $rec = $this->checknull($rec_a->where('month', $month));
 					$rej = $this->checknull($rej_a->where('month', $month));
+					$rs = $this->checknull($rs_a->where('month', $month));
 
 					$conftx = $this->checknull($conftx_a->where('month', $month));
 					$conf2VL = $this->checknull($conf2VL_a->where('month', $month));
@@ -282,14 +291,17 @@ class Vl extends Model
 					$sustx = $less5k +  $above5k;
 
 					$data_array = array(
-						'tests' => $tested,
-						'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
+						'sustxfail' => $sustx, 'confirmtx' => $conftx, 
 						'confirm2vl' => $conf2VL, 'rejected' => $rej, 'Undetected' => $ldl, 'less1000' => $less1k,
 						'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
 						'dateupdated' => $today
-					);					
+					);
 
-					if($type != 1){
+					if($type != 6){
+						$data_array = array_merge($data_array, ['tests' => $tested, 'repeattests' => $rs]);
+					}					
+
+					if($type != 1 && $type != 6){
 
 						$noage = $this->checknull($noage_a->where('month', $month));
 						$less2 = $this->checknull($less2_a->where('month', $month));
@@ -310,7 +322,7 @@ class Vl extends Model
 
 					}
 
-					if($type != 4){
+					if($type != 4 && $type != 6){
 
 						$plas = $this->checknull($plas_a->where('month', $month));
 						$edta = $this->checknull($edta_a->where('month', $month));
@@ -322,7 +334,7 @@ class Vl extends Model
 
 					}
 
-					if ($type != 2) {
+					if ($type != 2 && $type != 6) {
 					
 						$male = $this->checknull($male_a->where('month', $month));
 						$female = $this->checknull($female_a->where('month', $month));
@@ -634,7 +646,7 @@ class Vl extends Model
     	ini_set("memory_limit", "-1");
     	$n = new VlDivision;
     	$column2 = $column;
-    	for ($type=1; $type < 6; $type++) { 
+    	for ($type=6; $type > 0; $type--) { 
 
     		if($type == 3 && $column == "facility"){
 				continue;
@@ -648,7 +660,7 @@ class Vl extends Model
 			$divs = $data = DB::connection('vl')
 			->table($table[1])->select('ID')
 			->when($type, function($query) use ($type){
-				if($type == 1){
+				if($type == 1 || $type == 6){
 					return $query->where('subID', 1);
 				}				
 			})
@@ -657,7 +669,7 @@ class Vl extends Model
 			foreach ($divs as $key => $value) {	
 
 				// Get collection instances of the data
-		    	$rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
+		    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 
@@ -665,7 +677,7 @@ class Vl extends Model
 		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $division, $type, $value->ID);
 		    	$rs = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 
-		    	if ($type != 1) {
+		    	if ($type != 1 && $type != 6) {
 
 			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 1);
 			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 6);
@@ -686,14 +698,14 @@ class Vl extends Model
 				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 5);
 				// $sustx=$less5k +  $above5k;
 
-				if($type != 4){
+				if($type != 4 && $type != 6){
 
 					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 1);
 					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 3);
 					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 2);
 				}
 
-				if($type != 2){
+				if($type != 2 && $type != 6){
 
 					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->ID, 1);
 					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->ID, 2);
@@ -733,14 +745,17 @@ class Vl extends Model
 						$sustx = $less5k +  $above5k;
 
 						$data_array = array(
-							'tests' => $tested,
-							'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
+							'sustxfail' => $sustx, 'confirmtx' => $conftx,
 							'confirm2vl' => $conf2VL, 'rejected' => $rej, 'Undetected' => $ldl, 'less1000' => $less1k,
 							'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
 							'dateupdated' => $today
-						);					
+						);		
 
-						if($type != 1){
+						if($type != 6){
+							$data_array = array_merge($data_array, ['tests' => $tested, 'repeattests' => $rs]);
+						}				
+
+						if($type != 1 && $type != 6){
 
 							$noage = $this->checknull($noage_a->where('month', $month)->where($column, $div_array[$it]));
 							$less2 = $this->checknull($less2_a->where('month', $month)->where($column, $div_array[$it]));
@@ -761,7 +776,7 @@ class Vl extends Model
 
 						}
 
-						if($type != 4){
+						if($type != 4 && $type != 6){
 
 							$plas = $this->checknull($plas_a->where('month', $month)->where($column, $div_array[$it]));
 							$edta = $this->checknull($edta_a->where('month', $month)->where($column, $div_array[$it]));
@@ -773,7 +788,7 @@ class Vl extends Model
 
 						}
 
-						if ($type != 2) {
+						if ($type != 2 && $type != 6) {
 						
 							$male = $this->checknull($male_a->where('month', $month)->where($column, $div_array[$it]));
 							$female = $this->checknull($female_a->where('month', $month)->where($column, $div_array[$it]));
@@ -1011,6 +1026,9 @@ class Vl extends Model
     			case 5:
     				$name = array("vl_national_justification", "viraljustifications", "justification");
     				break;
+    			case 6:
+    				$name = array("vl_national_pmtct", "viralpmtcttype", "pmtcttype");
+    				break;
     			default:
     				break;
     		}
@@ -1031,6 +1049,9 @@ class Vl extends Model
     				break;
     			case 5:
     				$name = array("vl_county_justification", "viraljustifications", "justification");
+    				break;
+    			case 6:
+    				$name = array("vl_county_pmtct", "viralpmtcttype", "pmtcttype");
     				break;
     			default:
     				break;
@@ -1054,6 +1075,9 @@ class Vl extends Model
     			case 5:
     				$name = array("vl_subcounty_justification", "viraljustifications", "justification");
     				break;
+    			case 6:
+    				$name = array("vl_subcounty_pmtct", "viralpmtcttype", "pmtcttype");
+    				break;
     			default:
     				break;
     		}
@@ -1076,6 +1100,9 @@ class Vl extends Model
     			case 5:
     				$name = array("vl_partner_justification", "viraljustifications", "justification");
     				break;
+    			case 6:
+    				$name = array("vl_partner_pmtct", "viralpmtcttype", "pmtcttype");
+    				break;
     			default:
     				break;
     		}
@@ -1097,6 +1124,9 @@ class Vl extends Model
     				break;
     			case 5:
     				$name = array("vl_site_justification", "viraljustifications", "justification");
+    				break;
+    			case 6:
+    				$name = array("vl_site_pmtct", "viralpmtcttype", "pmtcttype");
     				break;
     			default:
     				break;

@@ -174,10 +174,6 @@ class BaseModel extends Model
 		{
 			$totaldays=1;
 		}
-		else
-		{
-			$totaldays=$totaldays;
-		}
 		return $totaldays;
 
 	}
@@ -283,6 +279,11 @@ class BaseModel extends Model
 		// Type 5 for justification
 		else if($type == 5){
 			return array('column' => 'viralsamples.justification', 'param' => $param);
+		}
+
+		// Type 6 for pmtct
+		else if($type == 6){
+			return array('column' => 'viralpatients.pmtct', 'param' => $param);
 		}
 	}
 

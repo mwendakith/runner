@@ -17,6 +17,7 @@ class CreateNationalAgeBreakdownTable extends Migration
 
         Schema::create('national_age_breakdown', function (Blueprint $table) {
             $table->increments('ID');
+            $table->date('dateupdated')->nullable();
             $table->integer('year')->unsigned();
             $table->integer('month')->unsigned();
             $table->integer('age_band_id')->unsigned();

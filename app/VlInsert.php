@@ -97,4 +97,95 @@ class VlInsert extends Model
 
 		echo "\n Completed vl rejection insert at " . date('d/m/Y h:i:s a', time());
     }
+
+    public function pmtct($year=null, $month=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	if($month == null){
+    		$month = Date('m');
+    	}
+		ini_set("memory_limit", "-1");
+
+    	echo "\n Begin vl pmtct insert at " . date('d/m/Y h:i:s a', time());
+
+    	$reasons = DB::connection('vl')->table('viralpmtctype')->select('ID')->where('subID', 1)->orderBy('ID')->get();
+    	$counties = DB::connection('vl')->table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
+    	$labs = DB::connection('vl')->table('labs')->select('ID')->orderBy('ID')->get();
+    	$sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
+
+    	$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID);
+			$i++;
+		}
+		DB::table('vl_national_pmtct')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($counties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'county' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_county_pmtct')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($subcounties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'subcounty' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_subcounty_pmtct')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($partners as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'partner' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_partner_pmtct')->insert($data_array);
+
+		// $data_array=null;
+  //   	$i=0;
+
+		// foreach ($reasons as $key => $value) {
+		// 	foreach ($labs as $k => $val) {
+		// 		$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'lab' => $val->ID);
+		// 		$i++;
+		// 	}
+		// }
+		// DB::table('vl_lab_pmtct')->insert($data_array);
+
+		echo "\n Completed vl else rejection insert at " . date('d/m/Y h:i:s a', time());
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($sites as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'facility' => $val->ID);
+				$i++;
+			}
+			DB::table('vl_site_pmtct')->insert($data_array);
+			$data_array=null;
+	    	$i=0;
+		}
+		
+
+		echo "\n Completed vl pmtct insert at " . date('d/m/Y h:i:s a', time());
+    }
+    
 }

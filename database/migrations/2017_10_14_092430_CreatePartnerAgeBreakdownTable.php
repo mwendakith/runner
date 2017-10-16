@@ -17,6 +17,7 @@ class CreatePartnerAgeBreakdownTable extends Migration
 
         Schema::create('ip_age_breakdown', function (Blueprint $table) {
             $table->increments('ID');
+            $table->date('dateupdated')->nullable();
             $table->integer('year')->unsigned();
             $table->integer('month')->unsigned();
             $table->integer('partner')->unsigned();

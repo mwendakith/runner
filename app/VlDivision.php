@@ -592,7 +592,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -635,7 +635,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -667,7 +667,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -700,7 +700,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -734,7 +734,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -769,7 +769,7 @@ class VlDivision extends Model
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -806,7 +806,7 @@ class VlDivision extends Model
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -843,7 +843,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -876,7 +876,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -977,7 +977,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})
@@ -1021,7 +1021,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
 		->when($type, function($query) use ($type){
-			if($type == 2){
+			if($type == 2 || $type == 6){
 				return $query->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID');
 			}			
 		})

@@ -17,6 +17,7 @@ class CreateSubcountyAgeBreakdownTable extends Migration
 
         Schema::create('subcounty_age_breakdown', function (Blueprint $table) {
             $table->increments('ID');
+            $table->date('dateupdated')->nullable();
             $table->integer('year')->unsigned();
             $table->integer('month')->unsigned();
             $table->integer('subcounty')->unsigned();
