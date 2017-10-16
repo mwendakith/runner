@@ -84,8 +84,8 @@ class VlInsert extends Model
 		$data_array=null;
     	$i=0;
 
-		foreach ($reasons as $key => $value) {
-			foreach ($sites as $k => $val) {
+		foreach ($sites as $k => $val) {
+			foreach ($reasons as $key => $value) {
 				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
 				$i++;
 			}
@@ -174,8 +174,9 @@ class VlInsert extends Model
 		$data_array=null;
     	$i=0;
 
-		foreach ($reasons as $key => $value) {
-			foreach ($sites as $k => $val) {
+		
+		foreach ($sites as $k => $val) {
+			foreach ($reasons as $key => $value) {
 				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'facility' => $val->ID);
 				$i++;
 			}
