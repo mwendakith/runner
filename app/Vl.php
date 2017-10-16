@@ -187,7 +187,7 @@ class Vl extends Model
 
     public function finish_nation($start_month, $year, $today){
     	$n = new VlNation;
-    	for ($type=6; $type > 0; $type--) { 
+    	for ($type=1; $type < 7; $type++) { 
 
 			$table = $this->get_table(0, $type);
 
@@ -646,7 +646,7 @@ class Vl extends Model
     	ini_set("memory_limit", "-1");
     	$n = new VlDivision;
     	$column2 = $column;
-    	for ($type=6; $type > 0; $type--) { 
+    	for ($type=1; $type < 7; $type++) { 
 
     		if($type == 3 && $column == "facility"){
 				continue;
