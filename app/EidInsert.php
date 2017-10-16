@@ -97,4 +97,82 @@ class EidInsert extends Model
 
 		echo "\n Completed eid rejection insert at " . date('d/m/Y h:i:s a', time());
     }
+
+    public function age_breakdown($year=null, $month=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	if($month == null){
+    		$month = Date('m');
+    	}
+		ini_set("memory_limit", "-1");
+
+    	echo "\n Begin eid age insert at " . date('d/m/Y h:i:s a', time());
+
+    	$reasons =  DB::connection('eid')->table('age_bands')->select('ID')->orderBy('ID')->get();
+    	$counties =  DB::connection('eid')->table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties =  DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners =  DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
+    	// $labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
+    	// $sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
+
+    	$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->ID);
+			$i++;
+		}
+		DB::table('national_age_breakdown')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($counties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->ID, 'county' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('county_age_breakdown')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($subcounties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->ID, 'subcounty' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('subcounty_age_breakdown')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($partners as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->ID, 'partner' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('ip_age_breakdown')->insert($data_array);
+
+		
+		// $data_array=null;
+    	// $i=0;
+
+		// foreach ($reasons as $key => $value) {
+		// 	foreach ($sites as $k => $val) {
+		// 		$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
+		// 		$i++;
+		// 	}
+		// 	DB::table('site_rejections')->insert($data_array);
+			// $data_array=null;
+	    	// $i=0;
+		// }
+		
+
+		echo "\n Completed eid age insert at " . date('d/m/Y h:i:s a', time());
+    }
 }

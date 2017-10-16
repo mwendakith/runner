@@ -93,11 +93,11 @@ class Eid extends Model
 		// $tat = $n->GetNatTATs($year);
 		// $tat = collect($tat);
 
-		$count = $pos_a->count();
 
 		// Loop through the months and insert data into the national summary
-		for ($i=0; $i < $count; $i++) { 
+		for ($i=0; $i < 12; $i++) { 
 			$month = $i + 1;
+			if($year == Date('Y') && $month > Date('m')){ break; }
 
 			$alltests = $this->checknull($alltests_a->where('month', $month));
 			$eqatests = $this->checknull($eqatests_a->where('month', $month));
@@ -218,8 +218,9 @@ class Eid extends Model
 		$age14neg_a = $n->GetTestOutcomesbyAgeBand($year, 14, 1);
 
 		// Loop through the months and insert data into the national agebreakdown
-		for ($i=0; $i < $count; $i++) { 
+		for ($i=0; $i < 12; $i++) { 
 			$month = $i + 1;
+			if($year == Date('Y') && $month > Date('m')){ break; }
 
 			$age1pos = $this->checknull($age1pos_a->where('month', $month));
 			$age1neg = $this->checknull($age1neg_a->where('month', $month));
@@ -269,6 +270,7 @@ class Eid extends Model
 
 		echo "\n Completed entry into eid national age breakdown at " . date('d/m/Y h:i:s a', time());
 
+
 		echo $this->continue_nation($year, $today);
 
 		echo "\n Begin entry into eid national rejections " . date('d/m/Y h:i:s a', time());
@@ -282,8 +284,9 @@ class Eid extends Model
 			$rej_a = $n->national_rejections($year, $value->ID);
 
 			// Loop through each month and update reason
-			for ($i=0; $i < $count; $i++) { 
+			for ($i=0; $i < 12; $i++) { 
 				$month = $i + 1;
+				if($year == Date('Y') && $month > Date('m')){ break; }
 
 				$rej = $this->checknull($rej_a->where('month', $month));
 
@@ -309,7 +312,7 @@ class Eid extends Model
 
     public function continue_nation($year, $today){
     	$n = new EidNation;
-    	for ($type=1; $type < 4; $type++) { 
+    	for ($type=1; $type < 5; $type++) { 
 
 			$table = $this->get_table(0, $type);
 
@@ -317,7 +320,7 @@ class Eid extends Model
 			
 			// Get ids of the necessary table
 			$divs = $data = DB::connection('eid')
-			->table($table[1])->select('ID')
+			->table($table[1])
 			->when($type, function($query) use ($type){
 				if($type == 1){
 					return $query->where('ptype', 2);
@@ -351,6 +354,11 @@ class Eid extends Model
 					$rd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5);
 				}
 
+				if($type == 4){
+					$pos_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 2);
+					$neg_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 1);
+				}
+
 				// Loop through each month and update entrypoints
 				for ($i=0; $i < 12; $i++) { 
 					$month = $i + 1;
@@ -358,6 +366,20 @@ class Eid extends Model
 
 					$pos = $this->checknull($pos_a->where('month', $month));
 					$neg = $this->checknull($neg_a->where('month', $month));
+
+					$data_array = array('pos' => $pos, 'neg' => $neg, 'dateupdated' => $today);
+
+					if($type != 4){							
+
+						$fail = $this->checknull($fail_a->where('month', $month));
+						$rd = $this->checknull($rd_a->where('month', $month));
+
+						$redraw = $fail + $rd;
+						$tests = $pos + $neg +  $redraw;
+
+						$data_array = array_merge($data_array, ['tests' => $tests, 'redraw' => $redraw]);
+					}
+
 					$fail = $this->checknull($fail_a->where('month', $month));
 					$rd = $this->checknull($rd_a->where('month', $month));
 
@@ -776,7 +798,7 @@ class Eid extends Model
 
     // Will be used to enter data for divisions except labs
     // Types: 1=county, 2=subcounty, 3=partner, 4=sites
-    public function division_updator($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='county_summary', $age_table='county_agebreakdown', $ir_table='county_iprophylaxis', $mr_table='county_mprophylaxis', $ent_table='county_entrypoint', $rej_table='county_rejections'){
+    public function division_updator($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='county_summary', $age_table='county_agebreakdown', $rej_table='county_rejections'){
 
     	if($year == null){
     		$year = Date('Y');
@@ -1086,6 +1108,7 @@ class Eid extends Model
 
 			echo "\n Completed entry into eid {$column} age breakdown at " . date('d/m/Y h:i:s a', time());
 
+			
 			echo $this->continue_division($year, $today, $div_array, $division, $column, $type, $array_size);
 		}
 		// End of functions that do not have a facility equivalent
@@ -1139,7 +1162,7 @@ class Eid extends Model
     public function continue_division($year, $today, &$div_array, $division, $column, $div_type, $array_size){
     	$n = new EidDivision;
     	$column2 = $column;
-    	for ($type=1; $type < 4; $type++) { 
+    	for ($type=1; $type < 5; $type++) { 
 
 			$table = $this->get_table($div_type, $type);
 
@@ -1147,7 +1170,7 @@ class Eid extends Model
 			
 			// Get ids of the necessary table
 			$divs = $data = DB::connection('eid')
-			->table($table[1])->select('ID')
+			->table($table[1])
 			->when($type, function($query) use ($type){
 				if($type == 1){
 					return $query->where('ptype', 2);
@@ -1181,6 +1204,11 @@ class Eid extends Model
 					$rd_a = $n->GetNationalResultbyEntrypoint($year, $value->ID, 5, $division);
 				}
 
+				if($type == 4){
+					$pos_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 2, $division);
+					$neg_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 1, $division);
+				}
+
 				// Loop through each month and update entrypoints
 				for ($i=0; $i < 12; $i++) { 
 					$month = $i + 1;
@@ -1191,23 +1219,27 @@ class Eid extends Model
 
 						$pos = $this->checknull($pos_a->where('month', $month)->where($column, $div_array[$it]));
 						$neg = $this->checknull($neg_a->where('month', $month)->where($column, $div_array[$it]));
-						$fail = $this->checknull($fail_a->where('month', $month)->where($column, $div_array[$it]));
-						$rd = $this->checknull($rd_a->where('month', $month)->where($column, $div_array[$it]));
 
-						$redraw = $fail + $rd;
-						$tests = $pos + $neg +  $redraw;
+						$data_array = array('pos' => $pos, 'neg' => $neg, 'dateupdated' => $today);
+
+						if($type != 4){							
+
+							$fail = $this->checknull($fail_a->where('month', $month)->where($column, $div_array[$it]));
+							$rd = $this->checknull($rd_a->where('month', $month)->where($column, $div_array[$it]));
+
+							$redraw = $fail + $rd;
+							$tests = $pos + $neg +  $redraw;
+
+							$data_array = array_merge($data_array, ['tests' => $tests, 'redraw' => $redraw]);
+						}
 
 						if ($div_type==2) {
 							$column="subcounty";
 						}
 
-						$data_array = array(
-							'tests' => $tests, 'pos' => $pos, 'neg' => $neg, 'redraw' => $redraw,
-							'dateupdated' => $today
-						);
-
 						DB::table($table[0])->where('year', $year)->where('month', $month)
 						->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+
 						$column = $column2;
 					}
 					// End of looping through divisions
@@ -1426,19 +1458,19 @@ class Eid extends Model
 	}
 
     public function update_counties($year = null){
-    	return $this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary', 'county_agebreakdown', 'county_iprophylaxis', 'county_mprophylaxis', 'county_entrypoint', 'county_rejections');
+    	return $this->division_updator($year, 1, 'county', 'view_facilitys.county', 'countys', 'county_summary', 'county_agebreakdown', 'county_rejections');
     }
 
     public function update_subcounties($year = null){
-    	return $this->division_updator($year, 2, 'district', 'view_facilitys.district', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_iprophylaxis', 'subcounty_mprophylaxis', 'subcounty_entrypoint', 'subcounty_rejections');
+    	return $this->division_updator($year, 2, 'district', 'view_facilitys.district', 'districts', 'subcounty_summary', 'subcounty_agebreakdown', 'subcounty_rejections');
     }
 
     public function update_partners($year = null){
-    	return $this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_iprophylaxis', 'ip_mprophylaxis', 'ip_entrypoint', 'ip_rejections');
+    	return $this->division_updator($year, 3, 'partner', 'view_facilitys.partner', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_rejections');
     }
 
     public function update_facilities($year = null){
-    	return $this->division_updator($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary', '', '', '', '', 'site_rejections');
+    	return $this->division_updator($year, 4, 'facility', 'samples.facility', 'facilitys', 'site_summary', '', 'site_rejections');
     }
 
 
@@ -1545,6 +1577,9 @@ class Eid extends Model
     			case 3:
     				$name = array("national_entrypoint", "entry_points", "entrypoint");
     				break;
+    			case 4:
+    				$name = array("national_age_breakdown", "age_bands", "age_band_id");
+    				break;
     			default:
     				break;
     		}
@@ -1559,6 +1594,9 @@ class Eid extends Model
     				break;
     			case 3:
     				$name = array("county_entrypoint", "entry_points", "entrypoint");
+    				break;
+    			case 4:
+    				$name = array("county_age_breakdown", "age_bands", "age_band_id");
     				break;
     			default:
     				break;
@@ -1576,6 +1614,9 @@ class Eid extends Model
     			case 3:
     				$name = array("subcounty_entrypoint", "entry_points", "entrypoint");
     				break;
+    			case 4:
+    				$name = array("subcounty_age_breakdown", "age_bands", "age_band_id");
+    				break;
     			default:
     				break;
     		}
@@ -1591,6 +1632,9 @@ class Eid extends Model
     				break;
     			case 3:
     				$name = array("ip_entrypoint", "entry_points", "entrypoint");
+    				break;
+    			case 4:
+    				$name = array("ip_age_breakdown", "age_bands", "age_band_id");
     				break;
     			default:
     				break;

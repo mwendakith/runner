@@ -669,6 +669,30 @@ class EidNation extends Model
   
 	}
 
+	//samples for a particular range	
+	public function OutcomesByAgeBand($year, $age_array, $result_type, $monthly=true)
+	{
+		$data = DB::connection('eid')
+		->table('samples')
+		->select(DB::raw("COUNT(patients.AutoID) as totals, month(datetested) as month"))
+		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
+		->whereBetween('patients.age', $age_array)
+		->where('samples.result', $result_type)
+		->whereYear('datetested', $year)
+		->where('samples.pcrtype', 1)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->where('samples.repeatt', 0)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month');
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
 	//National rejections
 	public function national_rejections($year, $rejected_reason, $monthly=true){
 
