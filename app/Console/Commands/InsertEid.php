@@ -48,13 +48,13 @@ class InsertEid extends Command
         $month = $this->option('month');
 
         if ($type == 1) {
-            $bar = $this->output->createProgressBar(12);
+            // $bar = $this->output->createProgressBar(12);
             for ($i=1; $i < 13; $i++) { 
                 // $output .= $eid->rejections($year, $i);
                 $output .= $eid->age_breakdown($year, $i);
-                $bar->advance();
+                // $bar->advance();
             }
-            $bar->finish();
+            // $bar->finish();
         }
 
         else if ($type == 2) {
@@ -65,6 +65,6 @@ class InsertEid extends Command
             $output .= $eid->rejections();
         }
 
-        // $this->info($output);
+        $this->info($output);
     }
 }
