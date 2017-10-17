@@ -380,17 +380,6 @@ class Eid extends Model
 						$data_array = array_merge($data_array, ['tests' => $tests, 'redraw' => $redraw]);
 					}
 
-					$fail = $this->checknull($fail_a->where('month', $month));
-					$rd = $this->checknull($rd_a->where('month', $month));
-
-					$redraw = $fail + $rd;
-					$tests = $pos + $neg +  $redraw;
-
-					$data_array = array(
-						'tests' => $tests, 'pos' => $pos, 'neg' => $neg, 'redraw' => $redraw,
-						'dateupdated' => $today
-					);
-
 					DB::table($table[0])->where('year', $year)->where('month', $month)
 					->where($table[2], $value->ID)->update($data_array);
 				}
