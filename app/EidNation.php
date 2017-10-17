@@ -44,9 +44,8 @@ class EidNation extends Model
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->where('result', '>', 0)
 		->whereYear('datetested', $year)
-		->whereRaw("(samples.receivedstatus=1  OR (samples.receivedstatus=3  and  samples.reason_for_repeat='Repeat For Rejection'))")
+		->where('samples.facility', 7148)
 		->where('Flag', 1)
-		->where('eqa', 1)
 		->where('repeatt', 0)
 		->when($monthly, function($query) use ($monthly){
 			if($monthly){
