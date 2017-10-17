@@ -334,7 +334,7 @@ class EidPoc extends Model
 
 		$data = DB::connection('eid')
 		->table('samples')
-		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when(true, function($query) use ($pos){
 			if($pos){
 				return $query->where('samples.result', 2);
@@ -349,12 +349,9 @@ class EidPoc extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
-		->when($division, function($query) use ($monthly, $division){
+		->when($monthly, function($query) use ($monthly){
 			if($monthly){
-				return $query->groupBy('month', $division);
-			}
-			else{
-				return $query->groupBy($division);
+				return $query->groupBy('month');
 			}			
 		})
 		->get(); 
