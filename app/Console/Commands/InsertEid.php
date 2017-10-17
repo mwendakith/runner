@@ -51,7 +51,7 @@ class InsertEid extends Command
             $bar = $this->output->createProgressBar(12);
             for ($i=1; $i < 13; $i++) { 
                 // $output .= $eid->rejections($year, $i);
-                // $output .= $eid->age_breakdown($year, $i);
+                $output .= $eid->age_breakdown($year, $i);
                 $bar->advance();
             }
             $bar->finish();
