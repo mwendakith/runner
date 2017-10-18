@@ -918,7 +918,7 @@ class Vl extends Model
     	$today=date('Y-m-d');
 
     	$divs = DB::connection('vl')
-		->table('facilitys')->select('ID')->get();
+		->table('facilitys')->select('ID', 'totalartmar')->get();
 
 		$data = collect($data);
 
@@ -938,15 +938,17 @@ class Vl extends Model
 
 			if($tests == 0){
 				$suppression = 0;
+				$coverage = 0;
 			}
 			else{
 				$suppression = ($suppressed * 100) / $tests;
+				$coverage = ($value->totalartmar * 100) / $tests;
 			}
 
 			// $data_array = array('facility' => $value->ID, 'dateupdated' => $today,
 			// 'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
 			$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
-				'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
+				'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression, 'coverage' => $coverage);
 
 			// DB::table('vl_site_suppression')->insert($data_array);
 			DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
