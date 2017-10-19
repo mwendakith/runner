@@ -933,17 +933,17 @@ class Vl extends Model
 			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 3)) + 
 			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 4));
 
-			$suppression;
+			$suppression=0;
 
 			$tests =  ($suppressed + $nonsuppressed);
+			$coverage = 0;
 
-			if($tests == 0){
-				$suppression = 0;
-				$coverage = 0;
-			}
-			else{
+			if($tests != 0){
 				$suppression = ($suppressed * 100) / $tests;
-				$coverage = ((int) $value->totalartmar * 100) / $tests;
+
+				if($value->totalartmar != null){
+					$coverage = ($tests * 100) / (int) $value->totalartmar ;
+				}
 			}
 
 			// $data_array = array('facility' => $value->ID, 'dateupdated' => $today,
