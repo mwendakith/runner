@@ -944,6 +944,9 @@ class Vl extends Model
 				if($value->totalartmar != null){
 					$coverage = ($tests * 100) / (int) $value->totalartmar ;
 				}
+				else{
+					$coverage = 100;
+				}
 			}
 
 			// $data_array = array('facility' => $value->ID, 'dateupdated' => $today,
