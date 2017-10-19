@@ -922,6 +922,7 @@ class Vl extends Model
 
 		$data = collect($data);
 
+
 		foreach ($divs as $key => $value) {
 
 			$suppressed = 
@@ -942,7 +943,7 @@ class Vl extends Model
 			}
 			else{
 				$suppression = ($suppressed * 100) / $tests;
-				$coverage = ($value->totalartmar * 100) / $tests;
+				$coverage = ((int) $value->totalartmar * 100) / $tests;
 			}
 
 			// $data_array = array('facility' => $value->ID, 'dateupdated' => $today,
