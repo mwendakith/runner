@@ -1160,7 +1160,7 @@ class VlDivision extends Model
 		return collect($data);
     }
 
-    public function current_gender_suppression($gender, $suppression){
+    public function current_gender_suppression($gender, $suppression=true){
     	ini_set("memory_limit", "-1");
     	
     	$year = ((int) Date('Y'));
