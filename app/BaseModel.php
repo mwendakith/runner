@@ -245,9 +245,9 @@ class BaseModel extends Model
 
 		// Type 1 for age
 		if($type == 1){
-			if($param < 6){
-				return array('column' => 'viralsamples.age', 'param' => $param);
-			}
+			// if($param < 6){
+			// 	return array('column' => 'viralsamples.age', 'param' => $param);
+			// }
 			return array('column' => 'viralsamples.age2', 'param' => $param);
 		}
 

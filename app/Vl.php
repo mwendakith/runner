@@ -36,7 +36,7 @@ class Vl extends Model
     	$baseline_a = $n->GetNationalBaseline($year, $start_month);
     	$baselinefail_a = $n->GetNationalBaselineFailure($year, $start_month);
 
-    	$noage_a = $n->getalltestedviraloadsbyage($year, $start_month, 1);
+    	$noage_a = $n->getalltestedviraloadsbyage($year, $start_month, 0);
     	$less2_a = $n->getalltestedviraloadsbyage($year, $start_month, 6);
     	$less9_a = $n->getalltestedviraloadsbyage($year, $start_month, 7);
     	$less14_a = $n->getalltestedviraloadsbyage($year, $start_month, 8);
@@ -218,7 +218,7 @@ class Vl extends Model
 
 		    	if ($type != 1 && $type != 6) {
 
-			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 1);
+			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 0);
 			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 6);
 			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 7);
 			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 8);
@@ -421,7 +421,7 @@ class Vl extends Model
 		$baseline_a = $n->GetNationalBaseline($year, $start_month, $division);
     	$baselinefail_a = $n->GetNationalBaselineFailure($year, $start_month, $division);
 
-    	$noage_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 1);
+    	$noage_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 0);
     	$less2_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 6);
     	$less9_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 7);
     	$less14_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 8);
@@ -679,7 +679,7 @@ class Vl extends Model
 
 		    	if ($type != 1 && $type != 6) {
 
-			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 1);
+			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 0);
 			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 6);
 			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 7);
 			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 8);
@@ -913,9 +913,17 @@ class Vl extends Model
     	// Instantiate new object
     	$n = new VlDivision;
 
+    	$today=date('Y-m-d');
+
     	$data = $n->suppression();
 
-    	$today=date('Y-m-d');
+		$noage_a = $n->current_age_suppression(0);
+    	$less2_a = $n->current_age_suppression(6);
+    	$less9_a = $n->current_age_suppression(7);
+    	$less14_a = $n->current_age_suppression(8);
+    	$less19_a = $n->current_age_suppression(9);
+    	$less24_a = $n->current_age_suppression(10);
+    	$over25_a = $n->current_age_suppression(11);  
 
     	$divs = DB::connection('vl')
 		->table('facilitys')->select('ID', 'totalartmar')->get();
@@ -938,7 +946,11 @@ class Vl extends Model
 			$tests =  ($suppressed + $nonsuppressed);
 			$coverage = 0;
 
-			if($tests != 0){
+			if($tests == 0){
+				continue;
+			}
+			else{
+
 				$suppression = ($suppressed * 100) / $tests;
 
 				if($value->totalartmar != null){
