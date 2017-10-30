@@ -1084,19 +1084,21 @@ class VlDivision extends Model
 
     public function suppression(){
     	ini_set("memory_limit", "-1");
-    	// SELECT facility, rcategory, count(*) as tests
+    	// SELECT facility, rcategory, count(*) as totals
 		// FROM
-		// (SELECT v.facility, v.rcategory
-		// FROM viralsamples v
-		// INNER JOIN
+		// (SELECT v.ID, v.facility, v.rcategory 
+		// FROM viralsamples v 
+		// RIGHT JOIN 
 		// (SELECT ID, patient, facility, max(datetested) as maxdate
 		// FROM viralsamples
-		// WHERE year(datetested)=2017
+		// WHERE ( (year(datetested) = 2016 and month(datetested) > 9) || (year(datetested) = 2017 and month(datetested) < 10) ) 
 		// AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 
-		// GROUP BY patient, facility) gv
-		// ON v.ID=gv.ID AND gv.maxdate=v.datetested) tb
-		// GROUP BY facility, rcategory
-		// ORDER BY facility, rcategory;
+		// AND justification != 10 
+		// GROUP BY patient, facility) gv 
+		// ON v.ID=gv.ID) tb
+		// GROUP BY facility, rcategory 
+		// ORDER BY facility, rcategory; 
+
 
     	$year = ((int) Date('Y'));
     	$prev_year = ((int) Date('Y')) - 1;
@@ -1112,13 +1114,40 @@ class VlDivision extends Model
 		$sql .= 'FROM viralsamples ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
-		$sql .= 'AND justification != 10 ';
+		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
 		$sql .= 'GROUP BY facility, rcategory ';
 		$sql .= 'ORDER BY facility, rcategory ';
 
 		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
+
+		return $data;
+    }
+
+    public function current_age_suppression($age){
+    	$year = ((int) Date('Y'));
+    	$prev_year = ((int) Date('Y')) - 1;
+    	$month = ((int) Date('m'));
+    	$prev_month = ((int) Date('m')) - 1;
+
+    	$sql = 'SELECT facility, rcategory, count(*) as totals ';
+		$sql .= 'FROM ';
+		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
+		$sql .= 'FROM viralsamples v ';
+		$sql .= 'RIGHT JOIN ';
+		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
+		$sql .= 'FROM viralsamples ';
+		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
+		$sql .= 'AND age2 = ? ';
+		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
+		$sql .= 'AND justification != 10 and facility != 7148 ';
+		$sql .= 'GROUP BY patient, facility) gv ';
+		$sql .= 'ON v.ID=gv.ID) tb ';
+		$sql .= 'GROUP BY facility, rcategory ';
+		$sql .= 'ORDER BY facility, rcategory ';
+
+		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
 
 		return $data;
     }
