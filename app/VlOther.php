@@ -169,81 +169,81 @@ class VlOther extends Model
 
     }
 
-    public function bla(){
-        echo "\n Begin eid {$column}_age_breakdown update at " . date('d/m/Y h:i:s a', time());
+    // public function bla(){
+    //     echo "\n Begin eid {$column}_age_breakdown update at " . date('d/m/Y h:i:s a', time());
 
-        $reasons = $data = DB::connection('eid')
-        ->table('age_bands')->get();
+    //     $reasons = $data = DB::connection('eid')
+    //     ->table('age_bands')->get();
 
-        // Loop through age bands
-        foreach ($reasons as $key => $value) {
-            // Each age band has a lower and uppper limit which we pass as a param
-            $pos_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 2, $division);
-            $neg_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 1, $division);
+    //     // Loop through age bands
+    //     foreach ($reasons as $key => $value) {
+    //         // Each age band has a lower and uppper limit which we pass as a param
+    //         $pos_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 2, $division);
+    //         $neg_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 1, $division);
 
-            // Loop through the months and insert data into the national agebreakdown
-            for ($i=0; $i < $count; $i++) { 
-                $month = $i + 1;
-                if($year == Date('Y') && $month > Date('m')){ break; }
+    //         // Loop through the months and insert data into the national agebreakdown
+    //         for ($i=0; $i < $count; $i++) { 
+    //             $month = $i + 1;
+    //             if($year == Date('Y') && $month > Date('m')){ break; }
 
-                // Loop through divisions
-                for ($it=0; $it < $array_size; $it++) {
+    //             // Loop through divisions
+    //             for ($it=0; $it < $array_size; $it++) {
 
-                    $pos = $this->checknull($pos_a->where('month', $month)->where($column, $div_array[$it]));
-                    $neg = $this->checknull($neg_a->where('month', $month)->where($column, $div_array[$it]));
+    //                 $pos = $this->checknull($pos_a->where('month', $month)->where($column, $div_array[$it]));
+    //                 $neg = $this->checknull($neg_a->where('month', $month)->where($column, $div_array[$it]));
 
-                    $data_array = array(
-                        'pos' => $pos, 'neg' => $neg 'dateupdated' => $today
-                    );
-
-
-                    if ($type==2) {
-                        $column="subcounty";
-                    }
-
-                    DB::table($ageb_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
-
-                    $column = $column2;
-                }
-            }
-        }
-        // End of for loop
-
-        echo "\n Completed entry into eid {$column}_age_breakdown at " . date('d/m/Y h:i:s a', time());
+    //                 $data_array = array(
+    //                     'pos' => $pos, 'neg' => $neg, 'dateupdated' => $today
+    //                 );
 
 
+    //                 if ($type==2) {
+    //                     $column="subcounty";
+    //                 }
+
+    //                 DB::table($ageb_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+
+    //                 $column = $column2;
+    //             }
+    //         }
+    //     }
+    //     // End of for loop
+
+    //     echo "\n Completed entry into eid {$column}_age_breakdown at " . date('d/m/Y h:i:s a', time());
 
 
 
-        echo "\n Begin eid nation_age_breakdown update at " . date('d/m/Y h:i:s a', time());
 
-        $reasons = $data = DB::connection('eid')
-        ->table('age_bands')->get();
 
-        // Loop through age bands
-        foreach ($reasons as $key => $value) {
-            // Each age band has a lower and uppper limit which we pass as a param
-            $pos_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 2);
-            $neg_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 1);
+    //     echo "\n Begin eid nation_age_breakdown update at " . date('d/m/Y h:i:s a', time());
 
-            // Loop through the months and insert data into the national agebreakdown
-            for ($i=0; $i < $count; $i++) { 
-                $month = $i + 1;
-                if($year == Date('Y') && $month > Date('m')){ break; }
+    //     $reasons = $data = DB::connection('eid')
+    //     ->table('age_bands')->get();
 
-                $pos = $this->checknull($pos_a->where('month', $month));
-                $neg = $this->checknull($neg_a->where('month', $month));
+    //     // Loop through age bands
+    //     foreach ($reasons as $key => $value) {
+    //         // Each age band has a lower and uppper limit which we pass as a param
+    //         $pos_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 2);
+    //         $neg_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 1);
 
-                $data_array = array(
-                    'pos' => $pos, 'neg' => $neg 'dateupdated' => $today
-                );
+    //         // Loop through the months and insert data into the national agebreakdown
+    //         for ($i=0; $i < $count; $i++) { 
+    //             $month = $i + 1;
+    //             if($year == Date('Y') && $month > Date('m')){ break; }
 
-                DB::table('national_age_breakdown')->where('year', $year)->where('month', $month)->update($data_array);
-            }
-        }
-        // End of for loop
+    //             $pos = $this->checknull($pos_a->where('month', $month));
+    //             $neg = $this->checknull($neg_a->where('month', $month));
 
-        echo "\n Completed entry into eid national_age_breakdown at " . date('d/m/Y h:i:s a', time());
+    //             $data_array = array(
+    //                 'pos' => $pos, 'neg' => $neg, 'dateupdated' => $today
+    //             );
 
-    }
+    //             DB::table('national_age_breakdown')->where('year', $year)->where('month', $month)->update($data_array);
+    //         }
+    //     }
+    //     // End of for loop
+
+    //     echo "\n Completed entry into eid national_age_breakdown at " . date('d/m/Y h:i:s a', time());
+
+    // }
 }
