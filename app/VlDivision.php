@@ -1127,6 +1127,7 @@ class VlDivision extends Model
 
     public function current_age_suppression($age){
     	ini_set("memory_limit", "-1");
+
     	$year = ((int) Date('Y'));
     	$prev_year = ((int) Date('Y')) - 1;
     	$month = ((int) Date('m'));
@@ -1155,6 +1156,7 @@ class VlDivision extends Model
 
     public function current_gender_suppression($gender){
     	ini_set("memory_limit", "-1");
+    	
     	$year = ((int) Date('Y'));
     	$prev_year = ((int) Date('Y')) - 1;
     	$month = ((int) Date('m'));
