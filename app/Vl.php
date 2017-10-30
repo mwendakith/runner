@@ -927,21 +927,21 @@ class Vl extends Model
     	$less24 = $n->current_age_suppression(10);
     	$over25 = $n->current_age_suppression(11);
 
-    	// $noage_ = $n->current_age_suppression(0, false);
-    	// $less2_ = $n->current_age_suppression(6, false);
-    	// $less9_ = $n->current_age_suppression(7, false);
-    	// $less14_ = $n->current_age_suppression(8, false);
-    	// $less19_ = $n->current_age_suppression(9, false);
-    	// $less24_ = $n->current_age_suppression(10, false);
-    	// $over25_ = $n->current_age_suppression(11, false);
+    	$noage_n= $n->current_age_suppression(0, false);
+    	$less2_n = $n->current_age_suppression(6, false);
+    	$less9_n = $n->current_age_suppression(7, false);
+    	$less14_n = $n->current_age_suppression(8, false);
+    	$less19_n = $n->current_age_suppression(9, false);
+    	$less24_n = $n->current_age_suppression(10, false);
+    	$over25_n = $n->current_age_suppression(11, false);
 
     	$male = $n->current_gender_suppression(1);  
     	$female = $n->current_gender_suppression(2);  
     	$nogender = $n->current_gender_suppression(3);
 
-    	// $male_ = $n->current_gender_suppression(1, false);  
-    	// $female_ = $n->current_gender_suppression(2, false);  
-    	// $nogender_ = $n->current_gender_suppression(3, false);   
+    	$male_n = $n->current_gender_suppression(1, false);  
+    	$female_n = $n->current_gender_suppression(2, false);  
+    	$nogender_n = $n->current_gender_suppression(3, false);   
 
     	$divs = DB::connection('vl')
 		->table('facilitys')->select('ID', 'totalartmar')->get();
@@ -980,93 +980,37 @@ class Vl extends Model
 				}
 			}
 
-			$noage_sup =
-			(int) $this->checknull($noage->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($noage->where('facility', $value->ID)->where('rcategory', 2));
+			$noage_sup =  $this->checknull($noage->where('facility', $value->ID));
+			$noage_nonsup =  $this->checknull($noage_n->where('facility', $value->ID));
 
-			$noage_nonsup = 
-			(int) $this->checknull($noage->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($noage->where('facility', $value->ID)->where('rcategory', 4));
+			$less2_sup = $this->checknull($less2->where('facility', $value->ID));
+			$less2_nonsup =  $this->checknull($less2_n->where('facility', $value->ID));
 
-			$less2_sup =
-			(int) $this->checknull($less2->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($less2->where('facility', $value->ID)->where('rcategory', 2));
+			$less9_sup = $this->checknull($less9->where('facility', $value->ID));
+			$less9_nonsup =  $this->checknull($less9_n->where('facility', $value->ID));
 
-			$less2_nonsup = 
-			(int) $this->checknull($less2->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($less2->where('facility', $value->ID)->where('rcategory', 4));
+			$less14_sup = $this->checknull($less14->where('facility', $value->ID));
+			$less14_nonsup =  $this->checknull($less14_n->where('facility', $value->ID));
 
-			$less9_sup =
-			(int) $this->checknull($less9->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($less9->where('facility', $value->ID)->where('rcategory', 2));
+			$less19_sup = $this->checknull($less19->where('facility', $value->ID));
+			$less19_nonsup =  $this->checknull($less19_n->where('facility', $value->ID));
 
-			$less9_nonsup = 
-			(int) $this->checknull($less9->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($less9->where('facility', $value->ID)->where('rcategory', 4));
+			$less24_sup = $this->checknull($less24->where('facility', $value->ID));
+			$less24_nonsup =  $this->checknull($less24_n->where('facility', $value->ID));
 
-			$less14_sup =
-			(int) $this->checknull($less14->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($less14->where('facility', $value->ID)->where('rcategory', 2));
-
-			$less14_nonsup = 
-			(int) $this->checknull($less14->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($less14->where('facility', $value->ID)->where('rcategory', 4));
-
-			$less19_sup =
-			(int) $this->checknull($less19->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($less19->where('facility', $value->ID)->where('rcategory', 2));
-
-			$less19_nonsup = 
-			(int) $this->checknull($less19->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($less19->where('facility', $value->ID)->where('rcategory', 4));
-
-			$less24_sup =
-			(int) $this->checknull($less24->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($less24->where('facility', $value->ID)->where('rcategory', 2));
-
-			$less24_nonsup = 
-			(int) $this->checknull($less24->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($less24->where('facility', $value->ID)->where('rcategory', 4));
-
-			$over25_sup =
-			(int) $this->checknull($over25->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($over25->where('facility', $value->ID)->where('rcategory', 2));
-
-			$over25_nonsup = 
-			(int) $this->checknull($over25->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($over25->where('facility', $value->ID)->where('rcategory', 4));
+			$over25_sup = $this->checknull($over25->where('facility', $value->ID));
+			$over25_nonsup =  $this->checknull($over25_n->where('facility', $value->ID));
 
 
+			$male_sup = $this->checknull($male->where('facility', $value->ID));
+			$male_nonsup = $this->checknull($male_n->where('facility', $value->ID));
 
+			$female_sup = $this->checknull($female->where('facility', $value->ID));
+			$female_nonsup = $this->checknull($female_n->where('facility', $value->ID)); 
 
+			$nogender_sup = $this->checknull($nogender->where('facility', $value->ID));
+			$nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->ID));
 
-			$male_sup =
-			(int) $this->checknull($male->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($male->where('facility', $value->ID)->where('rcategory', 2));
-
-			$male_nonsup = 
-			(int) $this->checknull($male->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($male->where('facility', $value->ID)->where('rcategory', 4));
-
-			$female_sup =
-			(int) $this->checknull($female->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($female->where('facility', $value->ID)->where('rcategory', 2));
-
-			$female_nonsup = 
-			(int) $this->checknull($female->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($female->where('facility', $value->ID)->where('rcategory', 4));
-
-			$nogender_sup =
-			(int) $this->checknull($nogender->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($nogender->where('facility', $value->ID)->where('rcategory', 2));
-
-			$nogender_nonsup = 
-			(int) $this->checknull($nogender->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($nogender->where('facility', $value->ID)->where('rcategory', 4));
-
-
-			// $data_array = array('facility' => $value->ID, 'dateupdated' => $today,
-			// 'suppressed' => $suppressed, 'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression);
 			$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
 				'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression, 'coverage' => $coverage,
 
@@ -1083,7 +1027,6 @@ class Vl extends Model
 				'nogender_suppressed' => $nogender_sup, 'nogender_nonsuppressed' => $nogender_nonsup
 			);
 
-			// DB::table('vl_site_suppression')->insert($data_array);
 			DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
 		}
 

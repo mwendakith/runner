@@ -1125,7 +1125,7 @@ class VlDivision extends Model
 		return $data;
     }
 
-    public function current_age_suppression($age){
+    public function current_age_suppression($age, $suppression=true){
     	ini_set("memory_limit", "-1");
     	
     	$year = ((int) Date('Y'));
@@ -1133,7 +1133,7 @@ class VlDivision extends Model
     	$month = ((int) Date('m'));
     	$prev_month = ((int) Date('m')) - 1;
 
-    	$sql = 'SELECT facility, rcategory, count(*) as totals ';
+    	$sql = 'SELECT facility, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
 		$sql .= 'FROM viralsamples v ';
@@ -1146,15 +1146,21 @@ class VlDivision extends Model
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
-		$sql .= 'GROUP BY facility, rcategory ';
-		$sql .= 'ORDER BY facility, rcategory ';
+		if($suppression){
+			$sql .= 'WHERE rcategory between 1 and 2 ';
+		}
+		else{
+			$sql .= 'WHERE rcategory between 3 and 4 ';
+		}
+		$sql .= 'GROUP BY facility ';
+		$sql .= 'ORDER BY facility';
 
 		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
 
-		return $data;
+		return collect($data);
     }
 
-    public function current_gender_suppression($gender){
+    public function current_gender_suppression($gender, $suppression){
     	ini_set("memory_limit", "-1");
     	
     	$year = ((int) Date('Y'));
@@ -1165,7 +1171,7 @@ class VlDivision extends Model
     	$b = new BaseModel;
 		$p = $b->get_gender($gender);
 
-    	$sql = 'SELECT facility, rcategory, count(*) as totals ';
+    	$sql = 'SELECT facility, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
 		$sql .= 'FROM viralsamples v ';
@@ -1178,12 +1184,18 @@ class VlDivision extends Model
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
-		$sql .= 'GROUP BY facility, rcategory ';
-		$sql .= 'ORDER BY facility, rcategory ';
+		if($suppression){
+			$sql .= 'WHERE rcategory between 1 and 2 ';
+		}
+		else{
+			$sql .= 'WHERE rcategory between 3 and 4 ';
+		}
+		$sql .= 'GROUP BY facility ';
+		$sql .= 'ORDER BY facility ';
 
 		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $p]);
 
-		return $data;
+		return collect($data);
     }
 
     public function update_patients()
