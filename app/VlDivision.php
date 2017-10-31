@@ -1084,16 +1084,16 @@ class VlDivision extends Model
 
     public function suppression(){
     	ini_set("memory_limit", "-1");
-    	// SELECT facility, rcategory, count(*) as totals
+  //   	SELECT facility, rcategory, count(*) as totals
 		// FROM
 		// (SELECT v.ID, v.facility, v.rcategory 
 		// FROM viralsamples v 
 		// RIGHT JOIN 
 		// (SELECT ID, patient, facility, max(datetested) as maxdate
 		// FROM viralsamples
-		// WHERE ( (year(datetested) = 2016 and month(datetested) > 9) || (year(datetested) = 2017 and month(datetested) < 10) ) 
-		// AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 
-		// AND justification != 10 
+		// WHERE ( (year(datetested) = 2016 AND month(datetested) > 9) || (year(datetested) = 2017 AND month(datetested) < 10) ) 
+		// AND flag=1 AND repeatt=0 AND rcategory between 1 AND 4 
+		// AND justification != 10 AND facility != 7148
 		// GROUP BY patient, facility) gv 
 		// ON v.ID=gv.ID) tb
 		// GROUP BY facility, rcategory 
@@ -1141,7 +1141,6 @@ class VlDivision extends Model
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
-		$sql .= 'AND age2 = ? ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
@@ -1152,6 +1151,7 @@ class VlDivision extends Model
 		else{
 			$sql .= 'WHERE rcategory between 3 and 4 ';
 		}
+		$sql .= 'AND age2 = ? ';
 		$sql .= 'GROUP BY facility ';
 		$sql .= 'ORDER BY facility';
 
@@ -1173,13 +1173,12 @@ class VlDivision extends Model
 
     	$sql = 'SELECT facility, count(*) as totals ';
 		$sql .= 'FROM ';
-		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
+		$sql .= '(SELECT v.ID, v.facility, v.rcategory, v.gender ';
 		$sql .= 'FROM viralsamples v ';
 		$sql .= 'RIGHT JOIN ';
 		$sql .= '(SELECT viralsamples.ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples JOIN viralpatients ON viralsamples.patientid=viralpatients.AutoID ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
-		$sql .= 'AND gender = ? ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
@@ -1190,6 +1189,7 @@ class VlDivision extends Model
 		else{
 			$sql .= 'WHERE rcategory between 3 and 4 ';
 		}
+		$sql .= 'AND gender = ? ';		
 		$sql .= 'GROUP BY facility ';
 		$sql .= 'ORDER BY facility ';
 
