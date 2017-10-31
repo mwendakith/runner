@@ -47,7 +47,6 @@ class Eid extends Model
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true);
 		$confirmdnaPOS_a = $n->getbypcr($year, 3, true);
 
-
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1);
 		$infantsless2mPOS_a = 	$n->Gettestedsamplescountrange($year, 1, true);
 		$infantsless2w_a =		$n->Gettestedsamplescountrange($year, 3);

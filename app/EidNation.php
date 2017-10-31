@@ -673,7 +673,7 @@ class EidNation extends Model
 	{
 		$data = DB::connection('eid')
 		->table('samples')
-		->select(DB::raw("COUNT(patients.AutoID) as totals, month(datetested) as month"))
+		->select(DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->whereBetween('patients.age', $age_array)
 		->where('samples.result', $result_type)

@@ -1084,7 +1084,7 @@ class VlDivision extends Model
 
     public function suppression(){
     	ini_set("memory_limit", "-1");
-  //   	SELECT facility, rcategory, count(*) as totals
+    	// SELECT facility, rcategory, count(*) as totals
 		// FROM
 		// (SELECT v.ID, v.facility, v.rcategory 
 		// FROM viralsamples v 
