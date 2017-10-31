@@ -1135,7 +1135,7 @@ class VlDivision extends Model
 
     	$sql = 'SELECT facility, count(*) as totals ';
 		$sql .= 'FROM ';
-		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
+		$sql .= '(SELECT v.ID, v.facility, v.rcategory, v.age2 ';
 		$sql .= 'FROM viralsamples v ';
 		$sql .= 'RIGHT JOIN ';
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
@@ -1160,7 +1160,7 @@ class VlDivision extends Model
 		return collect($data);
     }
 
-    public function current_gender_suppression($gender, $suppression=true){
+    public function current_gender_suppression($sex, $suppression=true){
     	ini_set("memory_limit", "-1");
     	
     	$year = ((int) Date('Y'));
@@ -1169,15 +1169,15 @@ class VlDivision extends Model
     	$prev_month = ((int) Date('m')) - 1;
 
     	$b = new BaseModel;
-		$p = $b->get_gender($gender);
+		$gender = $b->get_gender($sex);
 
     	$sql = 'SELECT facility, count(*) as totals ';
 		$sql .= 'FROM ';
-		$sql .= '(SELECT v.ID, v.facility, v.rcategory, v.gender ';
-		$sql .= 'FROM viralsamples v ';
+		$sql .= '(SELECT v.ID, v.facility, v.rcategory, viralpatients.gender ';
+		$sql .= 'FROM viralsamples v JOIN viralpatients ON v.patientid=viralpatients.AutoID ';
 		$sql .= 'RIGHT JOIN ';
 		$sql .= '(SELECT viralsamples.ID, patient, facility, max(datetested) as maxdate ';
-		$sql .= 'FROM viralsamples JOIN viralpatients ON viralsamples.patientid=viralpatients.AutoID ';
+		$sql .= 'FROM viralsamples ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'AND justification != 10 and facility != 7148 ';
@@ -1193,7 +1193,7 @@ class VlDivision extends Model
 		$sql .= 'GROUP BY facility ';
 		$sql .= 'ORDER BY facility ';
 
-		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $p]);
+		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $gender]);
 
 		return collect($data);
     }
