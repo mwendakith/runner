@@ -1193,8 +1193,10 @@ class Eid extends Model
 				}
 
 				if($type == 4){
-					$pos_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 2, $division);
-					$neg_a = $n->OutcomesByAgeBand($year, [$value->lower, $value->upper], 1, $division);
+					$lower = floatval($value->lower);
+					$upper = floatval($value->upper);
+					$pos_a = $n->OutcomesByAgeBand($year, [$lower, $upper], 2, $division);
+					$neg_a = $n->OutcomesByAgeBand($year, [$lower, $upper], 1, $division);
 				}
 
 				// Loop through each month and update entrypoints
