@@ -1197,6 +1197,12 @@ class Eid extends Model
 					$upper = floatval($value->upper);
 					$pos_a = $n->OutcomesByAgeBand($year, [$lower, $upper], 2, $division);
 					$neg_a = $n->OutcomesByAgeBand($year, [$lower, $upper], 1, $division);
+
+					$pos = $pos_a->count();
+					$neg = $neg_a->count();
+
+					echo "\n Pos - {$pos} Neg - {$neg}";
+					return null;
 				}
 
 				// Loop through each month and update entrypoints
@@ -1210,7 +1216,7 @@ class Eid extends Model
 						$pos = $this->checknull($pos_a->where('month', $month)->where($column, $div_array[$it]));
 						$neg = $this->checknull($neg_a->where('month', $month)->where($column, $div_array[$it]));
 
-						echo "\n Pos - {$pos} Neg - {$neg}";
+						// echo "\n Pos - {$pos} Neg - {$neg}";
 
 						$data_array = array('pos' => $pos, 'neg' => $neg, 'dateupdated' => $today);
 
