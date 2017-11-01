@@ -1150,7 +1150,7 @@ class Eid extends Model
     public function continue_division($year, $today, &$div_array, $division, $column, $div_type, $array_size){
     	$n = new EidDivision;
     	$column2 = $column;
-    	for ($type=1; $type < 5; $type++) { 
+    	for ($type=4; $type < 5; $type++) { 
 
 			$table = $this->get_table($div_type, $type);
 
