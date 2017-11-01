@@ -673,9 +673,17 @@ class EidNation extends Model
 	//samples for a particular range	
 	public function OutcomesByAgeBand($year, $age_array, $result_type, $monthly=true)
 	{
+		// use eid_kemri2;
+		// select COUNT(DISTINCT samples.patient,samples.facility) as totals
+		// from samples
+		// join patients on samples.patientautoid=patients.autoID
+		// where result between 1 and 2 and year(datetested)=2017
+		// and pcrtype=1 and flag=1 and eqa=0 and repeatt=0
+		// and patients.age between 0.0001 and 2;
+
 		$data = DB::connection('eid')
 		->table('samples')
-		->select(DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
+		->select(DB::raw("COUNT(patients.AutoID) as totals, month(datetested) as month"))
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->whereBetween('patients.age', $age_array)
 		->where('samples.result', $result_type)
