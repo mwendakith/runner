@@ -86,7 +86,8 @@ class Eid extends Model
 		
 		$sitesending_a = $n->GettotalEIDsitesbytimeperiod($year);
 		$avgage_a = $n->Getoverallaverageage($year);
-		$medage_a = $n->Getoverallmedianage($year);
+		$medage_array = $n->Getoverallmedianage($year);
+		$medage_a = collect($medage_array);
 
 		$tat = $n->get_tat($year);
 		// $tat = $n->GetNatTATs($year);
@@ -147,7 +148,7 @@ class Eid extends Model
 
 			$sitesending = $this->checknull($sitesending_a->where('month', $month));
 			$avgage = $this->checknull($avgage_a->where('month', $month));
-			$medage = $medage_a[$i];
+			$medage = $this->checkmedage($medage_a->where('month', $month));
 
 			// $tt = $tat[$i];			
 			$tt = $this->check_tat($tat->where('month', $month));			

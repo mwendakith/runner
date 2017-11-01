@@ -515,6 +515,7 @@ class EidNation extends Model
 		->where('samples.eqa', 0)
 		->get(); 
 
+
 		// return $data;
 
 		// $s="SELECT patients.age  FROM samples,patients WHERE samples.patientautoid=patients.autoID AND patients.age < 24 and patients.age >0  AND samples.result >0  AND YEAR(samples.datetested)='$yea' AND samples.Flag=1 and samples.eqa=0";
@@ -530,7 +531,8 @@ class EidNation extends Model
 					break;
 				}
 				else{
-					$return[$i] = $subset->median('age');
+					$return[$i]['totals'] = $subset->median('age');
+					$return[$i]['month'] = $subset->median('month');
 				}
 
 			}
