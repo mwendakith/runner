@@ -1208,6 +1208,8 @@ class Eid extends Model
 						$pos = $this->checknull($pos_a->where('month', $month)->where($column, $div_array[$it]));
 						$neg = $this->checknull($neg_a->where('month', $month)->where($column, $div_array[$it]));
 
+						echo "\n Pos - {$pos} Neg - {$neg}";
+
 						$data_array = array('pos' => $pos, 'neg' => $neg, 'dateupdated' => $today);
 
 						if($type != 4){							
