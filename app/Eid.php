@@ -1202,7 +1202,7 @@ class Eid extends Model
 					$neg = $neg_a->count();
 
 					echo "\n Pos - {$pos} Neg - {$neg}";
-					return null;
+					// continue;
 				}
 
 				// Loop through each month and update entrypoints
