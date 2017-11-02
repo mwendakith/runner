@@ -612,10 +612,10 @@ class Eid extends Model
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
 		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
 
-		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, $division);
-		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, $division);
-		$fail_a = $n->OverallTestedSamplesOutcomes($year, 5, $division);
-		$redraws_a = $n->OverallTestedSamplesOutcomes($year, 3, $division);
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, 1, $division);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, 1, $division);
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 5, 1, $division);
+		$redraws_a = $n->OverallTestedSamplesOutcomes($year, 3, 1, $division);
 		
 		$facilityssupported = $n->GettotalEIDsitesbytimeperiod($year, $division);
 
