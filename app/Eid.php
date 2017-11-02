@@ -31,14 +31,6 @@ class Eid extends Model
 		$patienttests_a = $n->OverallTestedPatients($year);
 		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year);
 		$received_a = $n->OverallReceivedSamples($year);
-			
-		// $firstdna_a = $n->OveralldnafirstTestedSamples($year);
-		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year);
-		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year);
-
-		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year);
-		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year);
-		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
 
 		$firstdna_a = $n->getbypcr($year, 1);
 		$posrepeats_a = $n->getbypcr($year, 2);
@@ -56,14 +48,20 @@ class Eid extends Model
 		$infantsabove2m_a =		$n->Gettestedsamplescountrange($year, 2);
 		$infantsabove2mPOS_a = 	$n->Gettestedsamplescountrange($year, 2, true);
 		$adulttests_a =			$n->Gettestedsamplescountrange($year, 5);
-		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true);
-		
+		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true);		
 
-		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2);
-		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1);
-		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3);
-		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5);
-		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6);
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, 1);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, 1);
+
+		$rpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 2);
+		$rneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 2);
+
+		$allpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 0);
+		$allneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 0);
+
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, 1);
+		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, 1);
+		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, 1);
 		// $redraw=$fail + $rd + $rdd;
 		
 		//echo $alltests;
@@ -132,6 +130,12 @@ class Eid extends Model
 			$rdd = $this->checknull($rdd_a->where('month', $month));
 			$redraw = $fail + $rd + $rdd;
 
+			$rpos = $this->checknull($rpos_a->where('month', $month));
+			$rneg = $this->checknull($rneg_a->where('month', $month));
+
+			$allpos = $this->checknull($allpos_a->where('month', $month));
+			$allneg = $this->checknull($allneg_a->where('month', $month));
+
 			$rej = $this->checknull($rej_a->where('month', $month));
 			$enrolled = $this->checknull($enrolled_a->where('month', $month));
 			$ltfu = $this->checknull($ltfu_a->where('month', $month));
@@ -164,6 +168,7 @@ class Eid extends Model
 				'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
 				'adultsPOs' => $adulttestsPOS, 'actualinfants' => $patienttests,
 				'actualinfantsPOs' => $patienttestsPOS, 'pos' => $pos, 'neg' => $neg,
+				'allpos' => $allpos, 'allneg' => $allneg, 'rpos' => $rpos, 'rneg' => $rneg,
 				'redraw' => $redraw, 'rejected' => $rej, 'enrolled' => $enrolled, 'dead' => $dead,
 				'ltfu' => $ltfu, 'adult' => $adult, 'transout' => $transout, 'other' => $other,
 				'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
@@ -176,10 +181,6 @@ class Eid extends Model
 			DB::table('national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
 			// $sql = "UPDATE national_summary set avgage='$avgage', medage='$medage',received='$received' , alltests ='$alltests' , eqatests ='$eqatests' , tests ='$tests',firstdna='$firstdna',confirmdna='$confirmdna',repeatspos ='$posrepeats',confirmedPOs ='$confimPOS',infantsless2m='$infantsless2m'  ,infantsless2mPOs ='$infantsless2mPOS' ,infantsless2w='$infantsless2w'  ,infantsless2wPOs ='$infantsless2wPOS',infants4to6w='$infantsless46w'  ,infants4to6wPOs ='$infantsless46wPOS',infantsabove2m='$infantsabove2m', infantsabove2mPOs ='$infantsabove2mPOS',adults ='$adulttests',adultsPOs ='$adulttestsPOS' ,actualinfants ='$patienttests', actualinfantsPOs ='$patienttestsPOS',pos ='$pos',neg ='$neg',redraw='$redraw',rejected='$rej',enrolled='$enrolled',dead='$dead',ltfu='$ltfu',adult='$adult',transout='$transout',	 other='$other' ,validation_confirmedpos ='$v_cp',validation_repeattest='$v_ad',validation_viralload='$v_vl',validation_adult='$v_rp',validation_unknownsite='$v_uf',sitessending ='$sitesending', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',sorted=15   WHERE month='$month' AND year='$year' ";
-
-			
-
-
 		}
 		// End of for loop
 
@@ -410,15 +411,6 @@ class Eid extends Model
 		$patienttests_a = $n->OverallTestedPatients($year, false);
 		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, false);
 		$received_a = $n->OverallReceivedSamples($year, false);
-			
-		// $firstdna_a = $n->OveralldnafirstTestedSamples($year, false);
-		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year, false);
-		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, false);
-
-		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, false);
-		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, false);
-		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
-
 
 		$firstdna_a = $n->getbypcr($year, 1, false, false);
 		$posrepeats_a = $n->getbypcr($year, 2, false, false);
@@ -440,11 +432,19 @@ class Eid extends Model
 		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true, false);
 		
 
-		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, false);
-		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, false);
-		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, false);
-		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, false);
-		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, false);
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, 1, false);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, 1, false);
+
+		$rpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 2, false);
+		$rneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 2, false);
+
+		$allpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 0, false);
+		$allneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 0, false);
+
+
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, 1, false);
+		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, 1, false);
+		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, 1, false);
 		// $redraw=$fail + $rd + $rdd;
 		
 		//echo $alltests;
@@ -507,6 +507,12 @@ class Eid extends Model
 		$rdd = $this->checknull($rdd_a);
 		$redraw = $fail + $rd + $rdd;
 
+		$rpos = $this->checknull($rpos_a);
+		$rneg = $this->checknull($rneg_a);
+		
+		$allpos = $this->checknull($allpos_a);
+		$allneg = $this->checknull($allneg_a);
+
 		$rej = $this->checknull($rej_a);
 		$enrolled = $this->checknull($enrolled_a);
 		$ltfu = $this->checknull($ltfu_a);
@@ -537,6 +543,7 @@ class Eid extends Model
 			'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
 			'adultsPOs' => $adulttestsPOS, 'actualinfants' => $patienttests,
 			'actualinfantsPOs' => $patienttestsPOS, 'pos' => $pos, 'neg' => $neg,
+			'allpos' => $allpos, 'allneg' => $allneg, 'rpos' => $rpos, 'rneg' => $rneg,
 			'redraw' => $redraw, 'rejected' => $rej, 'enrolled' => $enrolled, 'dead' => $dead,
 			'ltfu' => $ltfu, 'adult' => $adult, 'transout' => $transout, 'other' => $other,
 			'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
@@ -852,11 +859,18 @@ class Eid extends Model
 		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true, $division);
 		
 
-		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, $division);
-		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, $division);
-		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, $division);
-		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, $division);
-		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, $division);
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, 1, $division);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, 1, $division);
+
+		$rpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 2, $division);
+		$rneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 2, $division);
+
+		$allpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 0, $division);
+		$allneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 0, $division);
+
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, 1, $division);
+		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, 1, $division);
+		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, 1, $division);
 		// $redraw=$fail + $rd + $rdd;
 
 		$rej_a = $n->Getnationalrejectedsamples($year, $division);
@@ -936,6 +950,12 @@ class Eid extends Model
 				$rdd = $this->checknull($rdd_a->where('month', $month)->where($column, $div_array[$it]));
 				$redraw = $fail + $rd + $rdd;
 
+				$rpos = $this->checknull($rpos_a->where('month', $month)->where($column, $div_array[$it]));
+				$rneg = $this->checknull($rneg_a->where('month', $month)->where($column, $div_array[$it]));
+
+				$allpos = $this->checknull($allpos_a->where('month', $month)->where($column, $div_array[$it]));
+				$allneg = $this->checknull($allneg_a->where('month', $month)->where($column, $div_array[$it]));
+
 				$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 				$enrolled = $this->checknull($enrolled_a->where('month', $month)->where($column, $div_array[$it]));
 				$ltfu = $this->checknull($ltfu_a->where('month', $month)->where($column, $div_array[$it]));
@@ -970,6 +990,7 @@ class Eid extends Model
 					'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
 					'adultsPOs' => $adulttestsPOS, 'actualinfants' => $patienttests,
 					'actualinfantsPOs' => $patienttestsPOS, 'pos' => $pos, 'neg' => $neg,
+					'allpos' => $allpos, 'allneg' => $allneg, 'rpos' => $rpos, 'rneg' => $rneg,
 					'redraw' => $redraw, 'rejected' => $rej, 'enrolled' => $enrolled, 'dead' => $dead,
 					'ltfu' => $ltfu, 'adult' => $adult, 'transout' => $transout, 'other' => $other,
 					'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,
@@ -1277,14 +1298,6 @@ class Eid extends Model
 		$patienttests_a = $n->OverallTestedPatients($year, $division, false);
 		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, $division, false);
 		$received_a = $n->OverallReceivedSamples($year, $division, false);
-			
-		// $firstdna_a = $n->OveralldnafirstTestedSamples($year, $division, false);
-		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division, false);
-		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division, false);
-
-		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division, false);
-		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division, false);
-		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
 
 		$firstdna_a = $n->getbypcr($year, 1, false, $division, false);
 		$posrepeats_a = $n->getbypcr($year, 2, false, $division, false);
@@ -1306,11 +1319,19 @@ class Eid extends Model
 		$adulttestsPOS_a =		$n->Gettestedsamplescountrange($year, 5, true, $division, false);
 		
 
-		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, $division, false);
-		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, $division, false);
-		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, $division, false);
-		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, $division, false);
-		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, $division, false);
+		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, 1, $division, false);
+		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, 1, $division, false);
+
+		$rpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 2, $division, false);
+		$rneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 2, $division, false);
+
+		$allpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 0, $division, false);
+		$allneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 0, $division, false);
+
+
+		$fail_a = $n->OverallTestedSamplesOutcomes($year, 3, 1, $division, false);
+		$rd_a = $n->OverallTestedSamplesOutcomes($year, 5, 1, $division, false);
+		$rdd_a = $n->OverallTestedSamplesOutcomes($year, 6, 1, $division, false);
 		// $redraw=$fail + $rd + $rdd;
 
 		$rej_a = $n->Getnationalrejectedsamples($year, $division, false);
@@ -1384,6 +1405,12 @@ class Eid extends Model
 			$rdd = $this->checknull($rdd_a->where($column, $div_array[$it]));
 			$redraw = $fail + $rd + $rdd;
 
+			$rpos = $this->checknull($rpos_a->where($column, $div_array[$it]));
+			$rneg = $this->checknull($rneg_a->where($column, $div_array[$it]));
+
+			$allpos = $this->checknull($allpos_a->where($column, $div_array[$it]));
+			$allneg = $this->checknull($allneg_a->where($column, $div_array[$it]));
+
 			$rej = $this->checknull($rej_a->where($column, $div_array[$it]));
 			$enrolled = $this->checknull($enrolled_a->where($column, $div_array[$it]));
 			$ltfu = $this->checknull($ltfu_a->where($column, $div_array[$it]));
@@ -1404,10 +1431,6 @@ class Eid extends Model
 
 			$tt = $this->check_tat($tat->where($column, $div_array[$it]));
 
-			// echo "\n Count - {$new_count} Subcounty - {$div_array[$it]} Actual {$patienttests} Actual pos {$patienttestsPOS}";
-
-			
-
 			$data_array = array(
 				'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
 				'alltests' => $alltests, 'eqatests' => $eqatests, 'tests' => $tests,
@@ -1419,6 +1442,7 @@ class Eid extends Model
 				'infantsabove2mPOs' => $infantsabove2mPOS, 'adults' => $adulttests,
 				'adultsPOs' => $adulttestsPOS, 'actualinfants' => $patienttests,
 				'actualinfantsPOs' => $patienttestsPOS, 'pos' => $pos, 'neg' => $neg,
+				'allpos' => $allpos, 'allneg' => $allneg, 'rpos' => $rpos, 'rneg' => $rneg,
 				'redraw' => $redraw, 'rejected' => $rej, 'enrolled' => $enrolled, 'dead' => $dead,
 				'ltfu' => $ltfu, 'adult' => $adult, 'transout' => $transout, 'other' => $other,
 				'validation_confirmedpos' => $v_cp, 'validation_repeattest' => $v_ad,

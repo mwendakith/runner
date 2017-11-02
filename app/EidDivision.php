@@ -533,7 +533,7 @@ class EidDivision extends Model
 	}
 
 	//national outcomes	
-	public function OverallTestedSamplesOutcomes($year, $result_type, $division='view_facilitys.county', $monthly=true)
+	public function OverallTestedSamplesOutcomes($year, $result_type, $pcrtype, $division='view_facilitys.county', $monthly=true)
 	{
 
 		$data = DB::connection('eid')
@@ -549,9 +549,12 @@ class EidDivision extends Model
 		})
 		->where('samples.result', $result_type)
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 1)
+		->when($pcrtype, function($query) use ($pcrtype){
+			if($pcrtype != 0){
+				return $query->where('samples.pcrtype', $pcrtype);
+			}			
+		})		
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
