@@ -800,6 +800,8 @@ class Eid extends Model
     		$year = Date('Y');
     	}
 
+    	ini_set("memory_limit", "-1");
+
     	// Instantiate new object
     	$n = new EidDivision;
 
@@ -829,15 +831,6 @@ class Eid extends Model
 		$patienttests_a = $n->OverallTestedPatients($year, $division);
 		$patienttestsPOS_a = $n->OverallTestedPatientsPOS($year, $division);
 		$received_a = $n->OverallReceivedSamples($year, $division);
-			
-		// $firstdna_a = $n->OveralldnafirstTestedSamples($year, $division);
-		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division);
-		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division);
-
-
-		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division);
-		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division);
-		//$confimPOs =$confirmdnaPOS + $posrepeatsPOS;
 
 		$firstdna_a = $n->getbypcr($year, 1, false, $division);
 		$posrepeats_a = $n->getbypcr($year, 2, false, $division);
