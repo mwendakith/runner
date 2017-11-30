@@ -1100,10 +1100,15 @@ class VlDivision extends Model
 		// ORDER BY facility, rcategory; 
 
 
-    	$year = ((int) Date('Y'));
-    	$prev_year = ((int) Date('Y')) - 1;
-    	$month = ((int) Date('m'));
-    	$prev_month = ((int) Date('m')) - 1;
+    	// $year = ((int) Date('Y'));
+    	// $prev_year = ((int) Date('Y')) - 1;
+    	// $month = ((int) Date('m'));
+    	// $prev_month = ((int) Date('m')) - 1;
+
+    	$year = 2017;
+    	$prev_year = 2016;
+    	$month = 9;
+    	$prev_month = 10;
 
     	$sql = 'SELECT facility, rcategory, count(*) as totals ';
 		$sql .= 'FROM ';
@@ -1126,12 +1131,17 @@ class VlDivision extends Model
     }
 
     public function current_age_suppression($age, $suppression=true){
-    	ini_set("memory_limit", "-1");
-    	
-    	$year = ((int) Date('Y'));
-    	$prev_year = ((int) Date('Y')) - 1;
-    	$month = ((int) Date('m'));
-    	$prev_month = ((int) Date('m')) - 1;
+    	ini_set("memory_limit", "-1"); 
+
+    	// $year = ((int) Date('Y'));
+    	// $prev_year = ((int) Date('Y')) - 1;
+    	// $month = ((int) Date('m'));
+    	// $prev_month = ((int) Date('m')) - 1;
+
+    	$year = 2017;
+    	$prev_year = 2016;
+    	$month = 9;
+    	$prev_month = 10;
 
     	$sql = 'SELECT facility, count(*) as totals ';
 		$sql .= 'FROM ';
@@ -1161,12 +1171,17 @@ class VlDivision extends Model
     }
 
     public function current_gender_suppression($sex, $suppression=true){
-    	ini_set("memory_limit", "-1");
-    	
-    	$year = ((int) Date('Y'));
-    	$prev_year = ((int) Date('Y')) - 1;
-    	$month = ((int) Date('m'));
-    	$prev_month = ((int) Date('m')) - 1;
+    	ini_set("memory_limit", "-1"); 
+
+    	// $year = ((int) Date('Y'));
+    	// $prev_year = ((int) Date('Y')) - 1;
+    	// $month = ((int) Date('m'));
+    	// $prev_month = ((int) Date('m')) - 1;
+
+    	$year = 2017;
+    	$prev_year = 2016;
+    	$month = 9;
+    	$prev_month = 10;
 
     	$b = new BaseModel;
 		$gender = $b->get_gender($sex);
