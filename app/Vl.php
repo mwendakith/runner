@@ -1027,7 +1027,7 @@ class Vl extends Model
 				'nogender_suppressed' => $nogender_sup, 'nogender_nonsuppressed' => $nogender_nonsup
 			);
 
-			DB::table('vl_site_suppression_year')->where('facility', $value->ID)->update($data_array);
+			DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
 		}
 
     	echo "\n Completed entry into vl suppression at " . date('d/m/Y h:i:s a', time()); 

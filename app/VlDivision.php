@@ -1097,18 +1097,14 @@ class VlDivision extends Model
 		// GROUP BY patient, facility) gv 
 		// ON v.ID=gv.ID) tb
 		// GROUP BY facility, rcategory 
-		// ORDER BY facility, rcategory; 
+		// ORDER BY facility, rcategory;
 
+    	$r = $this->current_range();
 
-    	// $year = ((int) Date('Y'));
-    	// $prev_year = ((int) Date('Y')) - 1;
-    	// $month = ((int) Date('m'));
-    	// $prev_month = ((int) Date('m')) - 1;
-
-    	$year = 2017;
-    	$prev_year = 2016;
-    	$month = 9;
-    	$prev_month = 10;
+    	$year = $r[0];
+    	$prev_year = $r[1];
+    	$month = $r[2];
+    	$prev_month = $r[3];
 
     	$sql = 'SELECT facility, rcategory, count(*) as totals ';
 		$sql .= 'FROM ';
@@ -1133,15 +1129,12 @@ class VlDivision extends Model
     public function current_age_suppression($age, $suppression=true){
     	ini_set("memory_limit", "-1"); 
 
-    	// $year = ((int) Date('Y'));
-    	// $prev_year = ((int) Date('Y')) - 1;
-    	// $month = ((int) Date('m'));
-    	// $prev_month = ((int) Date('m')) - 1;
+    	$r = $this->current_range();
 
-    	$year = 2017;
-    	$prev_year = 2016;
-    	$month = 9;
-    	$prev_month = 10;
+    	$year = $r[0];
+    	$prev_year = $r[1];
+    	$month = $r[2];
+    	$prev_month = $r[3];
 
     	$sql = 'SELECT facility, count(*) as totals ';
 		$sql .= 'FROM ';
@@ -1173,15 +1166,12 @@ class VlDivision extends Model
     public function current_gender_suppression($sex, $suppression=true){
     	ini_set("memory_limit", "-1"); 
 
-    	// $year = ((int) Date('Y'));
-    	// $prev_year = ((int) Date('Y')) - 1;
-    	// $month = ((int) Date('m'));
-    	// $prev_month = ((int) Date('m')) - 1;
+    	$r = $this->current_range();
 
-    	$year = 2017;
-    	$prev_year = 2016;
-    	$month = 9;
-    	$prev_month = 10;
+    	$year = $r[0];
+    	$prev_year = $r[1];
+    	$month = $r[2];
+    	$prev_month = $r[3];
 
     	$b = new BaseModel;
 		$gender = $b->get_gender($sex);
@@ -1211,6 +1201,21 @@ class VlDivision extends Model
 		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $gender]);
 
 		return collect($data);
+    }
+
+    private function current_range(){
+
+    	$year = ((int) Date('Y'));
+    	$prev_year = ((int) Date('Y')) - 1;
+    	$month = ((int) Date('m'));
+    	$prev_month = ((int) Date('m')) - 1;
+
+    	// $year = 2017;
+    	// $prev_year = 2016;
+    	// $month = 9;
+    	// $prev_month = 10;
+
+    	return [$year, $prev_year, $month, $prev_month];
     }
 
     public function update_patients()
