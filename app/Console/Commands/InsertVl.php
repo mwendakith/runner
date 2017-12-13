@@ -49,16 +49,16 @@ class InsertVl extends Command
 
         if ($type == 1) {
             for ($i=1; $i < 13; $i++) { 
-                $output .= $vl->pmtct($year, $i);
+                $output .= $vl->summary($year, $i);
             }
         }
 
         else if ($type == 2) {
-            $output .= $vl->rejections($year, $month);
+            $output .= $vl->summary($year, $month);
         }
 
         else{
-            $output .= $vl->rejections();
+            $output .= $vl->summary();
         }
 
         $this->info($output);
