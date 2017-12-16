@@ -49,8 +49,8 @@ class InsertVl extends Command
 
         if ($type == 1) {
             for ($i=1; $i < 13; $i++) { 
-                // $output .= $vl->summary($year, $i);
-                $output .= $vl->inserter_missing($year, $i);
+                $output .= $vl->summary($year, $i);
+                // $output .= $vl->inserter_missing($year, $i);
             }
         }
 
