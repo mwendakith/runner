@@ -238,6 +238,8 @@ class EidInsert extends Model
 			$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => $val->ID);
 			$i++;
 		}
+		// POC row
+		$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => 11);
 		DB::table('lab_summary')->insert($data_array);
 
 		$data_array=null;
@@ -309,14 +311,15 @@ class EidInsert extends Model
 		}
 		DB::table('partner_summary_yearly')->insert($data_array);
 
-		$data_array=null;
-    	$i=0;
+		// $data_array=null;
+    	// $i=0;
 
-		foreach ($labs as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'lab' => $val->ID);
-			$i++;
-		}
-		DB::table('lab_summary_yearly')->insert($data_array);
+		// foreach ($labs as $k => $val) {
+		// 	$data_array[$i] = array('year' => $year, 'lab' => $val->ID);
+		// 	$i++;
+		// }
+		// $data_array[$i] = array('year' => $year, 'lab' => 11);
+		// DB::table('lab_summary_yearly')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
