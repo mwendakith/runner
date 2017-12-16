@@ -12,14 +12,14 @@ class SendReport extends Command
      *
      * @var string
      */
-    protected $signature = 'report:send';
+    protected $signature = 'report:send {--insert}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send Report on the update of the database';
+    protected $description = 'Send Report on the update of the database.';
 
     /**
      * Create a new command instance.
@@ -39,8 +39,15 @@ class SendReport extends Command
     public function handle()
     {
         //
+        $insert = $this->option('insert');
         $b = new BaseModel;
 
-        $b->send_report();
+        if($insert){
+            $b->send_insert_report();
+        }
+        
+        else{
+            $b->send_report();            
+        }
     }
 }

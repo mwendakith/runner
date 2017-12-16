@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UpdateReport;
+use App\Mail\InsertReport;
 
 class BaseModel extends Model
 {
@@ -337,6 +338,11 @@ class BaseModel extends Model
 
     	// $filePath = public_path('logs.txt');
     	// fclose(fopen($filePath, 'w'));
+    }
+
+    public function send_insert_report(){
+    	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com', 'baksajoshua09@gmail.com');
+    	Mail::to($mail_array)->send(new InsertReport());
     }
 
     public function test_mail(){
