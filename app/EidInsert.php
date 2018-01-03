@@ -229,7 +229,7 @@ class EidInsert extends Model
 			$data_array[$i] = array('year' => $year, 'month' => $month, 'partner' => $val->ID);
 			$i++;
 		}
-		DB::table('partner_summary')->insert($data_array);
+		DB::table('ip_summary')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
@@ -309,7 +309,7 @@ class EidInsert extends Model
 			$data_array[$i] = array('year' => $year, 'partner' => $val->ID);
 			$i++;
 		}
-		DB::table('partner_summary_yearly')->insert($data_array);
+		DB::table('ip_summary_yearly')->insert($data_array);
 
 		// $data_array=null;
     	// $i=0;
@@ -338,7 +338,7 @@ class EidInsert extends Model
 		echo "\n Completed eid summary yearly insert at " . date('d/m/Y h:i:s a', time());
     }
 
-    private function inserter($year=null, $month=null){
+    public function inserter($year=null, $month=null){
     	if($year == null){
     		$year = Date('Y');
     	}

@@ -59,7 +59,7 @@ class InsertVl extends Command
         }
 
         else if ($type == 3){
-            $output .= $vl->summary();
+            $output .= $vl->inserter();
         }
 
         $this->info($output);

@@ -266,7 +266,7 @@ class VlInsert extends Model
 		$this->inserter($year, $month);
     }
 
-    private function inserter($year=null, $month=null){
+    public function inserter($year=null, $month=null){
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -295,8 +295,8 @@ class VlInsert extends Model
 
 			$reasons = $data = DB::connection('vl')
 			->table($table_name)->select('ID')
-			->when($type, function($query) use ($type){
-				if($type == 1 || $type == 6){
+			->when($iterator, function($query) use ($iterator){
+				if($iterator == 1 || $iterator == 6){
 					return $query->where('subID', 1);
 				}				
 			})
