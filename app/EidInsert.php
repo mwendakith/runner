@@ -360,7 +360,6 @@ class EidInsert extends Model
     		$county = $this->get_table(1, $iterator);
     		$subcounty = $this->get_table(2, $iterator);
     		$partner = $this->get_table(3, $iterator);
-    		$site = $this->get_table(4, $iterator);
 
     		$table_name = $national[1];
     		$column_name = $national[2];
@@ -440,6 +439,8 @@ class EidInsert extends Model
 				// Facility Insert
 				$data_array=null;
 		    	$i=0;
+		    	
+				$site = $this->get_table(4, $iterator);
 				
 				foreach ($reasons as $key => $value) {
 					foreach ($sites as $k => $val) {
@@ -453,7 +454,6 @@ class EidInsert extends Model
 						}
 					}
 				}
-
 				DB::table($site[0])->insert($data_array);
 				$data_array=null;
 		    	$i=0;

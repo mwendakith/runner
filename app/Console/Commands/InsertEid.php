@@ -67,7 +67,7 @@ class InsertEid extends Command
         }
 
         else if ($type == 3) {
-            $output .= $eid->summary();
+            $output .= $eid->inserter();
         }
 
         $this->info($output);
