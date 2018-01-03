@@ -328,7 +328,7 @@ class EidInsert extends Model
 			$data_array[$i] = array('year' => $year, 'facility' => $val->ID);
 			$i++;
 			if ($i == 100) {
-				DB::table('site_summary')->insert($data_array);
+				DB::table('site_summary_yearly')->insert($data_array);
 				$data_array=null;
 		    	$i=0;
 			}
