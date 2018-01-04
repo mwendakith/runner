@@ -1114,8 +1114,9 @@ class VlDivision extends Model
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
-		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
-		$sql .= 'AND justification != 10 and facility != 7148 ';
+		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
+		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 AND 4 ';
+		$sql .= 'AND justification != 10 AND facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
 		$sql .= 'GROUP BY facility, rcategory ';
@@ -1144,6 +1145,7 @@ class VlDivision extends Model
 		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
+		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
@@ -1184,6 +1186,7 @@ class VlDivision extends Model
 		$sql .= '(SELECT viralsamples.ID, patient, facility, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
+		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
@@ -1205,15 +1208,15 @@ class VlDivision extends Model
 
     private function current_range(){
 
-    	$year = ((int) Date('Y'));
-    	$prev_year = ((int) Date('Y')) - 1;
-    	$month = ((int) Date('m'));
-    	$prev_month = ((int) Date('m')) - 1;
+    	// $year = ((int) Date('Y'));
+    	// $prev_year = ((int) Date('Y')) - 1;
+    	// $month = ((int) Date('m'));
+    	// $prev_month = ((int) Date('m')) - 1;
 
-    	// $year = 2017;
-    	// $prev_year = 2016;
-    	// $month = 9;
-    	// $prev_month = 10;
+    	$year = 2017;
+    	$prev_year = 2016;
+    	$month = 9;
+    	$prev_month = 10;
 
     	return [$year, $prev_year, $month, $prev_month];
     }
