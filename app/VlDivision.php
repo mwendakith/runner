@@ -1208,15 +1208,15 @@ class VlDivision extends Model
 
     private function current_range(){
 
-    	$year = ((int) Date('Y'));
-    	$prev_year = ((int) Date('Y')) - 1;
-    	$month = ((int) Date('m'));
-    	$prev_month = ((int) Date('m')) - 1;
+    	// $year = ((int) Date('Y'));
+    	// $prev_year = ((int) Date('Y')) - 1;
+    	// $month = ((int) Date('m'));
+    	// $prev_month = ((int) Date('m')) - 1;
 
-    	// $year = 2017;
-    	// $prev_year = 2016;
-    	// $month = 9;
-    	// $prev_month = 10;
+    	$year = 2017;
+    	$prev_year = 2016;
+    	$month = 9;
+    	$prev_month = 10;
 
     	return [$year, $prev_year, $month, $prev_month];
     }
