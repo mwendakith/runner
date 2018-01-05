@@ -13,7 +13,7 @@ class InsertEid extends Command
      *
      * @var string
      */
-    protected $signature = 'insert:eid {year?} {--type=2} {--month=1}';
+    protected $signature = 'insert:eid {year?} {--type=3} {--month=1}';
 
     /**
      * The console command description.
@@ -62,12 +62,13 @@ class InsertEid extends Command
             // $bar->finish();
         }
 
+
         else if ($type == 2) {
             $output .= $eid->summary($year, $month);
         }
 
         else if ($type == 3) {
-            $output .= $eid->summary();
+            $output .= $eid->inserter();
         }
 
         $this->info($output);

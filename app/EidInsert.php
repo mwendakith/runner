@@ -355,7 +355,7 @@ class EidInsert extends Model
     	$sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
 
     	// Iterate through classes of tables
-    	for ($iterator=1; $iterator < 6; $iterator++) { 
+    	for ($iterator=1; $iterator < 3; $iterator++) { 
     		$national = $this->get_table(0, $iterator);
     		$county = $this->get_table(1, $iterator);
     		$subcounty = $this->get_table(2, $iterator);
@@ -367,6 +367,14 @@ class EidInsert extends Model
 			$reasons = $data = DB::connection('eid')
 			->table($table_name)
 			->select('ID')
+			->when($iterator, function($query) use ($iterator){
+				if($iterator == 1){
+					return $query->where('ptype', 1);
+				}	
+				if($iterator == 2){
+					return $query->where('ptype', 2);
+				}							
+			})
 			->get();
 
 			echo "\n Begin eid {$table_name} insert at " . date('d/m/Y h:i:s a', time());
