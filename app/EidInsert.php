@@ -369,10 +369,10 @@ class EidInsert extends Model
 			->select('ID')
 			->when($iterator, function($query) use ($iterator){
 				if($iterator == 1){
-					return $query->where('ptype', 1);
+					return $query->where('ptype', 2);
 				}	
 				if($iterator == 2){
-					return $query->where('ptype', 2);
+					return $query->where('ptype', 1);
 				}							
 			})
 			->get();
