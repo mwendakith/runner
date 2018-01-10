@@ -98,6 +98,9 @@ class BaseModel extends Model
 	public function age_range($age){
 		$age_b;
 		switch ($age) {
+			case 0:
+				$age_b = array(0, 0);
+				break;
 			case 1:
 				$age_b = array(0.0001, 2);
 				break;
