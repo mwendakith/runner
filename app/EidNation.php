@@ -437,6 +437,11 @@ class EidNation extends Model
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
 		->where('samples.repeatt', 0)
+		->when(true, function($query) use ($col){
+			if($col == "samples.enrollmentstatus"){
+				return $query->where('hei_validation', 1);
+			}			
+		})
 		->when($monthly, function($query) use ($monthly){
 			if($monthly){
 				return $query->groupBy('month');

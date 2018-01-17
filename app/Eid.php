@@ -74,7 +74,6 @@ class Eid extends Model
 		$transout_a = $n->GetHEIFollowUpNational($year, 5);
 		$other_a = $n->GetHEIFollowUpNational($year, 6);
 
-
 		$v = 'samples.hei_validation';
 		$v_cp_a = $n->GetHEIFollowUpNational($year, 1, $v); //confirmedpos	
 		$v_ad_a = $n->GetHEIFollowUpNational($year, 2, $v); //adult

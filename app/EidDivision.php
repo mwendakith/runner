@@ -626,6 +626,11 @@ class EidDivision extends Model
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
+		->when(true, function($query) use ($col){
+			if($col == "samples.enrollmentstatus"){
+				return $query->where('hei_validation', 1);
+			}			
+		})
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
