@@ -798,6 +798,8 @@ class Eid extends Model
     	echo "\n Begin entry into eid lab mapping at " . date('d/m/Y h:i:s a', time());
 
     	$tests_a = $n->lab_county_tests($year);
+
+    	dd($tests_a);
     	$supported_sites_a = $n->lab_mapping_sites($year);
 
     	for ($i=0; $i < 12; $i++) { 
