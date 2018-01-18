@@ -41,6 +41,9 @@ class Kernel extends ConsoleKernel
 
         Commands\EidTat::class,
         Commands\VlTat::class,
+
+        Commands\EidConfirmatory::class,
+        Commands\VlConfirmatory::class,
         
         Commands\InsertEid::class,
         Commands\InsertVl::class,

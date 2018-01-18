@@ -891,6 +891,49 @@ class EidNation extends Model
 		echo "\n Completed eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 	}
 
+	public function confirmatory_report($year){
+
+    	$raw = "samples.ID, samples.patient, samples.facility";
+
+    	$data = DB::connection('eid')
+		->table("samples")
+		->select(DB::raw($raw))
+		->orderBy('samples.facility', 'desc')
+		->whereYear('datetested', $year)
+		->where('pcrtype', 3)
+		->where('samples.repeatt', 0)
+		->where('samples.Flag', 1)
+		->where('samples.facility', '!=', 7148)
+		->get();
+
+		echo "\n Begin eid samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
+
+		$i = 0;
+		$result = null;
+
+		foreach ($data as $patient) {
+
+	    	$d = DB::connection('eid')
+			->table("samples")
+			->select(DB::raw($raw))
+			->where('facility', $patient->facility)
+			->where('patient', $patient->patient)
+			->whereDate('datetested', '<', $patient->datetested)
+			->where('result', 1)
+			->where('repeatt', 0)
+			->where('Flag', 1)
+			->where('facility', '!=', 7148)
+			->where('pcrtype', '<', 3)
+			->first();
+
+			if($d == null){
+				DB::connection('eid')->table('samples')->where('ID', $patient->ID)->update(['previous_positive' => 1]);
+				$d = null;
+			}
+		}
+		echo "\n Completed eid samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
+    }
+
 	
 
 
