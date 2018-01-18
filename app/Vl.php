@@ -453,6 +453,7 @@ class Vl extends Model
 
 		if($type == 5){
 			$eqa_a = $n->get_eqa_tests($year, $start_month, $division);
+			$fake_a = $n->false_confirmatory($year, $start_month, $division);
 		}
 
 		$tat = $n->get_tat($year, $start_month, $division);
@@ -551,7 +552,8 @@ class Vl extends Model
 
 				if($type == 5){
 					$eqa = $this->checknull($eqa_a->where('month', $month)->where($column, $div_array[$it]));
-					$data_array = array_merge(['eqa' => $eqa], $data_array);
+					$fake = $this->checknull($fake_a->where('month', $month)->where($column, $div_array[$it]));
+					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake], $data_array);
 
 					$column = "lab";
 				}
@@ -1041,6 +1043,16 @@ class Vl extends Model
     	$n = new VlNation;
 
     	echo $n->update_tats($year);
+    }
+
+    public function update_confirmatory($year=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	// Instantiate new object
+    	$n = new VlNation;
+
+    	echo $n->confirmatory_report($year);
     }
 
 

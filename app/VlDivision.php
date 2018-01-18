@@ -205,6 +205,7 @@ class VlDivision extends Model
 		return $data;
     }
 
+
     public function GetNationalConfirmedFailure($year, $start_month, $division='view_facilitys.county'){
 
     	$data = DB::connection('vl')
@@ -222,6 +223,34 @@ class VlDivision extends Model
 		->whereMonth('datetested', '>', $start_month)
 		->whereBetween('viralsamples.rcategory', [3, 4])
 		->whereBetween('viralsamples.sampletype', [1, 4])
+		->where('viralsamples.justification', 2)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month', $division)
+		->get();
+
+		return $data;
+    }
+    
+
+    public function false_confirmatory($year, $start_month, $division='view_facilitys.county'){
+
+    	$data = DB::connection('vl')
+		->table('viralsamples')
+		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
+		->when($division, function($query) use ($division){
+			if($division == "viralsamples.labtestedin"){
+				return $query->where('viralsamples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID');
+			}
+		})
+		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
+		->whereBetween('viralsamples.rcategory', [1, 4])
+		->whereBetween('viralsamples.sampletype', [1, 4])
+		->where('viralsamples.previous_nonsuppressed', 1)
 		->where('viralsamples.justification', 2)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)

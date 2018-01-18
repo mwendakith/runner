@@ -993,5 +993,47 @@ class VlNation extends Model
 		}
 		echo "\n Completed vl samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 		
-	}
+	}}
+
+	public function confirmatory_report($year){
+
+    	$raw = "ID, patient, facility, datetested";
+
+    	$data = DB::connection('vl')
+		->table("viralsamples")
+		->select(DB::raw($raw))
+		->orderBy('facility', 'desc')
+		->whereYear('datetested', $year)
+		->where('justification', 2)
+		->where('repeatt', 0)
+		->where('Flag', 1)
+		->where('facility', '!=', 7148)
+		->get();
+
+		echo "\n Begin vl samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
+
+		$i = 0;
+		$result = null;
+
+		foreach ($data as $sample) {
+
+	    	$d = DB::connection('vl')
+			->table("viralsamples")
+			->select(DB::raw($raw))
+			->where('facility', $sample->facility)
+			->where('patient', $sample->patient)
+			->whereDate('datetested', '<', $sample->datetested)
+			->whereBetween('rcategory', [3, 4])
+			->where('repeatt', 0)
+			->where('Flag', 1)
+			->where('facility', '!=', 7148)
+			->first();
+
+			if($d == null){
+				DB::connection('vl')->table('viralsamples')->where('ID', $sample->ID)->update(['previous_nonsuppressed' => 1]);
+				$d = null;
+			}
+		}
+		echo "\n Completed vl samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
+    }
 }

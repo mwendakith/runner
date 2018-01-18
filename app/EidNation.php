@@ -170,6 +170,29 @@ class EidNation extends Model
 
 	}
 
+	//national false confirmatory
+	public function false_confirmatory($year, $monthly=true)
+	{
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->where('samples.facility', '!=', 7148)
+		->where('samples.previous_positive', 1)
+		->whereYear('datetested', $year)
+		->where('samples.repeatt', 0)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month');
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
 	public function getbypcr($year, $pcr=1, $pos=false, $monthly=true){
 
 		$data = DB::connection('eid')

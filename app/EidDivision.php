@@ -267,7 +267,7 @@ class EidDivision extends Model
 
 	}
 
-	//national tests
+	//national false confirmatory
 	public function false_confirmatory($year, $division='view_facilitys.county', $monthly=true)
 	{
 
