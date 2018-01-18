@@ -49,8 +49,8 @@ class InsertVl extends Command
 
         if ($type == 1) {
             for ($i=1; $i < 13; $i++) { 
-                $output .= $vl->summary($year, $i);
-                // $output .= $vl->inserter_missing($year, $i);
+                // $output .= $vl->summary($year, $i);
+                $output .= $vl->insert_lab_mapping($year, $i);
             }
         }
 
@@ -59,7 +59,8 @@ class InsertVl extends Command
         }
 
         else if ($type == 3){
-            $output .= $vl->summary();
+            // $output .= $vl->summary();
+            $output .= $vl->insert_lab_mapping();
         }
 
         $this->info($output);

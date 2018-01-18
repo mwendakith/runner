@@ -54,11 +54,11 @@ class InsertEid extends Command
         else if ($type == 1) {
             // $bar = $this->output->createProgressBar(12);
             for ($i=1; $i < 13; $i++) { 
-                // $output .= $eid->rejections($year, $i);
-                $output .= $eid->summary($year, $i);
+                $output .= $eid->insert_lab_mapping($year, $i);
+                // $output .= $eid->summary($year, $i);
                 // $bar->advance();
             }
-            $output .= $eid->summary_yearly($year);
+            // $output .= $eid->summary_yearly($year);
             // $bar->finish();
         }
 
@@ -68,7 +68,8 @@ class InsertEid extends Command
         }
 
         else if ($type == 3) {
-            $output .= $eid->summary();
+            $output .= $eid->insert_lab_mapping();
+            // $output .= $eid->summary();
         }
 
         $this->info($output);

@@ -587,6 +587,39 @@ class Vl extends Model
 
     }
 
+    public function lab_mapping($start_month, $year=null){
+        $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
+        $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+
+    	$n = new VlDivision;
+    	$today=date("Y-m-d");
+
+    	$tests_a = $n->lab_county_tests($year, $start_month);
+    	$supported_sites_a = $n->lab_mapping_sites($year, $start_month);
+
+    	for ($i=$start_month; $i < 12; $i++) { 
+			$month = $i + 1;
+			if($year == Date('Y') && $month > Date('m')){ break; }
+
+	    	foreach ($labs as $lab) {
+	    		foreach ($counties as $county) {
+	    			$search = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID];
+	    			$find = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID, 'year' => $year];
+	    			$tests = $this->checknull( $tests_a->where($search) );
+	    			if($tests == 0){
+	    				continue;
+	    			}
+	    			$supported = $this->checknull($supported_sites_a->where($search));
+
+	    			$data_array = ['total' => $tests, 'site_sending' => $supported];
+
+	    			DB::table('vl_lab_mapping')->where($find)->update($data_array);
+
+	    		}
+	    	}
+	    }
+    }
+
     public function division_rejections($start_month, $year=null, $today, &$div_array, $column, $division, $div_type, $array_size, $rej_table){
 
     	if($year == null){

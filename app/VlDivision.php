@@ -8,7 +8,40 @@ use App\BaseModel;
 
 class VlDivision extends Model
 {
-    //
+    //Mapping
+	public function lab_county_tests($year, $start_month, $division='view_facilitys.county'){
+
+    	$data = DB::connection('vl')
+		->table('viralsamples')
+		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month, viralsamples.labtestedin"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
+		->where('viralsamples.facility', '!=', 7148)
+		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
+		->where('viralsamples.Flag', 1)
+		->groupBy('month', $division, 'viralsamples.labtestedin')
+		->get();
+
+		return $data;
+	}
+	
+    //Mapping
+	public function lab_mapping_sites($year, $start_month, $division='view_facilitys.county'){
+
+    	$data = DB::connection('vl')
+		->table('viralsamples')
+		->select($division, DB::raw("COUNT(DISTINCT viralsamples.facility) as totals, month(datetested) as month, viralsamples.labtestedin"))
+		->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID')
+		->where('viralsamples.facility', '!=', 7148)
+		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
+		->where('viralsamples.Flag', 1)
+		->groupBy('month', $division, 'viralsamples.labtestedin')
+		->get();
+
+		return $data;
+	}
+
     //National rejections
 	public function national_rejections($year, $start_month, $division='view_facilitys.county', $rejected_reason){
 

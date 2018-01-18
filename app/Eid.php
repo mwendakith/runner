@@ -786,6 +786,39 @@ class Eid extends Model
 		echo "\n Completed entry into eid lab rejections at " . date('d/m/Y h:i:s a', time());
     }
 
+    public function lab_mapping($year=null){
+        $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
+        $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+
+    	$n = new EidDivision;
+    	$today=date("Y-m-d");
+
+    	$tests_a = $n->lab_county_tests($year);
+    	$supported_sites_a = $n->lab_mapping_sites($year);
+
+    	for ($i=0; $i < 12; $i++) { 
+			$month = $i + 1;
+			if($year == Date('Y') && $month > Date('m')){ break; }
+
+	    	foreach ($labs as $lab) {
+	    		foreach ($counties as $county) {
+	    			$search = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID];
+	    			$find = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID, 'year' => $year];
+	    			$tests = $this->checknull( $tests_a->where($search) );
+	    			if($tests == 0){
+	    				continue;
+	    			}
+	    			$supported = $this->checknull($supported_sites_a->where($search));
+
+	    			$data_array = ['total' => $tests, 'site_sending' => $supported];
+
+	    			DB::table('lab_mapping')->where($find)->update($data_array);
+
+	    		}
+	    	}
+	    }
+    }
+
 
     // Will be used to enter data for divisions except labs
     // Types: 1=county, 2=subcounty, 3=partner, 4=sites

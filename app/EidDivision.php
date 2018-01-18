@@ -8,7 +8,37 @@ use App\BaseModel;
 
 class EidDivision extends Model
 {
-    //
+    //Mapping
+	public function lab_county_tests($year, $division='view_facilitys.county'){
+
+    	$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month, samples.labtestedin"))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->where('samples.facility', '!=', 7148)
+		->whereYear('datetested', $year)
+		->where('samples.Flag', 1)
+		->groupBy('month', $division, 'samples.labtestedin')
+		->get();
+
+		return $data;
+	}
+	
+    //Mapping
+	public function lab_mapping_sites($year, $division='view_facilitys.county'){
+
+    	$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(DISTINCT samples.facility) as totals, month(datetested) as month, samples.labtestedin"))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->where('samples.facility', '!=', 7148)
+		->whereYear('datetested', $year)
+		->where('samples.Flag', 1)
+		->groupBy('month', $division, 'samples.labtestedin')
+		->get();
+
+		return $data;
+	}
 
     // Total number of batches
     public function GettotalbatchesPerlab($year, $division='view_facilitys.county', $monthly=true){

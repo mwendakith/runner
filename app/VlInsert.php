@@ -8,184 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class VlInsert extends Model
 {
     //
-    public function rejections($year=null, $month=null){
-    	if($year == null){
-    		$year = Date('Y');
-    	}
-    	if($month == null){
-    		$month = Date('m');
-    	}
-		ini_set("memory_limit", "-1");
-
-    	echo "\n Begin vl rejection insert at " . date('d/m/Y h:i:s a', time());
-
-    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->orderBy('ID')->get();
-    	$counties = DB::connection('vl')->table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::connection('vl')->table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
-
-    	$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID);
-			$i++;
-		}
-		DB::table('vl_national_rejections')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			foreach ($counties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'county' => $val->ID);
-				$i++;
-			}
-		}
-		DB::table('vl_county_rejections')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			foreach ($subcounties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'subcounty' => $val->ID);
-				$i++;
-			}
-		}
-		DB::table('vl_subcounty_rejections')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			foreach ($partners as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'partner' => $val->ID);
-				$i++;
-			}
-		}
-		DB::table('vl_partner_rejections')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			foreach ($labs as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'lab' => $val->ID);
-				$i++;
-			}
-		}
-		DB::table('vl_lab_rejections')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		foreach ($sites as $k => $val) {
-			foreach ($reasons as $key => $value) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
-				$i++;
-			}
-			DB::table('vl_site_rejections')->insert($data_array);
-			$data_array=null;
-	    	$i=0;
-		}
-		
-
-		echo "\n Completed vl rejection insert at " . date('d/m/Y h:i:s a', time());
-    }
-
-    public function pmtct($year=null, $month=null){
-    	if($year == null){
-    		$year = Date('Y');
-    	}
-    	if($month == null){
-    		$month = Date('m');
-    	}
-		ini_set("memory_limit", "-1");
-
-    	echo "\n Begin vl pmtct insert at " . date('d/m/Y h:i:s a', time());
-
-    	$reasons = DB::connection('vl')->table('viralpmtcttype')->select('ID')->where('subID', 1)->orderBy('ID')->get();
-    	$counties = DB::connection('vl')->table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::connection('vl')->table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
-
-    	$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID);
-			$i++;
-		}
-		DB::table('vl_national_pmtct')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			foreach ($counties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'county' => $val->ID);
-				$i++;
-			}
-		}
-		DB::table('vl_county_pmtct')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			foreach ($subcounties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'subcounty' => $val->ID);
-				$i++;
-			}
-		}
-		DB::table('vl_subcounty_pmtct')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		foreach ($reasons as $key => $value) {
-			foreach ($partners as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'partner' => $val->ID);
-				$i++;
-			}
-		}
-		DB::table('vl_partner_pmtct')->insert($data_array);
-
-		// $data_array=null;
-    	// $i=0;
-
-		// foreach ($reasons as $key => $value) {
-		// 	foreach ($labs as $k => $val) {
-		// 		$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'lab' => $val->ID);
-		// 		$i++;
-		// 	}
-		// }
-		// DB::table('vl_lab_pmtct')->insert($data_array);
-
-		$data_array=null;
-    	$i=0;
-
-		
-		foreach ($sites as $k => $val) {
-			foreach ($reasons as $key => $value) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'facility' => $val->ID);
-				$i++;
-			}
-			DB::table('vl_site_pmtct')->insert($data_array);
-			$data_array=null;
-	    	$i=0;
-		}
-		
-
-		echo "\n Completed vl pmtct insert at " . date('d/m/Y h:i:s a', time());
-    }
-
-
     public function summary($year=null, $month=null){
     	if($year == null){
     		$year = Date('Y');
@@ -528,6 +350,36 @@ class VlInsert extends Model
         }
     }
 
+    public function insert_lab_mapping($year=null, $month=null){
+        if($year == null){
+            $year = Date('Y');
+        }
+        if($month == null){
+            $month = Date('m');
+        }
+        ini_set("memory_limit", "-1");
+
+        // Get List of Divisions
+        $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
+        $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+
+        // Lab Insert
+    	$data_array=null;
+    	$i=0;
+
+        foreach ($labs as $key => $value) {
+        	foreach ($counties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => $value->ID, 
+					'county' => $val->ID);
+				$i++;
+        	}
+        	DB::table('vl_lab_mapping')->insert($data_array);
+	    	$data_array=null;
+	    	$i=0;
+        }
+
+    }
+
     private function get_table($division, $type){
     	$name;
     	if ($division == 0) {
@@ -679,6 +531,184 @@ class VlInsert extends Model
     		}    		
     	}
     	return $name;
+    }
+
+
+    public function rejections($year=null, $month=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	if($month == null){
+    		$month = Date('m');
+    	}
+		ini_set("memory_limit", "-1");
+
+    	echo "\n Begin vl rejection insert at " . date('d/m/Y h:i:s a', time());
+
+    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->orderBy('ID')->get();
+    	$counties = DB::connection('vl')->table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
+    	$labs = DB::connection('vl')->table('labs')->select('ID')->orderBy('ID')->get();
+    	$sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
+
+    	$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID);
+			$i++;
+		}
+		DB::table('vl_national_rejections')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($counties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'county' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_county_rejections')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($subcounties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'subcounty' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_subcounty_rejections')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($partners as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'partner' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_partner_rejections')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($labs as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'lab' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_lab_rejections')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($sites as $k => $val) {
+			foreach ($reasons as $key => $value) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
+				$i++;
+			}
+			DB::table('vl_site_rejections')->insert($data_array);
+			$data_array=null;
+	    	$i=0;
+		}
+		
+
+		echo "\n Completed vl rejection insert at " . date('d/m/Y h:i:s a', time());
+    }
+
+    public function pmtct($year=null, $month=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	if($month == null){
+    		$month = Date('m');
+    	}
+		ini_set("memory_limit", "-1");
+
+    	echo "\n Begin vl pmtct insert at " . date('d/m/Y h:i:s a', time());
+
+    	$reasons = DB::connection('vl')->table('viralpmtcttype')->select('ID')->where('subID', 1)->orderBy('ID')->get();
+    	$counties = DB::connection('vl')->table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties = DB::connection('vl')->table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners = DB::connection('vl')->table('partners')->select('ID')->orderBy('ID')->get();
+    	$labs = DB::connection('vl')->table('labs')->select('ID')->orderBy('ID')->get();
+    	$sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
+
+    	$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID);
+			$i++;
+		}
+		DB::table('vl_national_pmtct')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($counties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'county' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_county_pmtct')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($subcounties as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'subcounty' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_subcounty_pmtct')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		foreach ($reasons as $key => $value) {
+			foreach ($partners as $k => $val) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'partner' => $val->ID);
+				$i++;
+			}
+		}
+		DB::table('vl_partner_pmtct')->insert($data_array);
+
+		// $data_array=null;
+    	// $i=0;
+
+		// foreach ($reasons as $key => $value) {
+		// 	foreach ($labs as $k => $val) {
+		// 		$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'lab' => $val->ID);
+		// 		$i++;
+		// 	}
+		// }
+		// DB::table('vl_lab_pmtct')->insert($data_array);
+
+		$data_array=null;
+    	$i=0;
+
+		
+		foreach ($sites as $k => $val) {
+			foreach ($reasons as $key => $value) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'pmtcttype' => $value->ID, 'facility' => $val->ID);
+				$i++;
+			}
+			DB::table('vl_site_pmtct')->insert($data_array);
+			$data_array=null;
+	    	$i=0;
+		}
+		
+
+		echo "\n Completed vl pmtct insert at " . date('d/m/Y h:i:s a', time());
     }
 
     

@@ -1030,6 +1030,7 @@ class VlNation extends Model
 		->where('justification', 2)
 		->where('repeatt', 0)
 		->where('Flag', 1)
+		->where('previous_nonsuppressed', 0)
 		->where('facility', '!=', 7148)
 		->get();
 
