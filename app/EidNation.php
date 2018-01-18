@@ -893,7 +893,7 @@ class EidNation extends Model
 
 	public function confirmatory_report($year){
 
-    	$raw = "samples.ID, samples.patient, samples.facility";
+    	$raw = "samples.ID, samples.patient, samples.facility, samples.datetested";
 
     	$data = DB::connection('eid')
 		->table("samples")
