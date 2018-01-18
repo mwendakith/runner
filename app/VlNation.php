@@ -160,6 +160,27 @@ class VlNation extends Model
 
     	// $sql = "select count(DISTINCT(ID))  as numsamples from viralsamples where viralsamples.justification=2 AND  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND viralsamples.rcategory BETWEEN 3 AND 4  AND viralsamples.sampletype BETWEEN 1 AND 4  AND repeatt=0 and Flag=1";
     }
+    
+
+    public function false_confirmatory($year, $start_month){
+
+    	$data = DB::connection('vl')
+		->table('viralsamples')
+		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
+		->where('viralsamples.facility', '!=', 7148)
+		->whereYear('datetested', $year)
+		->whereMonth('datetested', '>', $start_month)
+		->whereBetween('viralsamples.rcategory', [1, 4])
+		->whereBetween('viralsamples.sampletype', [1, 4])
+		->where('viralsamples.previous_nonsuppressed', 1)
+		->where('viralsamples.justification', 2)
+		->where('viralsamples.Flag', 1)
+		->where('viralsamples.repeatt', 0)
+		->groupBy('month')
+		->get();
+
+		return $data;
+    }
 
     public function GetNationalBaseline($year, $start_month){
 
@@ -999,6 +1020,8 @@ class VlNation extends Model
 
     	$raw = "ID, patient, facility, datetested";
 
+		echo "\n Begin vl samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
+
     	$data = DB::connection('vl')
 		->table("viralsamples")
 		->select(DB::raw($raw))
@@ -1009,8 +1032,6 @@ class VlNation extends Model
 		->where('Flag', 1)
 		->where('facility', '!=', 7148)
 		->get();
-
-		echo "\n Begin vl samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
 
 		$i = 0;
 		$result = null;
