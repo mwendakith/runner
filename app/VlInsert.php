@@ -86,6 +86,7 @@ class VlInsert extends Model
 		echo "\n Completed vl summary insert at " . date('d/m/Y h:i:s a', time());
 
 		$this->inserter($year, $month);
+		$this->insert_lab_mapping($year, $month);
     }
 
     public function inserter($year=null, $month=null){
@@ -359,6 +360,8 @@ class VlInsert extends Model
         }
         ini_set("memory_limit", "-1");
 
+        echo "\n Begin vl summary lab mapping at " . date('d/m/Y h:i:s a', time());
+
         // Get List of Divisions
         $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
         $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
@@ -377,7 +380,7 @@ class VlInsert extends Model
 	    	$data_array=null;
 	    	$i=0;
         }
-
+        echo "\n Completed vl summary lab mapping at " . date('d/m/Y h:i:s a', time());
     }
 
     private function get_table($division, $type){

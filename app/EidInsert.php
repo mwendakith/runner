@@ -89,6 +89,7 @@ class EidInsert extends Model
 		echo "\n Completed eid summary insert at " . date('d/m/Y h:i:s a', time());
 
 		$this->inserter($year, $month);
+		$this->insert_lab_mapping($year, $month);
     }
 
     public function summary_yearly($year=null){
@@ -312,6 +313,8 @@ class EidInsert extends Model
         }
         ini_set("memory_limit", "-1");
 
+        echo "\n Begin eid lab mapping insert at " . date('d/m/Y h:i:s a', time());
+
         // Get List of Divisions
         $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
         $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
@@ -330,7 +333,7 @@ class EidInsert extends Model
 	    	$data_array=null;
 	    	$i=0;
         }
-
+        echo "\n Completed eid lab mapping insert at " . date('d/m/Y h:i:s a', time());
     }
 
     private function get_table($division, $type){

@@ -784,6 +784,8 @@ class Eid extends Model
 		// End of rejections
 
 		echo "\n Completed entry into eid lab rejections at " . date('d/m/Y h:i:s a', time());
+
+		echo $this->lab_mapping($year);
     }
 
     public function lab_mapping($year=null){
@@ -792,6 +794,8 @@ class Eid extends Model
 
     	$n = new EidDivision;
     	$today=date("Y-m-d");
+
+    	echo "\n Begin entry into eid lab mapping at " . date('d/m/Y h:i:s a', time());
 
     	$tests_a = $n->lab_county_tests($year);
     	$supported_sites_a = $n->lab_mapping_sites($year);
@@ -817,6 +821,8 @@ class Eid extends Model
 	    		}
 	    	}
 	    }
+
+	    echo "\n Completed entry into eid lab mapping at " . date('d/m/Y h:i:s a', time());
     }
 
 

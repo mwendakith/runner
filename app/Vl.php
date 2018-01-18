@@ -582,7 +582,8 @@ class Vl extends Model
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
 		}
 		if($type == 5){
-			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);			
+			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
+			echo $this->lab_mapping($start_month, $year);			
 		}
 
     }
@@ -593,6 +594,8 @@ class Vl extends Model
 
     	$n = new VlDivision;
     	$today=date("Y-m-d");
+
+    	echo "\n Begin entry into vl lab mapping at " . date('d/m/Y h:i:s a', time());
 
     	$tests_a = $n->lab_county_tests($year, $start_month);
     	$supported_sites_a = $n->lab_mapping_sites($year, $start_month);
@@ -618,6 +621,8 @@ class Vl extends Model
 	    		}
 	    	}
 	    }
+
+    	echo "\n Completed entry into vl lab mapping at " . date('d/m/Y h:i:s a', time());
     }
 
     public function division_rejections($start_month, $year=null, $today, &$div_array, $column, $division, $div_type, $array_size, $rej_table){
