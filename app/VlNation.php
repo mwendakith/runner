@@ -993,7 +993,7 @@ class VlNation extends Model
 		}
 		echo "\n Completed vl samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 		
-	}}
+	}
 
 	public function confirmatory_report($year){
 
