@@ -1547,7 +1547,7 @@ class Eid extends Model
     		$year = Date('Y');
     	}
 
-    	echo $n->update_tats($year);
+    	echo $n->confirmatory_report($year);
     }
 
 
