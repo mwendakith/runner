@@ -596,20 +596,13 @@ class Eid extends Model
 		$alltestedsamples = $n->CumulativeTestedSamples($year, $division);
 		$EQAtestedsamples = $n->OverallEQATestedSamples($year, $division);
 
-
-		// $confirmdna_a = $n->OverallPosRepeatsTestedSamples($year, $division);
-		// $posrepeats_a = $n->OveralldnasecondTestedSamples($year, $division);
-
-		// $posrepeatsPOS_a = $n->OveralldnasecondTestedSamplesPOS($year, $division);
-		// $confirmdnaPOS_a = $n->OverallPosRepeatsTestedSamplesPOS($year, $division);
-
-
-		// $firstdna_a = $n->getbypcr($year, 1, false, $division);
 		$posrepeats_a = $n->getbypcr($year, 2, false, $division);
 		$confirmdna_a = $n->getbypcr($year, 3, false, $division);
 
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
 		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
+
+		$fake_a = $n->false_confirmatory($year, $division);
 
 		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, 1, $division);
 		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, 1, $division);
@@ -643,6 +636,7 @@ class Eid extends Model
 		$confirmdnaPOS_a2 = $poc->getbypcr($year, 3, true);
 
 
+
 		$pos_a2 = $poc->OverallTestedSamplesOutcomes($year, 2);
 		$neg_a2 = $poc->OverallTestedSamplesOutcomes($year, 1);
 		$fail_a2 = $poc->OverallTestedSamplesOutcomes($year, 5);
@@ -674,6 +668,8 @@ class Eid extends Model
 
 				$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where('month', $month)->where($column, $div_array[$it]));
 				$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month)->where($column, $div_array[$it]));
+
+				$fake = $this->checknull($fake_a->where('month', $month)->where($column, $div_array[$it]));
 				
 				$eqatests = $this->checknull($EQAtestedsamples->where('month', $month)->where($column, $div_array[$it]));
 
@@ -694,7 +690,7 @@ class Eid extends Model
 
 				$data_array = array(
 					'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
-					'confirmdna' => $confirmdna, 'eqatests' => $eqatests, 
+					'confirmdna' => $confirmdna, 'fake_confirmatory' => $fake,  'eqatests' => $eqatests, 
 					'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
 					'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
 					'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,

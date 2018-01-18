@@ -267,6 +267,39 @@ class EidDivision extends Model
 
 	}
 
+	//national tests
+	public function false_confirmatory($year, $division='view_facilitys.county', $monthly=true)
+	{
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		->when($division, function($query) use ($division){
+			if($division == "samples.labtestedin"){
+				return $query->where('samples.facility', '!=', 7148);
+			}
+			else{
+				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
+			}
+		})
+		->where('samples.previous_positive', 1)
+		->whereYear('datetested', $year)
+		->where('samples.repeatt', 0)
+		->where('samples.Flag', 1)
+		->where('samples.eqa', 0)
+		->when($division, function($query) use ($monthly, $division){
+			if($monthly){
+				return $query->groupBy('month', $division);
+			}
+			else{
+				return $query->groupBy($division);
+			}			
+		})
+		->get(); 
+
+		return $data;
+	}
+
 	public function getbypcr($year, $pcr=1, $pos=false, $division='view_facilitys.county', $monthly=true){
 
 		$data = DB::connection('eid')
