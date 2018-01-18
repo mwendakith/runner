@@ -606,13 +606,13 @@ class Vl extends Model
 
 	    	foreach ($labs as $lab) {
 	    		foreach ($counties as $county) {
-	    			$search = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID];
+	    			// $search = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID];
 	    			$find = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID, 'year' => $year];
-	    			$tests = $this->checknull( $tests_a->where('month', $month)->where('lab', $lab->ID)->where('county', $county->ID) );
+	    			$tests = $this->checknull( $tests_a->where('month', $month)->where('labtestedin', $lab->ID)->where('county', $county->ID) );
 	    			if($tests == 0){
 	    				continue;
 	    			}
-	    			$supported = $this->checknull($supported_sites_a->where('month', $month)->where('lab', $lab->ID)->where('county', $county->ID));
+	    			$supported = $this->checknull($supported_sites_a->where('month', $month)->where('labtestedin', $lab->ID)->where('county', $county->ID));
 
 	    			$data_array = ['total' => $tests, 'site_sending' => $supported];
 
