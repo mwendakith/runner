@@ -242,7 +242,7 @@ class VlInsert extends Model
         $sites = DB::connection('vl')->table('facilitys')->select('ID')->orderBy('ID')->get();
 
         // Iterate through classes of tables
-        for ($iterator=3; $iterator < 4; $iterator++) { 
+        for ($iterator=5; $iterator < 6; $iterator++) { 
             $national = $this->get_table(0, $iterator);
             $county = $this->get_table(1, $iterator);
             $subcounty = $this->get_table(2, $iterator);
@@ -254,7 +254,7 @@ class VlInsert extends Model
 
             $reasons = $data = DB::connection('vl')
             ->table($table_name)->select('ID')
-            ->where('ID', '>', 16)
+            ->where('ID', '>', 6)
             ->get();
 
             echo "\n Begin vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
@@ -400,7 +400,7 @@ class VlInsert extends Model
     				$name = array("vl_national_sampletype", "viralsampletypedetails", "sampletype");
     				break;
     			case 5:
-    				$name = array("vl_national_justification", "viraljustificationsdetails", "justification");
+    				$name = array("vl_national_justification", "viraljustifications", "justification");
     				break;
     			case 6:
     				$name = array("vl_national_pmtct", "viralpmtcttype", "pmtcttype");
