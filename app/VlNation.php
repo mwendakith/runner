@@ -1058,4 +1058,42 @@ class VlNation extends Model
 		}
 		echo "\n Completed vl samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
     }
+
+
+
+	public function confirmatory_v(){
+
+    	$raw = "ID, patient, facility, datetested";
+
+		echo "\n Begin vl samples confirmatory update at " . date('d/m/Y h:i:s a', time());
+
+
+		// $sql = "
+		// 	SELECT id, concat(patient,'-',facility) as new_id
+		// 	FROM viralsamples WHERE new_id IN
+		// 		(
+		// 			SELECT concat(patient,'-',facility)
+		// 		)
+
+		// ";
+
+		$sql = "
+			SELECT ID, patient, facility, justification, count(*) as my_count
+			FROM viralsamples
+			WHERE justification=2
+			GROUP BY patient, facility,
+			HAVING my_count=1
+		";
+
+		$data = DB::connection('vl')->select($sql);
+
+		$i = 0;
+		$result = null;
+
+		foreach ($data as $sample) {
+
+			DB::connection('vl')->table('viralsamples')->where('ID', $sample->ID)->update(['previous_nonsuppressed' => 1]);
+		}
+		echo "\n Completed vl samples confirmatory update at " . date('d/m/Y h:i:s a', time());
+    }
 }
