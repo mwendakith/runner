@@ -1081,7 +1081,7 @@ class VlNation extends Model
 			SELECT ID, patient, facility, justification, count(*) as my_count
 			FROM viralsamples
 			WHERE justification=2
-			GROUP BY patient, facility,
+			GROUP BY patient, facility
 			HAVING my_count=1
 		";
 
