@@ -1080,7 +1080,7 @@ class VlNation extends Model
 		$sql = "
 			SELECT ID, patient, facility, justification, count(*) as my_count
 			FROM viralsamples
-			WHERE justification=2
+			WHERE justification=2 AND previous_nonsuppressed=0
 			GROUP BY patient, facility
 			HAVING my_count=1
 		";

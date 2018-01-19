@@ -1090,8 +1090,8 @@ class Vl extends Model
     	// Instantiate new object
     	$n = new VlNation;
 
-    	// echo $n->confirmatory_report($year);
-    	echo $n->confirmatory_v();
+    	echo $n->confirmatory_report($year);
+    	// echo $n->confirmatory_v();
     }
 
 
