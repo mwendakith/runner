@@ -1053,7 +1053,6 @@ class VlNation extends Model
 
 			if($d == null){
 				DB::connection('vl')->table('viralsamples')->where('ID', $sample->ID)->update(['previous_nonsuppressed' => 1]);
-				$d = null;
 			}
 		}
 		echo "\n Completed vl samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());

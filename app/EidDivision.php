@@ -1218,7 +1218,9 @@ class EidDivision extends Model
 	}
 
 	public function update_patients(){
-		$sql = "samples.ID, samples.patient, samples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, patients.age, patients.gender, patients.prophylaxis as infantproph, mothers.entry_point, mothers.feeding, mothers.prophylaxis, samples.datecollected, samples.receivedstatus, samples.pcrtype, samples.rejectedreason, samples.reason_for_repeat, samples.datereceived, samples.datetested, samples.result, samples.datedispatched, samples.labtestedin, month(datetested) as month";
+		$sql = "samples.ID, samples.patient, samples.facility, samples.batchno, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, patients.age, patients.gender, patients.prophylaxis as infantproph, mothers.entry_point, mothers.feeding, mothers.prophylaxis, samples.datecollected, samples.receivedstatus, samples.pcrtype, samples.rejectedreason, samples.reason_for_repeat, samples.datereceived, samples.datetested, samples.result, samples.datedispatched, samples.labtestedin, month(datetested) as month";
+
+    	$raw = "samples.ID, samples.patient, samples.facility, samples.datetested";
 
 		ini_set("memory_limit", "-1");
 		
@@ -1265,6 +1267,26 @@ class EidDivision extends Model
 
 			$update_array = array('synched' => 1, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 			// $update_array = array('synched' => 1, 'datesynched' => $today);
+
+			if($value->pcrtype == 3){
+
+		    	$d = DB::connection('eid')
+				->table("samples")
+				->select(DB::raw($raw))
+				->where('facility', $value->facility)
+				->where('patient', $value->patient)
+				->whereDate('datetested', '<', $value->datetested)
+				->where('result', 1)
+				->where('repeatt', 0)
+				->where('Flag', 1)
+				->where('facility', '!=', 7148)
+				->where('pcrtype', '<', 3)
+				->first();
+
+				if($d == null){
+					$update_array = array_merge($update_array, ['previous_positive' => 1]);
+				}
+			}
 
 			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
 			$p++;

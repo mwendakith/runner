@@ -1287,14 +1287,14 @@ class VlDivision extends Model
     {
     	ini_set("memory_limit", "-1");
 
-		$sql = "viralsamples.ID, viralsamples.patient, viralsamples.batchno, view_facilitys.name,
+		$sql = "viralsamples.ID, viralsamples.facility, viralsamples.patient, viralsamples.batchno, view_facilitys.name,
 		 view_facilitys.facilitycode, view_facilitys.DHIScode, viralpatients.age, viralpatients.gender,
 		  viralpatients.prophylaxis, viralsamples.justification, viralsamples.datecollected,
 		   viralsamples.receivedstatus, viralsamples.sampletype, viralsamples.rejectedreason,
 		    viralsamples.reason_for_repeat, viralsamples.datereceived, viralsamples.datetested,
 		     viralsamples.result, viralsamples.datedispatched, viralsamples.labtestedin, month(datetested) as month";
 
-		
+		$raw = "ID, patient, facility, datetested";		
 
 		$data = DB::connection('vl')
 		->table('viralsamples')
@@ -1336,11 +1336,32 @@ class VlDivision extends Model
 			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
 
 			$update_array = array('synched' => 1, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+
+			if ($value->justification == 2) {
+
+		    	$d = DB::connection('vl')
+				->table("viralsamples")
+				->select(DB::raw($raw))
+				->where('facility', $value->facility)
+				->where('patient', $value->patient)
+				->whereDate('datetested', '<', $value->datetested)
+				->whereBetween('rcategory', [3, 4])
+				->where('repeatt', 0)
+				->where('Flag', 1)
+				->where('facility', '!=', 7148)
+				->first();
+
+				if($d == null){
+					$update_array = array_merge($update_array, ['previous_nonsuppressed' => 1]);
+				}
+			}
 			// $update_array = array('synched' => 0, 'datesynched' => $today);
 
 			DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
 			$p++;
 		}
+
+
 		echo "\n {$p} vl patients synched.";
 	}
 }

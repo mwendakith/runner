@@ -934,14 +934,14 @@ class EidNation extends Model
 		$i = 0;
 		$result = null;
 
-		foreach ($data as $patient) {
+		foreach ($data as $sample) {
 
 	    	$d = DB::connection('eid')
 			->table("samples")
 			->select(DB::raw($raw))
-			->where('facility', $patient->facility)
-			->where('patient', $patient->patient)
-			->whereDate('datetested', '<', $patient->datetested)
+			->where('facility', $sample->facility)
+			->where('patient', $sample->patient)
+			->whereDate('datetested', '<', $sample->datetested)
 			->where('result', 1)
 			->where('repeatt', 0)
 			->where('Flag', 1)
@@ -950,8 +950,7 @@ class EidNation extends Model
 			->first();
 
 			if($d == null){
-				DB::connection('eid')->table('samples')->where('ID', $patient->ID)->update(['previous_positive' => 1]);
-				$d = null;
+				DB::connection('eid')->table('samples')->where('ID', $sample->ID)->update(['previous_positive' => 1]);
 			}
 		}
 		echo "\n Completed eid samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
