@@ -59,8 +59,8 @@ class InsertVl extends Command
         }
 
         else if ($type == 3){
-            $output .= $vl->inserter_missing();
-            // $output .= $vl->summary();
+            // $output .= $vl->inserter_missing();
+            $output .= $vl->summary();
             // $output .= $vl->insert_lab_mapping();
         }
 
