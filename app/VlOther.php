@@ -19,7 +19,10 @@ class VlOther extends Model
     	DB::connection('vl')->table('viralpatients')->where('gender', 2)->update(['gender' => 'F']);
 
     	// Justification
-    	DB::connection('vl')->table('viralsamples')->where('justification', 0)->update(['justification' => 8]);
+        DB::connection('vl')->table('viralsamples')->where('justification', 0)->update(['justification' => 8]);
+
+        // Sample Type
+    	DB::connection('vl')->table('viralsamples')->where('sampletype', 5)->update(['sampletype' => 1]);
 
     	// Prophylaxis
     	DB::connection('vl')->table('viralsamples')->where('prophylaxis', 0)->update(['prophylaxis' => 16]);
