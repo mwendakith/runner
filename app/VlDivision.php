@@ -100,7 +100,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
 			if($division == "viralsamples.labtestedin"){
-				return $query->where('viralsamples.facility', '!=', 7148);
+				// return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
 				return $query->join('view_facilitys', 'viralsamples.facility', '=', 'view_facilitys.ID');
