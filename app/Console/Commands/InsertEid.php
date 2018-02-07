@@ -51,6 +51,7 @@ class InsertEid extends Command
             $output .= $eid->summary_yearly($year);
         }
 
+
         else if ($type == 1) {
             // $bar = $this->output->createProgressBar(12);
             for ($i=1; $i < 13; $i++) { 
@@ -69,7 +70,8 @@ class InsertEid extends Command
 
         else if ($type == 3) {
             // $output .= $eid->insert_lab_mapping();
-            $output .= $eid->summary();
+            $output .= $eid->inserter();
+            // $output .= $eid->summary();
         }
 
         $this->info($output);
