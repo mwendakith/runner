@@ -65,8 +65,8 @@ class InsertEid extends Command
 
 
         else if ($type == 2) {
-            // $output .= $eid->summary($year, $month);
-            $output .= $eid->inserter($year, $month);
+            $output .= $eid->summary($year, $month);
+            // $output .= $eid->inserter($year, $month);
         }
 
         else if ($type == 3) {

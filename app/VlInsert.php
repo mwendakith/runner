@@ -135,7 +135,7 @@ class VlInsert extends Model
 				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID);
 				$i++;
 			}
-			DB::table($national[0])->insert($data_array);
+			// DB::table($national[0])->insert($data_array);
 
 
 			// County Insert
@@ -148,7 +148,7 @@ class VlInsert extends Model
 					$i++;
 				}
 			}
-			DB::table($county[0])->insert($data_array);
+			// DB::table($county[0])->insert($data_array);
 
 			// Subcounty Insert
 			$data_array=null;
@@ -160,21 +160,22 @@ class VlInsert extends Model
 					$i++;
 
 					if($i == 100){
-						DB::table($subcounty[0])->insert($data_array);
+						// DB::table($subcounty[0])->insert($data_array);
 						$data_array=null;
 				    	$i=0;
 					}
 				}
 			}
-			DB::table($subcounty[0])->insert($data_array);
+			// DB::table($subcounty[0])->insert($data_array);
 
 			// Partner Insert
 			$data_array=null;
 	    	$i=0;
 
 			foreach ($reasons as $key => $value) {
-				foreach ($partners as $k => $val) {
-					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $val->ID);
+				// foreach ($partners as $k => $val) {
+                    // $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $val->ID);
+					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => 83);
 					$i++;
 
                     if($i == 100){
@@ -182,9 +183,10 @@ class VlInsert extends Model
                         $data_array=null;
                         $i=0;
                     }
-				}
+				// }
 			}
 			DB::table($partner[0])->insert($data_array);
+            continue;
 
 			// Lab Insert
 	    	if($iterator == 7){
