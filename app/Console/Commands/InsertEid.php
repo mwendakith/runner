@@ -65,13 +65,14 @@ class InsertEid extends Command
 
 
         else if ($type == 2) {
-            $output .= $eid->summary($year, $month);
+            // $output .= $eid->summary($year, $month);
+            $output .= $eid->inserter();
         }
 
         else if ($type == 3) {
             // $output .= $eid->insert_lab_mapping();
-            $output .= $eid->inserter();
-            // $output .= $eid->summary();
+            // $output .= $eid->inserter();
+            $output .= $eid->summary();
         }
 
         $this->info($output);
