@@ -133,7 +133,7 @@ class Vl extends Model
 				'baselinesustxfail' => $baselinefail, 'dateupdated' => $today
 			);
 
-			DB::table('vl_national_summary')->where('year', $year)->where('month', $month)->update($data_array);
+			// DB::table('vl_national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
 			echo $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
 
@@ -144,8 +144,8 @@ class Vl extends Model
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
-		echo $this->finish_nation($start_month, $year, $today);
-		echo $this->nation_rejections($start_month, $year, $today);
+		// echo $this->finish_nation($start_month, $year, $today);
+		// echo $this->nation_rejections($start_month, $year, $today);
     }
 
     public function nation_rejections($start_month, $year=null){
