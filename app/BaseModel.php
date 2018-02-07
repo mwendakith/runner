@@ -355,6 +355,28 @@ class BaseModel extends Model
     	Mail::to($mail_array)->send($up);
     }
 
+
+    public function update_query($table, $data_array, $search_array)
+    {
+    	$sql = "UPDATE {$table} SET ";
+
+    	foreach ($data_array as $key => $value) {
+    		$sql .= "`{$key}` = '{$value}', ";
+    	}
+
+    	$sql = substr($sql, 0, -2);
+
+    	$sql .= ' WHERE ';
+
+    	foreach ($search_array as $key => $value) {
+    		$sql .= "`{$key}` = '{$value}', ";
+    	}
+
+    	$sql = substr($sql, 0, -2);
+    	$sql .= ";";
+    	return $sql;
+    }
+
 	
 
 

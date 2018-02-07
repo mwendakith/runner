@@ -135,6 +135,8 @@ class Vl extends Model
 
 			DB::table('vl_national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
+			echo $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
+
 			// $sql = "UPDATE vl_national_summary set received='$rec',alltests='$tested' ,actualpatients='$actualpatients' ,sustxfail='$sustx',confirmtx='$conftx',repeattests='$rs',confirm2vl='$conf2VL',rejected='$rej',dbs='$dbs',plasma='$plas',edta='$edta',maletest='$male',femaletest='$female',nogendertest='$nogender',adults='$adults',paeds='$paeds',noage='$noage',Undetected='$ldl',less1000='$less1k',less5000='$less5k',above5000='$above5k',invalids='$invalids',sitessending='$sites' ,less2='$less2',less9='$less9',less14='$less14',less19='$less19',less24='$less24',over25='$over25', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',baseline='$baseline',baselinesustxfail='$baselinefail', dateupdated='$today'  WHERE month='$month' AND year='$year' ";
 
 		}
@@ -1262,5 +1264,27 @@ class Vl extends Model
     		}
     	}
     	return $name;
+    }
+
+
+    public function update_query($table, $data_array, $search_array)
+    {
+    	$sql = "UPDATE {$table} SET ";
+
+    	foreach ($data_array as $key => $value) {
+    		$sql .= "`{$key}` = '{$value}', ";
+    	}
+
+    	$sql = substr($sql, 0, -2);
+
+    	$sql .= ' WHERE ';
+
+    	foreach ($search_array as $key => $value) {
+    		$sql .= "`{$key}` = '{$value}', ";
+    	}
+
+    	$sql = substr($sql, 0, -2);
+    	$sql .= ";";
+    	return $sql;
     }
 }
