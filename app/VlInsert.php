@@ -176,6 +176,12 @@ class VlInsert extends Model
 				foreach ($partners as $k => $val) {
 					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $val->ID);
 					$i++;
+
+                    if($i == 100){
+                        DB::table($partner[0])->insert($data_array);
+                        $data_array=null;
+                        $i=0;
+                    }
 				}
 			}
 			DB::table($partner[0])->insert($data_array);
