@@ -55,8 +55,8 @@ class InsertVl extends Command
         }
 
         else if ($type == 2) {
-            $output .= $vl->inserter($year, $month);
-            // $output .= $vl->summary($year, $month);
+            // $output .= $vl->inserter($year, $month);
+            $output .= $vl->summary($year, $month);
         }
 
         else if ($type == 3){
