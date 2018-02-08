@@ -726,11 +726,11 @@ class Vl extends Model
 						$column="lab";
 					}
 
-					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
-					->where('rejected_reason', $value->ID)->update($data_array);
+					// DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
+					// ->where('rejected_reason', $value->ID)->update($data_array);
 
 					$search_array = ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, $column => $div_array[$it]];
-					$update_statements .= $this->update_query($sum_table, $data_array, $search_array);
+					$update_statements .= $this->update_query($rej_table, $data_array, $search_array);
 					$updates++;
 
 					if($updates == 200){
@@ -743,7 +743,7 @@ class Vl extends Model
 				}		
 			}
     	}
-
+    	DB::statement($update_statements);
     	echo "\n Completed viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
     }
 
@@ -924,7 +924,18 @@ class Vl extends Model
 						}
 						
 
-						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+						// DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+
+						$search_array = ['year' => $year, 'month' => $month, $table[2] => $value->ID, $column => $div_array[$it]];
+						$update_statements .= $this->update_query($table[0], $data_array, $search_array);
+						$updates++;
+
+						if($updates == 200){
+							DB::statement($update_statements);
+							$update_statements = '';
+							$updates = 0;
+						}
+
 						$column = $column2;
 					}
 
@@ -935,6 +946,7 @@ class Vl extends Model
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
+		DB::statement($update_statements);
 		// End of looping of params
     }
 
@@ -1337,7 +1349,7 @@ class Vl extends Model
 
     public function update_query($table, $data_array, $search_array)
     {
-    	$sql = "UPDATE {$table} SET ";
+    	$sql = "UPDATE `{$table}` SET ";
 
     	foreach ($data_array as $key => $value) {
     		$sql .= "`{$key}` = '{$value}', ";
