@@ -142,7 +142,7 @@ class Vl extends Model
 			$updates++;
 
 			if($updates == 200){
-				DB::statement($update_statements);
+				DB::update($update_statements);
 				$update_statements = '';
 				$updates = 0;
 			}
@@ -152,7 +152,7 @@ class Vl extends Model
 		}
 		// End of for loop
 
-		DB::statement($update_statements);
+		DB::update($update_statements);
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
@@ -425,6 +425,9 @@ class Vl extends Model
     	}
     	// Instantiate new object
     	$n = new VlDivision;
+    	$update_statements = '';
+    	$updates = 0;
+
     	ini_set("memory_limit", "-1");
 
     	$today=date("Y-m-d");
@@ -604,15 +607,24 @@ class Vl extends Model
 
 				// echo "\n Column - {$column} ID - {$div_array[$it]}";
 
-				$search_array = ['year' => $year, 'month' => $month, $column => $div_array[$it]];
+				// DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
-				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+				$search_array = ['year' => $year, 'month' => $month, $column => $div_array[$it]];
+				$update_statements .= $this->update_query($sum_table, $data_array, $search_array);
+				$updates++;
+
+				if($updates == 200){
+					DB::statement($update_statements);
+					$update_statements = '';
+					$updates = 0;
+				}	
 
 				$column = $column2;
 				
 			}
 
 		}
+		DB::statement($update_statements);
 		// End of for loop
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
@@ -633,6 +645,8 @@ class Vl extends Model
         $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
 
     	$n = new VlDivision;
+    	$update_statements = '';
+    	$updates = 0;
     	$today=date("Y-m-d");
 
     	echo "\n Begin entry into vl lab mapping at " . date('d/m/Y h:i:s a', time());
@@ -672,6 +686,8 @@ class Vl extends Model
     	}
     	// Instantiate new object
     	$n = new VlDivision;
+    	$update_statements = '';
+    	$updates = 0;
 
     	$column2 = $column;
 
@@ -713,6 +729,16 @@ class Vl extends Model
 					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
 					->where('rejected_reason', $value->ID)->update($data_array);
 
+					$search_array = ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, $column => $div_array[$it]];
+					$update_statements .= $this->update_query($sum_table, $data_array, $search_array);
+					$updates++;
+
+					if($updates == 200){
+						DB::statement($update_statements);
+						$update_statements = '';
+						$updates = 0;
+					}	
+
 					$column = $column2;
 				}		
 			}
@@ -724,8 +750,12 @@ class Vl extends Model
     // Div type is the type of division eg county, subcounty, partner and facility
     public function finish_division($start_month, $year, $today, &$div_array, $column, $division, $div_type, $array_size){
     	ini_set("memory_limit", "-1");
+
     	$n = new VlDivision;
+    	$update_statements = '';
+    	$updates = 0;
     	$column2 = $column;
+
     	for ($type=1; $type < 7; $type++) { 
 
     		if($type == 3 && $column == "facility"){
