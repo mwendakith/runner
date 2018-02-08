@@ -187,7 +187,11 @@ class Eid extends Model
 		}
 		// End of for loop
 
-		DB::update(DB::raw($update_statements), []);
+		// DB::update(DB::raw($update_statements), []);
+
+		$pdo = DB::connection()->getPdo();
+		$pdo->execute($update_statements);
+
 
 		$update_statements = '';
 
