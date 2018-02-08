@@ -241,7 +241,7 @@ class Eid extends Model
 			
 		}
 		// End of rejections
-		DB::statement(DB::raw($update_statements));
+		$this->mysqli->multi_query($update_statements);
 
 		echo "\n Completed entry into eid national rejections at " . date('d/m/Y h:i:s a', time());
 
@@ -329,14 +329,14 @@ class Eid extends Model
 					$updates++;
 
 					if($updates == 200){
-						DB::statement(DB::raw($update_statements));
+						$this->mysqli->multi_query($update_statements);
 						$update_statements = '';
 						$updates = 0;
 					}	
 				}
 
 			}
-			DB::statement(DB::raw($update_statements));
+			$this->mysqli->multi_query($update_statements);
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
@@ -1014,7 +1014,7 @@ class Eid extends Model
 				$updates++;
 
 				if($updates == 200){
-					DB::statement(DB::raw($update_statements));
+					$this->mysqli->multi_query($update_statements);
 					$update_statements = '';
 					$updates = 0;
 				}	
@@ -1027,7 +1027,7 @@ class Eid extends Model
 			
 		}
 		// End of summary
-		DB::statement(DB::raw($update_statements));
+		$this->mysqli->multi_query($update_statements);
 		$update_statements = '';
 		$updates = 0;
 		echo "\n Completed entry into eid {$column} summary at " . date('d/m/Y h:i:s a', time());
@@ -1086,7 +1086,7 @@ class Eid extends Model
 					$updates++;
 
 					if($updates == 200){
-						DB::statement(DB::raw($update_statements));
+						$this->mysqli->multi_query($update_statements);
 						$update_statements = '';
 						$updates = 0;
 					}	
@@ -1097,7 +1097,7 @@ class Eid extends Model
 			
 		}
 		// End of rejections
-		DB::statement(DB::raw($update_statements));
+		$this->mysqli->multi_query($update_statements);
 		echo "\n Completed entry into eid {$column} rejections at " . date('d/m/Y h:i:s a', time());
 
 		// End of division updator
@@ -1191,7 +1191,7 @@ class Eid extends Model
 						$updates++;
 
 						if($updates == 200){
-							DB::statement(DB::raw($update_statements));
+							$this->mysqli->multi_query($update_statements);
 							$update_statements = '';
 							$updates = 0;
 						}	
@@ -1205,7 +1205,7 @@ class Eid extends Model
 			// End of looping through ids of each table e.g. entry_points
 			echo "\n Completed eid " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
-		DB::statement(DB::raw($update_statements));
+		$this->mysqli->multi_query($update_statements);
     }
 
     // Will be used to enter data for yearly divisions except labs
@@ -1424,7 +1424,7 @@ class Eid extends Model
 			$updates++;
 
 			if($updates == 200){
-				DB::statement(DB::raw($update_statements));
+				$this->mysqli->multi_query($update_statements);
 				$update_statements = '';
 				$updates = 0;
 			}	
@@ -1436,7 +1436,7 @@ class Eid extends Model
 		}
 		// End of division loop
 			
-		DB::statement(DB::raw($update_statements));
+		$this->mysqli->multi_query($update_statements);
 
 		echo "\n Completed entry into eid {$column} summary yearly at " . date('d/m/Y h:i:s a', time());
 	}

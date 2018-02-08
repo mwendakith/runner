@@ -10,6 +10,15 @@ use DB;
 class Vl extends Model
 {
     //
+
+	protected $mysqli;
+
+	public function __construct(){
+		parent::__construct();
+		$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
+	}
+
+	
     public function update_nation($start_month, $year=null){
     	if($year == null){
     		$year = Date('Y');
@@ -142,7 +151,7 @@ class Vl extends Model
 			$updates++;
 
 			if($updates == 200){
-				DB::statement(DB::raw($update_statements));
+				$this->mysqli->multi_query($update_statements);
 				$update_statements = '';
 				$updates = 0;
 			}
@@ -152,7 +161,7 @@ class Vl extends Model
 		}
 		// End of for loop
 
-		DB::statement(DB::raw($update_statements));
+		$this->mysqli->multi_query($update_statements);
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
@@ -200,13 +209,13 @@ class Vl extends Model
 				$updates++;
 
 				if($updates == 200){
-					DB::statement(DB::raw($update_statements));
+					$this->mysqli->multi_query($update_statements);
 					$update_statements = '';
 					$updates = 0;
 				}	
 			}
     	}
-    	DB::statement(DB::raw($update_statements));
+    	$this->mysqli->multi_query($update_statements);
 
     	echo "\n Completed viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
     }
@@ -403,7 +412,7 @@ class Vl extends Model
 					$updates++;
 
 					if($updates == 200){
-						DB::statement(DB::raw($update_statements));
+						$this->mysqli->multi_query($update_statements);
 						$update_statements = '';
 						$updates = 0;
 					}	
@@ -412,7 +421,7 @@ class Vl extends Model
 				// End of for loop for months
 
 			}
-			DB::statement(DB::raw($update_statements));
+			$this->mysqli->multi_query($update_statements);
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
@@ -614,7 +623,7 @@ class Vl extends Model
 				$updates++;
 
 				if($updates == 200){
-					DB::statement(DB::raw($update_statements));
+					$this->mysqli->multi_query($update_statements);
 					$update_statements = '';
 					$updates = 0;
 				}	
@@ -624,7 +633,7 @@ class Vl extends Model
 			}
 
 		}
-		DB::statement(DB::raw($update_statements));
+		$this->mysqli->multi_query($update_statements);
 		// End of for loop
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
@@ -734,7 +743,7 @@ class Vl extends Model
 					$updates++;
 
 					if($updates == 200){
-						DB::statement(DB::raw($update_statements));
+						$this->mysqli->multi_query($update_statements);
 						$update_statements = '';
 						$updates = 0;
 					}	
@@ -743,7 +752,7 @@ class Vl extends Model
 				}		
 			}
     	}
-    	DB::statement(DB::raw($update_statements));
+    	$this->mysqli->multi_query($update_statements);
     	echo "\n Completed viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
     }
 
@@ -931,7 +940,7 @@ class Vl extends Model
 						$updates++;
 
 						if($updates == 200){
-							DB::statement(DB::raw($update_statements));
+							$this->mysqli->multi_query($update_statements);
 							$update_statements = '';
 							$updates = 0;
 						}
@@ -946,7 +955,7 @@ class Vl extends Model
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
-		DB::statement(DB::raw($update_statements));
+		$this->mysqli->multi_query($update_statements);
 		// End of looping of params
     }
 
