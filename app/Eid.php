@@ -189,8 +189,11 @@ class Eid extends Model
 
 		// DB::update(DB::raw($update_statements), []);
 
-		$pdo = DB::connection()->getPdo();
-		$pdo->execute($update_statements);
+		// $pdo = DB::connection()->getPdo();
+		// $pdo->execute($update_statements);
+
+		$mysqli = new mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
+		$mysqli->multi_query($update_statements);
 
 
 		$update_statements = '';
