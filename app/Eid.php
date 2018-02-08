@@ -1,5 +1,7 @@
 <?php
 
+$mysqli = new mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge')); 
+
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -192,7 +194,7 @@ class Eid extends Model
 		// $pdo = DB::connection()->getPdo();
 		// $pdo->execute($update_statements);
 
-		$mysqli = new mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
+		global $mysqli;
 		$mysqli->multi_query($update_statements);
 
 
