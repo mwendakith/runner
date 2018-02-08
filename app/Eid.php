@@ -187,7 +187,7 @@ class Eid extends Model
 		}
 		// End of for loop
 
-		DB::statement(DB::raw($update_statements));
+		DB::statement(DB::raw($update_statements), []);
 
 		$update_statements = '';
 
@@ -1425,7 +1425,7 @@ class Eid extends Model
 		// End of division loop
 			
 		DB::statement(DB::raw($update_statements));
-		
+
 		echo "\n Completed entry into eid {$column} summary yearly at " . date('d/m/Y h:i:s a', time());
 	}
 
