@@ -138,7 +138,7 @@ class Vl extends Model
 
 			// DB::table('vl_national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
-			$update_statements = $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
+			$update_statements .= $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
 			$updates++;
 
 			if($updates == 200){

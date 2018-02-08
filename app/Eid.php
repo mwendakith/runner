@@ -18,6 +18,9 @@ class Eid extends Model
     	// Instantiate new object
     	$n = new EidNation;
 
+    	$update_statements = "";
+    	$updates = 0;
+
     	$today=date("Y-m-d");
 
     	echo "\n Begin eid nation update at " . date('d/m/Y h:i:s a', time());
@@ -177,18 +180,24 @@ class Eid extends Model
 				'tat4' => $tt['tat4'], 'dateupdated' => $today
 			);
 
-			DB::table('national_summary')->where('year', $year)->where('month', $month)->update($data_array);
+			// DB::table('national_summary')->where('year', $year)->where('month', $month)->update($data_array);
+
+			$update_statements .= $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
 
 			// $sql = "UPDATE national_summary set avgage='$avgage', medage='$medage',received='$received' , alltests ='$alltests' , eqatests ='$eqatests' , tests ='$tests',firstdna='$firstdna',confirmdna='$confirmdna',repeatspos ='$posrepeats',confirmedPOs ='$confimPOS',infantsless2m='$infantsless2m'  ,infantsless2mPOs ='$infantsless2mPOS' ,infantsless2w='$infantsless2w'  ,infantsless2wPOs ='$infantsless2wPOS',infants4to6w='$infantsless46w'  ,infants4to6wPOs ='$infantsless46wPOS',infantsabove2m='$infantsabove2m', infantsabove2mPOs ='$infantsabove2mPOS',adults ='$adulttests',adultsPOs ='$adulttestsPOS' ,actualinfants ='$patienttests', actualinfantsPOs ='$patienttestsPOS',pos ='$pos',neg ='$neg',redraw='$redraw',rejected='$rej',enrolled='$enrolled',dead='$dead',ltfu='$ltfu',adult='$adult',transout='$transout',	 other='$other' ,validation_confirmedpos ='$v_cp',validation_repeattest='$v_ad',validation_viralload='$v_vl',validation_adult='$v_rp',validation_unknownsite='$v_uf',sitessending ='$sitesending', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',sorted=15   WHERE month='$month' AND year='$year' ";
 		}
 		// End of for loop
+
+		DB::statement(DB::raw($update_statements));
+
+		$update_statements = '';
 
 		echo "\n Completed entry into eid national summary at " . date('d/m/Y h:i:s a', time());
 
 		// Set the following to null in order to free memory
 		$alltests_a = $eqatests_a = $tests_a = $patienttests_a = $patienttestsPOS_a = $received_a = $firstdna_a = $confirmdna_a = $posrepeats_a = $confirmdnaPOS_a = $posrepeatsPOS_a = $infantsless2m_a = $infantsless2mPOS_a = $infantsless2w_a = $infantsless2wPOS_a = $infantsless46w_a = $infantsless46wPOS_a = $infantsabove2m_a = $infantsabove2mPOS_a = $adulttests_a = $adulttestsPOS_a = $pos_a = $neg_a = $fail_a = $rd_a = $rdd_a = $rej_a = $enrolled_a = $ltfu_a = $dead_a = $adult_a = $transout_a = $other_a = $v_cp_a = $v_ad_a = $v_vl_a = $v_rp_a = $v_uf_a = $sitesending_a = $avgage_a = $medage_a = $tat = null;
 
-		echo "\n Begin eid nation age breakdown update at " . date('d/m/Y h:i:s a', time());
+		// echo "\n Begin eid nation age breakdown update at " . date('d/m/Y h:i:s a', time());
 
 		// Get national age_breakdown
 		// $age1pos_a = $n->GetTestOutcomesbyAgeBand($year, 1, 2);
@@ -1717,6 +1726,29 @@ class Eid extends Model
     	}
 
     	return $name;
+    }
+
+
+    public function update_query($table, $data_array, $search_array)
+    {
+    	$sql = "UPDATE `{$table}` SET ";
+
+    	foreach ($data_array as $key => $value) {
+    		$sql .= "`{$key}` = '{$value}', ";
+    	}
+
+    	$sql = substr($sql, 0, -2);
+
+    	$sql .= ' WHERE ';
+
+    	foreach ($search_array as $key => $value) {
+    		$sql .= "`{$key}` = '{$value}' AND ";
+    	}
+
+    	$sql = substr($sql, 0, -5);
+    	$sql .= ";
+    	 ";
+    	return $sql;
     }
 
 
