@@ -152,7 +152,7 @@ class Vl extends Model
 		}
 		// End of for loop
 
-		DB::statement($update_statements, []);
+		DB::statement(DB::raw($update_statements));
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
