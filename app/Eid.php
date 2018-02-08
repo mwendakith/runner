@@ -11,6 +11,14 @@ use DB;
 class Eid extends Model
 {
     //
+
+	protected $mysqli;
+
+	public function __construct(){
+		parent::__construct();
+		$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
+	}
+
     public function update_nation($year = null){
     	if($year == null){
     		$year = Date('Y');
@@ -189,11 +197,8 @@ class Eid extends Model
 
 		// DB::update(DB::raw($update_statements), []);
 
-		// $pdo = DB::connection()->getPdo();
-		// $pdo->execute($update_statements);
-
-		$mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge')); 
-		$mysqli->multi_query($update_statements);
+		// $mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge')); 
+		$this->mysqli->multi_query($update_statements);
 
 
 		$update_statements = '';
