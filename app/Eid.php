@@ -187,7 +187,7 @@ class Eid extends Model
 		}
 		// End of for loop
 
-		DB::statement(DB::raw($update_statements), []);
+		DB::update(DB::raw($update_statements), []);
 
 		$update_statements = '';
 
