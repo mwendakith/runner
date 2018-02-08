@@ -142,7 +142,7 @@ class Vl extends Model
 			$updates++;
 
 			if($updates == 200){
-				DB::update($update_statements);
+				DB::statement($update_statements, []);
 				$update_statements = '';
 				$updates = 0;
 			}
@@ -152,7 +152,7 @@ class Vl extends Model
 		}
 		// End of for loop
 
-		DB::update($update_statements);
+		DB::statement($update_statements, []);
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
@@ -1352,7 +1352,8 @@ class Vl extends Model
     	}
 
     	$sql = substr($sql, 0, -5);
-    	$sql .= "; ";
+    	$sql .= ";
+    	 ";
     	return $sql;
     }
 }
