@@ -142,7 +142,7 @@ class Vl extends Model
 			$updates++;
 
 			if($updates == 200){
-				DB::statement($update_statements, []);
+				DB::statement(DB::raw($update_statements));
 				$update_statements = '';
 				$updates = 0;
 			}
@@ -200,13 +200,13 @@ class Vl extends Model
 				$updates++;
 
 				if($updates == 200){
-					DB::statement($update_statements);
+					DB::statement(DB::raw($update_statements));
 					$update_statements = '';
 					$updates = 0;
 				}	
 			}
     	}
-    	DB::statement($update_statements);
+    	DB::statement(DB::raw($update_statements));
 
     	echo "\n Completed viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
     }
@@ -403,7 +403,7 @@ class Vl extends Model
 					$updates++;
 
 					if($updates == 200){
-						DB::statement($update_statements);
+						DB::statement(DB::raw($update_statements));
 						$update_statements = '';
 						$updates = 0;
 					}	
@@ -412,7 +412,7 @@ class Vl extends Model
 				// End of for loop for months
 
 			}
-			DB::statement($update_statements);
+			DB::statement(DB::raw($update_statements));
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
@@ -614,7 +614,7 @@ class Vl extends Model
 				$updates++;
 
 				if($updates == 200){
-					DB::statement($update_statements);
+					DB::statement(DB::raw($update_statements));
 					$update_statements = '';
 					$updates = 0;
 				}	
@@ -624,7 +624,7 @@ class Vl extends Model
 			}
 
 		}
-		DB::statement($update_statements);
+		DB::statement(DB::raw($update_statements));
 		// End of for loop
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
@@ -734,7 +734,7 @@ class Vl extends Model
 					$updates++;
 
 					if($updates == 200){
-						DB::statement($update_statements);
+						DB::statement(DB::raw($update_statements));
 						$update_statements = '';
 						$updates = 0;
 					}	
@@ -743,7 +743,7 @@ class Vl extends Model
 				}		
 			}
     	}
-    	DB::statement($update_statements);
+    	DB::statement(DB::raw($update_statements));
     	echo "\n Completed viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
     }
 
@@ -931,7 +931,7 @@ class Vl extends Model
 						$updates++;
 
 						if($updates == 200){
-							DB::statement($update_statements);
+							DB::statement(DB::raw($update_statements));
 							$update_statements = '';
 							$updates = 0;
 						}
@@ -946,7 +946,7 @@ class Vl extends Model
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
-		DB::statement($update_statements);
+		DB::statement(DB::raw($update_statements));
 		// End of looping of params
     }
 
