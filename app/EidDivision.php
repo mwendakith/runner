@@ -8,6 +8,19 @@ use App\BaseModel;
 
 class EidDivision extends Model
 {
+    //Control Tests
+	public function control_samples($year){
+
+    	$data = DB::connection('eid')
+		->table('worksheets_eid')
+		->select('worksheets_eid.lab', DB::raw("COUNT(*) as totals, month(daterun) as month"))
+		->whereYear('daterun', $year)
+		->groupBy('month', 'worksheets_eid.lab')
+		->get();
+
+		return $data;
+	}
+
     //Mapping
 	public function lab_county_tests($year, $division='view_facilitys.county'){
 
@@ -1256,7 +1269,7 @@ class EidDivision extends Model
 				'datedispatched' => $value->datedispatched, 'labtestedin' => $value->labtestedin
 			);
 
-			DB::table('patients_eid')->insert($data_array);
+			// DB::table('patients_eid')->insert($data_array);
 
 			$holidays = $b->getTotalHolidaysinMonth($value->month);
 

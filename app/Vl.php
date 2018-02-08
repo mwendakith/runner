@@ -18,7 +18,7 @@ class Vl extends Model
 		$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
 	}
 
-	
+
     public function update_nation($start_month, $year=null){
     	if($year == null){
     		$year = Date('Y');
@@ -263,6 +263,17 @@ class Vl extends Model
 			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 9);
 			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 10);
 			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 11);
+
+			    	if ($type == 3) {
+
+				    	$noages_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 0, true);
+				    	$less2s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 6, true);
+				    	$less9s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 7, true);
+				    	$less14s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 8, true);
+				    	$less19s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 9, true);
+				    	$less24s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 10, true);
+				    	$over25s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 11, true);
+			    	}
 			    }
 
 		    	// $adults=$less19 +$less24 + $over25 ;
@@ -289,7 +300,7 @@ class Vl extends Model
 					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 2);
 					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 3);
 
-					if($type == 1){
+					if($type == 1 || $type == 3){
 						$males_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 1, true);
 						$females_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 2, true);
 						$nogenders_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 3, true);
@@ -356,6 +367,24 @@ class Vl extends Model
 						'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
 						'noage' => $noage);
 
+						if($type == 3){
+
+							$noage = $this->checknull($noages_a->where('month', $month));
+							$less2 = $this->checknull($less2s_a->where('month', $month));
+							$less9 = $this->checknull($less9s_a->where('month', $month));
+							$less14 = $this->checknull($less14s_a->where('month', $month));
+							$less19 = $this->checknull($less19s_a->where('month', $month));
+							$less24 = $this->checknull($less24s_a->where('month', $month));
+							$over25 = $this->checknull($over25s_a->where('month', $month));
+
+							$age_array2 = array('less2_nonsuppressed' => $less2, 'less9_nonsuppressed' => $less9,
+							'less14_nonsuppressed' => $less14, 'less19_nonsuppressed' => $less19, 'less24_nonsuppressed' => $less24,
+							'over25_nonsuppressed' => $over25, 
+							'noage_nonsuppressed' => $noage);
+
+							$age_array = array_merge($age_array, $age_array2);
+						}
+
 						$data_array = array_merge($age_array, $data_array);
 
 					}
@@ -380,7 +409,7 @@ class Vl extends Model
 
 						$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
 
-						if($type == 1){
+						if($type == 1 || $type == 3){
 							$males = $this->checknull($males_a->where('month', $month));
 							$females = $this->checknull($females_a->where('month', $month));
 							$nogenders = $this->checknull($nogenders_a->where('month', $month));
@@ -421,10 +450,11 @@ class Vl extends Model
 				// End of for loop for months
 
 			}
-			$this->mysqli->multi_query($update_statements);
+			
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
+		$this->mysqli->multi_query($update_statements);
 		// End of looping of params
     }
 
@@ -505,6 +535,7 @@ class Vl extends Model
 		if($type == 5){
 			$eqa_a = $n->get_eqa_tests($year, $start_month, $division);
 			$fake_a = $n->false_confirmatory($year, $start_month, $division);
+			$controls_a = $n->control_samples($year, $start_month);
 		}
 
 		$tat = $n->get_tat($year, $start_month, $division);
@@ -604,7 +635,8 @@ class Vl extends Model
 				if($type == 5){
 					$eqa = $this->checknull($eqa_a->where('month', $month)->where($column, $div_array[$it]));
 					$fake = $this->checknull($fake_a->where('month', $month)->where($column, $div_array[$it]));
-					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake], $data_array);
+					$controls = $this->checknull($controls_a->where('month', $month)->where('lab', $div_array[$it])) * 2;
+					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
 
 					$column = "lab";
 				}
@@ -670,7 +702,7 @@ class Vl extends Model
 	    	foreach ($labs as $lab) {
 	    		foreach ($counties as $county) {
 	    			// $search = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID];
-	    			$find = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID, 'year' => $year];
+	    			$search_array = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID, 'year' => $year];
 	    			$tests = $this->checknull( $tests_a->where('month', $month)->where('labtestedin', $lab->ID)->where('county', $county->ID) );
 	    			if($tests == 0){
 	    				continue;
@@ -679,12 +711,21 @@ class Vl extends Model
 
 	    			$data_array = ['total' => $tests, 'site_sending' => $supported];
 
-	    			DB::table('vl_lab_mapping')->where($find)->update($data_array);
+	    			// DB::table('vl_lab_mapping')->where($search_array)->update($data_array);
+
+					$update_statements .= $this->update_query($sum_table, $data_array, $search_array);
+					$updates++;
+
+					if($updates == 200){
+						$this->mysqli->multi_query($update_statements);
+						$update_statements = '';
+						$updates = 0;
+					}	
 
 	    		}
 	    	}
 	    }
-
+	    $this->mysqli->multi_query($update_statements);
     	echo "\n Completed entry into vl lab mapping at " . date('d/m/Y h:i:s a', time());
     }
 
@@ -767,9 +808,9 @@ class Vl extends Model
 
     	for ($type=1; $type < 7; $type++) { 
 
-    		if($type == 3 && $column == "facility"){
-				continue;
-			}
+    		// if($type == 3 && $column == "facility"){
+			// 	continue;
+			// }
 
 			$table = $this->get_table($div_type, $type);
 

@@ -561,6 +561,7 @@ class Eid extends Model
 		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
 
 		$fake_a = $n->false_confirmatory($year, $division);
+		$controls_a = $n->control_samples($year);
 
 		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, 1, $division);
 		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, 1, $division);
@@ -628,6 +629,7 @@ class Eid extends Model
 				$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month)->where($column, $div_array[$it]));
 
 				$fake = $this->checknull($fake_a->where('month', $month)->where($column, $div_array[$it]));
+				$controls = $this->checknull($controls_a->where('month', $month)->where('lab', $div_array[$it])) * 2;
 				
 				$eqatests = $this->checknull($EQAtestedsamples->where('month', $month)->where($column, $div_array[$it]));
 
@@ -652,7 +654,7 @@ class Eid extends Model
 					'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
 					'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
 					'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
-					'sitessending' => $sitesending,
+					'sitessending' => $sitesending, 'controls' => $controls,
 					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
 					'tat4' => $tt['tat4'], 'dateupdated' => $today
 				);

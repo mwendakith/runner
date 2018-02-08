@@ -8,6 +8,20 @@ use App\BaseModel;
 
 class VlDivision extends Model
 {
+    //Control Tests
+	public function control_samples($year, $start_month){
+
+    	$data = DB::connection('vl')
+		->table('worksheets_vl')
+		->select('worksheets_vl.lab', DB::raw("COUNT(*) as totals, month(daterun) as month"))
+		->whereYear('daterun', $year)
+		->whereMonth('daterun', '>', $start_month)
+		->groupBy('month', 'worksheets_vl.lab')
+		->get();
+
+		return $data;
+	}
+
     //Mapping
 	public function lab_county_tests($year, $start_month, $division='view_facilitys.county'){
 
@@ -1326,7 +1340,7 @@ class VlDivision extends Model
 				'datedispatched' => $value->datedispatched, 'labtestedin' => $value->labtestedin
 			);
 
-			DB::table('patients')->insert($data_array);
+			// DB::table('patients')->insert($data_array);
 
 			$holidays = $b->getTotalHolidaysinMonth($value->month);
 
