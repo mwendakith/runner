@@ -369,11 +369,11 @@ class BaseModel extends Model
     	$sql .= ' WHERE ';
 
     	foreach ($search_array as $key => $value) {
-    		$sql .= "`{$key}` = '{$value}', ";
+    		$sql .= "`{$key}` = '{$value}' AND ";
     	}
 
-    	$sql = substr($sql, 0, -2);
-    	$sql .= ";";
+    	$sql = substr($sql, 0, -5);
+    	$sql .= "; ";
     	return $sql;
     }
 

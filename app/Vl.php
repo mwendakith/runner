@@ -19,6 +19,9 @@ class Vl extends Model
 
     	$today=date("Y-m-d");
 
+    	$update_statements = "";
+    	$updates = 0;
+
     	echo "\n Begin viralload nation update at " . date('d/m/Y h:i:s a', time());
 
     	// Get collection instances of the data
@@ -135,17 +138,26 @@ class Vl extends Model
 
 			// DB::table('vl_national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
-			echo $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
+			$update_statements .= $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
+			$updates++;
+
+			if($updates == 200){
+				DB::statement($update_statements);
+				$update_statements = '';
+				$updates = 0;
+			}
 
 			// $sql = "UPDATE vl_national_summary set received='$rec',alltests='$tested' ,actualpatients='$actualpatients' ,sustxfail='$sustx',confirmtx='$conftx',repeattests='$rs',confirm2vl='$conf2VL',rejected='$rej',dbs='$dbs',plasma='$plas',edta='$edta',maletest='$male',femaletest='$female',nogendertest='$nogender',adults='$adults',paeds='$paeds',noage='$noage',Undetected='$ldl',less1000='$less1k',less5000='$less5k',above5000='$above5k',invalids='$invalids',sitessending='$sites' ,less2='$less2',less9='$less9',less14='$less14',less19='$less19',less24='$less24',over25='$over25', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',baseline='$baseline',baselinesustxfail='$baselinefail', dateupdated='$today'  WHERE month='$month' AND year='$year' ";
 
 		}
 		// End of for loop
 
+		DB::statement($update_statements);
+
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
-		// echo $this->finish_nation($start_month, $year, $today);
-		// echo $this->nation_rejections($start_month, $year, $today);
+		echo $this->finish_nation($start_month, $year, $today);
+		echo $this->nation_rejections($start_month, $year, $today);
     }
 
     public function nation_rejections($start_month, $year=null){
@@ -155,6 +167,8 @@ class Vl extends Model
     	}
     	// Instantiate new object
     	$n = new VlNation;
+    	$update_statements = '';
+    	$updates = 0;
 
     	$today=date("Y-m-d");
 
@@ -179,16 +193,29 @@ class Vl extends Model
 				$data_array = array(
 					'dateupdated' => $today, 'total' => $rej
 				);
-				DB::table('vl_national_rejections')->where('year', $year)->where('month', $month)
-				->where('rejected_reason', $value->ID)->update($data_array);	
+				// DB::table('vl_national_rejections')->where('year', $year)->where('month', $month)
+				// ->where('rejected_reason', $value->ID)->update($data_array);
+
+				$update_statements .= $this->update_query('vl_national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID]);
+				$updates++;
+
+				if($updates == 200){
+					DB::statement($update_statements);
+					$update_statements = '';
+					$updates = 0;
+				}	
 			}
     	}
+    	DB::statement($update_statements);
 
     	echo "\n Completed viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
     }
 
     public function finish_nation($start_month, $year, $today){
     	$n = new VlNation;
+    	$update_statements = '';
+    	$updates = 0;
+
     	for ($type=1; $type < 7; $type++) { 
 
 			$table = $this->get_table(0, $type);
@@ -370,12 +397,22 @@ class Vl extends Model
 					// echo "\n Sample - {$value->ID}  Actual - {$sample} ";
 					
 
-					DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->update($data_array);
+					// DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->update($data_array);
+
+					$update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->ID]);
+					$updates++;
+
+					if($updates == 200){
+						DB::statement($update_statements);
+						$update_statements = '';
+						$updates = 0;
+					}	
 
 				}
 				// End of for loop for months
 
 			}
+			DB::statement($update_statements);
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
@@ -567,6 +604,7 @@ class Vl extends Model
 
 				// echo "\n Column - {$column} ID - {$div_array[$it]}";
 
+				$search_array = ['year' => $year, 'month' => $month, $column => $div_array[$it]];
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
@@ -1280,11 +1318,11 @@ class Vl extends Model
     	$sql .= ' WHERE ';
 
     	foreach ($search_array as $key => $value) {
-    		$sql .= "`{$key}` = '{$value}', ";
+    		$sql .= "`{$key}` = '{$value}' AND ";
     	}
 
-    	$sql = substr($sql, 0, -2);
-    	$sql .= ";";
+    	$sql = substr($sql, 0, -5);
+    	$sql .= "; ";
     	return $sql;
     }
 }
