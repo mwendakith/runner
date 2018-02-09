@@ -225,7 +225,7 @@ class Vl extends Model
     	$update_statements = '';
     	$updates = 0;
 
-    	for ($type=1; $type < 7; $type++) { 
+    	for ($type=3; $type < 4; $type++) { 
 
 			$table = $this->get_table(0, $type);
 
@@ -806,7 +806,7 @@ class Vl extends Model
     	$updates = 0;
     	$column2 = $column;
 
-    	for ($type=1; $type < 7; $type++) { 
+    	for ($type=3; $type < 4; $type++) { 
 
     		// if($type == 3 && $column == "facility"){
 			// 	continue;
