@@ -12,12 +12,12 @@ class Eid extends Model
 {
     //
 
-	protected $mysqli;
+	// protected $mysqli;
 
-	public function __construct(){
-		parent::__construct();
-		$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
-	}
+	// public function __construct(){
+	// 	parent::__construct();
+	// 	$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
+	// }
 
     public function update_nation($year = null){
     	if($year == null){
@@ -188,9 +188,9 @@ class Eid extends Model
 				'tat4' => $tt['tat4'], 'dateupdated' => $today
 			);
 
-			// DB::table('national_summary')->where('year', $year)->where('month', $month)->update($data_array);
+			DB::table('national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
-			$update_statements .= $this->update_query('national_summary', $data_array, ['year' => $year, 'month' => $month]);
+			// $update_statements .= $this->update_query('national_summary', $data_array, ['year' => $year, 'month' => $month]);
 
 		}
 		// End of for loop
@@ -198,10 +198,9 @@ class Eid extends Model
 		// DB::update(DB::raw($update_statements), []);
 
 		// $mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge')); 
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
 
-
-		$update_statements = '';
+		// $update_statements = '';
 
 		echo "\n Completed entry into eid national summary at " . date('d/m/Y h:i:s a', time());
 
@@ -233,15 +232,15 @@ class Eid extends Model
 					'total' => $rej, 'dateupdated' => $today
 				);
 
-				// DB::table('national_rejections')->where('year', $year)->where('month', $month)->where('rejected_reason', $value->ID)->update($data_array);
+				DB::table('national_rejections')->where('year', $year)->where('month', $month)->where('rejected_reason', $value->ID)->update($data_array);
 
-				$update_statements .= $this->update_query('national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID]);
+				// $update_statements .= $this->update_query('national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID]);
 
 			}
 			
 		}
 		// End of rejections
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
 
 		echo "\n Completed entry into eid national rejections at " . date('d/m/Y h:i:s a', time());
 
@@ -322,21 +321,21 @@ class Eid extends Model
 						$data_array = array_merge($data_array, ['tests' => $tests, 'redraw' => $redraw]);
 					}
 
-					// DB::table($table[0])->where('year', $year)->where('month', $month)
-					// ->where($table[2], $value->ID)->update($data_array);
+					DB::table($table[0])->where('year', $year)->where('month', $month)
+					->where($table[2], $value->ID)->update($data_array);
 
-					$update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->ID]);
-					$updates++;
+					// $update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->ID]);
+					// $updates++;
 
-					if($updates == 200){
-						$this->mysqli->multi_query($update_statements);
-						$update_statements = '';
-						$updates = 0;
-					}	
+					// if($updates == 200){
+					// 	$this->mysqli->multi_query($update_statements);
+					// 	$update_statements = '';
+					// 	$updates = 0;
+					// }	
 				}
 
 			}
-			$this->mysqli->multi_query($update_statements);
+			// $this->mysqli->multi_query($update_statements);
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
@@ -1010,16 +1009,16 @@ class Eid extends Model
 					$column="subcounty";
 				}
 
-				// DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
-				$update_statements .= $this->update_query($sum_table, $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it] ]);
-				$updates++;
+				// $update_statements .= $this->update_query($sum_table, $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it] ]);
+				// $updates++;
 
-				if($updates == 200){
-					$this->mysqli->multi_query($update_statements);
-					$update_statements = '';
-					$updates = 0;
-				}	
+				// if($updates == 200){
+				// 	$this->mysqli->multi_query($update_statements);
+				// 	$update_statements = '';
+				// 	$updates = 0;
+				// }	
 
 				if ($type==2) {
 					$column = $column2;
@@ -1029,9 +1028,9 @@ class Eid extends Model
 			
 		}
 		// End of summary
-		$this->mysqli->multi_query($update_statements);
-		$update_statements = '';
-		$updates = 0;
+		// $this->mysqli->multi_query($update_statements);
+		// $update_statements = '';
+		// $updates = 0;
 		echo "\n Completed entry into eid {$column} summary at " . date('d/m/Y h:i:s a', time());
 
 		if($type == 4){
@@ -1082,16 +1081,16 @@ class Eid extends Model
 						$column="subcounty";
 					}
 
-					// DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('rejected_reason', $value->ID)->update($data_array);
+					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->where('rejected_reason', $value->ID)->update($data_array);
 
-					$update_statements .= $this->update_query($rej_table, $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it], 'rejected_reason' => $value->ID]);
-					$updates++;
+					// $update_statements .= $this->update_query($rej_table, $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it], 'rejected_reason' => $value->ID]);
+					// $updates++;
 
-					if($updates == 200){
-						$this->mysqli->multi_query($update_statements);
-						$update_statements = '';
-						$updates = 0;
-					}	
+					// if($updates == 200){
+					// 	$this->mysqli->multi_query($update_statements);
+					// 	$update_statements = '';
+					// 	$updates = 0;
+					// }	
 
 					$column = $column2;
 				}
@@ -1186,17 +1185,17 @@ class Eid extends Model
 							$column="subcounty";
 						}
 
-						// DB::table($table[0])->where('year', $year)->where('month', $month)
-						// ->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+						DB::table($table[0])->where('year', $year)->where('month', $month)
+						->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
 
-						$update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it], $table[2] => $value->ID]);
-						$updates++;
+						// $update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it], $table[2] => $value->ID]);
+						// $updates++;
 
-						if($updates == 200){
-							$this->mysqli->multi_query($update_statements);
-							$update_statements = '';
-							$updates = 0;
-						}	
+						// if($updates == 200){
+						// 	$this->mysqli->multi_query($update_statements);
+						// 	$update_statements = '';
+						// 	$updates = 0;
+						// }	
 
 						$column = $column2;
 					}
@@ -1207,7 +1206,7 @@ class Eid extends Model
 			// End of looping through ids of each table e.g. entry_points
 			echo "\n Completed eid " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
     }
 
     // Will be used to enter data for yearly divisions except labs
@@ -1420,16 +1419,16 @@ class Eid extends Model
 				$column="subcounty";
 			}
 
-			// DB::table($sum_table)->where('year', $year)->where($column, $div_array[$it])->update($data_array);
+			DB::table($sum_table)->where('year', $year)->where($column, $div_array[$it])->update($data_array);
 
-			$update_statements .= $this->update_query($sum_table, $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it]]);
-			$updates++;
+			// $update_statements .= $this->update_query($sum_table, $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it]]);
+			// $updates++;
 
-			if($updates == 200){
-				$this->mysqli->multi_query($update_statements);
-				$update_statements = '';
-				$updates = 0;
-			}	
+			// if($updates == 200){
+			// 	$this->mysqli->multi_query($update_statements);
+			// 	$update_statements = '';
+			// 	$updates = 0;
+			// }	
 
 			if ($type==2) {
 				$column = $column2;
@@ -1438,7 +1437,7 @@ class Eid extends Model
 		}
 		// End of division loop
 			
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
 
 		echo "\n Completed entry into eid {$column} summary yearly at " . date('d/m/Y h:i:s a', time());
 	}

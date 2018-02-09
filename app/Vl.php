@@ -12,12 +12,12 @@ class Vl extends Model
 {
     //
 
-	protected $mysqli;
+	// protected $mysqli;
 
-	public function __construct(){
-		parent::__construct();
-		$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
-	}
+	// public function __construct(){
+	// 	parent::__construct();
+	// 	$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
+	// }
 
 
     public function update_nation($start_month, $year=null){
@@ -146,23 +146,23 @@ class Vl extends Model
 				'baselinesustxfail' => $baselinefail, 'dateupdated' => $today
 			);
 
-			// DB::table('vl_national_summary')->where('year', $year)->where('month', $month)->update($data_array);
+			DB::table('vl_national_summary')->where('year', $year)->where('month', $month)->update($data_array);
 
-			$update_statements .= $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
-			$updates++;
+			// $update_statements .= $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
+			// $updates++;
 
-			if($updates == 150){
-				$this->mysqli->multi_query($update_statements);
-				$update_statements = '';
-				$updates = 0;
-			}
+			// if($updates == 150){
+			// 	$this->mysqli->multi_query($update_statements);
+			// 	$update_statements = '';
+			// 	$updates = 0;
+			// }
 
 			// $sql = "UPDATE vl_national_summary set received='$rec',alltests='$tested' ,actualpatients='$actualpatients' ,sustxfail='$sustx',confirmtx='$conftx',repeattests='$rs',confirm2vl='$conf2VL',rejected='$rej',dbs='$dbs',plasma='$plas',edta='$edta',maletest='$male',femaletest='$female',nogendertest='$nogender',adults='$adults',paeds='$paeds',noage='$noage',Undetected='$ldl',less1000='$less1k',less5000='$less5k',above5000='$above5k',invalids='$invalids',sitessending='$sites' ,less2='$less2',less9='$less9',less14='$less14',less19='$less19',less24='$less24',over25='$over25', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',baseline='$baseline',baselinesustxfail='$baselinefail', dateupdated='$today'  WHERE month='$month' AND year='$year' ";
 
 		}
 		// End of for loop
 
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
@@ -203,20 +203,20 @@ class Vl extends Model
 				$data_array = array(
 					'dateupdated' => $today, 'total' => $rej
 				);
-				// DB::table('vl_national_rejections')->where('year', $year)->where('month', $month)
-				// ->where('rejected_reason', $value->ID)->update($data_array);
+				DB::table('vl_national_rejections')->where('year', $year)->where('month', $month)
+				->where('rejected_reason', $value->ID)->update($data_array);
 
-				$update_statements .= $this->update_query('vl_national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID]);
-				$updates++;
+				// $update_statements .= $this->update_query('vl_national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID]);
+				// $updates++;
 
-				if($updates == 150){
-					$this->mysqli->multi_query($update_statements);
-					$update_statements = '';
-					$updates = 0;
-				}	
+				// if($updates == 150){
+				// 	$this->mysqli->multi_query($update_statements);
+				// 	$update_statements = '';
+				// 	$updates = 0;
+				// }	
 			}
     	}
-    	$this->mysqli->multi_query($update_statements);
+    	// $this->mysqli->multi_query($update_statements);
 
     	echo "\n Completed viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
     }
@@ -436,16 +436,16 @@ class Vl extends Model
 					// echo "\n Sample - {$value->ID}  Actual - {$sample} ";
 					
 
-					// DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->update($data_array);
+					DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->update($data_array);
 
-					$update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->ID]);
-					$updates++;
+					// $update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->ID]);
+					// $updates++;
 
-					if($updates == 150){
-						$this->mysqli->multi_query($update_statements);
-						$update_statements = '';
-						$updates = 0;
-					}	
+					// if($updates == 150){
+					// 	$this->mysqli->multi_query($update_statements);
+					// 	$update_statements = '';
+					// 	$updates = 0;
+					// }	
 
 				}
 				// End of for loop for months
@@ -455,7 +455,7 @@ class Vl extends Model
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
 		// End of looping of params
     }
 
@@ -649,24 +649,24 @@ class Vl extends Model
 
 				// echo "\n Column - {$column} ID - {$div_array[$it]}";
 
-				// DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
-				$search_array = ['year' => $year, 'month' => $month, $column => $div_array[$it]];
-				$update_statements .= $this->update_query($sum_table, $data_array, $search_array);
-				$updates++;
+				// $search_array = ['year' => $year, 'month' => $month, $column => $div_array[$it]];
+				// $update_statements .= $this->update_query($sum_table, $data_array, $search_array);
+				// $updates++;
 
-				if($updates == 150){
-					$this->mysqli->multi_query($update_statements);
-					$update_statements = '';
-					$updates = 0;
-				}	
+				// if($updates == 150){
+				// 	$this->mysqli->multi_query($update_statements);
+				// 	$update_statements = '';
+				// 	$updates = 0;
+				// }	
 
 				$column = $column2;
 				
 			}
 
 		}
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
 		// End of for loop
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
@@ -712,21 +712,21 @@ class Vl extends Model
 
 	    			$data_array = ['total' => $tests, 'site_sending' => $supported];
 
-	    			// DB::table('vl_lab_mapping')->where($search_array)->update($data_array);
+	    			DB::table('vl_lab_mapping')->where($search_array)->update($data_array);
 
-					$update_statements .= $this->update_query('vl_lab_mapping', $data_array, $search_array);
-					$updates++;
+					// $update_statements .= $this->update_query('vl_lab_mapping', $data_array, $search_array);
+					// $updates++;
 
-					if($updates == 150){
-						$this->mysqli->multi_query($update_statements);
-						$update_statements = '';
-						$updates = 0;
-					}	
+					// if($updates == 150){
+					// 	$this->mysqli->multi_query($update_statements);
+					// 	$update_statements = '';
+					// 	$updates = 0;
+					// }	
 
 	    		}
 	    	}
 	    }
-	    $this->mysqli->multi_query($update_statements);
+	    // $this->mysqli->multi_query($update_statements);
     	echo "\n Completed entry into vl lab mapping at " . date('d/m/Y h:i:s a', time());
     }
 
@@ -777,24 +777,24 @@ class Vl extends Model
 						$column="lab";
 					}
 
-					// DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
-					// ->where('rejected_reason', $value->ID)->update($data_array);
+					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
+					->where('rejected_reason', $value->ID)->update($data_array);
 
-					$search_array = ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, $column => $div_array[$it]];
-					$update_statements .= $this->update_query($rej_table, $data_array, $search_array);
-					$updates++;
+					// $search_array = ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, $column => $div_array[$it]];
+					// $update_statements .= $this->update_query($rej_table, $data_array, $search_array);
+					// $updates++;
 
-					if($updates == 150){
-						$this->mysqli->multi_query($update_statements);
-						$update_statements = '';
-						$updates = 0;
-					}	
+					// if($updates == 150){
+					// 	$this->mysqli->multi_query($update_statements);
+					// 	$update_statements = '';
+					// 	$updates = 0;
+					// }	
 
 					$column = $column2;
 				}		
 			}
     	}
-    	$this->mysqli->multi_query($update_statements);
+    	// $this->mysqli->multi_query($update_statements);
     	echo "\n Completed viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
     }
 
@@ -976,17 +976,17 @@ class Vl extends Model
 						}
 						
 
-						// DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
 
-						$search_array = ['year' => $year, 'month' => $month, $table[2] => $value->ID, $column => $div_array[$it]];
-						$update_statements .= $this->update_query($table[0], $data_array, $search_array);
-						$updates++;
+						// $search_array = ['year' => $year, 'month' => $month, $table[2] => $value->ID, $column => $div_array[$it]];
+						// $update_statements .= $this->update_query($table[0], $data_array, $search_array);
+						// $updates++;
 
-						if($updates == 150){
-							$this->mysqli->multi_query($update_statements);
-							$update_statements = '';
-							$updates = 0;
-						}
+						// if($updates == 150){
+						// 	$this->mysqli->multi_query($update_statements);
+						// 	$update_statements = '';
+						// 	$updates = 0;
+						// }
 
 						$column = $column2;
 					}
@@ -998,7 +998,7 @@ class Vl extends Model
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
 		// End of looping of params
     }
 
