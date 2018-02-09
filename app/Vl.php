@@ -713,7 +713,7 @@ class Vl extends Model
 
 	    			// DB::table('vl_lab_mapping')->where($search_array)->update($data_array);
 
-					$update_statements .= $this->update_query($sum_table, $data_array, $search_array);
+					$update_statements .= $this->update_query('vl_lab_mapping', $data_array, $search_array);
 					$updates++;
 
 					if($updates == 200){
