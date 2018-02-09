@@ -151,7 +151,7 @@ class Vl extends Model
 			$update_statements .= $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
 			$updates++;
 
-			if($updates == 200){
+			if($updates == 150){
 				$this->mysqli->multi_query($update_statements);
 				$update_statements = '';
 				$updates = 0;
@@ -209,7 +209,7 @@ class Vl extends Model
 				$update_statements .= $this->update_query('vl_national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID]);
 				$updates++;
 
-				if($updates == 200){
+				if($updates == 150){
 					$this->mysqli->multi_query($update_statements);
 					$update_statements = '';
 					$updates = 0;
@@ -441,7 +441,7 @@ class Vl extends Model
 					$update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->ID]);
 					$updates++;
 
-					if($updates == 200){
+					if($updates == 150){
 						$this->mysqli->multi_query($update_statements);
 						$update_statements = '';
 						$updates = 0;
@@ -655,7 +655,7 @@ class Vl extends Model
 				$update_statements .= $this->update_query($sum_table, $data_array, $search_array);
 				$updates++;
 
-				if($updates == 200){
+				if($updates == 150){
 					$this->mysqli->multi_query($update_statements);
 					$update_statements = '';
 					$updates = 0;
@@ -717,7 +717,7 @@ class Vl extends Model
 					$update_statements .= $this->update_query('vl_lab_mapping', $data_array, $search_array);
 					$updates++;
 
-					if($updates == 200){
+					if($updates == 150){
 						$this->mysqli->multi_query($update_statements);
 						$update_statements = '';
 						$updates = 0;
@@ -784,7 +784,7 @@ class Vl extends Model
 					$update_statements .= $this->update_query($rej_table, $data_array, $search_array);
 					$updates++;
 
-					if($updates == 200){
+					if($updates == 150){
 						$this->mysqli->multi_query($update_statements);
 						$update_statements = '';
 						$updates = 0;
@@ -807,7 +807,7 @@ class Vl extends Model
     	$updates = 0;
     	$column2 = $column;
 
-    	for ($type=3; $type < 4; $type++) { 
+    	for ($type=1; $type < 7; $type++) { 
 
     		// if($type == 3 && $column == "facility"){
 			// 	continue;
@@ -890,9 +890,9 @@ class Vl extends Model
 						// $rec = $this->checknull($rec_a->where('month', $month));
 						$tested = $this->checknull($tested_a->where($column, $div_array[$it]));
 
-						// if($tested == 0){
-						// 	continue;
-						// }
+						if($tested == 0){
+							continue;
+						}
 
 						$rej = $this->checknull($rej_a->where($column, $div_array[$it]));
 
@@ -982,7 +982,7 @@ class Vl extends Model
 						$update_statements .= $this->update_query($table[0], $data_array, $search_array);
 						$updates++;
 
-						if($updates == 200){
+						if($updates == 150){
 							$this->mysqli->multi_query($update_statements);
 							$update_statements = '';
 							$updates = 0;
