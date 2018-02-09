@@ -321,9 +321,9 @@ class Vl extends Model
 
 					$tested = $this->checknull($tested_a->where('month', $month));
 
-					if($tested == 0){
-						continue;
-					}
+					// if($tested == 0){
+					// 	continue;
+					// }
 
 					// $rec = $this->checknull($rec_a->where('month', $month));
 					$rej = $this->checknull($rej_a->where('month', $month));
@@ -888,9 +888,9 @@ class Vl extends Model
 						// $rec = $this->checknull($rec_a->where('month', $month));
 						$tested = $this->checknull($tested_a->where('month', $month)->where($column, $div_array[$it]));
 
-						if($tested == 0){
-							continue;
-						}
+						// if($tested == 0){
+						// 	continue;
+						// }
 
 						$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 
