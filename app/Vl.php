@@ -34,6 +34,8 @@ class Vl extends Model
 
     	echo "\n Begin viralload nation update at " . date('d/m/Y h:i:s a', time());
 
+    	echo $this->finish_nation($start_month, $year, $today);
+
     	// Get collection instances of the data
 
     	$rec_a = $n->getallreceivediraloadsamples($year, $start_month);
