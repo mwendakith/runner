@@ -34,8 +34,6 @@ class Vl extends Model
 
     	echo "\n Begin viralload nation update at " . date('d/m/Y h:i:s a', time());
 
-    	echo $this->finish_nation($start_month, $year, $today);
-
     	// Get collection instances of the data
 
     	$rec_a = $n->getallreceivediraloadsamples($year, $start_month);
@@ -228,7 +226,7 @@ class Vl extends Model
     	$update_statements = '';
     	$updates = 0;
 
-    	for ($type=3; $type < 4; $type++) { 
+    	for ($type=1; $type < 7; $type++) { 
 
 			$table = $this->get_table(0, $type);
 
@@ -324,9 +322,9 @@ class Vl extends Model
 
 					$tested = $this->checknull($tested_a->where('month', $month));
 
-					// if($tested == 0){
-					// 	continue;
-					// }
+					if($tested == 0){
+						continue;
+					}
 
 					// $rec = $this->checknull($rec_a->where('month', $month));
 					$rej = $this->checknull($rej_a->where('month', $month));
@@ -638,7 +636,7 @@ class Vl extends Model
 				if($type == 5){
 					$eqa = $this->checknull($eqa_a->where('month', $month)->where($column, $div_array[$it]));
 					$fake = $this->checknull($fake_a->where('month', $month)->where($column, $div_array[$it]));
-					$controls = $this->checknull($controls_a->where('month', $month)->where('lab', $div_array[$it])) * 2;
+					$controls = $this->checknull($controls_a->where('month', $month)->where('lab', $div_array[$it])) * 3;
 					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
 
 					$column = "lab";
@@ -892,9 +890,9 @@ class Vl extends Model
 						// $rec = $this->checknull($rec_a->where('month', $month));
 						$tested = $this->checknull($tested_a->where($column, $div_array[$it]));
 
-						if($tested == 0){
-							continue;
-						}
+						// if($tested == 0){
+						// 	continue;
+						// }
 
 						$rej = $this->checknull($rej_a->where($column, $div_array[$it]));
 
