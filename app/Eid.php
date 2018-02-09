@@ -1098,7 +1098,7 @@ class Eid extends Model
 			
 		}
 		// End of rejections
-		$this->mysqli->multi_query($update_statements);
+		// $this->mysqli->multi_query($update_statements);
 		echo "\n Completed entry into eid {$column} rejections at " . date('d/m/Y h:i:s a', time());
 
 		// End of division updator
