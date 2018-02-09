@@ -185,7 +185,6 @@ class VlInsert extends Model
 				}
 			}
 			DB::table($partner[0])->insert($data_array);
-            continue;
 
 			// Lab Insert
 	    	if($iterator == 7){
