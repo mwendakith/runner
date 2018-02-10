@@ -867,9 +867,9 @@ class Vl extends Model
 
 					if($type != 4 && $type != 6){
 
-						$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $monthmonth, $division, $type, $value->ID, 1);
-						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $monthmonth, $division, $type, $value->ID, 3);
-						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $monthmonth, $division, $type, $value->ID, 2);
+						$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->ID, 1);
+						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->ID, 3);
+						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->ID, 2);
 					}
 
 					if($type != 2 && $type != 6){
