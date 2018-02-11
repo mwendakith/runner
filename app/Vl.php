@@ -807,7 +807,7 @@ class Vl extends Model
     	$updates = 0;
     	$column2 = $column;
 
-    	for ($type=1; $type < 7; $type++) { 
+    	for ($type=3; $type < 4; $type++) { 
 
     		// if($type == 3 && $column == "facility"){
 			// 	continue;
@@ -890,9 +890,9 @@ class Vl extends Model
 						// $rec = $this->checknull($rec_a->where('month', $month));
 						$tested = $this->checknull($tested_a->where($column, $div_array[$it]));
 
-						if($tested == 0){
-							continue;
-						}
+						// if($tested == 0){
+						// 	continue;
+						// }
 
 						$rej = $this->checknull($rej_a->where($column, $div_array[$it]));
 
