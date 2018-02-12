@@ -809,9 +809,9 @@ class Vl extends Model
 
     	for ($type=3; $type < 4; $type++) { 
 
-    		// if($type == 3 && $column == "facility"){
-			// 	continue;
-			// }
+    		if($type == 3 && $column == "facility"){
+				continue;
+			}
 
 			$table = $this->get_table($div_type, $type);
 
