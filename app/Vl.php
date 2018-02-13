@@ -807,7 +807,7 @@ class Vl extends Model
     	$updates = 0;
     	$column2 = $column;
 
-    	for ($type=3; $type < 4; $type++) { 
+    	for ($type=1; $type < 7; $type++) { 
 
     		if($type == 3 && $column == "facility"){
 				continue;
@@ -1117,8 +1117,7 @@ class Vl extends Model
     	$female_n = $n->current_gender_suppression(2, false);  
     	$nogender_n = $n->current_gender_suppression(3, false);   
 
-    	$divs = DB::connection('vl')
-		->table('facilitys')->select('ID', 'totalartmar')->get();
+    	$divs = DB::table('facilitys')->select('ID', 'totalartsep17')->get();
 
 		$data = collect($data);
 
@@ -1146,8 +1145,8 @@ class Vl extends Model
 
 				$suppression = ($suppressed * 100) / $tests;
 
-				if($value->totalartmar != null){
-					$coverage = ($tests * 100) / (int) $value->totalartmar ;
+				if($value->totalartsep17 != null){
+					$coverage = ($tests * 100) / (int) $value->totalartsep17 ;
 				}
 				else{
 					$coverage = 100;
