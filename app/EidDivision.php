@@ -589,8 +589,12 @@ class EidDivision extends Model
 				return $query->whereBetween('samples.result', [1, 2]);				
 			}				
 		})
+		->when(true, function($query) use ($a){
+			if($a != 5){
+				return $query->where('samples.pcrtype', 1);
+			}
+		})
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 1)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
