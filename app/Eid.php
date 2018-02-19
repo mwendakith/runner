@@ -559,6 +559,9 @@ class Eid extends Model
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
 		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
 
+		$discrepant_a = $n->getbypcr($year, 4, false, $division);
+		$discrepantpos_a = $n->getbypcr($year, 4, true, $division);
+
 		$fake_a = $n->false_confirmatory($year, $division);
 		$controls_a = $n->control_samples($year);
 
@@ -627,6 +630,10 @@ class Eid extends Model
 				$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where('month', $month)->where($column, $div_array[$it]));
 				$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month)->where($column, $div_array[$it]));
 
+				$discrepant = $this->checknull($discrepant_a->where('month', $month)->where($column, $div_array[$it]));
+				$discrepant_pos = $this->checknull($discrepantpos_a->where('month', $month)->where($column, $div_array[$it]));
+
+
 				$fake = $this->checknull($fake_a->where('month', $month)->where($column, $div_array[$it]));
 				$controls = $this->checknull($controls_a->where('month', $month)->where('lab', $div_array[$it])) * 2;
 				
@@ -651,6 +658,7 @@ class Eid extends Model
 					'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
 					'confirmdna' => $confirmdna, 'fake_confirmatory' => $fake,  'eqatests' => $eqatests, 
 					'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
+					'tiebreaker' => $discrepant, 'tiebreakerPOS' => $discrepant_pos,
 					'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
 					'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
 					'sitessending' => $sitesending, 'controls' => $controls,
