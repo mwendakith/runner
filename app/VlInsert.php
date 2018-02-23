@@ -389,6 +389,48 @@ class VlInsert extends Model
         echo "\n Completed vl summary lab mapping at " . date('d/m/Y h:i:s a', time());
     }
 
+    public function insert_sub($year=null, $month=null){
+        if($year == null){
+            $year = Date('Y');
+        }
+        if($month == null){
+            $month = Date('m');
+        }
+
+        $data_array[0] = array('year' => $year, 'month' => $month, 'subcounty' => 379);
+        DB::table('vl_subcounty_summary')->insert($data_array);
+
+        // Iterate through classes of tables
+        for ($iterator=1; $iterator < 8; $iterator++) { 
+            $national = $this->get_table(0, $iterator);
+            $county = $this->get_table(1, $iterator);
+            $subcounty = $this->get_table(2, $iterator);
+            $partner = $this->get_table(3, $iterator);
+            $site = $this->get_table(4, $iterator);
+
+            $table_name = $national[1];
+            $column_name = $national[2];
+
+            $reasons = $data = DB::connection('vl')
+            ->table($table_name)->select('ID')
+            ->when($iterator, function($query) use ($iterator){
+                if($iterator == 1 || $iterator == 6){
+                    return $query->where('subID', 1);
+                }               
+            })
+            ->get();
+
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'subcounty' => 379);
+                $i++;
+            }
+            DB::table($subcounty[0])->insert($data_array);
+        }
+    }
+
     private function get_table($division, $type){
     	$name;
     	if ($division == 0) {
