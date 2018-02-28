@@ -389,7 +389,7 @@ class VlInsert extends Model
         echo "\n Completed vl summary lab mapping at " . date('d/m/Y h:i:s a', time());
     }
 
-    public function insert_sub($year=null, $month=null){
+    public function insert_partner($year=null, $month=null){
         if($year == null){
             $year = Date('Y');
         }
@@ -397,8 +397,8 @@ class VlInsert extends Model
             $month = Date('m');
         }
 
-        $data_array[0] = array('year' => $year, 'month' => $month, 'subcounty' => 379);
-        DB::table('vl_subcounty_summary')->insert($data_array);
+        $data_array[0] = array('year' => $year, 'month' => $month, 'partner' => 83);
+        DB::table('vl_partner_summary')->insert($data_array);
 
         // Iterate through classes of tables
         for ($iterator=1; $iterator < 8; $iterator++) { 
@@ -424,10 +424,10 @@ class VlInsert extends Model
             $i=0;
 
             foreach ($reasons as $key => $value) {
-                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'subcounty' => 379);
+                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => 83);
                 $i++;
             }
-            DB::table($subcounty[0])->insert($data_array);
+            DB::table($partner[0])->insert($data_array);
         }
     }
 
