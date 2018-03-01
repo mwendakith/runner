@@ -317,7 +317,7 @@ class EidInsert extends Model
     }
 
 
-    public function insert_partner($year=null, $month=null){
+    public function insert_subcounty($year=null, $month=null, $subcounty==null){
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -325,8 +325,8 @@ class EidInsert extends Model
     		$month = Date('m');
     	}
 
-    	$data_array[0] = array('year' => $year, 'month' => $month, 'partner' => 83);
-    	DB::table('ip_summary')->insert($data_array);
+    	$data_array[0] = array('year' => $year, 'month' => $month, 'subcounty' => $subcounty);
+    	DB::table('subcounty_summary')->insert($data_array);
 
     	// Iterate through classes of tables
     	for ($iterator=1; $iterator < 6; $iterator++) { 
@@ -355,10 +355,10 @@ class EidInsert extends Model
 	    	$i=0;
 
 			foreach ($reasons as $key => $value) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => 83);
+				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'subcounty' => $subcounty);
 				$i++;
 			}
-			DB::table($partner[0])->insert($data_array);
+			DB::table($subcounty[0])->insert($data_array);
 		}
     }
 
