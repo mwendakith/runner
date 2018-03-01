@@ -317,7 +317,7 @@ class EidInsert extends Model
     }
 
 
-    public function insert_subcounty($year=null, $month=null, $subcounty==null){
+    public function insert_subcounty($year=null, $month=null, $subcounty=null){
     	if($year == null){
     		$year = Date('Y');
     	}
