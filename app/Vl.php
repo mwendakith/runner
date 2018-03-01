@@ -890,9 +890,9 @@ class Vl extends Model
 						// $rec = $this->checknull($rec_a->where('month', $month));
 						$tested = $this->checknull($tested_a->where($column, $div_array[$it]));
 
-						// if($tested == 0){
-						// 	continue;
-						// }
+						if($tested == 0){
+							continue;
+						}
 
 						$rej = $this->checknull($rej_a->where($column, $div_array[$it]));
 
