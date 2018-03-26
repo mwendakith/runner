@@ -1252,8 +1252,8 @@ class VlDivision extends Model
     	$month = $r[2];
     	$prev_month = $r[3];
 
-    	$b = new BaseModel;
-		$gender = $b->get_gender($sex);
+    	// $b = new BaseModel;
+		// $gender = $b->get_gender($sex);
 
     	$sql = 'SELECT facility, rcategory, gender, count(*) as totals ';
 		$sql .= 'FROM ';
@@ -1278,7 +1278,8 @@ class VlDivision extends Model
 		$sql .= 'GROUP BY facility, rcategory, gender ';
 		$sql .= 'ORDER BY facility ';
 
-		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $gender]);
+		// $data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $gender]);
+		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
 
 		return collect($data);
     }
