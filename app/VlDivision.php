@@ -1241,7 +1241,8 @@ class VlDivision extends Model
 		return collect($data);
     }
 
-    public function current_gender_suppression($sex, $suppression=true){
+    // public function current_gender_suppression($sex, $suppression=true){
+    public function current_gender_suppression(){
     	ini_set("memory_limit", "-1"); 
 
     	$r = $this->current_range();
@@ -1254,7 +1255,7 @@ class VlDivision extends Model
     	$b = new BaseModel;
 		$gender = $b->get_gender($sex);
 
-    	$sql = 'SELECT facility, count(*) as totals ';
+    	$sql = 'SELECT facility, rcategory, gender, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.ID, v.facility, v.rcategory, viralpatients.gender ';
 		$sql .= 'FROM viralsamples v JOIN viralpatients ON v.patientid=viralpatients.AutoID ';
@@ -1267,14 +1268,14 @@ class VlDivision extends Model
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
-		if($suppression){
-			$sql .= 'WHERE rcategory between 1 and 2 ';
-		}
-		else{
-			$sql .= 'WHERE rcategory between 3 and 4 ';
-		}
-		$sql .= 'AND gender = ? ';		
-		$sql .= 'GROUP BY facility ';
+		// if($suppression){
+		// 	$sql .= 'WHERE rcategory between 1 and 2 ';
+		// }
+		// else{
+		// 	$sql .= 'WHERE rcategory between 3 and 4 ';
+		// }
+		// $sql .= 'AND gender = ? ';		
+		$sql .= 'GROUP BY facility, rcategory, gender ';
 		$sql .= 'ORDER BY facility ';
 
 		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $gender]);
