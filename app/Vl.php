@@ -1192,7 +1192,7 @@ class Vl extends Model
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'M')) +
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'M'));
 			$male_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'M')) +;
+			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'M')) +
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'M'));
 
 
@@ -1200,7 +1200,7 @@ class Vl extends Model
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'F')) +
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'F'));
 			$female_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'F')) +;
+			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'F')) +
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'F'));
 
 
@@ -1208,7 +1208,7 @@ class Vl extends Model
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'No Data')) +
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'No Data'));
 			$nogender_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'No Data')) +;
+			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'No Data')) +
 			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'No Data'));
 
 			$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
