@@ -1203,8 +1203,8 @@ class VlDivision extends Model
 		return $data;
     }
 
-    // public function current_age_suppression($age, $suppression=true){
-    public function current_age_suppression(){
+    public function current_age_suppression($age, $suppression=true){
+    // public function current_age_suppression(){
     	ini_set("memory_limit", "-1"); 
 
     	$r = $this->current_range();
@@ -1214,7 +1214,7 @@ class VlDivision extends Model
     	$month = $r[2];
     	$prev_month = $r[3];
 
-    	$sql = 'SELECT facility, rcategory, age2, count(*) as totals ';
+    	$sql = 'SELECT facility, count(*) as totals ';
 		$sql .= 'FROM ';
 		$sql .= '(SELECT v.ID, v.facility, v.rcategory, v.age2 ';
 		$sql .= 'FROM viralsamples v ';
@@ -1227,18 +1227,18 @@ class VlDivision extends Model
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
-		// if($suppression){
-		// 	$sql .= 'WHERE rcategory between 1 and 2 ';
-		// }
-		// else{
-		// 	$sql .= 'WHERE rcategory between 3 and 4 ';
-		// }
-		// $sql .= 'AND age2 = ? ';
-		$sql .= 'GROUP BY facility, rcategory, age2 ';
+		if($suppression){
+			$sql .= 'WHERE rcategory between 1 and 2 ';
+		}
+		else{
+			$sql .= 'WHERE rcategory between 3 and 4 ';
+		}
+		$sql .= 'AND age2 = ? ';
+		$sql .= 'GROUP BY facility ';
 		$sql .= 'ORDER BY facility';
 
-		// $data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
-		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
+		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
+		// $data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
 
 		return collect($data);
     }

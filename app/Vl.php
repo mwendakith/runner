@@ -1093,24 +1093,24 @@ class Vl extends Model
 
     	$data = $n->suppression(); 
     	$gender_data = $n->current_gender_suppression();
-    	$age_data = $n->current_age_suppression();
+    	// $age_data = $n->current_age_suppression();
 
 
-		// $noage = $n->current_age_suppression(0);
-    	// $less2 = $n->current_age_suppression(6);
-    	// $less9 = $n->current_age_suppression(7);
-    	// $less14 = $n->current_age_suppression(8);
-    	// $less19 = $n->current_age_suppression(9);
-    	// $less24 = $n->current_age_suppression(10);
-    	// $over25 = $n->current_age_suppression(11);
+		$noage = $n->current_age_suppression(0);
+    	$less2 = $n->current_age_suppression(6);
+    	$less9 = $n->current_age_suppression(7);
+    	$less14 = $n->current_age_suppression(8);
+    	$less19 = $n->current_age_suppression(9);
+    	$less24 = $n->current_age_suppression(10);
+    	$over25 = $n->current_age_suppression(11);
 
-    	// $noage_n= $n->current_age_suppression(0, false);
-    	// $less2_n = $n->current_age_suppression(6, false);
-    	// $less9_n = $n->current_age_suppression(7, false);
-    	// $less14_n = $n->current_age_suppression(8, false);
-    	// $less19_n = $n->current_age_suppression(9, false);
-    	// $less24_n = $n->current_age_suppression(10, false);
-    	// $over25_n = $n->current_age_suppression(11, false);
+    	$noage_n= $n->current_age_suppression(0, false);
+    	$less2_n = $n->current_age_suppression(6, false);
+    	$less9_n = $n->current_age_suppression(7, false);
+    	$less14_n = $n->current_age_suppression(8, false);
+    	$less19_n = $n->current_age_suppression(9, false);
+    	$less24_n = $n->current_age_suppression(10, false);
+    	$over25_n = $n->current_age_suppression(11, false);
 
     	// $male = $n->current_gender_suppression(1);  
     	// $female = $n->current_gender_suppression(2);  
@@ -1156,86 +1156,86 @@ class Vl extends Model
 				}
 			}
 
-			// $noage_sup =  $this->checknull($noage->where('facility', $value->ID));
-			// $noage_nonsup =  $this->checknull($noage_n->where('facility', $value->ID));
+			$noage_sup =  $this->checknull($noage->where('facility', $value->ID));
+			$noage_nonsup =  $this->checknull($noage_n->where('facility', $value->ID));
 
-			// $less2_sup = $this->checknull($less2->where('facility', $value->ID));
-			// $less2_nonsup =  $this->checknull($less2_n->where('facility', $value->ID));
+			$less2_sup = $this->checknull($less2->where('facility', $value->ID));
+			$less2_nonsup =  $this->checknull($less2_n->where('facility', $value->ID));
 
-			// $less9_sup = $this->checknull($less9->where('facility', $value->ID));
-			// $less9_nonsup =  $this->checknull($less9_n->where('facility', $value->ID));
+			$less9_sup = $this->checknull($less9->where('facility', $value->ID));
+			$less9_nonsup =  $this->checknull($less9_n->where('facility', $value->ID));
 
-			// $less14_sup = $this->checknull($less14->where('facility', $value->ID));
-			// $less14_nonsup =  $this->checknull($less14_n->where('facility', $value->ID));
+			$less14_sup = $this->checknull($less14->where('facility', $value->ID));
+			$less14_nonsup =  $this->checknull($less14_n->where('facility', $value->ID));
 
-			// $less19_sup = $this->checknull($less19->where('facility', $value->ID));
-			// $less19_nonsup =  $this->checknull($less19_n->where('facility', $value->ID));
+			$less19_sup = $this->checknull($less19->where('facility', $value->ID));
+			$less19_nonsup =  $this->checknull($less19_n->where('facility', $value->ID));
 
-			// $less24_sup = $this->checknull($less24->where('facility', $value->ID));
-			// $less24_nonsup =  $this->checknull($less24_n->where('facility', $value->ID));
+			$less24_sup = $this->checknull($less24->where('facility', $value->ID));
+			$less24_nonsup =  $this->checknull($less24_n->where('facility', $value->ID));
 
-			// $over25_sup = $this->checknull($over25->where('facility', $value->ID));
-			// $over25_nonsup =  $this->checknull($over25_n->where('facility', $value->ID));
-
-
-			// $male_sup = $this->checknull($male->where('facility', $value->ID));
-			// $male_nonsup = $this->checknull($male_n->where('facility', $value->ID));
-
-			// $female_sup = $this->checknull($female->where('facility', $value->ID));
-			// $female_nonsup = $this->checknull($female_n->where('facility', $value->ID)); 
-
-			// $nogender_sup = $this->checknull($nogender->where('facility', $value->ID));
-			// $nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->ID));
+			$over25_sup = $this->checknull($over25->where('facility', $value->ID));
+			$over25_nonsup =  $this->checknull($over25_n->where('facility', $value->ID));
 
 
-			$noage_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 0)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 0));
-			$noage_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 0)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 0));
+			$male_sup = $this->checknull($male->where('facility', $value->ID));
+			$male_nonsup = $this->checknull($male_n->where('facility', $value->ID));
 
-			$less2_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 6)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 6));
-			$less2_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 6)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 6));
+			$female_sup = $this->checknull($female->where('facility', $value->ID));
+			$female_nonsup = $this->checknull($female_n->where('facility', $value->ID)); 
 
-			$less9_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 7)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 7));
-			$less9_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 7)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 7));
+			$nogender_sup = $this->checknull($nogender->where('facility', $value->ID));
+			$nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->ID));
 
-			$less14_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 8)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 8));
-			$less14_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 8)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 8));
 
-			$less19_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 9)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 9));
-			$less19_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 9)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 9));
+			// $noage_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 0)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 0));
+			// $noage_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 0)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 0));
 
-			$less24_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 10)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 10));
-			$less24_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 10)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 10));
+			// $less2_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 6)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 6));
+			// $less2_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 6)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 6));
 
-			$over25_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 11)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 11));
-			$over25_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 11)) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 11));
+			// $less9_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 7)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 7));
+			// $less9_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 7)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 7));
+
+			// $less14_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 8)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 8));
+			// $less14_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 8)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 8));
+
+			// $less19_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 9)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 9));
+			// $less19_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 9)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 9));
+
+			// $less24_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 10)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 10));
+			// $less24_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 10)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 10));
+
+			// $over25_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('age2', 11)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('age2', 11));
+			// $over25_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('age2', 11)) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('age2', 11));
 
 
 
