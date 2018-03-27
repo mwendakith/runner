@@ -1178,14 +1178,14 @@ class Vl extends Model
 			$over25_nonsup =  $this->checknull($over25_n->where('facility', $value->ID));
 
 
-			$male_sup = $this->checknull($male->where('facility', $value->ID));
-			$male_nonsup = $this->checknull($male_n->where('facility', $value->ID));
+			// $male_sup = $this->checknull($male->where('facility', $value->ID));
+			// $male_nonsup = $this->checknull($male_n->where('facility', $value->ID));
 
-			$female_sup = $this->checknull($female->where('facility', $value->ID));
-			$female_nonsup = $this->checknull($female_n->where('facility', $value->ID)); 
+			// $female_sup = $this->checknull($female->where('facility', $value->ID));
+			// $female_nonsup = $this->checknull($female_n->where('facility', $value->ID)); 
 
-			$nogender_sup = $this->checknull($nogender->where('facility', $value->ID));
-			$nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->ID));
+			// $nogender_sup = $this->checknull($nogender->where('facility', $value->ID));
+			// $nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->ID));
 
 
 			// $noage_sup = 
