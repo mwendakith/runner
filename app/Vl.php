@@ -1092,7 +1092,7 @@ class Vl extends Model
     	$today=date('Y-m-d');
 
     	$data = $n->suppression(); 
-    	$gender_data = $n->current_gender_suppression();
+    	// $gender_data = $n->current_gender_suppression();
     	// $age_data = $n->current_age_suppression();
 
 
@@ -1112,13 +1112,13 @@ class Vl extends Model
     	$less24_n = $n->current_age_suppression(10, false);
     	$over25_n = $n->current_age_suppression(11, false);
 
-    	// $male = $n->current_gender_suppression(1);  
-    	// $female = $n->current_gender_suppression(2);  
-    	// $nogender = $n->current_gender_suppression(3);
+    	$male = $n->current_gender_suppression(1);  
+    	$female = $n->current_gender_suppression(2);  
+    	$nogender = $n->current_gender_suppression(3);
 
-    	// $male_n = $n->current_gender_suppression(1, false);  
-    	// $female_n = $n->current_gender_suppression(2, false);  
-    	// $nogender_n = $n->current_gender_suppression(3, false);
+    	$male_n = $n->current_gender_suppression(1, false);  
+    	$female_n = $n->current_gender_suppression(2, false);  
+    	$nogender_n = $n->current_gender_suppression(3, false);
 
     	$divs = DB::table('facilitys')->select('ID', 'totalartsep17')->get();
 
@@ -1178,14 +1178,14 @@ class Vl extends Model
 			$over25_nonsup =  $this->checknull($over25_n->where('facility', $value->ID));
 
 
-			// $male_sup = $this->checknull($male->where('facility', $value->ID));
-			// $male_nonsup = $this->checknull($male_n->where('facility', $value->ID));
+			$male_sup = $this->checknull($male->where('facility', $value->ID));
+			$male_nonsup = $this->checknull($male_n->where('facility', $value->ID));
 
-			// $female_sup = $this->checknull($female->where('facility', $value->ID));
-			// $female_nonsup = $this->checknull($female_n->where('facility', $value->ID)); 
+			$female_sup = $this->checknull($female->where('facility', $value->ID));
+			$female_nonsup = $this->checknull($female_n->where('facility', $value->ID)); 
 
-			// $nogender_sup = $this->checknull($nogender->where('facility', $value->ID));
-			// $nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->ID));
+			$nogender_sup = $this->checknull($nogender->where('facility', $value->ID));
+			$nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->ID));
 
 
 			// $noage_sup = 
@@ -1239,28 +1239,28 @@ class Vl extends Model
 
 
 
-			$male_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'M')) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'M'));
-			$male_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'M')) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'M'));
+			// $male_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'M')) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'M'));
+			// $male_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'M')) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'M'));
 
 
-			$female_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'F')) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'F'));
-			$female_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'F')) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'F'));
+			// $female_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'F')) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'F'));
+			// $female_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'F')) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'F'));
 
 
-			$nogender_sup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'No Data')) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'No Data'));
-			$nogender_nonsup = 
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'No Data')) +
-			(int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'No Data'));
+			// $nogender_sup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 1)->where('gender', 'No Data')) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 2)->where('gender', 'No Data'));
+			// $nogender_nonsup = 
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 3)->where('gender', 'No Data')) +
+			// (int) $this->checknull($gender_data->where('facility', $value->ID)->where('rcategory', 4)->where('gender', 'No Data'));
 
 			$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
 				'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression, 'coverage' => $coverage,
