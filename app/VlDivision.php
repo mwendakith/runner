@@ -1203,8 +1203,7 @@ class VlDivision extends Model
 		return $data;
     }
 
-    // public function current_age_suppression($age, $suppression=true){
-    public function current_age_suppression(){
+    public function current_age_suppression($age, $suppression=true){
     	ini_set("memory_limit", "-1"); 
 
     	$r = $this->current_range();
@@ -1227,24 +1226,22 @@ class VlDivision extends Model
 		$sql .= 'AND justification != 10 and facility != 7148 ';
 		$sql .= 'GROUP BY patient, facility) gv ';
 		$sql .= 'ON v.ID=gv.ID) tb ';
-		// if($suppression){
-		// 	$sql .= 'WHERE rcategory between 1 and 2 ';
-		// }
-		// else{
-		// 	$sql .= 'WHERE rcategory between 3 and 4 ';
-		// }
-		// $sql .= 'AND age2 = ? ';
+		if($suppression){
+			$sql .= 'WHERE rcategory between 1 and 2 ';
+		}
+		else{
+			$sql .= 'WHERE rcategory between 3 and 4 ';
+		}
+		$sql .= 'AND age2 = ? ';
 		$sql .= 'GROUP BY facility, rcategory, age2 ';
 		$sql .= 'ORDER BY facility';
 
-		// $data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
-		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
+		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
 
 		return collect($data);
     }
 
     public function current_gender_suppression($sex, $suppression=true){
-    // public function current_gender_suppression(){
     	ini_set("memory_limit", "-1"); 
 
     	$r = $this->current_range();
