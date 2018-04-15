@@ -59,7 +59,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.batchno) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -92,7 +92,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				// return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -130,7 +130,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				// return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -166,7 +166,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -203,7 +203,7 @@ class EidDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -243,7 +243,7 @@ class EidDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -282,7 +282,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -318,7 +318,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -349,7 +349,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -390,7 +390,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -428,7 +428,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -465,7 +465,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -502,7 +502,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -540,7 +540,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -620,7 +620,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -662,7 +662,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -736,7 +736,7 @@ class EidDivision extends Model
 		->table('samples')
 		->select($division, DB::raw("COUNT(DISTINCT samples.facility) as totals, month(datereceived) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -772,7 +772,7 @@ class EidDivision extends Model
 		->select($division, DB::raw("AVG(patients.age) as totals, month(datetested) as month"))
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{
@@ -810,7 +810,7 @@ class EidDivision extends Model
 		->select($division, DB::raw("patients.age, month(datetested) as month"))
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->when($division, function($query) use ($division){
-			if($division == "samples.labtestedin"){
+			if($division == "samples.labtestedin" || $division == "samples.facility"){
 				return $query->where('samples.facility', '!=', 7148);
 			}
 			else{

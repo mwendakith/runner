@@ -63,7 +63,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -89,7 +89,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				// return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -113,7 +113,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				// return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -135,7 +135,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.patient,viralsamples.facility) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -159,7 +159,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -182,7 +182,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -208,7 +208,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.facility) as totals, month(datereceived) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -224,7 +224,7 @@ class VlDivision extends Model
 		->get();
 
 		return $data;
-    }
+    } 
 
     public function GetNationalConfirmed2VLs($year, $start_month, $division='view_facilitys.county'){
 
@@ -232,7 +232,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -259,7 +259,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -286,7 +286,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -313,7 +313,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -339,7 +339,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -365,7 +365,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -389,7 +389,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -433,7 +433,7 @@ class VlDivision extends Model
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->join('viralpatients', 'viralsamples.patientid', '=', 'viralpatients.AutoID')
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -474,7 +474,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -501,7 +501,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datetested) as month"))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -536,7 +536,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw($sql))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
@@ -621,7 +621,7 @@ class VlDivision extends Model
 		->table('viralsamples')
 		->select($division, DB::raw($sql))
 		->when($division, function($query) use ($division){
-			if($division == "viralsamples.labtestedin"){
+			if($division == "viralsamples.labtestedin" || $division == "viralsamples.facility"){
 				return $query->where('viralsamples.facility', '!=', 7148);
 			}
 			else{
