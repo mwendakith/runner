@@ -616,7 +616,6 @@ class EidNation extends Model
 	// mother proph nat summary
 	public function Getinterventionspositivitycount($year, $drug, $result_type, $monthly=true)
 	{
-
 		$data = DB::connection('eid')
 		->table('samples')
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))

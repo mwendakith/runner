@@ -1011,7 +1011,7 @@ class Vl extends Model
     	$updates = 0;
     	$column2 = $column;
 
-    	for ($type=1; $type < 7; $type++) { 
+    	for ($type=3; $type < 4; $type++) { 
 
     		// if($type == 3 && $column == "facility"){
 			// 	continue;
@@ -1246,7 +1246,7 @@ class Vl extends Model
 			$array_size++;
 		}
 
-		// echo $this->finish_division($start_month, $year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
+		echo $this->finish_division($start_month, $year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
 		return $this->finish_facilities_regimen($start_month, $year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
     }
 
