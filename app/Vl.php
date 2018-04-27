@@ -2,20 +2,18 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use App\VlNation;
 use App\VlDivision;
 use App\VlTest;
 use DB;
 
-class Vl extends Model
+class Vl
 {
     //
 
 	// protected $mysqli;
 
 	// public function __construct(){
-	// 	parent::__construct();
 	// 	$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
 	// }
 
@@ -671,10 +669,11 @@ class Vl extends Model
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
 
-		if ($type < 4) {
-			echo $this->finish_division($start_month, $year, $today, $div_array, $column, $division, $type, $array_size);
+		if ($type < 5) {
+			if($type != 4) echo $this->finish_division($start_month, $year, $today, $div_array, $column, $division, $type, $array_size);
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
 		}
+
 		if($type == 5){
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
 			echo $this->lab_mapping($start_month, $year);			
@@ -833,10 +832,10 @@ class Vl extends Model
 		    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $month, $division, $type, $value->ID);
 		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
+		    	// $rs_a = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 
 		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $start_month, $division, $type, $value->ID);
 		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $division, $type, $value->ID);
-		    	$rs = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
 
 		    	if ($type != 1 && $type != 6) {
 
@@ -895,6 +894,8 @@ class Vl extends Model
 						}
 
 						$rej = $this->checknull($rej_a->where($column, $div_array[$it])->where('month', $month));
+						// $rs = $this->checknull($rs_a->where($column, $div_array[$it])->where('month', $month));
+						$rs = 0;
 
 						$conftx = $this->checknull($conftx_a->where($column, $div_array[$it])->where('month', $month));
 						$conf2VL = $this->checknull($conf2VL_a->where($column, $div_array[$it])->where('month', $month));
@@ -1048,7 +1049,8 @@ class Vl extends Model
 
 			    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $month, $division, $type, $value->ID);
 			    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $month, $division, $type, $value->ID);
-			    	$rs = $n->getallrepeattviraloadsamplesbydash($year, $month, $division, $type, $value->ID);
+			    	// $rs = $n->getallrepeattviraloadsamplesbydash($year, $month, $division, $type, $value->ID);
+			    	$rs = 0;
 
 			    	if ($type != 1 && $type != 6) {
 
