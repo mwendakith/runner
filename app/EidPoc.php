@@ -99,6 +99,10 @@ class EidPoc extends Model
 			['datereceived', '<=', 'datetested'],
 			['datetested', '<=', 'datedispatched']
 		])
+		->whereYear('samples.datecollected', '>', 1980)
+		->whereYear('samples.datereceived', '>', 1980)
+		->whereYear('samples.datetested', '>', 1980)
+		->whereYear('samples.datedispatched', '>', 1980)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)

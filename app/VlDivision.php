@@ -635,6 +635,10 @@ class VlDivision extends Model
 			['datetested', '<=', 'datedispatched']
 		])
 		->whereYear('datetested', $year)
+		->whereYear('viralsamples.datecollected', '>', 1980)
+		->whereYear('viralsamples.datereceived', '>', 1980)
+		->whereYear('viralsamples.datetested', '>', 1980)
+		->whereYear('viralsamples.datedispatched', '>', 1980)
 		->whereMonth('datetested', '>', $start_month)
 		->where('viralsamples.Flag', 1)
 		->where('viralsamples.repeatt', 0)
