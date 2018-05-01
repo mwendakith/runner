@@ -3,9 +3,7 @@
 namespace App;
 use DB;
 
-use Illuminate\Database\Eloquent\Model;
-
-class VlInsert extends Model
+class VlInsert
 {
     //
     public function summary($year=null, $month=null){
@@ -428,6 +426,48 @@ class VlInsert extends Model
                 $i++;
             }
             DB::table($subcounty[0])->insert($data_array);
+        }
+    }
+
+    public function insert_partner($year=null, $month=null, $partner=null){
+        if($year == null){
+            $year = Date('Y');
+        }
+        if($month == null){
+            $month = Date('m');
+        }
+
+        $data_array[0] = array('year' => $year, 'month' => $month, 'partner' => $partner);
+        DB::table('vl_partner_summary')->insert($data_array);
+
+        // Iterate through classes of tables
+        for ($iterator=1; $iterator < 8; $iterator++) { 
+            $national = $this->get_table(0, $iterator);
+            $county = $this->get_table(1, $iterator);
+            $subcounty = $this->get_table(2, $iterator);
+            $partner = $this->get_table(3, $iterator);
+            $site = $this->get_table(4, $iterator);
+
+            $table_name = $national[1];
+            $column_name = $national[2];
+
+            $reasons = $data = DB::connection('vl')
+            ->table($table_name)->select('ID')
+            ->when($iterator, function($query) use ($iterator){
+                if($iterator == 1 || $iterator == 6){
+                    return $query->where('subID', 1);
+                }               
+            })
+            ->get();
+
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $partner);
+                $i++;
+            }
+            DB::table($partner[0])->insert($data_array);
         }
     }
 

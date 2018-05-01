@@ -3,9 +3,7 @@
 namespace App;
 use DB;
 
-use Illuminate\Database\Eloquent\Model;
-
-class EidInsert extends Model
+class EidInsert
 {
     //
 
@@ -359,6 +357,51 @@ class EidInsert extends Model
 				$i++;
 			}
 			DB::table($subcounty[0])->insert($data_array);
+		}
+    }
+
+    public function insert_partner($year=null, $month=null, $partner=null){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	if($month == null){
+    		$month = Date('m');
+    	}
+
+    	$data_array[0] = array('year' => $year, 'month' => $month, 'partner' => $partner);
+    	DB::table('ip_summary')->insert($data_array);
+
+    	// Iterate through classes of tables
+    	for ($iterator=1; $iterator < 6; $iterator++) { 
+    		$national = $this->get_table(0, $iterator);
+    		$county = $this->get_table(1, $iterator);
+    		$subcounty = $this->get_table(2, $iterator);
+    		$partner = $this->get_table(3, $iterator);
+
+    		$table_name = $national[1];
+    		$column_name = $national[2];
+
+			$reasons = $data = DB::connection('eid')
+			->table($table_name)
+			->select('ID')
+			->when($iterator, function($query) use ($iterator){
+				if($iterator == 1){
+					return $query->where('ptype', 2);
+				}	
+				if($iterator == 2){
+					return $query->where('ptype', 1);
+				}							
+			})
+			->get();// Subcounty Insert
+
+			$data_array=null;
+	    	$i=0;
+
+			foreach ($reasons as $key => $value) {
+				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $partner);
+				$i++;
+			}
+			DB::table($partner[0])->insert($data_array);
 		}
     }
 
