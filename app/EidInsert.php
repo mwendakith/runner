@@ -360,7 +360,7 @@ class EidInsert
 		}
     }
 
-    public function insert_partner($year=null, $month=null, $partner=null){
+    public function insert_partner($year=null, $month=null, $part=null){
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -368,7 +368,7 @@ class EidInsert
     		$month = Date('m');
     	}
 
-    	$data_array[0] = array('year' => $year, 'month' => $month, 'partner' => $partner);
+    	$data_array[0] = array('year' => $year, 'month' => $month, 'partner' => $part);
     	DB::table('ip_summary')->insert($data_array);
 
     	// Iterate through classes of tables
@@ -398,7 +398,7 @@ class EidInsert
 	    	$i=0;
 
 			foreach ($reasons as $key => $value) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $partner);
+				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $part);
 				$i++;
 			}
 			DB::table($partner[0])->insert($data_array);
