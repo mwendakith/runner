@@ -69,7 +69,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->whereRaw("(samples.parentid=0  OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -177,7 +176,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -216,7 +214,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -256,7 +253,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -292,7 +288,6 @@ class EidDivision extends Model
 		->whereYear('datereceived', $year)
 		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -329,7 +324,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -367,7 +361,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', $pcr)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -401,7 +394,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -439,7 +431,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 2)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -476,7 +467,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 2)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -513,7 +503,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 3)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -551,7 +540,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 3)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -596,7 +584,6 @@ class EidDivision extends Model
 		})
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -673,7 +660,6 @@ class EidDivision extends Model
 		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
 		->where('samples.receivedstatus', 2)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -698,13 +684,14 @@ class EidDivision extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select($division, DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
+		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
+		->whereBetween('patients.age', [0.0001, 24])
 		->whereBetween('samples.pcrtype', [1, 2])
 		->where($col, $estatus)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when(true, function($query) use ($col){
 			if($col == "samples.enrollmentstatus"){
@@ -745,7 +732,6 @@ class EidDivision extends Model
 		})
 		->whereYear('datereceived', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -785,7 +771,6 @@ class EidDivision extends Model
 		->where('samples.result', '>', 0)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
 				return $query->groupBy('month', $division);
@@ -823,7 +808,6 @@ class EidDivision extends Model
 		->where('samples.result', '>', 0)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->get(); 
 
 		// return $data;
@@ -901,7 +885,6 @@ class EidDivision extends Model
 		->where('samples.pcrtype', 1)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -936,7 +919,6 @@ class EidDivision extends Model
 		->where('samples.pcrtype', 1)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -969,7 +951,6 @@ class EidDivision extends Model
 		->where('samples.pcrtype', 1)
 		->whereYear('datetested', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -1007,7 +988,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -1040,7 +1020,6 @@ class EidDivision extends Model
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){
@@ -1066,7 +1045,6 @@ class EidDivision extends Model
 		->where('rejectedreason', $rejected_reason)
 		->whereYear('datereceived', $year)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
 			if($monthly){

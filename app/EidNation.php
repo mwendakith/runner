@@ -182,7 +182,6 @@ class EidNation extends Model
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
-		->where('samples.eqa', 0)
 		->when($monthly, function($query) use ($monthly){
 			if($monthly){
 				return $query->groupBy('month');
@@ -457,8 +456,10 @@ class EidNation extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select(DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
+		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
+		->whereBetween('patients.age', [0.0001, 24])
 		->whereBetween('samples.pcrtype', [1, 2])
 		->where($col, $estatus)
 		->where('samples.Flag', 1)
