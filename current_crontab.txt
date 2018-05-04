@@ -1,0 +1,45 @@
+
+30 17 * * * php /root/runner/artisan update:vl-samples >> /root/runner/public/logs.txt 2>&1
+30 17 * * * php /root/runner/artisan update:eid-tat >> /root/runner/public/logs_tat.txt 2>&1
+45 17 * * * php  /root/runner/artisan update:eid-patients >>  /root/runner/public/logs.txt 2>&1
+45 17 * * * php  /root/runner/artisan update:vl-patients >>  /root/runner/public/logs.txt 2>&1
+
+#25 12 * * * php /root/runner/artisan update:vl-tat 2018 >> /root/runner/public/logs.txt 2>&1
+#25 12 * * * php /root/runner/artisan update:vl-tat 2017 >> /root/runner/public/logs.txt 2>&1
+50 22 * * * php /root/runner/artisan update:eid 2017 --type=1 >> /root/runner/public/logs.txt 2>&1
+0 1 * * * php /root/runner/artisan update:eid-facility 2017 >> /root/runner/public/logs.txt 2>&1
+
+0 5 * * * php  /root/runner/artisan update:vl-lablogs >>  /root/runner/public/logs.txt 2>&1
+
+20 18 * * * php /root/runner/artisan update:eid --type=1 >> /root/runner/public/logs.txt 2>&1
+0 18 * * * php /root/runner/artisan update:vl --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
+
+0 18 * * * php /root/runner/artisan update:eid-facility  --type=1 >> /root/runner/public/logs.txt 2>&1
+0 18 * * * php /root/runner/artisan update:eid-facility  --type=2 >> /root/runner/public/logs.txt 2>&1
+
+30 20 * * * php /root/runner/artisan update:vl-facility --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
+0 18 * * * php /root/runner/artisan update:vl-facility --type=2 --month=0  >> /root/runner/public/logs.txt 2>&1
+
+
+0 10 * * * php /root/runner/artisan report:send 2>&1
+0 11 * * * echo '' > /root/runner/public/logs.txt 2>&1
+0 4 * * * echo '' > /root/newlogs.txt 2>&1
+
+#9 7 * * 0 php /root/syncher/artisan synch:eid >> /root/synchlogs.txt 2>&1
+#10 7 * * 0 php /root/syncher/artisan synch:vl >> /root/synchlogs.txt 2>&1
+
+0 7-17 * * 1-6 php /root/runner/artisan update:eid-nation >> /root/newlogs.txt 2>&1
+0 7-17 * * 1-6 php /root/runner/artisan update:eid-lab  >> /root/newlogs.txt 2>&1 
+0 7-16 * * 1-6 php /root/runner/artisan update:vl-nation  >> /root/newlogs.txt 2>&1
+0 7-16 * * 1-6 php /root/runner/artisan update:vl-lab  >> /root/newlogs.txt 2>&1
+10 7-17 * * 1-6 php /root/runner/artisan update:eid-partner >> /root/newlogs.txt 2>&1
+5 8-16/2 * * 1-6 php /root/runner/artisan update:vl-partner >> /root/newlogs.txt 2>&1
+
+30 8-16/2 * * 1-5 php /root/runner/artisan update:vl-suppression  >> /root/newlogs.txt 2>&1
+
+
+0 5 1 1 * php /root/runner/artisan insert:eid --type=0 >> /root/runner/public/insertlogs.txt 2>&1
+30 4 1 * * php /root/runner/artisan insert:eid  >> /root/runner/public/insertlogs.txt 2>&1
+30 4 1 * * php /root/runner/artisan insert:vl  >> /root/runner/public/insertlogs.txt 2>&1
+0 6 1 * * php /root/runner/artisan report:send --insert 2>&1
+0 7 1 * * echo '' > /root/runner/public/insertlogs.txt 2>&1
