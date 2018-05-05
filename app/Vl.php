@@ -14,7 +14,7 @@ class Vl
 	// protected $mysqli;
 
 	// public function __construct(){
-	// 	$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
+	// 	$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'), env('DB_PORT_WR', 3306));
 	// }
 
 
@@ -1625,8 +1625,7 @@ class Vl
     	}
 
     	$sql = substr($sql, 0, -5);
-    	$sql .= ";
-    	 ";
+    	$sql .= "; ";
     	return $sql;
     }
 }

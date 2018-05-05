@@ -19,7 +19,6 @@ class EidNation extends Model
 		->where('result', '>', 0)
 		->whereYear('datetested', $year)
 		->where('Flag', 1)
-		->where('eqa', 0)
 		->where('repeatt', 0)
 		->when($monthly, function($query) use ($monthly){
 			if($monthly){
@@ -67,11 +66,10 @@ class EidNation extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->whereBetween('result', [1, 2])
+		->whereIn('result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('repeatt', 0)
 		->where('Flag', 1)
-		->where('eqa', 0)
 		->when($monthly, function($query) use ($monthly){
 			if($monthly){
 				return $query->groupBy('month');
@@ -95,8 +93,8 @@ class EidNation extends Model
 		->leftJoin('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
 		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
 		->whereBetween('patients.age', [0.0001, 24])
-		->whereBetween('samples.pcrtype', [1, 2])
-		->whereBetween('samples.result', [1, 2])
+		->whereIn('samples.pcrtype', [1, 2, 3])
+		->whereIn('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
@@ -127,7 +125,7 @@ class EidNation extends Model
 		->whereBetween('patients.age', [0.0001, 24])
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
-		->whereBetween('samples.pcrtype', [1, 2])
+		->whereIn('samples.pcrtype', [1, 2, 3])
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
@@ -192,7 +190,7 @@ class EidNation extends Model
 		return $data;
 	}
 
-	public function getbypcr($year, $pcr=1, $pos=false, $monthly=true){
+	public function getbypcr($year, $pcrtype=1, $pos=false, $monthly=true){
 
 		$data = DB::connection('eid')
 		->table('samples')
@@ -202,11 +200,19 @@ class EidNation extends Model
 				return $query->where('samples.result', 2);
 			}
 			else{
-				return $query->whereBetween('samples.result', [1, 2]);
+				return $query->whereIn('samples.result', [1, 2]);
 			}			
 		})
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', $pcr)
+		->when($pcrtype, function($query) use ($pcrtype){
+			if($pcrtype == 2){
+				return $query->whereIn('samples.pcrtype', [2, 3]);
+			}
+			else{
+				return $query->where('samples.pcrtype', $pcrtype);
+			}			
+		})		
+		// ->where('samples.pcrtype', $pcrtype)
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
 		->where('samples.repeatt', 0)
@@ -227,7 +233,7 @@ class EidNation extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->whereBetween('samples.result', [1, 2])
+		->whereIn('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
 		->where('samples.Flag', 1)
@@ -254,9 +260,9 @@ class EidNation extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->whereBetween('samples.result', [1, 2])
+		->whereIn('samples.result', [1, 2])
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 2)
+		->whereIn('samples.pcrtype', [2, 3])
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
 		->where('samples.repeatt', 0)
@@ -282,7 +288,7 @@ class EidNation extends Model
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 2)
+		->whereIn('samples.pcrtype', [2, 3])
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
 		->where('samples.repeatt', 0)
@@ -306,9 +312,9 @@ class EidNation extends Model
 		$data = DB::connection('eid')
 		->table('samples')
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->whereBetween('samples.result', [1, 2])
+		->whereIn('samples.result', [1, 2])
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 3)
+		->where('samples.pcrtype', 4)
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
 		->where('samples.repeatt', 0)
@@ -335,7 +341,7 @@ class EidNation extends Model
 		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 3)
+		->where('samples.pcrtype', 4)
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
 		->where('samples.repeatt', 0)
@@ -368,7 +374,7 @@ class EidNation extends Model
 				return $query->where('samples.result', 2);
 			}
 			else{
-				return $query->whereBetween('samples.result', [1, 2]);				
+				return $query->whereIn('samples.result', [1, 2]);				
 			}				
 		})
 		->when(true, function($query) use ($a){
@@ -401,7 +407,10 @@ class EidNation extends Model
 		->where('samples.result', $result_type)
 		->whereYear('datetested', $year)
 		->when($pcrtype, function($query) use ($pcrtype){
-			if($pcrtype != 0){
+			if($pcrtype == 2){
+				return $query->whereIn('samples.pcrtype', [2, 3]);
+			}
+			else{
 				return $query->where('samples.pcrtype', $pcrtype);
 			}			
 		})		
@@ -460,7 +469,7 @@ class EidNation extends Model
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
 		->whereBetween('patients.age', [0.0001, 24])
-		->whereBetween('samples.pcrtype', [1, 2])
+		->whereIn('samples.pcrtype', [1, 2, 3])
 		->where($col, $estatus)
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
@@ -932,7 +941,7 @@ class EidNation extends Model
 		->select(DB::raw($raw))
 		->orderBy('samples.facility', 'desc')
 		->whereYear('datetested', $year)
-		->where('pcrtype', 3)
+		->where('pcrtype', 4)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
 		->where('samples.facility', '!=', 7148)
@@ -955,7 +964,7 @@ class EidNation extends Model
 			->where('repeatt', 0)
 			->where('Flag', 1)
 			->where('facility', '!=', 7148)
-			->where('pcrtype', '<', 3)
+			->where('pcrtype', '<', 4)
 			->first();
 
 			if($d == null){

@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(AgeBandsTableSeeder::class);
+        // $this->call(AgeBandsTableSeeder::class);
+        // viralsample_dt_datetested_ind
     }
 }

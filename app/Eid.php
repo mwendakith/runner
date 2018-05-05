@@ -14,7 +14,7 @@ class Eid
 	// protected $mysqli;
 
 	// public function __construct(){
-	// 	$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'));
+	// 	$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'), env('DB_PORT_WR', 3306));
 	// }
 
     public function update_nation($year = null){
@@ -43,10 +43,14 @@ class Eid
 
 		$firstdna_a = $n->getbypcr($year, 1);
 		$posrepeats_a = $n->getbypcr($year, 2);
-		$confirmdna_a = $n->getbypcr($year, 3);
+		// $posrepeats_two_a = $n->getbypcr($year, 3);
+		$confirmdna_a = $n->getbypcr($year, 4);
+
+
 
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true);
-		$confirmdnaPOS_a = $n->getbypcr($year, 3, true);
+		// $posrepeatsPOS_two_a = $n->getbypcr($year, 3, true);
+		$confirmdnaPOS_a = $n->getbypcr($year, 4, true);
 
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1);
 		$infantsless2mPOS_a = 	$n->Gettestedsamplescountrange($year, 1, true);
@@ -64,6 +68,9 @@ class Eid
 
 		$rpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 2);
 		$rneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 2);
+
+		// $rpos_two_a = $n->OverallTestedSamplesOutcomes($year, 2, 3);
+		// $rneg_two_a = $n->OverallTestedSamplesOutcomes($year, 1, 3);
 
 		$allpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 0);
 		$allneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 0);
@@ -114,9 +121,14 @@ class Eid
 			$received = $this->checknull($received_a->where('month', $month));
 			$firstdna = $this->checknull($firstdna_a->where('month', $month));
 			$confirmdna = $this->checknull($confirmdna_a->where('month', $month));
+
 			$posrepeats = $this->checknull($posrepeats_a->where('month', $month));
+			// $posrepeats = $this->checknull($posrepeats_a->where('month', $month)) + $this->checknull($posrepeats_two_a->where('month', $month));
+
 			$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where('month', $month));
+
 			$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month));
+			// $posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where('month', $month)) + $this->checknull($posrepeatsPOS_two_a->where('month', $month));
 			$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
 
 			$infantsless2m = $this->checknull($infantsless2m_a->where('month', $month));
@@ -137,6 +149,9 @@ class Eid
 			$rd = $this->checknull($rd_a->where('month', $month));
 			$rdd = $this->checknull($rdd_a->where('month', $month));
 			$redraw = $fail + $rd + $rdd;
+
+			// $rpos = $this->checknull($rpos_a->where('month', $month)) + $this->checknull($rpos_two_a->where('month', $month));
+			// $rneg = $this->checknull($rneg_a->where('month', $month)) + $this->checknull($rneg_two_a->where('month', $month));
 
 			$rpos = $this->checknull($rpos_a->where('month', $month));
 			$rneg = $this->checknull($rneg_a->where('month', $month));
@@ -365,10 +380,12 @@ class Eid
 
 		$firstdna_a = $n->getbypcr($year, 1, false, false);
 		$posrepeats_a = $n->getbypcr($year, 2, false, false);
-		$confirmdna_a = $n->getbypcr($year, 3, false, false);
+		// $posrepeats_two_a = $n->getbypcr($year, 3, false, false);
+		$confirmdna_a = $n->getbypcr($year, 4, false, false);
 
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, false);
-		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, false);
+		// $posrepeatsPOS_two_a = $n->getbypcr($year, 3, true, false);
+		$confirmdnaPOS_a = $n->getbypcr($year, 4, true, false);
 
 
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, false);
@@ -388,6 +405,9 @@ class Eid
 
 		$rpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 2, false);
 		$rneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 2, false);
+
+		// $rpos_two_a = $n->OverallTestedSamplesOutcomes($year, 2, 3, false);
+		// $rneg_two_a = $n->OverallTestedSamplesOutcomes($year, 1, 3, false);
 
 		$allpos_a = $n->OverallTestedSamplesOutcomes($year, 2, 0, false);
 		$allneg_a = $n->OverallTestedSamplesOutcomes($year, 1, 0, false);
@@ -435,8 +455,10 @@ class Eid
 		$firstdna = $this->checknull($firstdna_a);
 		$confirmdna = $this->checknull($confirmdna_a);
 		$posrepeats = $this->checknull($posrepeats_a);
+		// $posrepeats = $this->checknull($posrepeats_a) + $this->checknull($posrepeats_two_a);
 		$confirmdnaPOS = $this->checknull($confirmdnaPOS_a);
 		$posrepeatsPOS = $this->checknull($posrepeatsPOS_a);
+		// $posrepeatsPOS = $this->checknull($posrepeatsPOS_a) + $this->checknull($posrepeatsPOS_two_a);
 		$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
 
 		$infantsless2m = $this->checknull($infantsless2m_a);
@@ -458,8 +480,8 @@ class Eid
 		$rdd = $this->checknull($rdd_a);
 		$redraw = $fail + $rd + $rdd;
 
-		$rpos = $this->checknull($rpos_a);
-		$rneg = $this->checknull($rneg_a);
+		$rpos = $this->checknull($rpos_a) + $this->checknull($rpos_two_a);
+		$rneg = $this->checknull($rneg_a) + $this->checknull($rneg_two_a);
 		
 		$allpos = $this->checknull($allpos_a);
 		$allneg = $this->checknull($allneg_a);
@@ -557,8 +579,8 @@ class Eid
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
 		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
 
-		$discrepant_a = $n->getbypcr($year, 4, false, $division);
-		$discrepantpos_a = $n->getbypcr($year, 4, true, $division);
+		$discrepant_a = $n->getbypcr($year, 5, false, $division);
+		$discrepantpos_a = $n->getbypcr($year, 5, true, $division);
 
 		$fake_a = $n->false_confirmatory($year, $division);
 		$controls_a = $n->control_samples($year);
@@ -841,10 +863,10 @@ class Eid
 
 		$firstdna_a = $n->getbypcr($year, 1, false, $division);
 		$posrepeats_a = $n->getbypcr($year, 2, false, $division);
-		$confirmdna_a = $n->getbypcr($year, 3, false, $division);
+		$confirmdna_a = $n->getbypcr($year, 4, false, $division);
 
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
-		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
+		$confirmdnaPOS_a = $n->getbypcr($year, 4, true, $division);
 
 
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, $division);
@@ -1652,8 +1674,7 @@ class Eid
     	}
 
     	$sql = substr($sql, 0, -5);
-    	$sql .= ";
-    	 ";
+    	$sql .= "; ";
     	return $sql;
     }
 

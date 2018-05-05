@@ -209,8 +209,8 @@ class EidDivision extends Model
 			}
 		})
 		->whereBetween('patients.age', [0.0001, 24])
-		->whereBetween('samples.pcrtype', [1, 2])
-		->whereBetween('samples.result', [1, 2])
+		->whereIn('samples.pcrtype', [1, 2, 3])
+		->whereIn('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
@@ -248,7 +248,7 @@ class EidDivision extends Model
 			}
 		})
 		->whereBetween('patients.age', [0.0001, 24])
-		->whereBetween('samples.pcrtype', [1, 2])
+		->whereIn('samples.pcrtype', [1, 2, 3])
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
@@ -337,7 +337,7 @@ class EidDivision extends Model
 		return $data;
 	}
 
-	public function getbypcr($year, $pcr=1, $pos=false, $division='view_facilitys.county', $monthly=true){
+	public function getbypcr($year, $pcrtype=1, $pos=false, $division='view_facilitys.county', $monthly=true){
 
 		$data = DB::connection('eid')
 		->table('samples')
@@ -358,8 +358,15 @@ class EidDivision extends Model
 				return $query->whereBetween('samples.result', [1, 2]);
 			}			
 		})
-		->whereYear('datetested', $year)
-		->where('samples.pcrtype', $pcr)
+		->whereYear('datetested', $year)		
+		->when($pcrtype, function($query) use ($pcrtype){
+			if($pcrtype == 2){
+				return $query->whereIn('samples.pcrtype', [2, 3]);
+			}
+			else{
+				return $query->where('samples.pcrtype', $pcrtype);
+			}			
+		})		
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
@@ -429,7 +436,7 @@ class EidDivision extends Model
 		})
 		->whereBetween('samples.result', [1, 2])
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 2)
+		->whereIn('samples.pcrtype', [2, 3])
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
@@ -465,7 +472,7 @@ class EidDivision extends Model
 		})
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 2)
+		->whereIn('samples.pcrtype', [2, 3])
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
@@ -501,7 +508,7 @@ class EidDivision extends Model
 		})
 		->whereBetween('samples.result', [1, 2])
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 3)
+		->where('samples.pcrtype', 4)
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
@@ -538,7 +545,7 @@ class EidDivision extends Model
 		})
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 3)
+		->where('samples.pcrtype', 4)
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
@@ -617,10 +624,13 @@ class EidDivision extends Model
 		->where('samples.result', $result_type)
 		->whereYear('datetested', $year)
 		->when($pcrtype, function($query) use ($pcrtype){
-			if($pcrtype != 0){
+			if($pcrtype == 2){
+				return $query->whereIn('samples.pcrtype', [2, 3]);
+			}
+			else{
 				return $query->where('samples.pcrtype', $pcrtype);
 			}			
-		})		
+		})			
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)
 		->when($division, function($query) use ($monthly, $division){
@@ -689,7 +699,7 @@ class EidDivision extends Model
 		->where('samples.result', 2)
 		->whereYear('datetested', $year)
 		->whereBetween('patients.age', [0.0001, 24])
-		->whereBetween('samples.pcrtype', [1, 2])
+		->whereIn('samples.pcrtype', [1, 2, 3])
 		->where($col, $estatus)
 		->where('samples.Flag', 1)
 		->where('samples.repeatt', 0)
@@ -1268,7 +1278,7 @@ class EidDivision extends Model
 			$update_array = array('synched' => 1, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 			// $update_array = array('synched' => 1, 'datesynched' => $today);
 
-			if($value->pcrtype == 3){
+			if($value->pcrtype == 4){
 
 		    	$d = DB::connection('eid')
 				->table("samples")
@@ -1280,7 +1290,7 @@ class EidDivision extends Model
 				->where('repeatt', 0)
 				->where('Flag', 1)
 				->where('facility', '!=', 7148)
-				->where('pcrtype', '<', 3)
+				->where('pcrtype', '<', 4)
 				->first();
 
 				if($d == null){
