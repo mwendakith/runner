@@ -58,18 +58,22 @@ class Cleaner
 			$sql = "CREATE INDEX {$value} ON (";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
 			$sql .= "year, month);"
+			DB::statement($sql);
 
 			// execute
-			$sql = "CREATE INDEX {$value}_years ON (year, month);";
+			$sql = "CREATE INDEX {$value}_year ON (year, month);";
+			DB::statement($sql);
 		}
 
 		foreach ($yearlies as $key => $value) {
 			$sql = "CREATE INDEX {$value} ON (";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
 			$sql .= "year);";
+			DB::statement($sql);
 
 			// execute
 			$sql = "CREATE INDEX index_year ON (year);";
+			DB::statement($sql);
 		}
 
 		foreach ($similar as $match => $tables) {
@@ -79,8 +83,10 @@ class Cleaner
 				$sql = "CREATE INDEX {$value}_year ON (";
 				if($levels[$key]) $sql .= $levels[$key] . ", ";
 				$sql .= "year, month);";
+				DB::statement($sql);
 				
 				$sql = "CREATE INDEX {$column}_year ON ({$column}, year, month);";
+				DB::statement($sql);
 			}
 		}		
 	}
@@ -100,17 +106,14 @@ class Cleaner
 			'justification' => ['vl_national_justification', 'vl_county_justification', 'vl_subcounty_justification', 'vl_partner_justification', 'vl_site_justification'],
 			'pmtcttype' => ['vl_national_pmtct', 'vl_county_pmtct', 'vl_subcounty_pmtct', 'vl_partner_pmtct', 'vl_site_pmtct'],
 			// '' => ['vl_national_', 'vl_county_', 'vl_subcounty_', 'vl_partner_', 'vl_site_'],
-			// '' => ['vl_national_', 'vl_county_', 'vl_subcounty_', 'vl_partner_', 'vl_site_'],
-			// '' => ['vl_national_', 'vl_county_', 'vl_subcounty_', 'vl_partner_', 'vl_site_'],
-			// '' => ['vl_national_', 'vl_county_', 'vl_subcounty_', 'vl_partner_', 'vl_site_'],
-			// '' => ['vl_national_', 'vl_county_', 'vl_subcounty_', 'vl_partner_', 'vl_site_'],
 
 		];
 
 		foreach ($summaries as $key => $value) {
 			$sql = "CREATE INDEX {$value} ON (";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
-			$sql .= "year, month);"
+			$sql .= "year, month);";
+			DB::statement($sql);
 
 			// execute
 			$sql = "CREATE INDEX {$value}_year ON (year, month);";
@@ -122,8 +125,10 @@ class Cleaner
 				$sql = "CREATE INDEX {$value}_year ON (";
 				if($levels[$key]) $sql .= $levels[$key] . ", ";
 				$sql .= "year, month);";
+				DB::statement($sql);
 				
 				$sql = "CREATE INDEX {$column}_year ON ({$column}, year, month);";
+				DB::statement($sql);
 			}
 		}		
 	}

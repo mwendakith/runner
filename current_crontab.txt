@@ -9,13 +9,10 @@
 
 0 5 * * * php  /root/runner/artisan update:vl-lablogs >>  /root/runner/public/logs.txt 2>&1
 
-30 20 * * * php /root/runner/artisan update:vl-facility 2017 --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
+30 20 * * * php /root/runner/artisan update:vl-facility 2016 --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
 #0 18 * * * php /root/runner/artisan update:vl-facility 2017 --type=2 --month=0  >> /root/runner/public/logs.txt 2>&1
-#0 18 * * * php /root/runner/artisan update:vl 2017 --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
-50 7 * * * php /root/runner/artisan update:vl 2016 --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
-
-50 7 * * * php /root/runner/artisan update:eid 2016 --type=1 >> /root/runner/public/logs.txt 2>&1
-50 7 * * * php /root/runner/artisan update:eid-facility 2016 >> /root/runner/public/logs.txt 2>&1
+#0 18 * * * php /root/runner/artisan update:vl --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
+10 19 * * * php /root/runner/artisan update:vl 2016 --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
 
 
 0 18 * * * php /root/runner/artisan update:eid-facility >> /root/runner/public/logs.txt 2>&1
