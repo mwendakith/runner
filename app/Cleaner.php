@@ -58,31 +58,31 @@ class Cleaner
 			'ages' => ['national_age_breakdown', 'county_age_breakdown', 'subcounty_age_breakdown', 'ip_age_breakdown'],
 		];
 
-		foreach ($summaries as $key => $value) {
-			$sql = "CREATE INDEX {$value} ON {$value}(";
-			if($levels[$key]) $sql .= $levels[$key] . ", ";
-			$sql .= "year, month);";
-			DB::statement($sql);
+		// foreach ($summaries as $key => $value) {
+		// 	$sql = "CREATE INDEX {$value} ON {$value}(";
+		// 	if($levels[$key]) $sql .= $levels[$key] . ", ";
+		// 	$sql .= "year, month);";
+		// 	DB::statement($sql);
 
-			// execute
-			$sql = "CREATE INDEX {$value}_year ON {$value}(year, month);";
-			DB::statement($sql);
-		}
+		// 	// execute
+		// 	$sql = "CREATE INDEX {$value}_year ON {$value}(year, month);";
+		// 	DB::statement($sql);
+		// }
 
-		foreach ($yearlies as $key => $value) {
-			$sql = "CREATE INDEX {$value} ON {$value}(";
-			if($levels[$key]) $sql .= $levels[$key] . ", ";
-			$sql .= "year);";
-			DB::statement($sql);
+		// foreach ($yearlies as $key => $value) {
+		// 	$sql = "CREATE INDEX {$value} ON {$value}(";
+		// 	if($levels[$key]) $sql .= $levels[$key] . ", ";
+		// 	$sql .= "year);";
+		// 	DB::statement($sql);
 
-			// execute
-			$sql = "CREATE INDEX index_year ON {$value}(year);";
-			DB::statement($sql);
-		}
+		// 	// execute
+		// 	$sql = "CREATE INDEX index_year ON {$value}(year);";
+		// 	DB::statement($sql);
+		// }
 
 		foreach ($similar as $match => $tables) {
 			foreach ($tables as $key => $value) {
-				$column = $matches[$key];
+				$column = $matches[$match]; 
 
 				$sql = "CREATE INDEX {$value}_year ON {$value}(";
 				if($levels[$key]) $sql .= $levels[$key] . ", ";
