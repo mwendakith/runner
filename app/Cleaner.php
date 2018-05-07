@@ -117,6 +117,7 @@ class Cleaner
 
 			// execute
 			$sql = "CREATE INDEX {$value}_year ON (year, month);";
+			DB::statement($sql);
 		}
 
 		foreach ($similar as $column => $tables) {
