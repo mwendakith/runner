@@ -19,7 +19,7 @@ class Cleaner
 			->get();
 
 
-		echo $indices->first();
+		print_r($indices->first()->toArray());
 		return null;
 
 		foreach ($indices as $key => $ind) {
