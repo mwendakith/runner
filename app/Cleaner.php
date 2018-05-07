@@ -57,7 +57,7 @@ class Cleaner
 		foreach ($summaries as $key => $value) {
 			$sql = "CREATE INDEX {$value} ON (";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
-			$sql .= "year, month);"
+			$sql .= "year, month);";
 			DB::statement($sql);
 
 			// execute
