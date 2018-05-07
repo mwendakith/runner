@@ -19,8 +19,8 @@ class Cleaner
 			->get();
 
 
-		dd($indices->first());
-		return null;
+		// dd($indices->first());
+		// return null;
 
 		foreach ($indices as $key => $ind) {
 			$sql = "DROP INDEX " . $ind->index_name . " ON " . $ind->table_name . ";";
