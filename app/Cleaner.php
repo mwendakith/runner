@@ -14,6 +14,7 @@ class Cleaner
 			->where('TABLE_SCHEMA', 'apidb')
 			->where('INDEX_NAME', '!=', 'PRIMARY')
 			->where('NON_UNIQUE', 1)
+			->where('SEQ_IN_INDEX', 1)
 			->where('TABLE_NAME', 'NOT LIKE', 'a%')
 			->whereNotIn('COLUMN_NAME', ['county', 'subcounty', 'partner', 'facility', 'lab', 'prophylaxis', 'entrypoint', 'age_band_id', 'rejected_reason', 'age', 'gender', 'regimen', 'sampletype', 'justification', 'pmtcttype'])
 			->get();
