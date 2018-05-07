@@ -59,24 +59,24 @@ class Cleaner
 		];
 
 		foreach ($summaries as $key => $value) {
-			$sql = "CREATE INDEX {$value} ON {$value}(";
+			$sql = "CREATE INDEX eid_{$value} ON {$value}(";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
 			$sql .= "year, month);";
 			DB::statement($sql);
 
 			// execute
-			$sql = "CREATE INDEX {$value}_year ON {$value}(year, month);";
+			$sql = "CREATE INDEX eid_{$value}_year ON {$value}(year, month);";
 			DB::statement($sql);
 		}
 
 		foreach ($yearlies as $key => $value) {
-			$sql = "CREATE INDEX {$value} ON {$value}(";
+			$sql = "CREATE INDEX eid_{$value} ON {$value}(";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
 			$sql .= "year);";
 			DB::statement($sql);
 
 			// execute
-			$sql = "CREATE INDEX index_year ON {$value}(year);";
+			$sql = "CREATE INDEX eid_index_year ON {$value}(year);";
 			DB::statement($sql);
 		}
 
@@ -84,12 +84,12 @@ class Cleaner
 			foreach ($tables as $key => $value) {
 				$column = $matches[$match]; 
 
-				$sql = "CREATE INDEX {$value}_year ON {$value}(";
+				$sql = "CREATE INDEX eid_{$value}_year ON {$value}(";
 				if($levels[$key]) $sql .= $levels[$key] . ", ";
 				$sql .= "year, month);";
 				DB::statement($sql);
 				
-				$sql = "CREATE INDEX {$column}_year ON {$value}({$column}, year, month);";
+				$sql = "CREATE INDEX eid_{$column}_year ON {$value}({$column}, year, month);";
 				DB::statement($sql);
 			}
 		}		
@@ -105,7 +105,7 @@ class Cleaner
 			'rejected_reason' => ['vl_national_rejections', 'vl_county_rejections', 'vl_subcounty_rejections', 'vl_partner_rejections', 'vl_site_rejections', 'vl_lab_rejections'],
 			'age' => ['vl_national_age', 'vl_county_age', 'vl_subcounty_age', 'vl_partner_age', 'vl_site_age'],
 			'gender' => ['vl_national_gender', 'vl_county_gender', 'vl_subcounty_gender', 'vl_partner_gender', 'vl_site_gender'],
-			'viralprophylaxis' => ['vl_national_regimen', 'vl_county_regimen', 'vl_subcounty_regimen', 'vl_partner_regimen', 'vl_site_regimen'],
+			'regimen' => ['vl_national_regimen', 'vl_county_regimen', 'vl_subcounty_regimen', 'vl_partner_regimen', 'vl_site_regimen'], 
 			'sampletype' => ['vl_national_sampletype', 'vl_county_sampletype', 'vl_subcounty_sampletype', 'vl_partner_sampletype', 'vl_site_sampletype'],
 			'justification' => ['vl_national_justification', 'vl_county_justification', 'vl_subcounty_justification', 'vl_partner_justification', 'vl_site_justification'],
 			'pmtcttype' => ['vl_national_pmtct', 'vl_county_pmtct', 'vl_subcounty_pmtct', 'vl_partner_pmtct', 'vl_site_pmtct'],
@@ -113,25 +113,25 @@ class Cleaner
 		];
 
 		foreach ($summaries as $key => $value) {
-			$sql = "CREATE INDEX {$value} ON {$value}(";
+			$sql = "CREATE INDEX vl_{$value} ON {$value}(";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
 			$sql .= "year, month);";
 			DB::statement($sql);
 
 			// execute
-			$sql = "CREATE INDEX {$value}_year ON {$value}(year, month);";
+			$sql = "CREATE INDEX vl_{$value}_year ON {$value}(year, month);";
 			DB::statement($sql);
 		}
 
 		foreach ($similar as $column => $tables) {
 			foreach ($tables as $key => $value) {
 
-				$sql = "CREATE INDEX {$value}_year ON {$value}(";
+				$sql = "CREATE INDEX vl_{$value}_year ON {$value}(";
 				if($levels[$key]) $sql .= $levels[$key] . ", ";
 				$sql .= "year, month);";
 				DB::statement($sql);
 				
-				$sql = "CREATE INDEX {$column}_year ON {$value}({$column}, year, month);";
+				$sql = "CREATE INDEX vl_{$column}_year ON {$value}({$column}, year, month);";
 				DB::statement($sql);
 			}
 		}		

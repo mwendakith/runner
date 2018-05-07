@@ -480,8 +480,8 @@ class Eid
 		$rdd = $this->checknull($rdd_a);
 		$redraw = $fail + $rd + $rdd;
 
-		$rpos = $this->checknull($rpos_a) + $this->checknull($rpos_two_a);
-		$rneg = $this->checknull($rneg_a) + $this->checknull($rneg_two_a);
+		$rpos = $this->checknull($rpos_a);
+		$rneg = $this->checknull($rneg_a);
 		
 		$allpos = $this->checknull($allpos_a);
 		$allneg = $this->checknull($allneg_a);
