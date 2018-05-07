@@ -47,7 +47,7 @@ class Cleaner
 		// $ages = ['national_age_breakdown', 'county_age_breakdown', 'subcounty_age_breakdown', 'ip_age_breakdown'];
 
 		$similar = [
-			'rejections' => ['national_rejections', 'county_rejections', 'subcounty_rejections', 'ip_rejections', 'site_rejections' 'lab_rejections',],
+			'rejections' => ['national_rejections', 'county_rejections', 'subcounty_rejections', 'ip_rejections', 'site_rejections', 'lab_rejections'],
 			'i_regimens' => ['national_iprophylaxis', 'county_iprophylaxis', 'subcounty_iprophylaxis', 'ip_iprophylaxis'],
 			'm_regimens' => ['national_mprophylaxis', 'county_mprophylaxis', 'subcounty_mprophylaxis', 'ip_mprophylaxis'],
 			'entrypoints' => ['national_entrypoint', 'county_entrypoint', 'subcounty_entrypoint', 'ip_entrypoint'],
@@ -98,7 +98,7 @@ class Cleaner
 		$summaries = ['vl_national_summary', 'vl_county_summary', 'vl_subcounty_summary', 'vl_partner_summary', 'vl_site_summary', 'vl_lab_summary'];
 
 		$similar = [
-			'rejected_reason' => ['vl_national_rejections', 'vl_county_rejections', 'vl_subcounty_rejections', 'vl_partner_rejections', 'vl_site_rejections' 'vl_lab_rejections'],
+			'rejected_reason' => ['vl_national_rejections', 'vl_county_rejections', 'vl_subcounty_rejections', 'vl_partner_rejections', 'vl_site_rejections', 'vl_lab_rejections'],
 			'age' => ['vl_national_age', 'vl_county_age', 'vl_subcounty_age', 'vl_partner_age', 'vl_site_age'],
 			'gender' => ['vl_national_gender', 'vl_county_gender', 'vl_subcounty_gender', 'vl_partner_gender', 'vl_site_gender'],
 			'viralprophylaxis' => ['vl_national_regimen', 'vl_county_regimen', 'vl_subcounty_regimen', 'vl_partner_regimen', 'vl_site_regimen'],
@@ -106,7 +106,6 @@ class Cleaner
 			'justification' => ['vl_national_justification', 'vl_county_justification', 'vl_subcounty_justification', 'vl_partner_justification', 'vl_site_justification'],
 			'pmtcttype' => ['vl_national_pmtct', 'vl_county_pmtct', 'vl_subcounty_pmtct', 'vl_partner_pmtct', 'vl_site_pmtct'],
 			// '' => ['vl_national_', 'vl_county_', 'vl_subcounty_', 'vl_partner_', 'vl_site_'],
-
 		];
 
 		foreach ($summaries as $key => $value) {
