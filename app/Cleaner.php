@@ -23,7 +23,8 @@ class Cleaner
 		// return null;
 
 		foreach ($indices as $key => $ind) {
-			$sql = "DROP INDEX `" . $ind->index_name . "` ON " . $ind->table_name . ";";
+			// $sql = "DROP INDEX `" . $ind->index_name . "` ON " . $ind->table_name . ";";
+			$sql = "ALTER TABLE " . $ind->table_name . "DROP INDEX `" . $ind->index_name . "`;";
 			DB::statement($sql);
 		}
 	}
