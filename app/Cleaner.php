@@ -59,24 +59,24 @@ class Cleaner
 		];
 
 		foreach ($summaries as $key => $value) {
-			$sql = "CREATE INDEX {$value} ON (";
+			$sql = "CREATE INDEX {$value} ON {$value}(";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
 			$sql .= "year, month);";
 			DB::statement($sql);
 
 			// execute
-			$sql = "CREATE INDEX {$value}_year ON (year, month);";
+			$sql = "CREATE INDEX {$value}_year ON {$value}(year, month);";
 			DB::statement($sql);
 		}
 
 		foreach ($yearlies as $key => $value) {
-			$sql = "CREATE INDEX {$value} ON (";
+			$sql = "CREATE INDEX {$value} ON {$value}(";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
 			$sql .= "year);";
 			DB::statement($sql);
 
 			// execute
-			$sql = "CREATE INDEX index_year ON (year);";
+			$sql = "CREATE INDEX index_year ON {$value}(year);";
 			DB::statement($sql);
 		}
 
@@ -84,12 +84,12 @@ class Cleaner
 			foreach ($tables as $key => $value) {
 				$column = $matches[$key];
 
-				$sql = "CREATE INDEX {$value}_year ON (";
+				$sql = "CREATE INDEX {$value}_year ON {$value}(";
 				if($levels[$key]) $sql .= $levels[$key] . ", ";
 				$sql .= "year, month);";
 				DB::statement($sql);
 				
-				$sql = "CREATE INDEX {$column}_year ON ({$column}, year, month);";
+				$sql = "CREATE INDEX {$column}_year ON {$value}({$column}, year, month);";
 				DB::statement($sql);
 			}
 		}		
@@ -113,25 +113,25 @@ class Cleaner
 		];
 
 		foreach ($summaries as $key => $value) {
-			$sql = "CREATE INDEX {$value} ON (";
+			$sql = "CREATE INDEX {$value} ON {$value}(";
 			if($levels[$key]) $sql .= $levels[$key] . ", ";
 			$sql .= "year, month);";
 			DB::statement($sql);
 
 			// execute
-			$sql = "CREATE INDEX {$value}_year ON (year, month);";
+			$sql = "CREATE INDEX {$value}_year ON {$value}(year, month);";
 			DB::statement($sql);
 		}
 
 		foreach ($similar as $column => $tables) {
 			foreach ($tables as $key => $value) {
 
-				$sql = "CREATE INDEX {$value}_year ON (";
+				$sql = "CREATE INDEX {$value}_year ON {$value}(";
 				if($levels[$key]) $sql .= $levels[$key] . ", ";
 				$sql .= "year, month);";
 				DB::statement($sql);
 				
-				$sql = "CREATE INDEX {$column}_year ON ({$column}, year, month);";
+				$sql = "CREATE INDEX {$column}_year ON {$value}({$column}, year, month);";
 				DB::statement($sql);
 			}
 		}		
