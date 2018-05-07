@@ -18,6 +18,10 @@ class Cleaner
 			->whereNotIn('COLUMN_NAME', ['county', 'subcounty', 'partner', 'facility', 'lab', 'prophylaxis', 'entrypoint', 'age_band_id', 'rejected_reason', 'age', 'gender', 'regimen', 'sampletype', 'justification', 'pmtcttype'])
 			->get();
 
+
+		echo $indices->first();
+		return null;
+
 		foreach ($indices as $key => $ind) {
 			$sql = "DROP INDEX " . $ind->index_name . " ON " . $ind->table_name . ";";
 			DB::statement($sql);
