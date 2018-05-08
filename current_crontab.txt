@@ -37,7 +37,7 @@
 10 7-17 * * 1-6 php /root/runner/artisan update:eid-partner >> /root/newlogs.txt 2>&1
 #5 8-16/2 * * 1-6 php /root/runner/artisan update:vl-partner >> /root/newlogs.txt 2>&1
 
-#30 8-16/2 * * 1-5 php /root/runner/artisan update:vl-suppression  >> /root/newlogs.txt 2>&1
+30 8-16/2 * * 1-5 php /root/runner/artisan update:vl-suppression  >> /root/newlogs.txt 2>&1
 
 
 0 5 1 1 * php /root/runner/artisan insert:eid --type=0 >> /root/runner/public/insertlogs.txt 2>&1
