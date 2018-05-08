@@ -574,10 +574,10 @@ class Eid
 		$EQAtestedsamples = $n->OverallEQATestedSamples($year, $division);
 
 		$posrepeats_a = $n->getbypcr($year, 2, false, $division);
-		$confirmdna_a = $n->getbypcr($year, 3, false, $division);
+		$confirmdna_a = $n->getbypcr($year, 4, false, $division);
 
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division);
-		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division);
+		$confirmdnaPOS_a = $n->getbypcr($year, 4, true, $division);
 
 		$discrepant_a = $n->getbypcr($year, 5, false, $division);
 		$discrepantpos_a = $n->getbypcr($year, 5, true, $division);
@@ -1273,10 +1273,10 @@ class Eid
 
 		$firstdna_a = $n->getbypcr($year, 1, false, $division, false);
 		$posrepeats_a = $n->getbypcr($year, 2, false, $division, false);
-		$confirmdna_a = $n->getbypcr($year, 3, false, $division, false);
+		$confirmdna_a = $n->getbypcr($year, 4, false, $division, false);
 
 		$posrepeatsPOS_a = $n->getbypcr($year, 2, true, $division, false);
-		$confirmdnaPOS_a = $n->getbypcr($year, 3, true, $division, false);
+		$confirmdnaPOS_a = $n->getbypcr($year, 4, true, $division, false);
 
 
 		$infantsless2m_a = 		$n->Gettestedsamplescountrange($year, 1, false, $division, false);
