@@ -331,7 +331,7 @@ class EidInsert
         $sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
 
         // Iterate through classes of tables
-        for ($iterator=1; $iterator < 2; $iterator++) { 
+        for ($iterator=2; $iterator < 3; $iterator++) { 
             $national = $this->get_table(0, $iterator);
             $county = $this->get_table(1, $iterator);
             $subcounty = $this->get_table(2, $iterator);
@@ -340,7 +340,7 @@ class EidInsert
             $table_name = $national[1];
             $column_name = $national[2];
 
-            $reasons = [26, 27];
+            $reasons = [25];
 
             echo "\n Begin eid {$table_name} insert at " . date('d/m/Y h:i:s a', time());
 
