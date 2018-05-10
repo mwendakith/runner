@@ -19,8 +19,8 @@
 
 
 
-0 23 * * * php /root/runner/artisan update:eid-facility 2017 >> /root/runner/public/logs.txt 2>&1
-23 0 * * * php /root/runner/artisan update:eid 2017 --type=1 >> /root/runner/public/logs.txt 2>&1
+#0 23 * * * php /root/runner/artisan update:eid-facility 2017 >> /root/runner/public/logs.txt 2>&1
+#23 0 * * * php /root/runner/artisan update:eid 2017 --type=1 >> /root/runner/public/logs.txt 2>&1
 
 
 0 10 * * * php /root/runner/artisan report:send 2>&1

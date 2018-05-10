@@ -18,11 +18,11 @@ class EidInsert
 
     	echo "\n Begin eid summary insert at " . date('d/m/Y h:i:s a', time());
 
-    	$counties = DB::connection('eid')->table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties = DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners = DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties = DB::table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners = DB::table('partners')->select('ID')->orderBy('ID')->get();
+    	$labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+    	$sites = DB::table('facilitys')->select('ID')->orderBy('ID')->get();
 
     	$data_array=null;
     	$i=0;
@@ -99,11 +99,11 @@ class EidInsert
 
     	echo "\n Begin eid summary yearly insert at " . date('d/m/Y h:i:s a', time());
 
-    	$counties = DB::connection('eid')->table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties = DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners = DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties = DB::table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners = DB::table('partners')->select('ID')->orderBy('ID')->get();
+    	$labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+    	$sites = DB::table('facilitys')->select('ID')->orderBy('ID')->get();
 
     	$data_array=null;
     	$i=0;
@@ -177,11 +177,11 @@ class EidInsert
 		ini_set("memory_limit", "-1");
 
 		// Get List of Divisions
-    	$counties = DB::connection('eid')->table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties = DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners = DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
+    	$subcounties = DB::table('districts')->select('ID')->orderBy('ID')->get();
+    	$partners = DB::table('partners')->select('ID')->orderBy('ID')->get();
+    	$labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+    	$sites = DB::table('facilitys')->select('ID')->orderBy('ID')->get();
 
     	// Iterate through classes of tables
     	for ($iterator=1; $iterator < 6; $iterator++) { 
@@ -324,11 +324,11 @@ class EidInsert
         ini_set("memory_limit", "-1");
 
         // Get List of Divisions
-        $counties = DB::connection('eid')->table('countys')->select('ID')->orderBy('ID')->get();
-        $subcounties = DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
-        $partners = DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
-        $labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
-        $sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
+        $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
+        $subcounties = DB::table('districts')->select('ID')->orderBy('ID')->get();
+        $partners = DB::table('partners')->select('ID')->orderBy('ID')->get();
+        $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+        $sites = DB::table('facilitys')->select('ID')->orderBy('ID')->get();
 
         // Iterate through classes of tables
         for ($iterator=2; $iterator < 3; $iterator++) { 

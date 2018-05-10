@@ -135,5 +135,103 @@ class Cleaner
 		}		
 	}
 
+	public static function clean_vl_sites($year = null)
+	{
+		if(!$year) $year = Date('Y');
+
+		$sites = [
+			// 'vl_site_summary' => null,
+			'vl_site_rejections' => ['table' => 'viralrejections', 'column' => 'rejected_reason'],
+			'vl_site_age' => ['table' => 'agecategory', 'column' => 'age', 'subid' => 1],
+			'vl_site_gender' => ['table' => 'gender', 'column' => 'gender'],
+			'vl_site_regimen' => ['table' => 'viralprophylaxis', 'column' => 'regimen'],
+			'vl_site_sampletype' => ['table' => 'viralsampletypedetails', 'column' => 'sampletype'],
+			'vl_site_justification' => ['table' => 'viraljustifications', 'column' => 'justification'],
+			'vl_site_pmtct' => ['table' => 'viralpmtcttype', 'column' => 'pmtcttype', 'subid' => 1],
+		];
+
+		for ($month=1; $month < 13; $month++) {
+			if($year == Date('Y') && $month > Date('m')) break;
+			$table_name = 'vl_site_summary'; 
+
+			$duplicates = DB::table($table_name)
+				->selectRaw("facility, count(facility) as my_count")
+				->where(['year' => $year, 'month' => $month])
+				->groupBy('facility')
+				->having('my_count', '>', 1)
+				->get();
+
+			if($duplicates->isNotEmpty){
+				$facilities = $duplicates->pluck('facility')->toArray();
+				DB::table($table_name)
+					->where(['year' => $year, 'month' => $month])
+					->whereIn('facility', $facilities)
+					->delete();					
+			}		
+		}
+
+		foreach ($sites as $table_name => $value) {
+			$vars = DB::table($value['table'])
+				->select('id')
+				->when(isset($value['subid']), function($query){
+					return $query->where('subid', 1);
+				})
+				->get();
+
+			for ($month=1; $month < 13; $month++) {
+				if($year == Date('Y') && $month > Date('m')) break; 
+
+				foreach ($vars as $row) {
+					$duplicates = DB::table($table_name)
+						->selectRaw("facility, count(facility) as my_count")
+						->where(['year' => $year, 'month' => $month, $value['column'] => $row->id])
+						->groupBy('facility')
+						->having('my_count', '>', 1)
+						->get();
+
+					if($duplicates->isNotEmpty){
+						$facilities = $duplicates->pluck('facility')->toArray();
+
+						DB::table($table_name)
+							->where(['year' => $year, 'month' => $month, $value['column'] => $row->id])
+							->whereIn('facility', $facilities)
+							->delete();
+					}
+				}
+			}
+		}
+	}
+
+	public static function vl_missing_site_rows($year = null)
+	{
+		if(!$year) $year = Date('Y');
+
+		$sites = [
+			// 'vl_site_summary' => null,
+			'vl_site_rejections' => ['table' => 'viralrejections', 'column' => 'rejected_reason'],
+			'vl_site_age' => ['table' => 'agecategory', 'column' => 'age', 'subid' => 1],
+			'vl_site_gender' => ['table' => 'gender', 'column' => 'gender'],
+			'vl_site_regimen' => ['table' => 'viralprophylaxis', 'column' => 'regimen'],
+			'vl_site_sampletype' => ['table' => 'viralsampletypedetails', 'column' => 'sampletype'],
+			'vl_site_justification' => ['table' => 'viraljustifications', 'column' => 'justification'],
+			'vl_site_pmtct' => ['table' => 'viralpmtcttype', 'column' => 'pmtcttype', 'subid' => 1],
+		];
+
+
+		for ($month=1; $month < 13; $month++) {
+			if($year == Date('Y') && $month > Date('m')) break; 
+			$table_name = 'vl_site_summary';
+
+			$mfacilities = DB::table('facilitys')
+				->select('id')
+				->whereRaw("id not in (SELECT facility FROM {$table_name} where year={$year} and month={$month} )")
+				->get();
+
+			return $mfacilities;
+		}
+
+
+	}
+
 
 }
