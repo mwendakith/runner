@@ -141,7 +141,7 @@ class Cleaner
 
 		$sites = [
 			// 'vl_site_summary' => null,
-			'vl_site_rejections' => ['table' => 'viralrejections', 'column' => 'rejected_reason'],
+			'vl_site_rejections' => ['table' => 'viralrejectedreasons', 'column' => 'rejected_reason'],
 			'vl_site_age' => ['table' => 'agecategory', 'column' => 'age', 'subid' => 1],
 			'vl_site_gender' => ['table' => 'gender', 'column' => 'gender'],
 			'vl_site_regimen' => ['table' => 'viralprophylaxis', 'column' => 'regimen'],
@@ -208,7 +208,7 @@ class Cleaner
 
 		$sites = [
 			// 'vl_site_summary' => null,
-			'vl_site_rejections' => ['table' => 'viralrejections', 'column' => 'rejected_reason'],
+			'vl_site_rejections' => ['table' => 'viralrejectedreasons', 'column' => 'rejected_reason'],
 			'vl_site_age' => ['table' => 'agecategory', 'column' => 'age', 'subid' => 1],
 			'vl_site_gender' => ['table' => 'gender', 'column' => 'gender'],
 			'vl_site_regimen' => ['table' => 'viralprophylaxis', 'column' => 'regimen'],
