@@ -264,8 +264,9 @@ class Cleaner
 			}
 		}
 
+
 		// Insert pending rows
-		DB::table($table_name)->insert($data_array);
+		if($data_array) DB::table($table_name)->insert($data_array);
 		$data_array=null;
 		$i=0;
 
@@ -283,7 +284,7 @@ class Cleaner
 			}
 		}
 
-		DB::table($table_name)->insert($data_array);
+		if($data_array) DB::table($table_name)->insert($data_array);
 		$data_array=null;
 		$i=0;
 
@@ -331,7 +332,7 @@ class Cleaner
 			}
 			// End of looping through months
 
-			DB::table($table_name)->insert($data_array);
+			if($data_array) DB::table($table_name)->insert($data_array);
 			$data_array=null;
 	    	$i=0;
 		}
