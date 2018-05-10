@@ -169,7 +169,7 @@ class Cleaner
 
 			// If the duplicates result set is not empty, delete rows for all facilities in the result set for that particular month and year
 			// These deleted rows will be recreated in vl_site_missing_rows() without duplicates
-			if($duplicates->isNotEmpty){
+			if($duplicates->isNotEmpty()){
 				$facilities = $duplicates->pluck('facility')->toArray();
 				DB::table($table_name)
 					->where(['year' => $year, 'month' => $month])
@@ -204,7 +204,7 @@ class Cleaner
 					// If the duplicates result set is not empty, delete rows for all facilities in the result set for that particular month and year
 					// These deleted rows will be recreated in vl_site_missing_rows() without duplicates
 
-					if($duplicates->isNotEmpty){
+					if($duplicates->isNotEmpty()){
 						$facilities = $duplicates->pluck('facility')->toArray();
 
 						DB::table($table_name)
