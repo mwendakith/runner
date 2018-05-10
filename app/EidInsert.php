@@ -18,11 +18,11 @@ class EidInsert
 
     	echo "\n Begin eid summary insert at " . date('d/m/Y h:i:s a', time());
 
-    	$counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties = DB::table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners = DB::table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$counties = DB::table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties = DB::table('districts')->select('id')->orderBy('id')->get();
+    	$partners = DB::table('partners')->select('id')->orderBy('id')->get();
+    	$labs = DB::table('labs')->select('id')->orderBy('id')->get();
+    	$sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
 
     	$data_array=null;
     	$i=0;
@@ -36,7 +36,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($counties as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'county' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'county' => $val->id);
 			$i++;
 		}
 		DB::table('county_summary')->insert($data_array);
@@ -45,7 +45,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($subcounties as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'subcounty' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'subcounty' => $val->id);
 			$i++;
 		}
 		DB::table('subcounty_summary')->insert($data_array);
@@ -54,7 +54,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($partners as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'partner' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'partner' => $val->id);
 			$i++;
 		}
 		DB::table('ip_summary')->insert($data_array);
@@ -63,7 +63,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($labs as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => $val->id);
 			$i++;
 		}
 		// POC row
@@ -74,7 +74,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($sites as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $val->id);
 			$i++;
 			if ($i == 100) {
 				DB::table('site_summary')->insert($data_array);
@@ -99,11 +99,11 @@ class EidInsert
 
     	echo "\n Begin eid summary yearly insert at " . date('d/m/Y h:i:s a', time());
 
-    	$counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties = DB::table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners = DB::table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$counties = DB::table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties = DB::table('districts')->select('id')->orderBy('id')->get();
+    	$partners = DB::table('partners')->select('id')->orderBy('id')->get();
+    	$labs = DB::table('labs')->select('id')->orderBy('id')->get();
+    	$sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
 
     	$data_array=null;
     	$i=0;
@@ -117,7 +117,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($counties as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'county' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'county' => $val->id);
 			$i++;
 		}
 		DB::table('county_summary_yearly')->insert($data_array);
@@ -126,7 +126,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($subcounties as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'subcounty' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'subcounty' => $val->id);
 			$i++;
 		}
 		DB::table('subcounty_summary_yearly')->insert($data_array);
@@ -135,7 +135,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($partners as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'partner' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'partner' => $val->id);
 			$i++;
 		}
 		DB::table('ip_summary_yearly')->insert($data_array);
@@ -144,7 +144,7 @@ class EidInsert
     	// $i=0;
 
 		// foreach ($labs as $k => $val) {
-		// 	$data_array[$i] = array('year' => $year, 'lab' => $val->ID);
+		// 	$data_array[$i] = array('year' => $year, 'lab' => $val->id);
 		// 	$i++;
 		// }
 		// $data_array[$i] = array('year' => $year, 'lab' => 11);
@@ -154,7 +154,7 @@ class EidInsert
     	$i=0;
 
 		foreach ($sites as $k => $val) {
-			$data_array[$i] = array('year' => $year, 'facility' => $val->ID);
+			$data_array[$i] = array('year' => $year, 'facility' => $val->id);
 			$i++;
 			if ($i == 100) {
 				DB::table('site_summary_yearly')->insert($data_array);
@@ -177,11 +177,11 @@ class EidInsert
 		ini_set("memory_limit", "-1");
 
 		// Get List of Divisions
-    	$counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties = DB::table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners = DB::table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$counties = DB::table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties = DB::table('districts')->select('id')->orderBy('id')->get();
+    	$partners = DB::table('partners')->select('id')->orderBy('id')->get();
+    	$labs = DB::table('labs')->select('id')->orderBy('id')->get();
+    	$sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
 
     	// Iterate through classes of tables
     	for ($iterator=1; $iterator < 6; $iterator++) { 
@@ -195,7 +195,7 @@ class EidInsert
 
 			$reasons = $data = DB::connection('eid')
 			->table($table_name)
-			->select('ID')
+			->select('id')
 			->when($iterator, function($query) use ($iterator){
 				if($iterator == 1){
 					return $query->where('ptype', 2);
@@ -213,7 +213,7 @@ class EidInsert
 	    	$i=0;
 
 			foreach ($reasons as $key => $value) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id);
 				$i++;
 			}
 			DB::table($national[0])->insert($data_array);
@@ -225,7 +225,7 @@ class EidInsert
 
 			foreach ($reasons as $key => $value) {
 				foreach ($counties as $k => $val) {
-					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'county' => $val->ID);
+					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'county' => $val->id);
 					$i++;
 				}
 			}
@@ -237,7 +237,7 @@ class EidInsert
 
 			foreach ($reasons as $key => $value) {
 				foreach ($subcounties as $k => $val) {
-					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'subcounty' => $val->ID);
+					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $val->id);
 					$i++;
 
 					if($i == 100){
@@ -255,7 +255,7 @@ class EidInsert
 
 			foreach ($reasons as $key => $value) {
 				foreach ($partners as $k => $val) {
-					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $val->ID);
+					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $val->id);
 					$i++;
 
 					if($i == 100){
@@ -275,7 +275,7 @@ class EidInsert
 
 				foreach ($reasons as $key => $value) {
 					foreach ($labs as $k => $val) {
-						$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'lab' => $val->ID);
+						$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => $val->id);
 						$i++;
 					}
 				}
@@ -293,7 +293,7 @@ class EidInsert
 				
 				foreach ($reasons as $key => $value) {
 					foreach ($sites as $k => $val) {
-						$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'facility' => $val->ID);
+						$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
 						$i++;
 
 						if($i == 100){
@@ -324,11 +324,11 @@ class EidInsert
         ini_set("memory_limit", "-1");
 
         // Get List of Divisions
-        $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
-        $subcounties = DB::table('districts')->select('ID')->orderBy('ID')->get();
-        $partners = DB::table('partners')->select('ID')->orderBy('ID')->get();
-        $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
-        $sites = DB::table('facilitys')->select('ID')->orderBy('ID')->get();
+        $counties = DB::table('countys')->select('id')->orderBy('id')->get();
+        $subcounties = DB::table('districts')->select('id')->orderBy('id')->get();
+        $partners = DB::table('partners')->select('id')->orderBy('id')->get();
+        $labs = DB::table('labs')->select('id')->orderBy('id')->get();
+        $sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
 
         // Iterate through classes of tables
         for ($iterator=2; $iterator < 3; $iterator++) { 
@@ -361,7 +361,7 @@ class EidInsert
 
             foreach ($reasons as $key => $value) {
                 foreach ($counties as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'county' => $val->ID);
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'county' => $val->id);
                     $i++;
                 }
             }
@@ -373,7 +373,7 @@ class EidInsert
 
             foreach ($reasons as $key => $value) {
                 foreach ($subcounties as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'subcounty' => $val->ID);
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'subcounty' => $val->id);
                     $i++;
 
                     if($i == 100){
@@ -391,7 +391,7 @@ class EidInsert
 
             foreach ($reasons as $key => $value) {
                 foreach ($partners as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'partner' => $val->ID);
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'partner' => $val->id);
                     $i++;
 
                     if($i == 100){
@@ -411,7 +411,7 @@ class EidInsert
 
                 foreach ($reasons as $key => $value) {
                     foreach ($labs as $k => $val) {
-                        $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'lab' => $val->ID);
+                        $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'lab' => $val->id);
                         $i++;
                     }
                 }
@@ -429,7 +429,7 @@ class EidInsert
                 
                 foreach ($reasons as $key => $value) {
                     foreach ($sites as $k => $val) {
-                        $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'facility' => $val->ID);
+                        $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value, 'facility' => $val->id);
                         $i++;
 
                         if($i == 100){
@@ -471,7 +471,7 @@ class EidInsert
 
 			$reasons = $data = DB::connection('eid')
 			->table($table_name)
-			->select('ID')
+			->select('id')
 			->when($iterator, function($query) use ($iterator){
 				if($iterator == 1){
 					return $query->where('ptype', 2);
@@ -486,7 +486,7 @@ class EidInsert
 	    	$i=0;
 
 			foreach ($reasons as $key => $value) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'subcounty' => $sub);
+				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $sub);
 				$i++;
 			}
 			DB::table($subcounty[0])->insert($data_array);
@@ -516,7 +516,7 @@ class EidInsert
 
 			$reasons = $data = DB::connection('eid')
 			->table($table_name)
-			->select('ID')
+			->select('id')
 			->when($iterator, function($query) use ($iterator){
 				if($iterator == 1){
 					return $query->where('ptype', 2);
@@ -531,7 +531,7 @@ class EidInsert
 	    	$i=0;
 
 			foreach ($reasons as $key => $value) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->ID, 'partner' => $part);
+				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $part);
 				$i++;
 			}
 			DB::table($partner[0])->insert($data_array);
@@ -550,8 +550,8 @@ class EidInsert
         echo "\n Begin eid lab mapping insert at " . date('d/m/Y h:i:s a', time());
 
         // Get List of Divisions
-        $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
-        $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+        $counties = DB::table('countys')->select('id')->orderBy('id')->get();
+        $labs = DB::table('labs')->select('id')->orderBy('id')->get();
 
         // Lab Insert
     	$data_array=null;
@@ -559,8 +559,8 @@ class EidInsert
 
         foreach ($labs as $key => $value) {
         	foreach ($counties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => $value->ID, 
-					'county' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => $value->id, 
+					'county' => $val->id);
 				$i++;
         	}
         	DB::table('lab_mapping')->insert($data_array);
@@ -694,18 +694,18 @@ class EidInsert
 
     	echo "\n Begin eid rejection insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons =  DB::connection('eid')->table('rejectedreasons')->select('ID')->orderBy('ID')->get();
-    	$counties =  DB::connection('eid')->table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties =  DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners =  DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
-    	$labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
-    	$sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$reasons =  DB::connection('eid')->table('rejectedreasons')->select('id')->orderBy('id')->get();
+    	$counties =  DB::connection('eid')->table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties =  DB::connection('eid')->table('districts')->select('id')->orderBy('id')->get();
+    	$partners =  DB::connection('eid')->table('partners')->select('id')->orderBy('id')->get();
+    	$labs = DB::connection('eid')->table('labs')->select('id')->orderBy('id')->get();
+    	$sites = DB::connection('eid')->table('facilitys')->select('id')->orderBy('id')->get();
 
     	$data_array=null;
     	$i=0;
 
 		foreach ($reasons as $key => $value) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID);
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->id);
 			$i++;
 		}
 		DB::table('national_rejections')->insert($data_array);
@@ -715,7 +715,7 @@ class EidInsert
 
 		foreach ($reasons as $key => $value) {
 			foreach ($counties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'county' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->id, 'county' => $val->id);
 				$i++;
 			}
 		}
@@ -726,7 +726,7 @@ class EidInsert
 
 		foreach ($reasons as $key => $value) {
 			foreach ($subcounties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'subcounty' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->id, 'subcounty' => $val->id);
 				$i++;
 			}
 		}
@@ -737,7 +737,7 @@ class EidInsert
 
 		foreach ($reasons as $key => $value) {
 			foreach ($partners as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'partner' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->id, 'partner' => $val->id);
 				$i++;
 			}
 		}
@@ -748,7 +748,7 @@ class EidInsert
 
 		foreach ($reasons as $key => $value) {
 			foreach ($labs as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'lab' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->id, 'lab' => $val->id);
 				$i++;
 			}
 		}
@@ -761,7 +761,7 @@ class EidInsert
 
 		foreach ($reasons as $key => $value) {
 			foreach ($sites as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->id, 'facility' => $val->id);
 				$i++;
 			}
 			DB::table('site_rejections')->insert($data_array);
@@ -784,18 +784,18 @@ class EidInsert
 
     	echo "\n Begin eid age insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons =  DB::connection('eid')->table('age_bands')->select('ID')->orderBy('ID')->get();
-    	$counties =  DB::connection('eid')->table('countys')->select('ID')->orderBy('ID')->get();
-    	$subcounties =  DB::connection('eid')->table('districts')->select('ID')->orderBy('ID')->get();
-    	$partners =  DB::connection('eid')->table('partners')->select('ID')->orderBy('ID')->get();
-    	// $labs = DB::connection('eid')->table('labs')->select('ID')->orderBy('ID')->get();
-    	// $sites = DB::connection('eid')->table('facilitys')->select('ID')->orderBy('ID')->get();
+    	$reasons =  DB::connection('eid')->table('age_bands')->select('id')->orderBy('id')->get();
+    	$counties =  DB::connection('eid')->table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties =  DB::connection('eid')->table('districts')->select('id')->orderBy('id')->get();
+    	$partners =  DB::connection('eid')->table('partners')->select('id')->orderBy('id')->get();
+    	// $labs = DB::connection('eid')->table('labs')->select('id')->orderBy('id')->get();
+    	// $sites = DB::connection('eid')->table('facilitys')->select('id')->orderBy('id')->get();
 
     	$data_array=null;
     	$i=0;
 
 		foreach ($reasons as $key => $value) {
-			$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->ID);
+			$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->id);
 			$i++;
 		}
 		DB::table('national_age_breakdown')->insert($data_array);
@@ -805,7 +805,7 @@ class EidInsert
 
 		foreach ($reasons as $key => $value) {
 			foreach ($counties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->ID, 'county' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->id, 'county' => $val->id);
 				$i++;
 			}
 		}
@@ -816,7 +816,7 @@ class EidInsert
 
 		foreach ($reasons as $key => $value) {
 			foreach ($subcounties as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->ID, 'subcounty' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->id, 'subcounty' => $val->id);
 				$i++;
 			}
 		}
@@ -827,7 +827,7 @@ class EidInsert
 
 		foreach ($reasons as $key => $value) {
 			foreach ($partners as $k => $val) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->ID, 'partner' => $val->ID);
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'age_band_id' => $value->id, 'partner' => $val->id);
 				$i++;
 			}
 		}
@@ -839,7 +839,7 @@ class EidInsert
 
 		// foreach ($reasons as $key => $value) {
 		// 	foreach ($sites as $k => $val) {
-		// 		$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, 'facility' => $val->ID);
+		// 		$data_array[$i] = array('year' => $year, 'month' => $month, 'rejected_reason' => $value->id, 'facility' => $val->id);
 		// 		$i++;
 		// 	}
 		// 	DB::table('site_rejections')->insert($data_array);

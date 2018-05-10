@@ -217,18 +217,78 @@ class Cleaner
 			'vl_site_pmtct' => ['table' => 'viralpmtcttype', 'column' => 'pmtcttype', 'subid' => 1],
 		];
 
+		$data_array=null;
+    	$i=0;
 
-		for ($month=1; $month < 13; $month++) {
-			if($year == Date('Y') && $month > Date('m')) break; 
-			$table_name = 'vl_site_summary';
+		// for ($month=1; $month < 13; $month++) {
+		// 	if($year == Date('Y') && $month > Date('m')) break; 
+		// 	$table_name = 'vl_site_summary';
 
-			$mfacilities = DB::table('facilitys')
+		// 	$mfacilities = DB::table('facilitys')
+		// 		->select('id')
+		// 		->whereRaw("id not in (SELECT facility FROM {$table_name} WHERE year={$year} AND month={$month} )")
+		// 		->get();
+
+		// 	if($mfacilities->isEmpty()) continue;
+
+		// 	foreach ($mfacilities as $key => $fac) {
+
+		// 		$data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $fac->id);
+		// 		$i++;
+		// 		if ($i == 100) {
+		// 			DB::table($table_name)->insert($data_array);
+		// 			$data_array=null;
+		// 	    	$i=0;
+		// 		}				
+		// 	}
+		// }
+
+		// DB::table($table_name)->insert($data_array);
+		// $data_array=null;
+  //   	$i=0;
+
+		foreach ($sites as $table_name => $value) {
+			$vars = DB::table($value['table'])
 				->select('id')
-				->whereRaw("id not in (SELECT facility FROM {$table_name} where year={$year} and month={$month} )")
+				->when(isset($value['subid']), function($query){
+					return $query->where('subid', 1);
+				})
 				->get();
 
-			return $mfacilities;
+			for ($month=1; $month < 13; $month++) {
+				if($year == Date('Y') && $month > Date('m')) break; 
+
+				foreach ($vars as $row) {
+
+					$mfacilities = DB::table('facilitys')
+						->select('id')
+						->whereRaw("id not in (SELECT facility FROM {$table_name} WHERE year={$year} AND month={$month} AND {$value['column']}={$row->id} )")
+						->get();
+
+					if($mfacilities->isNotEmpty()) return $mfacilities;
+					if($mfacilities->isEmpty()) continue;
+
+					foreach ($mfacilities as $key => $fac) {
+
+						$data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $fac->id, $value['column'] => $row->id);
+						$i++;
+
+						if ($i == 100) {
+							DB::table($table_name)->insert($data_array);
+							$data_array=null;
+					    	$i=0;
+						}				
+					}
+
+				}
+			}
+
+			DB::table($table_name)->insert($data_array);
+			$data_array=null;
+	    	$i=0;
 		}
+
+
 
 
 	}
