@@ -278,7 +278,7 @@ class Cleaner
 
 		if($mfacilities->isNotEmpty()){
 			foreach ($mfacilities as $key => $fac) {
-				$data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $fac->id);
+				$data_array[$i] = array('facility' => $fac->id);
 				$i++;
 			}
 		}
