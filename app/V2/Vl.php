@@ -51,18 +51,7 @@ class Vl
     	$results_array = $n->getalltestedviraloadsbyresult($year, $start_month);
     	$sampletype_array = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month);
     	$sampletype_a_array = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, false);
-
-		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 1);
-		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 3);
-		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 2);
-
-		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 1, false);
-		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 3, false);
-		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, 2, false);
-
-		$male_a = $n->getalltestedviraloadbygender($year, $start_month, 1);
-		$female_a = $n->getalltestedviraloadbygender($year, $start_month, 2);
-		$nogender_a = $n->getalltestedviraloadbygender($year, $start_month, 3);
+    	$gender_array = $n->getalltestedviraloadbygender($year, $start_month, false);
 
 		$tat = $n->get_tat($year, $start_month);
 
@@ -100,20 +89,21 @@ class Vl
 			$invalids = $this->checknull($results_array->where('month', $month)->where('rcategory', 5));
 			$sustx = $less5k +  $above5k;
 
-			$plas = $this->checknull($plas_a->where('month', $month));
-			$edta = $this->checknull($edta_a->where('month', $month));
-			$dbs = $this->checknull($dbs_a->where('month', $month));
+			$plas = $this->checknull($sampletype_array->where('month', $month)->where('sampletype', 1));
+			$edta = $this->checknull($sampletype_array->where('month', $month)->where('sampletype', 2));
+			$dbs = $this->checknull($sampletype_array->where('month', $month)->where('sampletype', 3)) +
+			$this->checknull($sampletype_array->where('month', $month)->where('sampletype', 4));
 
-			$aplas = $this->checknull($aplas_a->where('month', $month));
-			$aedta = $this->checknull($aedta_a->where('month', $month));
-			$adbs = $this->checknull($adbs_a->where('month', $month));
+			$aplas = $this->checknull($sampletype_a_array->where('month', $month)->where('sampletype', 1));
+			$aedta = $this->checknull($sampletype_a_array->where('month', $month)->where('sampletype', 2));
+			$adbs = $this->checknull($sampletype_a_array->where('month', $month)->where('sampletype', 3)) +
+			$this->checknull($sampletype_a_array->where('month', $month)->where('sampletype', 4));
 
-			$male = $this->checknull($male_a->where('month', $month));
-			$female = $this->checknull($female_a->where('month', $month));
-			$nogender = $this->checknull($nogender_a->where('month', $month));
+			$male = $this->checknull($gender_array->where('month', $month)->where('sex', 1));
+			$female = $this->checknull($gender_array->where('month', $month)->where('sex', 2));
+			$nogender = $this->checknull($gender_array->where('month', $month)->where('sex', 3));
 
 			$tt = $this->check_tat($tat->where('month', $month));
-			// $tt = $this->checktat($tat->where('month', $month));
 
 			$data_array = array(
 				'received' => $rec, 'alltests' => $tested, 'actualpatients' => $actualpatients,
@@ -169,17 +159,17 @@ class Vl
 
     	echo "\n Begin viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
+    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('id')->get();
+    	$rej_a = $n->national_rejections($year, $start_month);
 
     	foreach ($reasons as $key => $value) {
-    		$rej_a = $n->national_rejections($year, $start_month, $value->ID);
 
     		// Loop through the months and insert data into the national summary
 			for ($i=$start_month; $i < 12; $i++) { 
 				$month = $i + 1;
 				if($year == Date('Y') && $month > Date('m')){ break; }
 
-				$rej = $this->checknull($rej_a->where('month', $month));
+				$rej = $this->checknull($rej_a->where('month', $month)->where('rejected_reason', $value->id));
 
 				if($rej == 0){
 					continue;

@@ -10,16 +10,15 @@ class VlNation
 {
     
 	//National rejections
-	public function national_rejections($year, $start_month, $rejected_reason){
+	public function national_rejections($year, $start_month){
 		$date_range = BaseModel::date_range($year, $start_month);
 
-		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
+		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datereceived) as month, rejected_reason")
 		->where('receivedstatus', 2)
-		->where('rejectedreason', $rejected_reason)
 		->whereBetween('datereceived', $date_range)
 		->where('flag', 1)
 		->where('repeatt', 0)
-		->groupBy('month')
+		->groupBy('month', 'rejectedreason')
 		->get(); 
 
 		return $data;
