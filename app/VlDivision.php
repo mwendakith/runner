@@ -190,7 +190,6 @@ class VlDivision extends Model
 			}
 		})
 		->whereYear('datereceived', $year)
-		->whereYear('datereceived', $year)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->whereMonth('datereceived', '>', $start_month)
 		->where('viralsamples.receivedstatus', 2)

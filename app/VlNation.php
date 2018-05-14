@@ -89,7 +89,6 @@ class VlNation extends Model
 		->select(DB::raw("COUNT(DISTINCT viralsamples.ID) as totals, month(datereceived) as month"))
 		->whereYear('datereceived', $year)
 		->whereMonth('datereceived', '>', $start_month)
-		->whereYear('datereceived', $year)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->where('viralsamples.receivedstatus', 2)
 		->where('viralsamples.Flag', 1)

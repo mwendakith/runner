@@ -1,13 +1,12 @@
 <?php
 
-namespace App;
+namespace App\V2;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UpdateReport;
 use App\Mail\InsertReport;
 
-class BaseModel extends Model
+class BaseModel
 {
     //
 
@@ -182,22 +181,6 @@ class BaseModel extends Model
 
 	}
 
-	public function get_gender($gender){
-		$sex;
-		switch ($gender) {
-			case 1:
-				$sex = "M";
-				break;
-			case 2:
-				$sex = "F";
-				break;
-			default:
-				$sex = "No Data";
-				break;
-		}
-		return $sex;
-	}
-
 	public function get_vlage($age){
 		$age_b;
 		switch ($age) {
@@ -243,7 +226,7 @@ class BaseModel extends Model
 		return $age_b;
 	}
 
-	public function get_vlparams($type, $param){
+	public static function get_vlparams($type, $param=null){
 		$data;
 		$param = (int) $param;
 
@@ -252,42 +235,41 @@ class BaseModel extends Model
 			// if($param < 6){
 			// 	return array('column' => 'viralsamples.age', 'param' => $param);
 			// }
-			return array('column' => 'viralsamples.age2', 'param' => $param);
+			return array('column' => 'age_category', 'param' => $param);
 		}
 
 		// Type 2 for gender
 		else if($type == 2){
-			$gender = $this->get_gender($param);
-			return array('column' => 'viralpatients.gender', 'param' => $gender);
+			return array('column' => 'sex', 'param' => $param);
 		}
 
 		// Type 3 for regimen
 		else if($type == 3){
-			return array('column' => 'viralsamples.prophylaxis', 'param' => $param);
+			return array('column' => 'prophylaxis', 'param' => $param);
 		}
 
 		// Type 4 for sampletype
 		else if ($type == 4) {
 			if ($param == 2) {
-				return array('column' => 'viralsamples.sampletype', 'param' => 3);
+				return array('column' => 'sampletype', 'param' => 3);
 			}
 			else if ($param == 3) {
-				return array('column' => 'viralsamples.sampletype', 'param' => 2);
+				return array('column' => 'sampletype', 'param' => 2);
 			}
 			else{
-				return array('column' => 'viralsamples.sampletype', 'param' => $param);
+				return array('column' => 'sampletype', 'param' => $param);
 			}
 			
 		}
 
 		// Type 5 for justification
 		else if($type == 5){
-			return array('column' => 'viralsamples.justification', 'param' => $param);
+			return array('column' => 'justification', 'param' => $param);
 		}
 
 		// Type 6 for pmtct
 		else if($type == 6){
-			return array('column' => 'viralpatients.pmtct', 'param' => $param);
+			return array('column' => 'pmtct', 'param' => $param);
 		}
 	}
 
@@ -301,8 +283,7 @@ class BaseModel extends Model
 
 		// Type 2 for gender
 		else if($type == 2){
-			$gender = $this->get_gender($param);
-			return array('column' => 'viralpatients.gender', 'param' => $gender);
+			return array('column' => 'viralpatients.gender', 'param' => $param);
 		}
 
 		// Type 3 for regimen
@@ -321,7 +302,7 @@ class BaseModel extends Model
 		}
 	}
 
-	public function date_range($year, $start_month=null)
+	public static function date_range($year, $start_month=null)
 	{
 		$date_range[0] = ($year) . '-01-01';
 		if($start_month){
