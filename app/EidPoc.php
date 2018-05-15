@@ -222,7 +222,7 @@ class EidPoc extends Model
 
 	}
 
-	public function getbypcr($year, $pcr=1, $pos=false, $monthly=true){ 
+	public function getbypcr($year, $pcrtype=1, $pos=false, $monthly=true){ 
 
 		$data = DB::connection('eid')
 		->table('samples')
