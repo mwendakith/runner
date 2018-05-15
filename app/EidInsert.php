@@ -278,6 +278,8 @@ class EidInsert
 						$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => $val->id);
 						$i++;
 					}
+					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => 11);
+					$i++;
 				}
 				$lab = $this->get_table(5, $iterator);
 				DB::table($lab[0])->insert($data_array);

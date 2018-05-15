@@ -172,7 +172,7 @@ class EidDivision extends Model
 				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
 			}
 		})
-		->whereBetween('result', [1, 2])
+		->whereIn('result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.repeatt', 0)
 		->where('samples.Flag', 1)
@@ -355,7 +355,7 @@ class EidDivision extends Model
 				return $query->where('samples.result', 2);
 			}
 			else{
-				return $query->whereBetween('samples.result', [1, 2]);
+				return $query->whereIn('samples.result', [1, 2]);
 			}			
 		})
 		->whereYear('datetested', $year)		
@@ -397,7 +397,7 @@ class EidDivision extends Model
 				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
 			}
 		})
-		->whereBetween('samples.result', [1, 2])
+		->whereIn('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 1)
 		->where('samples.Flag', 1)
@@ -434,7 +434,7 @@ class EidDivision extends Model
 				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
 			}
 		})
-		->whereBetween('samples.result', [1, 2])
+		->whereIn('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->whereIn('samples.pcrtype', [2, 3])
 		->where('samples.Flag', 1)
@@ -506,7 +506,7 @@ class EidDivision extends Model
 				return $query->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID');
 			}
 		})
-		->whereBetween('samples.result', [1, 2])
+		->whereIn('samples.result', [1, 2])
 		->whereYear('datetested', $year)
 		->where('samples.pcrtype', 4)
 		->where('samples.Flag', 1)
@@ -581,7 +581,7 @@ class EidDivision extends Model
 				return $query->where('samples.result', 2);
 			}
 			else{
-				return $query->whereBetween('samples.result', [1, 2]);				
+				return $query->whereIn('samples.result', [1, 2]);				
 			}				
 		})
 		->when(true, function($query) use ($a){

@@ -9,7 +9,6 @@ use App\BaseModel;
 class EidPoc extends Model
 {
 
-
 	//national outcomes	
 	public function OverallTestedSamplesOutcomes($year, $result_type, $monthly=true)
 	{
@@ -223,7 +222,7 @@ class EidPoc extends Model
 
 	}
 
-	public function getbypcr($year, $pcr=1, $pos=false, $monthly=true){
+	public function getbypcr($year, $pcr=1, $pos=false, $monthly=true){ 
 
 		$data = DB::connection('eid')
 		->table('samples')
@@ -237,7 +236,14 @@ class EidPoc extends Model
 			}			
 		})
 		->whereYear('datetested', $year)
-		->where('samples.pcrtype', $pcr)
+		->when($pcrtype, function($query) use ($pcrtype){
+			if($pcrtype == 2){
+				return $query->whereIn('samples.pcrtype', [2, 3]);
+			}
+			else{
+				return $query->where('samples.pcrtype', $pcrtype);
+			}			
+		})
 		->where('samples.siteentry', 2)
 		->where('samples.Flag', 1)
 		->where('samples.eqa', 0)
@@ -247,7 +253,7 @@ class EidPoc extends Model
 				return $query->groupBy('month');
 			}			
 		})
-		->get(); 
+		->get();
 
 		return $data;
 	}

@@ -588,7 +588,7 @@ class Eid
 		$pos_a = $n->OverallTestedSamplesOutcomes($year, 2, 1, $division);
 		$neg_a = $n->OverallTestedSamplesOutcomes($year, 1, 1, $division);
 		$fail_a = $n->OverallTestedSamplesOutcomes($year, 5, 1, $division);
-		$redraws_a = $n->OverallTestedSamplesOutcomes($year, 3, 1, $division);
+		$redraws_a = $n->OverallTestedSamplesOutcomes($year, 3, 1, $division); 
 		
 		$facilityssupported = $n->GettotalEIDsitesbytimeperiod($year, $division);
 
@@ -611,10 +611,12 @@ class Eid
 
 		// $firstdna_a = $poc->getbypcr($year, 1, false);
 		$posrepeats_a2 = $poc->getbypcr($year, 2, false);
-		$confirmdna_a2 = $poc->getbypcr($year, 3, false);
+		$confirmdna_a2 = $poc->getbypcr($year, 4, false);
+		$discrepant_a2 = $poc->getbypcr($year, 5, false);
 
 		$posrepeatsPOS_a2 = $poc->getbypcr($year, 2, true);
-		$confirmdnaPOS_a2 = $poc->getbypcr($year, 3, true);
+		$confirmdnaPOS_a2 = $poc->getbypcr($year, 4, true);
+		$discrepantpos_a2 = $poc->getbypcr($year, 5, true);
 
 
 
@@ -698,9 +700,11 @@ class Eid
 			$tests = $this->checknull($testedsamples2->where('month', $month));
 			$confirmdna = $this->checknull($confirmdna_a2->where('month', $month));
 			$posrepeats = $this->checknull($posrepeats_a2->where('month', $month));
+			$discrepant = $this->checknull($discrepant_a2->where('month', $month));
 
 			$confirmdnaPOS = $this->checknull($confirmdnaPOS_a2->where('month', $month));
 			$posrepeatsPOS = $this->checknull($posrepeatsPOS_a2->where('month', $month));
+			$discrepant_pos = $this->checknull($discrepantpos_a2->where('month', $month));
 			
 			$eqatests = $this->checknull($EQAtestedsamples2->where('month', $month));
 
@@ -723,6 +727,7 @@ class Eid
 				'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
 				'confirmdna' => $confirmdna, 'eqatests' => $eqatests, 
 				'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
+				'tiebreaker' => $discrepant, 'tiebreakerPOS' => $discrepant_pos,
 				'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
 				'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
 				'sitessending' => $sitesending,
