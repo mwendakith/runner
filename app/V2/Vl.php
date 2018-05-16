@@ -179,9 +179,9 @@ class Vl
 					'dateupdated' => $today, 'total' => $rej
 				);
 				DB::table('vl_national_rejections')->where('year', $year)->where('month', $month)
-				->where('rejected_reason', $value->ID)->update($data_array);
+				->where('rejected_reason', $value->id)->update($data_array);
 
-				// $update_statements .= $this->update_query('vl_national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID]);
+				// $update_statements .= $this->update_query('vl_national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->id]);
 				// $updates++;
 
 				// if($updates == 150){
@@ -209,10 +209,10 @@ class Vl
 			
 			// Get ids of the necessary table
 			$divs = $data = DB::connection('vl')
-			->table($table[1])->select('ID')
+			->table($table[1])->select('id')
 			->when($type, function($query) use ($type){
 				if($type == 1 || $type == 6){
-					return $query->where('subID', 1);
+					return $query->where('subid', 1);
 				}				
 			})
 			->get();
@@ -221,73 +221,73 @@ class Vl
 
 				// Get collection instances of the data
 
-		    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $type, $value->ID);
-		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $type, $value->ID);
-		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $type, $value->ID);
-		    	$rs_a = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $type, $value->ID);
+		    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $type, $value->id);
+		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $type, $value->id);
+		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $type, $value->id);
+		    	$rs_a = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $type, $value->id);
 				
 
-		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $start_month, $type, $value->ID);
-		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $type, $value->ID);
+		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $start_month, $type, $value->id);
+		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $type, $value->id);
 
 		    	if ($type != 1 && $type != 6) {
 
-			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 0);
-			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 6);
-			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 7);
-			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 8);
-			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 9);
-			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 10);
-			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 11);
+			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 0);
+			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 6);
+			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 7);
+			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 8);
+			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 9);
+			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 10);
+			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 11);
 
 			    	if ($type == 3) {
 
-				    	$noages_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 0, true);
-				    	$less2s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 6, true);
-				    	$less9s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 7, true);
-				    	$less14s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 8, true);
-				    	$less19s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 9, true);
-				    	$less24s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 10, true);
-				    	$over25s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->ID, 11, true);
+				    	$noages_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 0, true);
+				    	$less2s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 6, true);
+				    	$less9s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 7, true);
+				    	$less14s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 8, true);
+				    	$less19s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 9, true);
+				    	$less24s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 10, true);
+				    	$over25s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 11, true);
 			    	}
 			    }
 
 		    	// $adults=$less19 +$less24 + $over25 ;
 				// $paeds=$less2 + $less9 + $less14;
 
-				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 1);
-				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 2);
-				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 3);
-				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 4);
-				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->ID, 5);
+				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 1);
+				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 2);
+				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 3);
+				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 4);
+				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 5);
 				// $sustx=$less5k +  $above5k;
 
 
 				if($type != 4 && $type != 6){
 
-					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 1);
-					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 3);
-					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->ID, 2);
+					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->id, 1);
+					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->id, 3);
+					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->id, 2);
 				}
 
 				if($type != 2 && $type != 6){
 
-					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 1);
-					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 2);
-					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 3);
+					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 1);
+					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 2);
+					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 3);
 
 					if($type == 1 || $type == 3){
-						$males_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 1, true);
-						$females_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 2, true);
-						$nogenders_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->ID, 3, true);
+						$males_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 1, true);
+						$females_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 2, true);
+						$nogenders_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 3, true);
 
 					}
 
 				}
 
 				if ($type != 5) {
-					$baseline_a = $n->GetNationalBaselinebydash($year, $start_month, $type, $value->ID);
-					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $start_month, $type, $value->ID);
+					$baseline_a = $n->GetNationalBaselinebydash($year, $start_month, $type, $value->id);
+					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $start_month, $type, $value->id);
 				}
 
 				// Loop through the months and insert data into the national summary
@@ -408,12 +408,12 @@ class Vl
 						$data_array = array_merge($baseline_array, $data_array);
 					}
 
-					// echo "\n Sample - {$value->ID}  Actual - {$sample} ";
+					// echo "\n Sample - {$value->id}  Actual - {$sample} ";
 					
 
-					DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->update($data_array);
+					DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->update($data_array);
 
-					// $update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->ID]);
+					// $update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->id]);
 					// $updates++;
 
 					// if($updates == 150){
@@ -451,16 +451,14 @@ class Vl
     	$array_size = 0;
 
     	$divs = $data = DB::connection('vl')
-		->table($div_table)->select('ID')->get();
+		->table($div_table)->select('id')->get();
 
 		foreach ($divs as $key => $value) {
-			$div_array[$key] = $value->ID;
+			$div_array[$key] = $value->id;
 			$array_size++;
 		}
 
     	echo "\n Begin  viralload {$column} update at " . date('d/m/Y h:i:s a', time());
-
-    	$column2=$column;
 
     	// Get collection instances of the data
 
@@ -515,10 +513,6 @@ class Vl
 		}
 
 		$tat = $n->get_tat($year, $start_month, $division);
-		// $tat = $n->GetNatTATs($year, $start_month, $div_array, $division, $column);
-		// $tat = collect($tat);
-
-		// $count = $rec_a->count();
 
 		// Loop through the months and insert data into the national summary
 		for ($i=$start_month; $i < 12; $i++) { 
@@ -579,8 +573,6 @@ class Vl
 				$nogender = $this->checknull($nogender_a->where('month', $month)->where($column, $div_array[$it]));
 
 				$tt = $this->check_tat($tat->where('month', $month)->where($column, $div_array[$it]));
-				// $tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
-
 				
 
 				$data_array = array(
@@ -599,30 +591,12 @@ class Vl
 					'noage' => $noage, 'baseline' => $baseline, 'baselinesustxfail' => $baselinefail
 				);
 
-
-
-				// if($type != 5){
-				// 	$age_array = array('baseline' => $baseline,
-				// 	'baselinesustxfail' => $baselinefail);
-
-				// 	$data_array = array_merge($age_array, $data_array);
-				// }
-
 				if($type == 5){
 					$eqa = $this->checknull($eqa_a->where('month', $month)->where($column, $div_array[$it]));
 					$fake = $this->checknull($fake_a->where('month', $month)->where($column, $div_array[$it]));
-					$controls = $this->checknull($controls_a->where('month', $month)->where('lab', $div_array[$it])) * 3;
+					$controls = $this->checknull($controls_a->where('month', $month)->where($column, $div_array[$it])) * 3;
 					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
-
-					$column = "lab";
 				}
-
-				
-				if ($type==2) {
-					$column="subcounty";
-				}
-
-				// echo "\n Column - {$column} ID - {$div_array[$it]}";
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 
@@ -635,8 +609,6 @@ class Vl
 				// 	$update_statements = '';
 				// 	$updates = 0;
 				// }	
-
-				$column = $column2;
 				
 			}
 
@@ -659,8 +631,8 @@ class Vl
     }
 
     public function lab_mapping($start_month, $year=null){
-        $counties = DB::table('countys')->select('ID')->orderBy('ID')->get();
-        $labs = DB::table('labs')->select('ID')->orderBy('ID')->get();
+        $counties = DB::table('countys')->select('id')->orderBy('id')->get();
+        $labs = DB::table('labs')->select('id')->orderBy('id')->get();
 
     	$n = new VlDivision;
     	$update_statements = '';
@@ -678,13 +650,13 @@ class Vl
 
 	    	foreach ($labs as $lab) {
 	    		foreach ($counties as $county) {
-	    			// $search = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID];
-	    			$search_array = ['month' => $month, 'lab' => $lab->ID, 'county' => $county->ID, 'year' => $year];
-	    			$tests = $this->checknull( $tests_a->where('month', $month)->where('labtestedin', $lab->ID)->where('county', $county->ID) );
+	    			// $search = ['month' => $month, 'lab' => $lab->id, 'county' => $county->id];
+	    			$search_array = ['month' => $month, 'lab' => $lab->id, 'county' => $county->id, 'year' => $year];
+	    			$tests = $this->checknull( $tests_a->where('month', $month)->where('lab', $lab->id)->where('county', $county->id) );
 	    			if($tests == 0){
 	    				continue;
 	    			}
-	    			$supported = $this->checknull($supported_sites_a->where('month', $month)->where('labtestedin', $lab->ID)->where('county', $county->ID));
+	    			$supported = $this->checknull($supported_sites_a->where('month', $month)->where('lab', $lab->id)->where('county', $county->id));
 
 	    			$data_array = ['total' => $tests, 'site_sending' => $supported];
 
@@ -722,10 +694,10 @@ class Vl
 
     	echo "\n Begin viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('ID')->get();
+    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('id')->get();
 
     	foreach ($reasons as $key => $value) {
-    		$rej_a = $n->national_rejections($year, $start_month, $division, $value->ID);
+    		$rej_a = $n->national_rejections($year, $start_month, $division, $value->id);
 
     		// Loop through the months and insert data into the national summary
 			for ($i=$start_month; $i < 12; $i++) { 
@@ -745,18 +717,10 @@ class Vl
 						'dateupdated' => $today, 'total' => $rej
 					);
 
-					if ($div_type==2) {
-						$column="subcounty";
-					}
-
-					if ($div_type==5) {
-						$column="lab";
-					}
-
 					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
-					->where('rejected_reason', $value->ID)->update($data_array);
+					->where('rejected_reason', $value->id)->update($data_array);
 
-					// $search_array = ['year' => $year, 'month' => $month, 'rejected_reason' => $value->ID, $column => $div_array[$it]];
+					// $search_array = ['year' => $year, 'month' => $month, 'rejected_reason' => $value->id, $column => $div_array[$it]];
 					// $update_statements .= $this->update_query($rej_table, $data_array, $search_array);
 					// $updates++;
 
@@ -765,8 +729,6 @@ class Vl
 					// 	$update_statements = '';
 					// 	$updates = 0;
 					// }	
-
-					$column = $column2;
 				}		
 			}
     	}
@@ -781,7 +743,6 @@ class Vl
     	$n = new VlDivision;
     	$update_statements = '';
     	$updates = 0;
-    	$column2 = $column;
 
     	for ($type=1; $type < 7; $type++) { 
 
@@ -795,10 +756,10 @@ class Vl
 			
 			// Get ids of the necessary table
 			$divs = $data = DB::connection('vl')
-			->table($table[1])->select('ID')
+			->table($table[1])->select('id')
 			->when($type, function($query) use ($type){
 				if($type == 1 || $type == 6){
-					return $query->where('subID', 1);
+					return $query->where('subid', 1);
 				}				
 			})
 			->get();
@@ -806,53 +767,53 @@ class Vl
 			foreach ($divs as $key => $value) {	
 
 				// Get collection instances of the data
-		    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $month, $division, $type, $value->ID);
-		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
-		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
-		    	// $rs_a = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $division, $type, $value->ID);
+		    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $month, $division, $type, $value->id);
+		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $division, $type, $value->id);
+		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $division, $type, $value->id);
+		    	// $rs_a = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $division, $type, $value->id);
 
-		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $start_month, $division, $type, $value->ID);
-		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $division, $type, $value->ID);
+		    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $start_month, $division, $type, $value->id);
+		    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $start_month, $division, $type, $value->id);
 
 		    	if ($type != 1 && $type != 6) {
 
-			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 0);
-			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 6);
-			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 7);
-			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 8);
-			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 9);
-			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 10);
-			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->ID, 11);
+			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->id, 0);
+			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->id, 6);
+			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->id, 7);
+			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->id, 8);
+			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->id, 9);
+			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->id, 10);
+			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $division, $type, $value->id, 11);
 			    }
 
 		    	// $adults=$less19 +$less24 + $over25 ;
 				// $paeds=$less2 + $less9 + $less14;
 
-				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 1);
-				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 2);
-				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 3);
-				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 4);
-				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->ID, 5);
+				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->id, 1);
+				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->id, 2);
+				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->id, 3);
+				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->id, 4);
+				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $division, $type, $value->id, 5);
 				// $sustx=$less5k +  $above5k;
 
 				if($type != 4 && $type != 6){
 
-					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 1);
-					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 3);
-					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->ID, 2);
+					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->id, 1);
+					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->id, 3);
+					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $division, $type, $value->id, 2);
 				}
 
 				if($type != 2 && $type != 6){
 
-					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->ID, 1);
-					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->ID, 2);
-					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->ID, 3);
+					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->id, 1);
+					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->id, 2);
+					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division, $type, $value->id, 3);
 
 				}
 
 				if ($type != 5) {
-					$baseline_a = $n->GetNationalBaselinebydash($year, $start_month, $division, $type, $value->ID);
-					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $start_month, $division, $type, $value->ID);
+					$baseline_a = $n->GetNationalBaselinebydash($year, $start_month, $division, $type, $value->id);
+					$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $start_month, $division, $type, $value->id);
 				}
 
 
@@ -948,15 +909,11 @@ class Vl
 
 							$data_array = array_merge($baseline_array, $data_array);
 						}
-
-						if($div_type == 2){
-							$column = "subcounty";
-						}
 						
 
-						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($column, $div_array[$it])->update($data_array);
 
-						// $search_array = ['year' => $year, 'month' => $month, $table[2] => $value->ID, $column => $div_array[$it]];
+						// $search_array = ['year' => $year, 'month' => $month, $table[2] => $value->id, $column => $div_array[$it]];
 						// $update_statements .= $this->update_query($table[0], $data_array, $search_array);
 						// $updates++;
 
@@ -965,8 +922,6 @@ class Vl
 						// 	$update_statements = '';
 						// 	$updates = 0;
 						// }
-
-						$column = $column2;
 					}
 
 				}
@@ -987,7 +942,6 @@ class Vl
     	$n = new VlTest;
     	$update_statements = '';
     	$updates = 0;
-    	$column2 = $column;
 
     	for ($type=1; $type < 7; $type++) { 
     	// for ($type=3; $type < 4; $type++) { 
@@ -1002,10 +956,10 @@ class Vl
 			
 			// Get ids of the necessary table
 			$divs = $data = DB::connection('vl')
-			->table($table[1])->select('ID')
+			->table($table[1])->select('id')
 			->when($type, function($query) use ($type){
 				if($type == 1 || $type == 6){
-					return $query->where('subID', 1);
+					return $query->where('subid', 1);
 				}				
 			})
 			->get();
@@ -1019,56 +973,56 @@ class Vl
 					if($year == Date('Y') && $month > Date('m')){ break; }
 
 					// Get collection instances of the data
-			    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $month, $division, $type, $value->ID);
-			    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $month, $division, $type, $value->ID);
-			    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $month, $division, $type, $value->ID);
+			    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $month, $division, $type, $value->id);
+			    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $month, $division, $type, $value->id);
+			    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $month, $division, $type, $value->id);
 
 			    	if($tested_a->count() == 0 && $rej_a->count() == 0) continue;
 
-			    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $month, $division, $type, $value->ID);
-			    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $month, $division, $type, $value->ID);
-			    	// $rs = $n->getallrepeattviraloadsamplesbydash($year, $month, $division, $type, $value->ID);
+			    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $month, $division, $type, $value->id);
+			    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $month, $division, $type, $value->id);
+			    	// $rs = $n->getallrepeattviraloadsamplesbydash($year, $month, $division, $type, $value->id);
 			    	$rs = 0;
 
 			    	if ($type != 1 && $type != 6) {
 
-				    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->ID, 0);
-				    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->ID, 6);
-				    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->ID, 7);
-				    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->ID, 8);
-				    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->ID, 9);
-				    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->ID, 10);
-				    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->ID, 11);
+				    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 0);
+				    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 6);
+				    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 7);
+				    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 8);
+				    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 9);
+				    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 10);
+				    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 11);
 				    }
 
 			    	// $adults=$less19 +$less24 + $over25 ;
 					// $paeds=$less2 + $less9 + $less14;
 
-					$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->ID, 1);
-					$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->ID, 2);
-					$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->ID, 3);
-					$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->ID, 4);
-					$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->ID, 5);
+					$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 1);
+					$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 2);
+					$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 3);
+					$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 4);
+					$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 5);
 					// $sustx=$less5k +  $above5k;
 
 					if($type != 4 && $type != 6){
 
-						$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->ID, 1);
-						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->ID, 3);
-						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->ID, 2);
+						$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 1);
+						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 3);
+						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 2);
 					}
 
 					if($type != 2 && $type != 6){
 
-						$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->ID, 1);
-						$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->ID, 2);
-						$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->ID, 3);
+						$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 1);
+						$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 2);
+						$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 3);
 
 					}
 
 					if ($type != 5) {
-						$baseline_a = $n->GetNationalBaselinebydash($year, $month, $division, $type, $value->ID);
-						$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $month, $division, $type, $value->ID);
+						$baseline_a = $n->GetNationalBaselinebydash($year, $month, $division, $type, $value->id);
+						$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $month, $division, $type, $value->id);
 					}
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
@@ -1156,15 +1110,11 @@ class Vl
 
 							$data_array = array_merge($baseline_array, $data_array);
 						}
-
-						if($div_type == 2){
-							$column = "subcounty";
-						}
 						
 
-						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->ID)->where($column, $div_array[$it])->update($data_array);
+						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($column, $div_array[$it])->update($data_array);
 
-						// $search_array = ['year' => $year, 'month' => $month, $table[2] => $value->ID, $column => $div_array[$it]];
+						// $search_array = ['year' => $year, 'month' => $month, $table[2] => $value->id, $column => $div_array[$it]];
 						// $update_statements .= $this->update_query($table[0], $data_array, $search_array);
 						// $updates++;
 
@@ -1173,8 +1123,6 @@ class Vl
 						// 	$update_statements = '';
 						// 	$updates = 0;
 						// }
-
-						$column = $column2;
 					}
 
 				}
@@ -1191,19 +1139,19 @@ class Vl
 
 
     public function update_counties($start_month, $year=null){
-    	return $this->update_division($start_month, $year, 1, 'county', 'view_facilitys.county', 'countys', 'vl_county_summary', 'vl_county_rejections');
+    	return $this->update_division($start_month, $year, 1, 'county', 'county', 'countys', 'vl_county_summary', 'vl_county_rejections');
     }
 
     public function update_subcounties($start_month, $year=null){
-    	return $this->update_division($start_month, $year, 2, 'district', 'view_facilitys.district', 'districts', 'vl_subcounty_summary', 'vl_subcounty_rejections');
+    	return $this->update_division($start_month, $year, 2, 'subcounty', 'subcounty', 'districts', 'vl_subcounty_summary', 'vl_subcounty_rejections');
     }
 
     public function update_partners($start_month, $year=null){
-    	return $this->update_division($start_month, $year, 3, 'partner', 'view_facilitys.partner', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
+    	return $this->update_division($start_month, $year, 3, 'partner', 'partner', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
     }
 
     public function update_facilities($start_month, $year=null){
-    	return $this->update_division($start_month, $year, 4, 'facility', 'viralsamples.facility', 'facilitys', 'vl_site_summary', 'vl_site_rejections');
+    	return $this->update_division($start_month, $year, 4, 'facility', 'facility', 'facilitys', 'vl_site_summary', 'vl_site_rejections');
     }
 
     public function finish_facilities($start_month, $year=null){
@@ -1219,19 +1167,19 @@ class Vl
     	$array_size = 0;
 
     	$divs = DB::connection('vl')
-		->table('facilitys')->select('ID')->get();
+		->table('facilitys')->select('id')->get();
 
 		foreach ($divs as $key => $value) {
-			$div_array[$key] = $value->ID;
+			$div_array[$key] = $value->id;
 			$array_size++;
 		}
 
 		// echo $this->finish_division($start_month, $year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
-		return $this->finish_facilities_regimen($start_month, $year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
+		return $this->finish_facilities_regimen($start_month, $year, $today, $div_array, 'facility', 'facility', 4, $array_size);
     }
 
     public function update_labs($start_month, $year=null){
-    	return $this->update_division($start_month, $year, 5, 'labtestedin', "viralsamples.labtestedin", 'labs', 'vl_lab_summary', 'vl_lab_rejections');
+    	return $this->update_division($start_month, $year, 5, 'lab', 'lab', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
 
     }
 
@@ -1241,14 +1189,14 @@ class Vl
     	$logdate=	date("Y-m-d");
     	$datestatsupdated = date('Y-m-d H:i:s');
 
-    	$labs = $data = DB::table('labs')->select('ID')->get();
-    	$testtypes = $data = DB::table('testtype')->select('ID')->get();
+    	$labs = $data = DB::table('labs')->select('id')->get();
+    	$testtypes = $data = DB::table('testtype')->select('id')->get();
 
     	foreach ($labs as $key => $lab) {
 			foreach ($testtypes as $key2 => $ttype) {
 				DB::table('lablogs')->insert([
-					'lab' => $lab->ID, 'logdate' => $logdate, 'dateupdated' => $datestatsupdated,
-					'testtype' => $ttype->ID
+					'lab' => $lab->id, 'logdate' => $logdate, 'dateupdated' => $datestatsupdated,
+					'testtype' => $ttype->id
 				]);
 			}
 		}
@@ -1304,7 +1252,7 @@ class Vl
     	$female_n = $n->current_gender_suppression(2, false);  
     	$nogender_n = $n->current_gender_suppression(3, false);
 
-    	$divs = DB::table('facilitys')->select('ID', 'totalartsep17')->get();
+    	$divs = DB::table('facilitys')->select('id', 'totalartsep17')->get();
 
 		$data = collect($data);
 
@@ -1312,12 +1260,12 @@ class Vl
 		foreach ($divs as $key => $value) {
 
 			$suppressed = 
-			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 1)) + 
-			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 2));
+			(int) $this->checknull($data->where('facility', $value->id)->where('rcategory', 1)) + 
+			(int) $this->checknull($data->where('facility', $value->id)->where('rcategory', 2));
 
 			$nonsuppressed = 
-			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 3)) + 
-			(int) $this->checknull($data->where('facility', $value->ID)->where('rcategory', 4));
+			(int) $this->checknull($data->where('facility', $value->id)->where('rcategory', 3)) + 
+			(int) $this->checknull($data->where('facility', $value->id)->where('rcategory', 4));
 
 			$suppression=0;
 
@@ -1340,36 +1288,36 @@ class Vl
 				}
 			}
 
-			$noage_sup =  $this->checknull($noage->where('facility', $value->ID));
-			$noage_nonsup =  $this->checknull($noage_n->where('facility', $value->ID));
+			$noage_sup =  $this->checknull($noage->where('facility', $value->id));
+			$noage_nonsup =  $this->checknull($noage_n->where('facility', $value->id));
 
-			$less2_sup = $this->checknull($less2->where('facility', $value->ID));
-			$less2_nonsup =  $this->checknull($less2_n->where('facility', $value->ID));
+			$less2_sup = $this->checknull($less2->where('facility', $value->id));
+			$less2_nonsup =  $this->checknull($less2_n->where('facility', $value->id));
 
-			$less9_sup = $this->checknull($less9->where('facility', $value->ID));
-			$less9_nonsup =  $this->checknull($less9_n->where('facility', $value->ID));
+			$less9_sup = $this->checknull($less9->where('facility', $value->id));
+			$less9_nonsup =  $this->checknull($less9_n->where('facility', $value->id));
 
-			$less14_sup = $this->checknull($less14->where('facility', $value->ID));
-			$less14_nonsup =  $this->checknull($less14_n->where('facility', $value->ID));
+			$less14_sup = $this->checknull($less14->where('facility', $value->id));
+			$less14_nonsup =  $this->checknull($less14_n->where('facility', $value->id));
 
-			$less19_sup = $this->checknull($less19->where('facility', $value->ID));
-			$less19_nonsup =  $this->checknull($less19_n->where('facility', $value->ID));
+			$less19_sup = $this->checknull($less19->where('facility', $value->id));
+			$less19_nonsup =  $this->checknull($less19_n->where('facility', $value->id));
 
-			$less24_sup = $this->checknull($less24->where('facility', $value->ID));
-			$less24_nonsup =  $this->checknull($less24_n->where('facility', $value->ID));
+			$less24_sup = $this->checknull($less24->where('facility', $value->id));
+			$less24_nonsup =  $this->checknull($less24_n->where('facility', $value->id));
 
-			$over25_sup = $this->checknull($over25->where('facility', $value->ID));
-			$over25_nonsup = $this->checknull($over25_n->where('facility', $value->ID));
+			$over25_sup = $this->checknull($over25->where('facility', $value->id));
+			$over25_nonsup = $this->checknull($over25_n->where('facility', $value->id));
 
 
-			$male_sup = $this->checknull($male->where('facility', $value->ID));
-			$male_nonsup = $this->checknull($male_n->where('facility', $value->ID));
+			$male_sup = $this->checknull($male->where('facility', $value->id));
+			$male_nonsup = $this->checknull($male_n->where('facility', $value->id));
 
-			$female_sup = $this->checknull($female->where('facility', $value->ID));
-			$female_nonsup = $this->checknull($female_n->where('facility', $value->ID)); 
+			$female_sup = $this->checknull($female->where('facility', $value->id));
+			$female_nonsup = $this->checknull($female_n->where('facility', $value->id)); 
 
-			$nogender_sup = $this->checknull($nogender->where('facility', $value->ID));
-			$nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->ID));
+			$nogender_sup = $this->checknull($nogender->where('facility', $value->id));
+			$nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->id));
 			
 
 			$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
@@ -1388,7 +1336,7 @@ class Vl
 				'nogender_suppressed' => $nogender_sup, 'nogender_nonsuppressed' => $nogender_nonsup
 			);
 
-			DB::table('vl_site_suppression')->where('facility', $value->ID)->update($data_array);
+			DB::table('vl_site_suppression')->where('facility', $value->id)->update($data_array);
 		}
 
     	echo "\n Completed entry into vl suppression at " . date('d/m/Y h:i:s a', time()); 

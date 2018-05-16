@@ -214,8 +214,7 @@ class VlNation
     	$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month, sex")
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
-		->where('justification', '!=', 2)
-		->where('justification', '!=', 10)
+		->whereNotIn('justification', [2, 10])
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month', 'sex')
@@ -234,8 +233,7 @@ class VlNation
 		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month, age_category")
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
-		->where('justification', '!=', 2)
-		->where('justification', '!=', 10)
+		->whereNotIn('justification', [2, 10])
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month', 'age_category')
@@ -251,9 +249,7 @@ class VlNation
 		->whereBetween('datetested', $date_range)
 		->when($result, function($query) use ($result){
 			if($result != 5){
-				return $query
-				->where('justification', '!=', 2)
-				->where('justification', '!=', 10);
+				return $query->whereNotIn('justification', [2, 10]);
 			}
 		})
 		->where('flag', 1)
@@ -295,8 +291,7 @@ class VlNation
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->where('justification', '!=', 2)
-				->where('justification', '!=', 10)
+		        ->whereNotIn('justification', [2, 10])
 				->whereIn('rcategory', [1, 2, 3, 4]);
 			}
 			if($type == 4){
@@ -500,8 +495,7 @@ class VlNation
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->where('justification', '!=', 2)
-				->where('justification', '!=', 10)
+		        ->whereNotIn('justification', [2, 10])
 				->whereIn('rcategory', [1, 2, 3, 4]);
 			}				
 		})
@@ -530,8 +524,7 @@ class VlNation
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->where('justification', '!=', 2)
-				->where('justification', '!=', 10)
+		        ->whereNotIn('justification', [2, 10])
 				->whereIn('rcategory', [1, 2, 3, 4]);
 			}
 			if($type == 4){
@@ -566,8 +559,7 @@ class VlNation
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->where('justification', '!=', 2)
-				->where('justification', '!=', 10)
+		        ->whereNotIn('justification', [2, 10])
 				->whereIn('rcategory', [1, 2, 3, 4]);
 			}
 			if($type == 4){
@@ -603,8 +595,7 @@ class VlNation
 		->when($type, function($query) use ($type){
 			if($type < 4){
 				return $query
-				->where('justification', '!=', 2)
-				->where('justification', '!=', 10);
+		        ->whereNotIn('justification', [2, 10]);
 			}				
 		})
 		->whereBetween('datetested', $date_range)

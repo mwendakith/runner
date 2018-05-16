@@ -232,9 +232,6 @@ class BaseModel
 
 		// Type 1 for age
 		if($type == 1){
-			// if($param < 6){
-			// 	return array('column' => 'viralsamples.age', 'param' => $param);
-			// }
 			return array('column' => 'age_category', 'param' => $param);
 		}
 
@@ -273,35 +270,6 @@ class BaseModel
 		}
 	}
 
-	public function get_viralparams($type=1, $param=6){
-		$data;
-
-		// Type 1 for age
-		if($type == 1){
-			return array('column' => 'viralsamples.age2', 'param' => $param);
-		}
-
-		// Type 2 for gender
-		else if($type == 2){
-			return array('column' => 'viralpatients.gender', 'param' => $param);
-		}
-
-		// Type 3 for regimen
-		else if($type == 3){
-			return array('column' => 'viralsamples.prophylaxis', 'param' => $param);
-		}
-
-		// Type 4 for sampletype
-		else if ($type == 4) {
-			return array('column' => 'viralsamples.sampletype', 'param' => $param);
-		}
-
-		// Type 5 for justification
-		else if($type == 5){
-			return array('column' => 'viralsamples.justification', 'param' => $param);
-		}
-	}
-
 	public static function date_range($year, $start_month=null)
 	{
 		$date_range[0] = ($year) . '-01-01';
@@ -315,19 +283,6 @@ class BaseModel
 		return $date_range;
 	}
 
-	
-
-	public function compare_alltestedviralloadsamples(){
-    	$age = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 AND repeatt=0 and Flag=1 AND $colmn ='$age' and viralsamples.rcategory BETWEEN 1 AND 4";
-
-    	$gender = "select count(viralsamples.ID)  as numsamples from viralsamples, viralpatients where  viralsamples.patientid=viralpatients.AutoID AND MONTH(datetested)='$month' AND (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2 and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND viralpatients.gender='$gender' and viralsamples.rcategory BETWEEN 1 AND 4";
-
-    	$regimen = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND prophylaxis='$regimen' and (viralsamples.receivedstatus=1  OR (viralsamples.receivedstatus=3  and  viralsamples.reason_for_repeat='Repeat For Rejection')) AND viralsamples.justification !=2";
-
-    	$justification = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND justification='$justification'";
-
-    	$sampletype = "select count(ID)  as numsamples from viralsamples where  MONTH(datetested)='$month' and YEAR(datetested)='$year' AND repeatt=0 and Flag=1 AND sampletype BETWEEN '$stype' AND '$ttype'";
-    }
 
     public function send_report(){
     	$mail_array = array('joelkith@gmail.com', 'tngugi@gmail.com', 'baksajoshua09@gmail.com');
