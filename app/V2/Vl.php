@@ -398,8 +398,7 @@ class Vl
 					}
 
 					if ($type != 5) {
-					
-						// $sample = $this->check_sample($baseline_a->where('month', $month));
+
 						$baseline = $this->checknull($baseline_a->where('month', $month));
 						$baselinefail = $this->checknull($baselinefail_a->where('month', $month));
 
@@ -1372,35 +1371,12 @@ class Vl
     	return $var->where('month', $month)->first()->totals ?? 0;
     }
 
-    public function check_sample($var){
-    	if($var->isEmpty()){
-    		return 0;
-    	}else{
-    		// return $var->sum('totals');
-    		return $var->first()->sampletype;
-    	}
-    }
-
-    public function checktat($var){
-    	if($var->isEmpty()){
-    		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
-    	}else{
-    		return $var->first();
-    	}
-    }
-
      public function check_tat($var){
     	if($var->isEmpty()){
     		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
     	}else{
-    		// $tat1 = $var->avg('tat1');
-    		// $tat2 = $var->avg('tat2');
-    		// $tat3 = $var->avg('tat3');
-    		// $tat4 = $var->avg('tat4');
     		$t = $var->first();
     		return array('tat1' => $t->tat1, 'tat2' => $t->tat2, 'tat3' => $t->tat3, 'tat4' => $t->tat4);
-    		// return array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
-    		// return $var->first()->toArray();
     	}
     }
 

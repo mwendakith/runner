@@ -14,9 +14,9 @@ class VlDivision
 
     	$data = DB::connection('vl')
 		->table('worksheets_vl')
-		->select('worksheets_vl.lab', DB::raw("COUNT(*) as totals, month(daterun) as month"))
+		->selectRaw("COUNT(*) as totals, lab, month(daterun) as month")
 		->whereBetween('daterun', $date_range)
-		->groupBy('month', 'worksheets_vl.lab')
+		->groupBy('month', 'lab')
 		->get();
 
 		return $data;
@@ -410,9 +410,9 @@ class VlDivision
 	public function get_tat($year, $start_month, $division='county'){
 		$date_range = BaseModel::date_range($year, $start_month);
 
-    	$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
+    	$sql = "{$division}, AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
 
-		$data = ViralsampleSynchView::select($division, DB::raw($sql))
+		$data = ViralsampleSynchView::selectRaw($sql)
 		->when($division, function($query) use ($division){
 			if($division == "lab_id" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);

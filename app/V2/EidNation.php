@@ -4,6 +4,7 @@ namespace App;
 
 use DB;
 use App\V2\BaseModel;
+use App\SampleView;
 
 class EidNation
 {
@@ -14,17 +15,13 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->where('result', '>', 0)
-		->whereYear('datetested', $year)
-		->where('Flag', 1)
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
 		->where('repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get();
 
@@ -36,18 +33,14 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->where('result', '>', 0)
-		->whereYear('datetested', $year)
-		->where('samples.facility', 7148)
-		->where('Flag', 1)
+		->whereBetween('datetested', $date_range)
+		->where('facility_id', 7148)
+		->where('flag', 1)
 		->where('repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get();
 
@@ -59,17 +52,13 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->whereIn('result', [1, 2])
-		->whereYear('datetested', $year)
+		->whereBetween('datetested', $date_range)
 		->where('repeatt', 0)
-		->where('Flag', 1)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->where('flag', 1)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -77,53 +66,28 @@ class EidNation
 	}
 
 	//national tests
-	public function OverallTestedPatients($year, $monthly=true)
+	public function OverallTestedPatients($year, $pos=false, $monthly=true)
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
-		->leftJoin('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->whereBetween('patients.age', [0.0001, 24])
-		->whereIn('samples.pcrtype', [1, 2, 3])
-		->whereIn('samples.result', [1, 2])
-		->whereYear('datetested', $year)
-		->where('samples.repeatt', 0)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
+		$data = SampleView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
+		->when(true, function($query) use ($pos){
+			if($pos){
+				return $query->where('result', 2);
+			}
+			else{
+				return $query->whereIn('result', [1, 2]);
 			}			
 		})
-		->get(); 
-
-		return $data;
-	}
-
-	//national tests
-	public function OverallTestedPatientsPOS($year, $monthly=true)
-	{
-		$date_range = BaseModel::date_range($year);
-
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
-		->leftJoin('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->whereBetween('patients.age', [0.0001, 24])
-		->where('samples.result', 2)
-		->whereYear('datetested', $year)
-		->whereIn('samples.pcrtype', [1, 2, 3])
-		->where('samples.repeatt', 0)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->whereBetween('age', [0.0001, 24])
+		->whereIn('pcrtype', [1, 2, 3])
+		->whereIn('result', [1, 2])
+		->whereBetween('datetested', $date_range)
+		->where('repeatt', 0)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -135,17 +99,13 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
-		->whereYear('datereceived', $year)
-		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
+		->whereBetween('datereceived', $date_range)
+		->whereRaw("(parentid=0 OR parentid IS NULL)")
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -157,18 +117,14 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select($division, DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->where('samples.facility', '!=', 7148)
-		->where('samples.previous_positive', 1)
-		->whereYear('datetested', $year)
-		->where('samples.repeatt', 0)
-		->where('samples.Flag', 1)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
+		->where('facility_id', '!=', 7148)
+		->where('previous_positive', 1)
+		->whereBetween('datetested', $date_range)
+		->where('repeatt', 0)
+		->where('flag', 1)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -179,154 +135,30 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($pos){
 			if($pos){
-				return $query->where('samples.result', 2);
+				return $query->where('result', 2);
 			}
 			else{
-				return $query->whereIn('samples.result', [1, 2]);
+				return $query->whereIn('result', [1, 2]);
 			}			
 		})
-		->whereYear('datetested', $year)
+		->whereBetween('datetested', $date_range)
 		->when($pcrtype, function($query) use ($pcrtype){
 			if($pcrtype == 2){
-				return $query->whereIn('samples.pcrtype', [2, 3]);
+				return $query->whereIn('pcrtype', [2, 3]);
 			}
 			else{
-				return $query->where('samples.pcrtype', $pcrtype);
+				return $query->where('pcrtype', $pcrtype);
 			}			
 		})		
-		// ->where('samples.pcrtype', $pcrtype)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
-		})
-		->get(); 
-
-		return $data;
-	}
-
-	//national tests first pcr
-	public function OveralldnafirstTestedSamples($year, $monthly=true)
-	{
-		$date_range = BaseModel::date_range($year);
-
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->whereIn('samples.result', [1, 2])
-		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 1)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
-		})
-		->get(); 
-
-		return $data;
-	}
-
-	//national tests confirmatory
-	public function OveralldnasecondTestedSamples($year, $monthly=true)
-	{
-		$date_range = BaseModel::date_range($year);
-
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->whereIn('samples.result', [1, 2])
-		->whereYear('datetested', $year)
-		->whereIn('samples.pcrtype', [2, 3])
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
-		})
-		->get(); 
-
-		return $data;
-	}
-
-	//national tests confirmatory
-	public function OveralldnasecondTestedSamplesPOS($year, $monthly=true)
-	{
-		$date_range = BaseModel::date_range($year);
-
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->where('samples.result', 2)
-		->whereYear('datetested', $year)
-		->whereIn('samples.pcrtype', [2, 3])
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
-		})
-		->get(); 
-
-		return $data;
-	}
-
-	//national tests confirmatory
-	public function OverallPosRepeatsTestedSamples($year, $monthly=true)
-	{
-		$date_range = BaseModel::date_range($year);
-
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->whereIn('samples.result', [1, 2])
-		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 4)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
-		})
-		->get(); 
-
-		return $data;
-	}
-
-	//national tests confirmatory
-	public function OverallPosRepeatsTestedSamplesPOS($year, $monthly=true)
-	{
-		$date_range = BaseModel::date_range($year);
-
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->where('samples.result', 2)
-		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 4)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		// ->where('pcrtype', $pcrtype)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -339,32 +171,27 @@ class EidNation
 		$date_range = BaseModel::date_range($year);
 		$age = BaseModel::age_range($a);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->whereBetween('patients.age', $age)
+		$data = SampleView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
+		->whereBetween('age', $age)
 		->when(true, function($query) use ($pos){
 			if($pos){
-				return $query->where('samples.result', 2);
+				return $query->where('result', 2);
 			}
 			else{
-				return $query->whereIn('samples.result', [1, 2]);				
+				return $query->whereIn('result', [1, 2]);				
 			}				
 		})
 		->when(true, function($query) use ($a){
 			if($a != 5){
-				return $query->where('samples.pcrtype', 1);
+				return $query->where('pcrtype', 1);
 			}
 		})
-		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -376,26 +203,22 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->where('samples.result', $result_type)
-		->whereYear('datetested', $year)
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
+		->where('result', $result_type)
+		->whereBetween('datetested', $date_range)
 		->when($pcrtype, function($query) use ($pcrtype){
 			if($pcrtype == 2){
-				return $query->whereIn('samples.pcrtype', [2, 3]);
+				return $query->whereIn('pcrtype', [2, 3]);
 			}
 			else{
-				return $query->where('samples.pcrtype', $pcrtype);
+				return $query->where('pcrtype', $pcrtype);
 			}			
 		})		
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -408,18 +231,14 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
-		->whereYear('datereceived', $year)
-		->where('samples.receivedstatus', 2)
-		->whereRaw("(samples.parentid=0 OR samples.parentid IS NULL)")
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
+		->whereBetween('datereceived', $date_range)
+		->where('receivedstatus', 2)
+		->whereRaw("(parentid=0 OR parentid IS NULL)")
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -428,32 +247,26 @@ class EidNation
 
 
 	//national patients HEI follow up or validation status
-	public function GetHEIFollowUpNational($year, $estatus, $col="samples.enrollmentstatus", $monthly=true)
+	public function GetHEIFollowUpNational($year, $col="enrollment_status", $monthly=true)
 	{
-		$date_range = BaseModel::date_range($year);
+		$date_range = BaseModel::date_range($year); 
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(DISTINCT samples.patient,samples.facility) as totals, month(datetested) as month"))
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->where('samples.result', 2)
-		->whereYear('datetested', $year)
-		->whereBetween('patients.age', [0.0001, 24])
-		->whereIn('samples.pcrtype', [1, 2, 3])
+		$data = SampleView::selectRaw("COUNT(DISTINCT patient_id) as totals, {$col}, month(datetested) as month")
+		->where('result', 2)
+		->whereBetween('datetested', $date_range)
+		->whereBetween('age', [0.0001, 24])
+		->whereIn('pcrtype', [1, 2, 3])
 		->where($col, $estatus)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
 		->when(true, function($query) use ($col){
-			if($col == "samples.enrollmentstatus"){
-				return $query->where('hei_validation', 1);
-			}			
+			if($col == "enrollment_status") return $query->where('hei_validation', 1);
 		})
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
+		->groupBy($col)
 		->get(); 
 
 		return $data;
@@ -464,16 +277,12 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(DISTINCT samples.facility) as totals, month(datereceived) as month"))
-		->whereYear('datereceived', $year)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datereceived) as month")
+		->whereBetween('datereceived', $date_range)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -485,21 +294,16 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("AVG(patients.age) as totals, month(datetested) as month"))
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->where('samples.pcrtype', 1)
-		->where('patients.age', '>', 0)
-		->where('patients.age', '<', 24)
-		->where('samples.result', '>', 0)
-		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("AVG(age) as totals, month(datetested) as month")
+		->where('pcrtype', 1)
+		->where('age', '>', 0)
+		->where('age', '<', 24)
+		->where('result', '>', 0)
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -512,23 +316,15 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("patients.age, month(datetested) as month"))
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->where('samples.pcrtype', 1)
-		->where('patients.age', '>', 0)
-		->where('patients.age', '<', 24)
-		->where('samples.result', '>', 0)
-		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
+		$data = SampleView::selectRaw("age, month(datetested) as month")
+		->where('pcrtype', 1)
+		->where('age', '>', 0)
+		->where('age', '<', 24)
+		->where('result', '>', 0)
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
 		->get(); 
-
-
-		// return $data;
-
-		// $s="SELECT patients.age  FROM samples,patients WHERE samples.patientautoid=patients.autoID AND patients.age < 24 and patients.age >0  AND samples.result >0  AND YEAR(samples.datetested)='$yea' AND samples.Flag=1 and samples.eqa=0";
 
 		$return;
 
@@ -551,33 +347,26 @@ class EidNation
 			$return = $data->median('age');
 		}
 
-		
-
 		return $return;
 		              
 	}
 
 	// infant proph nat summary
-	public function Getinfantprophpositivitycount($year, $drug, $result_type, $monthly=true)
+	public function Getinfantprophpositivitycount($year, $drug, $monthly=true)
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(patients.AutoID) as totals, month(datetested) as month"))
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->where('patients.prophylaxis', $drug)
-		->where('samples.result', $result_type)
-		->where('samples.pcrtype', 1)
-		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("COUNT(patient_id) as totals, result, month(datetested) as month")
+		->where('prophylaxis', $drug)
+		->where('pcrtype', 1)
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
+		->groupBy('result')
 		->get(); 
 
 		return $data;              
@@ -585,80 +374,63 @@ class EidNation
 
 
 	// mother proph nat summary
-	public function Getinterventionspositivitycount($year, $drug, $result_type, $monthly=true)
+	public function Getinterventionspositivitycount($year, $drug, $monthly=true)
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->join('mothers', 'patients.mother', '=', 'mothers.ID')
-		->where('mothers.prophylaxis', $drug)
-		->where('samples.result', $result_type)
-		->where('samples.pcrtype', 1)
-		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("COUNT(id) as totals, result, month(datetested) as month")
+		->where('mother_prophylaxis', $drug)
+		->where('pcrtype', 1)
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
+		->groupBy('result')
 		->get(); 
 
 		return $data;
 	}
 
 	// entry point national summary
-	public function GetNationalResultbyEntrypoint($year, $entry_point, $result_type, $monthly=true)
+	public function GetNationalResultbyEntrypoint($year, $entry_point, $monthly=true)
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datetested) as month"))
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->join('mothers', 'patients.mother', '=', 'mothers.ID')
-		->where('mothers.entry_point', $entry_point)
-		->where('samples.result', $result_type)
-		->where('samples.pcrtype', 1)
-		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("COUNT(id) as totals, result, month(datetested) as month")
+		->where('entry_point', $entry_point)
+		->where('pcrtype', 1)
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
+		->groupBy('result')
 		->get();
 
 		return $data;               
 	}
 
 	//samples for a particular range	
-	public function OutcomesByAgeBand($year, $age_array, $result_type, $monthly=true)
+	public function OutcomesByAgeBand($year, $age_array, $monthly=true)
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(patients.AutoID) as totals, month(datetested) as month"))
-		->join('patients', 'samples.patientautoid', '=', 'patients.autoID')
-		->whereBetween('patients.age', $age_array)
-		->where('samples.result', $result_type)
-		->whereYear('datetested', $year)
-		->where('samples.pcrtype', 1)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		$data = SampleView::selectRaw("COUNT(patient_id) as totals, result, month(datetested) as month")
+		->whereBetween('age', $age_array)
+		->whereBetween('datetested', $date_range)
+		->where('pcrtype', 1)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
+		->groupBy('result')
 		->get(); 
 
 		return $data;
@@ -669,19 +441,15 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
+		$data = SampleView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
-		->whereYear('datereceived', $year)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->whereBetween('datereceived', $date_range)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -694,26 +462,22 @@ class EidNation
 		$date_range = BaseModel::date_range($year);
 		$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw($sql))
-		->whereYear('samples.datecollected', '>', 1980)
+		$data = SampleView::selectRaw($sql)
+		->whereYear('datecollected', '>', 1980)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],
 			['datetested', '<=', 'datedispatched']
 		])
-		->whereYear('samples.datecollected', '>', 1980)
-		->whereYear('samples.datereceived', '>', 1980)
-		->whereYear('samples.datetested', '>', 1980)
-		->whereYear('samples.datedispatched', '>', 1980)
-		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.repeatt', 0)
-		->when($monthly, function($query) use ($monthly){
-			if($monthly){
-				return $query->groupBy('month');
-			}			
+		->whereYear('datecollected', '>', 1980)
+		->whereYear('datereceived', '>', 1980)
+		->whereYear('datetested', '>', 1980)
+		->whereYear('datedispatched', '>', 1980)
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
+		->where('repeatt', 0)
+		->when($monthly, function($query){
+			return $query->groupBy('month');			
 		})
 		->get(); 
 
@@ -725,27 +489,25 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 		
-		$sql = "samples.ID, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
+		$sql = "ID, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$b = new BaseModel;
 
 
 		echo "\n Begin eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 
-		$data = DB::connection('eid')
-		->table('samples')
-		->select(DB::raw($sql))
-		->whereYear('samples.datecollected', '>', 1980)
-		->whereYear('samples.datereceived', '>', 1980)
-		->whereYear('samples.datetested', '>', 1980)
-		->whereYear('samples.datedispatched', '>', 1980)
+		$data = SampleView::selectRaw($sql)
+		->whereYear('datecollected', '>', 1980)
+		->whereYear('datereceived', '>', 1980)
+		->whereYear('datetested', '>', 1980)
+		->whereYear('datedispatched', '>', 1980)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],
 			['datetested', '<=', 'datedispatched']
 		])
-		->whereYear('datetested', $year)
-		->where('samples.Flag', 1)
-		->where('samples.repeatt', 0)
+		->whereBetween('datetested', $date_range)
+		->where('flag', 1)
+		->where('repeatt', 0)
 		->get(); 
 
 		foreach ($data as $key => $value) {
@@ -769,17 +531,15 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 
-    	$raw = "samples.ID, samples.patient, samples.facility, samples.datetested";
+    	$raw = "ID, patient, facility_id, datetested";
 
-    	$data = DB::connection('eid')
-		->table("samples")
-		->select(DB::raw($raw))
-		->orderBy('samples.facility', 'desc')
-		->whereYear('datetested', $year)
+    	$data = SampleView::selectRaw($raw)
+		->orderBy('facility_id', 'desc')
+		->whereBetween('datetested', $date_range)
 		->where('pcrtype', 4)
-		->where('samples.repeatt', 0)
-		->where('samples.Flag', 1)
-		->where('samples.facility', '!=', 7148)
+		->where('repeatt', 0)
+		->where('flag', 1)
+		->where('facility_id', '!=', 7148)
 		->get();
 
 		echo "\n Begin eid samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());
@@ -789,16 +549,14 @@ class EidNation
 
 		foreach ($data as $sample) {
 
-	    	$d = DB::connection('eid')
-			->table("samples")
-			->select(DB::raw($raw))
-			->where('facility', $sample->facility)
+	    	$d = SampleView::selectRaw($raw)
+			->where('facility_id', $sample->facility_id)
 			->where('patient', $sample->patient)
 			->whereDate('datetested', '<', $sample->datetested)
 			->where('result', 1)
 			->where('repeatt', 0)
-			->where('Flag', 1)
-			->where('facility', '!=', 7148)
+			->where('flag', 1)
+			->where('facility_id', '!=', 7148)
 			->where('pcrtype', '<', 4)
 			->first();
 
