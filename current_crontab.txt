@@ -17,7 +17,7 @@
 0 18 * * * php /root/runner/artisan update:eid-facility >> /root/runner/public/logs.txt 2>&1
 20 18 * * * php /root/runner/artisan update:eid --type=1 >> /root/runner/public/logs.txt 2>&1
 
-20 40 * * * php /root/syncher/artisan synch:vl >> /root/synchlogs_vl.txt 2>&1
+40 20 * * * php /root/syncher/artisan synch:vl >> /root/synchlogs_vl.txt 2>&1
 0 1 * * * php /root/syncher/artisan synch:eid >> /root/synchlogs_eid.txt 2>&1
 
 
