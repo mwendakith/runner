@@ -17,10 +17,8 @@
 0 18 * * * php /root/runner/artisan update:eid-facility >> /root/runner/public/logs.txt 2>&1
 20 18 * * * php /root/runner/artisan update:eid --type=1 >> /root/runner/public/logs.txt 2>&1
 
-
-
-0 23 * * * php /root/runner/artisan update:eid-facility 2017 >> /root/runner/public/logs.txt 2>&1
-#23 0 * * * php /root/runner/artisan update:eid 2017 --type=1 >> /root/runner/public/logs.txt 2>&1
+20 40 * * * php /root/syncher/artisan synch:vl >> /root/synchlogs_vl.txt 2>&1
+0 1 * * * php /root/syncher/artisan synch:eid >> /root/synchlogs_eid.txt 2>&1
 
 
 0 10 * * * php /root/runner/artisan report:send 2>&1
@@ -30,11 +28,11 @@
 #9 7 * * 0 php /root/syncher/artisan synch:eid >> /root/synchlogs.txt 2>&1
 #10 7 * * 0 php /root/syncher/artisan synch:vl >> /root/synchlogs.txt 2>&1
 
-0 7-17 * * 1-6 php /root/runner/artisan update:eid-nation >> /root/newlogs.txt 2>&1
-0 7-17 * * 1-6 php /root/runner/artisan update:eid-lab  >> /root/newlogs.txt 2>&1 
-0 7-16 * * 1-6 php /root/runner/artisan update:vl-nation  >> /root/newlogs.txt 2>&1
-0 7-16 * * 1-6 php /root/runner/artisan update:vl-lab  >> /root/newlogs.txt 2>&1
-10 7-17 * * 1-6 php /root/runner/artisan update:eid-partner >> /root/newlogs.txt 2>&1
+0 8-17 * * 1-6 php /root/runner/artisan update:eid-nation >> /root/newlogs.txt 2>&1
+0 8-17 * * 1-6 php /root/runner/artisan update:eid-lab  >> /root/newlogs.txt 2>&1 
+0 8-16 * * 1-6 php /root/runner/artisan update:vl-nation  >> /root/newlogs.txt 2>&1
+0 8-16 * * 1-6 php /root/runner/artisan update:vl-lab  >> /root/newlogs.txt 2>&1
+10 8-17 * * 1-6 php /root/runner/artisan update:eid-partner >> /root/newlogs.txt 2>&1
 5 8-16/2 * * 1-6 php /root/runner/artisan update:vl-partner >> /root/newlogs.txt 2>&1
 
 30 8-16/2 * * 1-5 php /root/runner/artisan update:vl-suppression  >> /root/newlogs.txt 2>&1

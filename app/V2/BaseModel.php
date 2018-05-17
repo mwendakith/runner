@@ -94,7 +94,7 @@ class BaseModel
 	    return $workingDays;
 	} 
 
-	public function age_range($age){
+	public static function age_range($age){
 		$age_b;
 		switch ($age) {
 			case 0:
@@ -121,7 +121,7 @@ class BaseModel
 		return $age_b;
 	}
 
-	public function age_band($age){
+	public static function age_band($age){
 		$age_b;
 		switch ($age) {
 			case 1:
