@@ -168,7 +168,7 @@ class Cleaner
 				->get();
 
 			// If the duplicates result set is not empty, delete rows for all facilities in the result set for that particular month and year
-			// These deleted rows will be recreated in vl_site_missing_rows() without duplicates
+			// These deleted rows will be recreated in vl_missing_site_rows() without duplicates
 			if($duplicates->isNotEmpty()){
 				$facilities = $duplicates->pluck('facility')->toArray();
 				DB::table($table_name)
@@ -337,6 +337,225 @@ class Cleaner
 	    	$i=0;
 		}
 		// End of looping through vl site tables
+	}
+
+	// Delete duplicate rows from all eid site tables
+	public static function clean_eid_sites($year = null)
+	{
+		if(!$year) $year = Date('Y');
+
+		// When looping through sites array, the key will be the table name
+		$sites = [
+			// 'site_summary' => null,
+			'site_rejections' => ['table' => 'rejectedreasons', 'column' => 'rejected_reason'],
+		];
+
+		// Loop through months
+		// This is for eid_site_summary
+		for ($month=1; $month < 13; $month++) {
+			if($year == Date('Y') && $month > Date('m')) break;
+			$table_name = 'site_summary'; 
+
+			// Find where duplicate rows exist
+			// Unique index is (year, month, facility)
+			$duplicates = DB::table($table_name)
+				->selectRaw("facility, count(facility) as my_count")
+				->where(['year' => $year, 'month' => $month])
+				->groupBy('facility')
+				->having('my_count', '>', 1)
+				->get();
+
+			// If the duplicates result set is not empty, delete rows for all facilities in the result set for that particular month and year
+			// These deleted rows will be recreated in eid_site_missing_rows() without duplicates
+			if($duplicates->isNotEmpty()){
+				$facilities = $duplicates->pluck('facility')->toArray();
+				DB::table($table_name)
+					->where(['year' => $year, 'month' => $month])
+					->whereIn('facility', $facilities)
+					->delete();					
+			}		
+		}
+
+		$table_name = "site_summary_yearly";
+
+		// Find where duplicate rows exist
+		// Unique index is (year, facility)
+		$duplicates = DB::table($table_name)
+			->selectRaw("facility, count(facility) as my_count")
+			->where(['year' => $year])
+			->groupBy('facility')
+			->having('my_count', '>', 1)
+			->get();
+
+		// If the duplicates result set is not empty, delete rows for all facilities in the result set for that particular month and year
+		// These deleted rows will be recreated in eid_site_missing_rows() without duplicates
+		if($duplicates->isNotEmpty()){
+			$facilities = $duplicates->pluck('facility')->toArray();
+			DB::table($table_name)
+				->where(['year' => $year])
+				->whereIn('facility', $facilities)
+				->delete();					
+		}		
+
+		// Loop through sites array
+		foreach ($sites as $table_name => $value) {
+			// Get result set for rejected reasons ...
+			$vars = DB::table($value['table'])
+				->select('id')
+				->when(isset($value['subid']), function($query){
+					return $query->where('subid', 1);
+				})
+				->get();
+
+			// Loop through the months
+			for ($month=1; $month < 13; $month++) {
+				if($year == Date('Y') && $month > Date('m')) break; 
+
+				// Loop through rejected reasons, pmtct ...
+				foreach ($vars as $row) {
+					$duplicates = DB::table($table_name)
+						->selectRaw("facility, count(facility) as my_count")
+						->where(['year' => $year, 'month' => $month, $value['column'] => $row->id])
+						->groupBy('facility')
+						->having('my_count', '>', 1)
+						->get();
+
+					// If the duplicates result set is not empty, delete rows for all facilities in the result set for that particular month and year
+					// These deleted rows will be recreated in vl_site_missing_rows() without duplicates
+
+					if($duplicates->isNotEmpty()){
+						$facilities = $duplicates->pluck('facility')->toArray();
+
+						DB::table($table_name)
+							->where(['year' => $year, 'month' => $month, $value['column'] => $row->id])
+							->whereIn('facility', $facilities)
+							->delete();
+					}
+				}
+				// End of looping through rejected reasons, pmtct ...
+			}
+			// End of looping through months
+		}
+		// End of looping through sites_array
+	}
+
+	public static function eid_missing_site_rows($year = null)
+	{
+		if(!$year) $year = Date('Y');
+
+		$sites = [
+			// 'site_summary' => null,
+			'site_rejections' => ['table' => 'viralrejectedreasons', 'column' => 'rejected_reason'],
+		];
+
+		$data_array=null;
+    	$i=0;
+
+    	// Loop through months
+		for ($month=1; $month < 13; $month++) {
+			if($year == Date('Y') && $month > Date('m')) break; 
+			$table_name = 'site_summary';
+
+			// Get list of facilities that do not have a row in the table for the particular month and year
+			$mfacilities = DB::table('facilitys')
+				->select('id')
+				->whereRaw("id not in (SELECT facility FROM {$table_name} WHERE year={$year} AND month={$month} )")
+				->get();
+
+			if($mfacilities->isEmpty()) continue;
+
+			// Iterate the facilities and add new row array into data array for insertion
+			foreach ($mfacilities as $key => $fac) {
+
+				$data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $fac->id);
+				$i++;
+				if ($i == 100) {
+					DB::table($table_name)->insert($data_array);
+					$data_array=null;
+			    	$i=0;
+				}				
+			}
+		}
+
+		if($data_array) DB::table($table_name)->insert($data_array);
+		$data_array=null;
+		$i=0;
+
+		// For yearly table
+		$table_name = 'site_summary_yearly';
+
+		// Get list of facilities that do not have a row in the table for the particular month and year
+		$mfacilities = DB::table('facilitys')
+			->select('id')
+			->whereRaw("id not in (SELECT facility FROM {$table_name} WHERE year={$year} )")
+			->get();
+
+		if($mfacilities->isNotEmpty()){
+			// Iterate the facilities and add new row array into data array for insertion
+			foreach ($mfacilities as $key => $fac) {
+
+				$data_array[$i] = array('year' => $year, 'facility' => $fac->id);
+				$i++;
+				if ($i == 100) {
+					DB::table($table_name)->insert($data_array);
+					$data_array=null;
+			    	$i=0;
+				}				
+			}
+			// Insert pending rows
+			if($data_array) DB::table($table_name)->insert($data_array);
+			$data_array=null;
+			$i=0;
+		}
+
+		// Iterate through vl site tables
+		foreach ($sites as $table_name => $value) {
+			// Get rejected reasons, genders, rejection reasons etc.
+			$vars = DB::table($value['table'])
+				->select('id')
+				->when(isset($value['subid']), function($query){
+					return $query->where('subid', 1);
+				})
+				->get();
+
+			// Loop through months
+			for ($month=1; $month < 13; $month++) {
+				if($year == Date('Y') && $month > Date('m')) break; 
+
+				// Iterate through rejected reasons etc.
+				foreach ($vars as $row) {
+
+					// Get list of facilities that do not have a row for that particular combination of (year, month, {var}) where var is a rejected reason etc.
+					$mfacilities = DB::table('facilitys')
+						->select('id')
+						->whereRaw("id not in (SELECT facility FROM {$table_name} WHERE year={$year} AND month={$month} AND {$value['column']}={$row->id} )")
+						->get();
+
+					if($mfacilities->isEmpty()) continue;
+
+					// For each facility add row array into the data array to be inserted
+					foreach ($mfacilities as $key => $fac) {
+
+						$data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $fac->id, $value['column'] => $row->id);
+						$i++;
+
+						if ($i == 100) {
+							DB::table($table_name)->insert($data_array);
+							$data_array=null;
+					    	$i=0;
+						}				
+					}
+					// End of facility loop
+				}
+				// End of looping through rejected reasons, genders, pmtct types etc.
+			}
+			// End of looping through months
+
+			if($data_array) DB::table($table_name)->insert($data_array);
+			$data_array=null;
+	    	$i=0;
+		}
+		// End of looping through eid site tables
 	}
 
 

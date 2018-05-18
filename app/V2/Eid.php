@@ -210,7 +210,7 @@ class Eid
 				$month = $i + 1;
 				if($year == Date('Y') && $month > Date('m')){ break; }
 
-				$rej = $this->checknull($rej_a->where('month', $month));
+				$rej = $this->checknull_month($rej_a, $month);
 
 				if($rej == 0){
 					continue;
@@ -283,15 +283,15 @@ class Eid
 					$month = $i + 1;
 					if($year == Date('Y') && $month > Date('m')){ break; }
 
-					$pos = $this->checknull($result_a->where('month', $month)->where('result', 2));
-					$neg = $this->checknull($result_a->where('month', $month)->where('result', 1));
+					$pos = $this->checknull_month($result_a->where('result', 2), $month);
+					$neg = $this->checknull_month($result_a->where('result', 1), $month);
 
 					$data_array = array('pos' => $pos, 'neg' => $neg, 'dateupdated' => $today);
 
 					if($type != 4){		
 
-						$fail = $this->checknull($result_a->where('month', $month)->where('result', 3));
-						$rd = $this->checknull($result_a->where('month', $month)->where('result', 5));	
+						$fail = $this->checknull_month($result_a->where('result', 3), $month);
+						$rd = $this->checknull_month($result_a->where('result', 5), $month);	
 
 						$redraw = $fail + $rd;
 						$tests = $pos + $neg +  $redraw;
