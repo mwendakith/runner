@@ -66,7 +66,7 @@ class EidInsert
 			$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => $val->id);
 			$i++;
 		}
-		// POC row
+		// POC row 
 		$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => 11);
 		DB::table('lab_summary')->insert($data_array);
 
@@ -278,6 +278,7 @@ class EidInsert
 						$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => $val->id);
 						$i++;
 					}
+					// POC Rejection Row
 					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => 11);
 					$i++;
 				}

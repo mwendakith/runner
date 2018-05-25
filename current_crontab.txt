@@ -18,9 +18,9 @@
 20 18 * * * php /root/runner/artisan update:eid --type=1 >> /root/runner/public/logs.txt 2>&1
 
 #40 20 * * * php /root/syncher/artisan synch:vl >> /root/synchlogs_vl.txt 2>&1
-0 1 * * * php /root/syncher/artisan synch:eid >> /root/synchlogs_eid.txt 2>&1
+#0 1 * * * php /root/syncher/artisan synch:eid >> /root/synchlogs_eid.txt 2>&1
 
-10 9 * * * php /root/runner/artisan update:vl-tat 2018 >> /root/runner/public/logs.txt 2>&1
+#10 9 * * * php /root/runner/artisan update:vl-tat 2018 >> /root/runner/public/logs.txt 2>&1
 
 
 0 10 * * * php /root/runner/artisan report:send 2>&1

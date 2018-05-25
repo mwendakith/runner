@@ -65,6 +65,8 @@ class VlInsert
 			$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => $val->id);
 			$i++;
 		}
+        // POC row 
+        $data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => 11);
 		DB::table('vl_lab_summary')->insert($data_array);
 
 		$data_array=null;
@@ -195,6 +197,9 @@ class VlInsert
 						$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => $val->id);
 						$i++;
 					}
+                    // POC Rejection Row
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => 11);
+                    $i++;
 				}
 				$lab = $this->get_table(5, $iterator);
 				DB::table($lab[0])->insert($data_array);

@@ -284,4 +284,27 @@ class EidPoc extends Model
   
 	}
 
+	//National rejections
+	public function national_rejections($year, $rejected_reason, $monthly=true){
+
+		$data = DB::connection('eid')
+		->table('samples')
+		->select(DB::raw("COUNT(samples.ID) as totals, month(datereceived) as month"))
+		->join('view_facilitys', 'samples.facility', '=', 'view_facilitys.ID')
+		->where('receivedstatus', 2)
+		->where('rejectedreason', $rejected_reason)
+		->whereYear('datereceived', $year)
+		->where('samples.Flag', 1)
+		->where('samples.repeatt', 0)
+		->where('samples.siteentry', 2)
+		->when($monthly, function($query) use ($monthly){
+			if($monthly){
+				return $query->groupBy('month');
+			}			
+		})
+		->get(); 
+
+		return $data;
+	} 
+
 }

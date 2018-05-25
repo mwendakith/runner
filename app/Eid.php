@@ -749,6 +749,7 @@ class Eid
 		// Loop through reasons
 		foreach ($reasons as $key => $value) {
 			$rej_a = $n->national_rejections($year, $value->ID, $division);
+			$rej_a2 = $poc->national_rejections($year, $value->ID, $division);
 
 			// Loop through each month and update reason
 			for ($i=0; $i < 12; $i++) { 
@@ -770,6 +771,9 @@ class Eid
 
 					DB::table('lab_rejections')->where('year', $year)->where('month', $month)->where("lab", $div_array[$it])->where('rejected_reason', $value->ID)->update($data_array);
 				}
+				// POC row
+				$rej = $this->checknull($rej_a2->where('month', $month));
+				DB::table('lab_rejections')->where('year', $year)->where('month', $month)->where("lab", 11)->where('rejected_reason', $value->ID)->update(['total' => $rej, 'dateupdated' => $today]);
 			}
 			
 		}
