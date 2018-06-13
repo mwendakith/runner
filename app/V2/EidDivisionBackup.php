@@ -6,7 +6,7 @@ use DB;
 use App\V2\BaseModel;
 use App\SampleSynchView;
 
-class EidDivision
+class EidDivisionBackup
 {
     //Control Tests
 	public function control_samples($year)
