@@ -28,7 +28,7 @@ class Cleaner
 
 	public static function clean_storage()
 	{
-		$indices = DB::table('INFORMATION_SCHEMA.TABLES')
+		$tables = DB::table('INFORMATION_SCHEMA.TABLES')
 			->select(['table_schema', 'table_name'])
 			->where('ENGINE', 'MyISAM')
 			->whereIn('TABLE_SCHEMA', ['apidb', 'apidbtest', 'eid_kemri2', 'vl_kemri2'])
