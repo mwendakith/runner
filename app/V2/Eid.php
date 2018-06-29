@@ -9,7 +9,6 @@ use DB;
 
 class Eid
 {
-    //
 
 	// protected $mysqli;
 

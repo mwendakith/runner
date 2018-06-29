@@ -26,6 +26,20 @@ class Cleaner
 		}
 	}
 
+	public function clean_storage()
+	{
+		$indices = DB::table('INFORMATION_SCHEMA.TABLES')
+			->select(['table_schema', 'table_name'])
+			->where('ENGINE', 'MyISAM')
+			->whereIn('TABLE_SCHEMA', ['apidb', 'apidbtest', 'eid_kemri2', 'vl_kemri2'])
+			->get();
+
+		foreach ($tables as $key => $table) {
+			$sql = "ALTER TABLE  {$table->table_schema}.{$table->table_name}  ENGINE=INNODB;";
+			DB::statement($sql);
+		}
+	}
+
 	public function create_eid_indices()
 	{
 		$levels = [null, 'county', 'subcounty', 'partner', 'facility', 'lab'];

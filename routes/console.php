@@ -20,3 +20,9 @@ Artisan::command('inspire', function () {
 Artisan::command('fart', function () {
     $this->comment("This is pretty smelly.");
 })->describe('Release a smelly gas');
+
+Artisan::command('clean:storage', function () {
+	\App\Cleaner::clean_storage();
+})->describe('Alter MyIsam tables to InnoDB.');
+
+

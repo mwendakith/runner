@@ -98,7 +98,7 @@ class EidDivision
 				// return $query->where('facility_id', '!=', 7148);
 			}
 			else{
-				return $query->where('repeatt', 0)->where('eqa', 0);
+				return $query->where('repeatt', 0);
 			}
 		})
 		->when(true, function($query) use ($division){
