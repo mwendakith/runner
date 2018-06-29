@@ -26,7 +26,7 @@ class Cleaner
 		}
 	}
 
-	public function clean_storage()
+	public static function clean_storage()
 	{
 		$indices = DB::table('INFORMATION_SCHEMA.TABLES')
 			->select(['table_schema', 'table_name'])
