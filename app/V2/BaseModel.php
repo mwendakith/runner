@@ -174,12 +174,8 @@ class BaseModel
 		$workingdays= $this->getWorkingDays($start, $finish);
 
 		$totaldays = $workingdays - $holidays;
-		if ($totaldays < 0) 
-		{
-			$totaldays=1;
-		}
+		if ($totaldays < 1) $totaldays=1;
 		return $totaldays;
-
 	}
 
 	public function get_vlage($age){
