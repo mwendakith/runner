@@ -942,20 +942,25 @@ class VlDivision
 
     public function suppression(){
     	ini_set("memory_limit", "-1");
-    	// SELECT facility, rcategory, count(*) as totals
-		// FROM
-		// (SELECT v.ID, v.facility, v.rcategory 
-		// FROM viralsamples v 
+
+    	// SELECT facility_id as facility, rcategory, count(*) as totals 
+		// FROM 
+		// (SELECT v.id, v.facility_id, v.rcategory 
+		// FROM viralsamples_view v 
 		// RIGHT JOIN 
-		// (SELECT ID, patient, facility, max(datetested) as maxdate
-		// FROM viralsamples
-		// WHERE ( (year(datetested) = 2016 AND month(datetested) > 9) || (year(datetested) = 2017 AND month(datetested) < 10) ) 
-		// AND flag=1 AND repeatt=0 AND rcategory between 1 AND 4 
-		// AND justification != 10 AND facility != 7148
-		// GROUP BY patient, facility) gv 
-		// ON v.ID=gv.ID) tb
-		// GROUP BY facility, rcategory 
-		// ORDER BY facility, rcategory;
+		// (SELECT id, patient_id, max(datetested) as maxdate 
+		// FROM viralsamples_view 
+		// WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) 
+		// AND patient != '' AND patient != 'null' AND patient is not null 
+		// AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4)
+		// AND justification != 10 AND facility_id != 7148 
+		// GROUP BY patient_id) gv 
+		// ON v.id=gv.id) tb 
+		// GROUP BY facility_id, rcategory 
+		// ORDER BY facility_id, rcategory 
+
+
+
 
     	$r = $this->current_range();
 
@@ -964,21 +969,21 @@ class VlDivision
     	$month = $r[2];
     	$prev_month = $r[3];
 
-    	$sql = 'SELECT facility, rcategory, count(*) as totals ';
+    	$sql = 'SELECT facility_id as facility, rcategory, count(*) as totals ';
 		$sql .= 'FROM ';
-		$sql .= '(SELECT v.ID, v.facility, v.rcategory ';
-		$sql .= 'FROM viralsamples v ';
+		$sql .= '(SELECT v.id, v.facility_id, v.rcategory ';
+		$sql .= 'FROM viralsamples_view v ';
 		$sql .= 'RIGHT JOIN ';
-		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
-		$sql .= 'FROM viralsamples ';
+		$sql .= '(SELECT id, patient_id, max(datetested) as maxdate ';
+		$sql .= 'FROM viralsamples_view ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
 		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
-		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 AND 4 ';
-		$sql .= 'AND justification != 10 AND facility != 7148 ';
-		$sql .= 'GROUP BY patient, facility) gv ';
-		$sql .= 'ON v.ID=gv.ID) tb ';
-		$sql .= 'GROUP BY facility, rcategory ';
-		$sql .= 'ORDER BY facility, rcategory ';
+		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4) ';
+		$sql .= 'AND justification != 10 AND facility_id != 7148 ';
+		$sql .= 'GROUP BY patient_id) gv ';
+		$sql .= 'ON v.id=gv.id) tb ';
+		$sql .= 'GROUP BY facility_id, rcategory ';
+		$sql .= 'ORDER BY facility_id, rcategory ';
 
 		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
 
@@ -995,28 +1000,28 @@ class VlDivision
     	$month = $r[2];
     	$prev_month = $r[3];
 
-    	$sql = 'SELECT facility, count(*) as totals ';
+    	$sql = 'SELECT facility_id as facility, count(*) as totals ';
 		$sql .= 'FROM ';
-		$sql .= '(SELECT v.ID, v.facility, v.rcategory, v.age2 ';
-		$sql .= 'FROM viralsamples v ';
+		$sql .= '(SELECT v.id, v.facility_id, v.rcategory, v.age_category ';
+		$sql .= 'FROM viralsamples_view v ';
 		$sql .= 'RIGHT JOIN ';
-		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
-		$sql .= 'FROM viralsamples ';
+		$sql .= '(SELECT id, patient_id, max(datetested) as maxdate ';
+		$sql .= 'FROM viralsamples_view ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
 		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
-		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
-		$sql .= 'AND justification != 10 and facility != 7148 ';
-		$sql .= 'GROUP BY patient, facility) gv ';
-		$sql .= 'ON v.ID=gv.ID) tb ';
+		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4) ';
+		$sql .= 'AND justification != 10 and facility_id != 7148 ';
+		$sql .= 'GROUP BY patient_id) gv ';
+		$sql .= 'ON v.id=gv.id) tb ';
 		if($suppression){
-			$sql .= 'WHERE rcategory between 1 and 2 ';
+			$sql .= 'WHERE rcategory in (1, 2) ';
 		}
 		else{
-			$sql .= 'WHERE rcategory between 3 and 4 ';
+			$sql .= 'WHERE rcategory in (3, 4) ';
 		}
-		$sql .= 'AND age2 = ? ';
-		$sql .= 'GROUP BY facility ';
-		$sql .= 'ORDER BY facility';
+		$sql .= 'AND age_category = ? ';
+		$sql .= 'GROUP BY facility_id ';
+		$sql .= 'ORDER BY facility_id';
 
 		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
 
@@ -1034,32 +1039,31 @@ class VlDivision
     	$prev_month = $r[3];
 
     	$b = new BaseModel;
-		$gender = $b->get_gender($sex);
 
-    	$sql = 'SELECT facility, count(*) as totals ';
+    	$sql = 'SELECT facility_id as facility, count(*) as totals ';
 		$sql .= 'FROM ';
-		$sql .= '(SELECT v.ID, v.facility, v.rcategory, viralpatients.gender ';
-		$sql .= 'FROM viralsamples v JOIN viralpatients ON v.patientid=viralpatients.AutoID ';
+		$sql .= '(SELECT v.id, v.facility_id, v.rcategory, v.sex ';
+		$sql .= 'FROM viralsamples_view v ';
 		$sql .= 'RIGHT JOIN ';
-		$sql .= '(SELECT ID, patient, facility, max(datetested) as maxdate ';
-		$sql .= 'FROM viralsamples ';
+		$sql .= '(SELECT ID, patient_id, max(datetested) as maxdate ';
+		$sql .= 'FROM viralsamples_view ';
 		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
 		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
-		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory between 1 and 4 ';
-		$sql .= 'AND justification != 10 and facility != 7148 ';
-		$sql .= 'GROUP BY patient, facility) gv ';
-		$sql .= 'ON v.ID=gv.ID) tb ';
+		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4) ';
+		$sql .= 'AND justification != 10 and facility_id != 7148 ';
+		$sql .= 'GROUP BY patient_id) gv ';
+		$sql .= 'ON v.id=gv.id) tb ';
 		if($suppression){
-			$sql .= 'WHERE rcategory between 1 and 2 ';
+			$sql .= 'WHERE rcategory in (1, 2) ';
 		}
 		else{
-			$sql .= 'WHERE rcategory between 3 and 4 ';
+			$sql .= 'WHERE rcategory in (3, 4) ';
 		}
-		$sql .= 'AND gender = ? ';		
-		$sql .= 'GROUP BY facility ';
-		$sql .= 'ORDER BY facility ';
+		$sql .= 'AND sex = ? ';		
+		$sql .= 'GROUP BY facility_id ';
+		$sql .= 'ORDER BY facility_id ';
 
-		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $gender]);
+		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $sex]);
 		// $data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
 
 		return collect($data);

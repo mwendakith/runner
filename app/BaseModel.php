@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 use App\Mail\UpdateReport;
 use App\Mail\InsertReport;
 
@@ -170,10 +171,13 @@ class BaseModel extends Model
 	public function get_days($start, $finish, $holidays){
 		if($start == '0000-00-00' || $finish == '0000-00-00') return null;
 
-		$finish = date("d-m-Y",strtotime($finish));
-		$start = date("d-m-Y",strtotime($start));
+		// $finish = date("d-m-Y",strtotime($finish));
+		// $start = date("d-m-Y",strtotime($start));
+		// $workingdays= $this->getWorkingDays($start, $finish);
 
-		$workingdays= $this->getWorkingDays($start, $finish);
+		$s = Carbon::parse($start);
+		$f = Carbon::parse($finish);
+		$workingdays = $s->diffInWeekdays($f);
 
 		$totaldays = $workingdays - $holidays;
 		if ($totaldays < 1) $totaldays=1;
