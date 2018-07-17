@@ -4,8 +4,11 @@
 45 17 * * * php  /root/runner/artisan update:eid-patients >>  /root/runner/public/logs.txt 2>&1
 45 17 * * * php  /root/runner/artisan update:vl-patients >>  /root/runner/public/logs.txt 2>&1
 
-#25 12 * * * php /root/runner/artisan update:vl-tat 2018 >> /root/runner/public/logs.txt 2>&1
-#25 12 * * * php /root/runner/artisan update:vl-tat 2017 >> /root/runner/public/logs.txt 2>&1
+25 12 * * * php /root/runner/artisan update:vl-tat 2018 >> /root/runner/public/logs.txt 2>&1
+25 12 * * * php /root/runner/artisan update:vl-tat 2017 >> /root/runner/public/logs.txt 2>&1
+
+25 3 * * * php /root/runner/artisan update:vl-tat 2016 >> /root/runner/public/logs.txt 2>&1
+25 3 * * * php /root/runner/artisan update:vl-tat 2015 >> /root/runner/public/logs.txt 2>&1
 
 0 5 * * * php  /root/runner/artisan update:vl-lablogs >>  /root/runner/public/logs.txt 2>&1
 
