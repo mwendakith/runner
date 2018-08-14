@@ -1013,7 +1013,7 @@ class VlNation extends Model
 
 				$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
-				DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+				DB::connection('vl_wr')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
 
 			}
 			echo "\n Completed vl samples tat update for {$year} {$month} at " . date('d/m/Y h:i:s a', time());
@@ -1059,7 +1059,7 @@ class VlNation extends Model
 			->first();
 
 			if($d == null){
-				DB::connection('vl')->table('viralsamples')->where('ID', $sample->ID)->update(['previous_nonsuppressed' => 1]);
+				DB::connection('vl_wr')->table('viralsamples')->where('ID', $sample->ID)->update(['previous_nonsuppressed' => 1]);
 			}
 		}
 		echo "\n Completed vl samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());

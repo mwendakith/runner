@@ -1298,7 +1298,7 @@ class EidDivision extends Model
 				}
 			}
 
-			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
+			DB::connection('eid_wr')->table('samples')->where('ID', $value->ID)->update($update_array);
 			$p++;
 		}
 		echo "\n {$p} eid patients synched.";

@@ -1376,7 +1376,7 @@ class VlDivision extends Model
 			}
 			// $update_array = array('synched' => 0, 'datesynched' => $today);
 
-			DB::connection('vl')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+			DB::connection('vl_wr')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
 			$p++;
 		}
 

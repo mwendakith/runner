@@ -926,7 +926,7 @@ class EidNation extends Model
 
 			$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
-			DB::connection('eid')->table('samples')->where('ID', $value->ID)->update($update_array);
+			DB::connection('eid_wr')->table('samples')->where('ID', $value->ID)->update($update_array);
 
 		}
 		echo "\n Completed eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
@@ -968,7 +968,7 @@ class EidNation extends Model
 			->first();
 
 			if($d == null){
-				DB::connection('eid')->table('samples')->where('ID', $sample->ID)->update(['previous_positive' => 1]);
+				DB::connection('eid_wr')->table('samples')->where('ID', $sample->ID)->update(['previous_positive' => 1]);
 			}
 		}
 		echo "\n Completed eid samples confirmatory update for {$year} at " . date('d/m/Y h:i:s a', time());

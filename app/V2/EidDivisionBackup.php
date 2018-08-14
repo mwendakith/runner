@@ -796,7 +796,7 @@ class EidDivisionBackup
 				}
 			}
 
-			DB::connection('eid')->table('samples')->where('id', $value->id)->update($update_array);
+			DB::connection('eid_wr')->table('samples')->where('id', $value->id)->update($update_array);
 			$p++;
 		}
 		echo "\n {$p} eid patients synched.";
