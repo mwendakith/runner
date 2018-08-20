@@ -921,8 +921,8 @@ class EidNation extends Model
 			$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
 			$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
 			$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
-			// $tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
-			$tat4 = $tat1 + $tat2 + $tat3;
+			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+			// $tat4 = $tat1 + $tat2 + $tat3;
 
 			$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
