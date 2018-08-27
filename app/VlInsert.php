@@ -476,6 +476,104 @@ class VlInsert
         }
     }
 
+
+    public function insert_missing_rows($division=4, $year=null)
+    {
+        if(!$year) $year = Date('Y');
+        $tables = $this->get_table($division, 0);
+        if(!$tables) die();
+
+        $data_array=null;
+        $i=0;
+
+        for ($month=1; $month < 13; $month++) { 
+            if($year == Date('Y') && $month > Date('m')) break;
+
+            $mrows = DB::table($tables[1])
+                ->select('id')
+                ->whereRaw("id not in (SELECT {$tables[2]} FROM {$tables[0]} WHERE year={$year} AND month={$month} )")
+                ->get();
+
+            if($mrows->isEmpty()) continue;
+
+            // Iterate the facilities and add new row array into data array for insertion
+            foreach ($mrows as $key => $mrow) {
+
+                $data_array[$i] = array('year' => $year, 'month' => $month, $tables[2] => $mrow->id);
+                $i++;
+                if ($i == 100) {
+                    DB::table($tables[0])->insert($data_array);
+                    $data_array=null;
+                    $i=0;
+                }               
+            }
+
+        }
+
+        // Insert pending rows
+        if($data_array) DB::table($tables[0])->insert($data_array);
+        $data_array=null;
+        $i=0;
+
+        for ($iterator=1; $iterator < 8; $iterator++) { 
+
+            $newtables = $this->get_table($division, $iterator);
+
+            // Table being inserted into
+            $table_name = $newtables[0];
+            $column_name = $newtables[2];
+
+            $vars = $data = DB::table($newtables[1])
+            ->select('id')
+            ->when($iterator, function($query) use ($iterator){
+                if($iterator == 1 || $iterator == 6){
+                    return $query->where('subid', 1);
+                }               
+            })
+            ->get();
+
+            // Loop through months
+            for ($month=1; $month < 13; $month++) {
+                if($year == Date('Y') && $month > Date('m')) break; 
+
+                // Iterate through rejected reasons, genders, pmtct types etc.
+                foreach ($vars as $row) {
+
+                    // Get list of facilities that do not have a row for that particular combination of (year, month, {var}) where var is a rejected reason, gender, pmtct type etc.
+                    $mrows = DB::table($tables[1])
+                        ->select('id')
+                        ->whereRaw("id not in (SELECT {$tables[2]} FROM {$table_name} WHERE year={$year} AND month={$month} AND {$column_name}={$row->id} )")
+                        ->get();
+
+                    if($mrows->isEmpty()) continue;
+
+                    // For each facility add row array into the data array to be inserted
+                    foreach ($mrows as $key => $mrow) {
+
+                        $data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $mrow->id, $value['column'] => $row->id);
+                        $i++;
+
+                        if ($i == 100) {
+                            DB::table($table_name)->insert($data_array);
+                            $data_array=null;
+                            $i=0;
+                        }               
+                    }
+                    // End of facility loop
+                }
+                // End of looping through rejected reasons, genders, pmtct types etc.
+            }
+            // End of looping through months
+
+            if($data_array) DB::table($table_name)->insert($data_array);
+            $data_array=null;
+            $i=0;
+        }
+    }
+
+
+    // private function summary_tables
+
     private function get_table($division, $type){
     	$name;
     	if ($division == 0) {
@@ -535,6 +633,9 @@ class VlInsert
 
     	else if ($division == 2) {
     		switch ($type) {
+                case 0:
+                    $name = array("vl_subcounty_summary", "districts", "subcounty");
+                    break;
     			case 1:
     				$name = array("vl_subcounty_age", "agecategory", "age");
     				break;
@@ -563,6 +664,9 @@ class VlInsert
 
     	else if ($division == 3) {
     		switch ($type) {
+                case 0:
+                    $name = array("vl_partner_summary", "partners", "partner");
+                    break;
     			case 1:
     				$name = array("vl_partner_age", "agecategory", "age");
     				break;
@@ -591,6 +695,9 @@ class VlInsert
 
     	else if ($division == 4) {
     		switch ($type) {
+                case 0:
+                    $name = array("vl_site_summary", "facilitys", "facility");
+                    break;
     			case 1:
     				$name = array("vl_site_age", "agecategory", "age");
     				break;

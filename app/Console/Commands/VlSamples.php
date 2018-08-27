@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\VlOther;
+use App\V2\VlOther;
 
 class VlSamples extends Command
 {

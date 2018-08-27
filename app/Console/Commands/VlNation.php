@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Vl;
+use App\V2\Vl;
 
 class VlNation extends Command
 {

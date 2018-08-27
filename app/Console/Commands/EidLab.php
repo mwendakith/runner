@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Eid;
+use App\V2\Eid;
 
 class EidLab extends Command
 {

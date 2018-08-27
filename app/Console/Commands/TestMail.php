@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\BaseModel;
+use App\V2\BaseModel;
 
 class TestMail extends Command
 {
