@@ -439,11 +439,6 @@ class VlNation
 		$p = BaseModel::get_vlparams($type, $param);
 
     	$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when($type, function($query) use ($type){
-			if($type == 2 || $type == 6){
-				return $query->join('viralpatients', 'patientid', '=', 'viralpatients.AutoID');
-			}			
-		})
 		->whereBetween('datetested', $date_range)
 		->when($type, function($query) use ($type, $param, $p){
 			if($type == 4 && $p['param'] == 3){
