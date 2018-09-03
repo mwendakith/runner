@@ -28,7 +28,7 @@ class EidDivision
 	{
 		$date_range = BaseModel::date_range($year);
 
-    	$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab"))
+    	$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab")
 		->when(true, function($query) use ($division){
 			if($division != "poc") return $query->addSelect($division)->groupBy($division);
 			return $query->where('siteentry', 2);
@@ -47,7 +47,7 @@ class EidDivision
 	{
 		$date_range = BaseModel::date_range($year);
 
-    	$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab"))
+    	$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab")
 		->when(true, function($query) use ($division){
 			if($division != "poc") return $query->addSelect($division)->groupBy($division);
 			return $query->where('siteentry', 2);

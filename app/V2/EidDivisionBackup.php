@@ -28,7 +28,7 @@ class EidDivisionBackup
 	{
 		$date_range = BaseModel::date_range($year);
 
-    	$data = SampleSynchView::selectRaw($division . ", COUNT(id) as totals, month(datetested) as month, lab"))
+    	$data = SampleSynchView::selectRaw($division . ", COUNT(id) as totals, month(datetested) as month, lab")
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -43,7 +43,7 @@ class EidDivisionBackup
 	{
 		$date_range = BaseModel::date_range($year);
 
-    	$data = SampleSynchView::selectRaw($division . ", COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab"))
+    	$data = SampleSynchView::selectRaw($division . ", COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab")
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)

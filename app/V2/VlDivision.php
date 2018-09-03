@@ -26,7 +26,7 @@ class VlDivision
 	public function lab_county_tests($year, $start_month, $division='county'){
 		$date_range = BaseModel::date_range($year, $start_month);
 
-    	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab_id"))
+    	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab_id")
 		->when(true, function($query) use ($division){
 			if($division != "poc") return $query->addSelect($division)->groupBy($division);
 			return $query->where('siteentry', 2);
@@ -44,7 +44,7 @@ class VlDivision
 	public function lab_mapping_sites($year, $start_month, $division='county'){
 		$date_range = BaseModel::date_range($year, $start_month);
 
-    	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab_id"))
+    	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab_id")
 		->when(true, function($query) use ($division){
 			if($division != "poc") return $query->addSelect($division)->groupBy($division);
 			return $query->where('siteentry', 2);
