@@ -247,11 +247,11 @@ class VlNation
 
     	$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month, rcategory")
 		->whereBetween('datetested', $date_range)
-		->when($result, function($query) use ($result){
-			if($result != 5){
-				return $query->whereNotIn('justification', [2, 10]);
-			}
-		})
+		// ->when($result, function($query) use ($result){
+		// 	if($result != 5){
+		// 		return $query->whereNotIn('justification', [2, 10]);
+		// 	}
+		// })
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month', 'rcategory')
