@@ -256,7 +256,6 @@ class EidNation
 		->whereBetween('datetested', $date_range)
 		->whereBetween('age', [0.0001, 24])
 		->whereIn('pcrtype', [1, 2, 3])
-		->where($col, $estatus)
 		->where('flag', 1)
 		->where('facility_id', '!=', 7148)
 		->where('repeatt', 0)
