@@ -6,7 +6,7 @@ use DB;
 use App\V2\BaseModel;
 use App\SampleSynchView;
 
-class EidPoc extends Model
+class EidPoc
 {
 
 	//national outcomes	
