@@ -504,7 +504,6 @@ class EidDivisionBackup
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw($division . ", age, month(datetested) as month")
-		->join('patients', 'patientautoid', '=', 'patient_id')
 		->when($division, function($query) use ($division){
 			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
