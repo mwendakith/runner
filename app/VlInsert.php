@@ -234,131 +234,6 @@ class VlInsert
     	}
     }
 
-    public function inserter_missing($year=null, $month=null){
-        if($year == null){
-            $year = Date('Y');
-        }
-        if($month == null){
-            $month = Date('m');
-        }
-        ini_set("memory_limit", "-1");
-
-        // Get List of Divisions
-        $counties = DB::connection('vl')->table('countys')->select('id')->orderBy('id')->get();
-        $subcounties = DB::connection('vl')->table('districts')->select('id')->orderBy('id')->get();
-        $partners = DB::connection('vl')->table('partners')->select('id')->orderBy('id')->get();
-        $labs = DB::connection('vl')->table('labs')->select('id')->orderBy('id')->get();
-        $sites = DB::connection('vl')->table('facilitys')->select('id')->orderBy('id')->get();
-
-        // Iterate through classes of tables
-        for ($iterator=5; $iterator < 6; $iterator++) { 
-            $national = $this->get_table(0, $iterator);
-            $county = $this->get_table(1, $iterator);
-            $subcounty = $this->get_table(2, $iterator);
-            $partner = $this->get_table(3, $iterator);
-            $site = $this->get_table(4, $iterator);
-
-            $table_name = $national[1];
-            $column_name = $national[2];
-
-            $reasons = $data = DB::connection('vl')
-            ->table($table_name)->select('id')
-            ->where('id', '>', 6)
-            ->get();
-
-            echo "\n Begin vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
-
-            // National Insert
-            $data_array=null;
-            $i=0;
-
-            foreach ($reasons as $key => $value) {
-                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id);
-                $i++;
-            }
-            DB::table($national[0])->insert($data_array);
-
-
-            // County Insert
-            $data_array=null;
-            $i=0;
-
-            foreach ($reasons as $key => $value) {
-                foreach ($counties as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'county' => $val->id);
-                    $i++;
-                }
-            }
-            DB::table($county[0])->insert($data_array);
-
-            // Subcounty Insert
-            $data_array=null;
-            $i=0;
-
-            foreach ($reasons as $key => $value) {
-                foreach ($subcounties as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $val->id);
-                    $i++;
-                }
-            }
-            DB::table($subcounty[0])->insert($data_array);
-
-            // Partner Insert
-            $data_array=null;
-            $i=0;
-
-            foreach ($reasons as $key => $value) {
-                foreach ($partners as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $val->id);
-                    $i++;
-                }
-            }
-            DB::table($partner[0])->insert($data_array);
-
-            // Lab Insert
-            if($iterator == 7){
-
-                $data_array=null;
-                $i=0;
-
-                foreach ($reasons as $key => $value) {
-                    foreach ($labs as $k => $val) {
-                        $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => $val->id);
-                        $i++;
-                    }
-                }
-                $lab = $this->get_table(5, $iterator);
-                DB::table($lab[0])->insert($data_array);
-
-            }
-
-
-            // Facility Insert
-            $data_array=null;
-            $i=0;
-            
-            foreach ($reasons as $key => $value) {
-                foreach ($sites as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
-                    $i++;
-
-                    if($i == 100){
-                        DB::table($site[0])->insert($data_array);
-                        $data_array=null;
-                        $i=0;
-                    }
-                }
-            }
-
-            DB::table($site[0])->insert($data_array);
-            $data_array=null;
-            $i=0;
-            
-
-            echo "\n Completed vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
-
-        }
-    }
 
     public function insert_lab_mapping($year=null, $month=null){
         if($year == null){
@@ -390,90 +265,6 @@ class VlInsert
 	    	$i=0;
         }
         echo "\n Completed vl summary lab mapping at " . date('d/m/Y h:i:s a', time());
-    }
-
-    public function insert_subcounty($year=null, $month=null, $sub=null){
-        if($year == null){
-            $year = Date('Y');
-        }
-        if($month == null){
-            $month = Date('m');
-        }
-
-        $data_array[0] = array('year' => $year, 'month' => $month, 'subcounty' => $sub);
-        DB::table('vl_subcounty_summary')->insert($data_array);
-
-        // Iterate through classes of tables
-        for ($iterator=1; $iterator < 8; $iterator++) { 
-            $national = $this->get_table(0, $iterator);
-            $county = $this->get_table(1, $iterator);
-            $subcounty = $this->get_table(2, $iterator);
-            $partner = $this->get_table(3, $iterator);
-            $site = $this->get_table(4, $iterator);
-
-            $table_name = $national[1];
-            $column_name = $national[2];
-
-            $reasons = $data = DB::connection('vl')
-            ->table($table_name)->select('id')
-            ->when($iterator, function($query) use ($iterator){
-                if($iterator == 1 || $iterator == 6){
-                    return $query->where('subid', 1);
-                }               
-            })
-            ->get();
-
-            $data_array=null;
-            $i=0;
-
-            foreach ($reasons as $key => $value) {
-                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $sub);
-                $i++;
-            }
-            DB::table($subcounty[0])->insert($data_array);
-        }
-    }
-
-    public function insert_partner($year=null, $month=null, $part=null){
-        if($year == null){
-            $year = Date('Y');
-        }
-        if($month == null){
-            $month = Date('m');
-        }
-
-        $data_array[0] = array('year' => $year, 'month' => $month, 'partner' => $part);
-        DB::table('vl_partner_summary')->insert($data_array);
-
-        // Iterate through classes of tables
-        for ($iterator=1; $iterator < 8; $iterator++) { 
-            $national = $this->get_table(0, $iterator);
-            $county = $this->get_table(1, $iterator);
-            $subcounty = $this->get_table(2, $iterator);
-            $partner = $this->get_table(3, $iterator);
-            $site = $this->get_table(4, $iterator);
-
-            $table_name = $national[1];
-            $column_name = $national[2];
-
-            $reasons = $data = DB::connection('vl')
-            ->table($table_name)->select('id')
-            ->when($iterator, function($query) use ($iterator){
-                if($iterator == 1 || $iterator == 6){
-                    return $query->where('subid', 1);
-                }               
-            })
-            ->get();
-
-            $data_array=null;
-            $i=0;
-
-            foreach ($reasons as $key => $value) {
-                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $part);
-                $i++;
-            }
-            DB::table($partner[0])->insert($data_array);
-        }
     }
 
 
@@ -734,6 +525,217 @@ class VlInsert
     		}    		
     	}
     	return $name;
+    }
+
+    
+    public function inserter_missing($year=null, $month=null){
+        if($year == null){
+            $year = Date('Y');
+        }
+        if($month == null){
+            $month = Date('m');
+        }
+        ini_set("memory_limit", "-1");
+
+        // Get List of Divisions
+        $counties = DB::connection('vl')->table('countys')->select('id')->orderBy('id')->get();
+        $subcounties = DB::connection('vl')->table('districts')->select('id')->orderBy('id')->get();
+        $partners = DB::connection('vl')->table('partners')->select('id')->orderBy('id')->get();
+        $labs = DB::connection('vl')->table('labs')->select('id')->orderBy('id')->get();
+        $sites = DB::connection('vl')->table('facilitys')->select('id')->orderBy('id')->get();
+
+        // Iterate through classes of tables
+        for ($iterator=5; $iterator < 6; $iterator++) { 
+            $national = $this->get_table(0, $iterator);
+            $county = $this->get_table(1, $iterator);
+            $subcounty = $this->get_table(2, $iterator);
+            $partner = $this->get_table(3, $iterator);
+            $site = $this->get_table(4, $iterator);
+
+            $table_name = $national[1];
+            $column_name = $national[2];
+
+            $reasons = $data = DB::connection('vl')
+            ->table($table_name)->select('id')
+            ->where('id', '>', 6)
+            ->get();
+
+            echo "\n Begin vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
+
+            // National Insert
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id);
+                $i++;
+            }
+            DB::table($national[0])->insert($data_array);
+
+
+            // County Insert
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                foreach ($counties as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'county' => $val->id);
+                    $i++;
+                }
+            }
+            DB::table($county[0])->insert($data_array);
+
+            // Subcounty Insert
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                foreach ($subcounties as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $val->id);
+                    $i++;
+                }
+            }
+            DB::table($subcounty[0])->insert($data_array);
+
+            // Partner Insert
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                foreach ($partners as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $val->id);
+                    $i++;
+                }
+            }
+            DB::table($partner[0])->insert($data_array);
+
+            // Lab Insert
+            if($iterator == 7){
+
+                $data_array=null;
+                $i=0;
+
+                foreach ($reasons as $key => $value) {
+                    foreach ($labs as $k => $val) {
+                        $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => $val->id);
+                        $i++;
+                    }
+                }
+                $lab = $this->get_table(5, $iterator);
+                DB::table($lab[0])->insert($data_array);
+
+            }
+
+
+            // Facility Insert
+            $data_array=null;
+            $i=0;
+            
+            foreach ($reasons as $key => $value) {
+                foreach ($sites as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
+                    $i++;
+
+                    if($i == 100){
+                        DB::table($site[0])->insert($data_array);
+                        $data_array=null;
+                        $i=0;
+                    }
+                }
+            }
+
+            DB::table($site[0])->insert($data_array);
+            $data_array=null;
+            $i=0;
+            
+
+            echo "\n Completed vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
+
+        }
+    }
+
+    public function insert_subcounty($year=null, $month=null, $sub=null){
+        if($year == null){
+            $year = Date('Y');
+        }
+        if($month == null){
+            $month = Date('m');
+        }
+
+        $data_array[0] = array('year' => $year, 'month' => $month, 'subcounty' => $sub);
+        DB::table('vl_subcounty_summary')->insert($data_array);
+
+        // Iterate through classes of tables
+        for ($iterator=1; $iterator < 8; $iterator++) { 
+            $national = $this->get_table(0, $iterator);
+            $county = $this->get_table(1, $iterator);
+            $subcounty = $this->get_table(2, $iterator);
+            $partner = $this->get_table(3, $iterator);
+            $site = $this->get_table(4, $iterator);
+
+            $table_name = $national[1];
+            $column_name = $national[2];
+
+            $reasons = $data = DB::connection('vl')
+            ->table($table_name)->select('id')
+            ->when($iterator, function($query) use ($iterator){
+                if($iterator == 1 || $iterator == 6){
+                    return $query->where('subid', 1);
+                }               
+            })
+            ->get();
+
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $sub);
+                $i++;
+            }
+            DB::table($subcounty[0])->insert($data_array);
+        }
+    }
+
+    public function insert_partner($year=null, $month=null, $part=null){
+        if($year == null){
+            $year = Date('Y');
+        }
+        if($month == null){
+            $month = Date('m');
+        }
+
+        $data_array[0] = array('year' => $year, 'month' => $month, 'partner' => $part);
+        DB::table('vl_partner_summary')->insert($data_array);
+
+        // Iterate through classes of tables
+        for ($iterator=1; $iterator < 8; $iterator++) { 
+            $national = $this->get_table(0, $iterator);
+            $county = $this->get_table(1, $iterator);
+            $subcounty = $this->get_table(2, $iterator);
+            $partner = $this->get_table(3, $iterator);
+            $site = $this->get_table(4, $iterator);
+
+            $table_name = $national[1];
+            $column_name = $national[2];
+
+            $reasons = $data = DB::connection('vl')
+            ->table($table_name)->select('id')
+            ->when($iterator, function($query) use ($iterator){
+                if($iterator == 1 || $iterator == 6){
+                    return $query->where('subid', 1);
+                }               
+            })
+            ->get();
+
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $part);
+                $i++;
+            }
+            DB::table($partner[0])->insert($data_array);
+        }
     }
 
 
