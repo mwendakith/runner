@@ -21,7 +21,7 @@ class EidPoc
 		->where('flag', 1)
 		->where('eqa', 0)
 		->where('repeatt', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
@@ -40,7 +40,7 @@ class EidPoc
 		->whereRaw("(parentid=0  OR parentid IS NULL)")
 		->where('flag', 1)
 		->where('eqa', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
@@ -58,7 +58,7 @@ class EidPoc
 		->whereBetween('datereceived', $date_range)
 		->where('flag', 1)
 		->where('eqa', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
@@ -85,7 +85,7 @@ class EidPoc
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->where('repeatt', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
@@ -104,7 +104,7 @@ class EidPoc
 		->whereRaw("(parentid=0 OR parentid IS NULL)")
 		->where('flag', 1)
 		->where('eqa', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
@@ -124,7 +124,7 @@ class EidPoc
 		->where('repeatt', 0)
 		->where('flag', 1)
 		->where('eqa', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
@@ -144,7 +144,7 @@ class EidPoc
 		->where('flag', 1)
 		->where('eqa', 0)
 		->where('repeatt', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
@@ -165,7 +165,7 @@ class EidPoc
 		->where('flag', 1)
 		->where('eqa', 1)
 		->where('repeatt', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
@@ -196,7 +196,7 @@ class EidPoc
 				return $query->where('pcrtype', $pcrtype);
 			}			
 		})
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->where('flag', 1)
 		->where('eqa', 0)
 		->where('repeatt', 0)
@@ -219,7 +219,7 @@ class EidPoc
 		->where('flag', 1)
 		->where('eqa', 0)
 		->where('repeatt', 0)
-		->where('siteentry', 2)
+		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
 		})
