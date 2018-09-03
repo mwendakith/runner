@@ -159,7 +159,7 @@ class Vl
 
     	echo "\n Begin viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('id')->get();
+    	$reasons = DB::connection('eid_vl')->table('viralrejectedreasons')->select('id')->get();
     	$rej_a = $n->national_rejections($year, $start_month);
 
     	foreach ($reasons as $key => $value) {
@@ -208,7 +208,7 @@ class Vl
 			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 			
 			// Get ids of the necessary table
-			$divs = $data = DB::connection('vl')
+			$divs = $data = DB::connection('eid_vl')
 			->table($table[1])->select('id')
 			->when($type, function($query) use ($type){
 				if($type == 1 || $type == 6){
@@ -449,7 +449,7 @@ class Vl
     	$div_array;
     	$array_size = 0;
 
-    	$divs = $data = DB::connection('vl')
+    	$divs = $data = DB::connection('eid_vl')
 		->table($div_table)->select('id')->get();
 
 		foreach ($divs as $key => $value) {
@@ -693,7 +693,7 @@ class Vl
 
     	echo "\n Begin viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('id')->get();
+    	$reasons = DB::connection('eid_vl')->table('viralrejectedreasons')->select('id')->get();
 
     	foreach ($reasons as $key => $value) {
     		$rej_a = $n->national_rejections($year, $start_month, $division, $value->id);
@@ -754,7 +754,7 @@ class Vl
 			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 			
 			// Get ids of the necessary table
-			$divs = $data = DB::connection('vl')
+			$divs = $data = DB::connection('eid_vl')
 			->table($table[1])->select('id')
 			->when($type, function($query) use ($type){
 				if($type == 1 || $type == 6){
@@ -954,7 +954,7 @@ class Vl
 			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 			
 			// Get ids of the necessary table
-			$divs = $data = DB::connection('vl')
+			$divs = $data = DB::connection('eid_vl')
 			->table($table[1])->select('id')
 			->when($type, function($query) use ($type){
 				if($type == 1 || $type == 6){
@@ -1165,7 +1165,7 @@ class Vl
     	$div_array;
     	$array_size = 0;
 
-    	$divs = DB::connection('vl')
+    	$divs = DB::connection('eid_vl')
 		->table('facilitys')->select('id')->get();
 
 		foreach ($divs as $key => $value) {

@@ -197,7 +197,7 @@ class Eid
 		echo "\n Begin entry into eid national rejections " . date('d/m/Y h:i:s a', time());
 
 		// Start of rejections
-		$reasons = $data = DB::connection('eid')
+		$reasons = $data = DB::connection('eid_vl')
 		->table('rejectedreasons')->select('id')->get();
 
 		// Loop through reasons
@@ -247,7 +247,7 @@ class Eid
 			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 			
 			// Get ids of the necessary table
-			$divs = $data = DB::connection('eid')
+			$divs = $data = DB::connection('eid_vl')
 			->table($table[1])
 			->when($type, function($query) use ($type){
 				if($type == 1){
@@ -497,7 +497,7 @@ class Eid
     	$div_array;
     	$array_size = 0;
 
-    	$divs = $data = DB::connection('eid')
+    	$divs = $data = DB::connection('eid_vl')
 		->table('labs')->select('id')->get();
 
 		foreach ($divs as $key => $value) {
@@ -672,7 +672,7 @@ class Eid
 		echo "\n Begin entry into eid lab rejections " . date('d/m/Y h:i:s a', time());
 
 		// Start of rejections
-		$reasons = $data = DB::connection('eid')
+		$reasons = $data = DB::connection('eid_vl')
 		->table('rejectedreasons')->select('id')->get();
 
 		// Loop through reasons
@@ -773,7 +773,7 @@ class Eid
     	$div_array;
     	$array_size = 0;
 
-    	$divs = $data = DB::connection('eid')
+    	$divs = $data = DB::connection('eid_vl')
 		->table($div_table)->select('id')->get();
 
 		foreach ($divs as $key => $value) {
@@ -993,7 +993,7 @@ class Eid
 		echo "\n Begin entry into eid {$column} rejections " . date('d/m/Y h:i:s a', time());
 
 		// Start of rejections
-		$reasons = $data = DB::connection('eid')
+		$reasons = $data = DB::connection('eid_vl')
 		->table('rejectedreasons')->select('id')->get();
 
 		// Loop through reasons
@@ -1052,7 +1052,7 @@ class Eid
 			echo "\n Begin eid " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 			
 			// Get ids of the necessary table
-			$divs = $data = DB::connection('eid')
+			$divs = $data = DB::connection('eid_vl')
 			->table($table[1])
 			->when($type, function($query) use ($type){
 				if($type == 1){
@@ -1157,7 +1157,7 @@ class Eid
     	$div_array;
     	$array_size = 0;
 
-    	$divs = $data = DB::connection('eid')
+    	$divs = $data = DB::connection('eid_vl')
 		->table($div_table)->select('id')->get();
 
 		foreach ($divs as $key => $value) {
