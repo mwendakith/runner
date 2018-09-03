@@ -579,7 +579,7 @@ class EidDivision
 			if($division != "poc") return $query->addSelect($division)->groupBy($division);
 			return $query->where('siteentry', 2);
 		})
-		->where('prophylaxis', $drug)
+		->where('regimen', $drug)
 		->where('result', $result_type)
 		->where('pcrtype', 1)
 		->whereBetween('datetested', $date_range)

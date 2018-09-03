@@ -356,7 +356,7 @@ class EidNation
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleView::selectRaw("COUNT(patient_id) as totals, result, month(datetested) as month")
-		->where('prophylaxis', $drug)
+		->where('regimen', $drug)
 		->where('pcrtype', 1)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)

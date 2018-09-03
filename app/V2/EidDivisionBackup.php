@@ -579,7 +579,7 @@ class EidDivisionBackup
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw($division . ", COUNT(patient_id) as totals, month(datetested) as month")
-		->where('prophylaxis', $drug)
+		->where('regimen', $drug)
 		->where('result', $result_type)
 		->where('pcrtype', 1)
 		->whereBetween('datetested', $date_range)
