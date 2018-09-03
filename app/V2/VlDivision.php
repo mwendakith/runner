@@ -1097,7 +1097,7 @@ class VlDivision
 
 		$raw = "ID, patient, facility, datetested";		
 
-		$data = ViralsampleSynchView::selectRaw($sql))
+		$data = ViralsampleSynchView::selectRaw($sql)
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->where('synched', 0)
@@ -1139,7 +1139,7 @@ class VlDivision
 
 		    	$d = DB::connection('vl')
 				->table("viralsamples")
-				->selectRaw($raw))
+				->selectRaw($raw)
 				->where('facility', $value->facility)
 				->where('patient', $value->patient)
 				->whereDate('datetested', '<', $value->datetested)

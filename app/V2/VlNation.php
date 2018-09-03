@@ -265,7 +265,7 @@ class VlNation
 
     	$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
 
-		$data = ViralsampleView::selectRaw($sql))
+		$data = ViralsampleView::selectRaw($sql)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],
@@ -635,7 +635,7 @@ class VlNation
 
 			$data = DB::connection('vl')
 			->table('viralsamples')
-			->selectRaw($sql))
+			->selectRaw($sql)
 			->whereYear('datecollected', '>', 1980)
 			->whereYear('datereceived', '>', 1980)
 			->whereYear('datetested', '>', 1980)
@@ -685,7 +685,7 @@ class VlNation
 
     	$data = DB::connection('vl')
 		->table("viralsamples")
-		->selectRaw($raw))
+		->selectRaw($raw)
 		->orderBy('facility_id', 'desc')
 		->whereYear('datetested', $year)
 		->where('justification', 2)
@@ -702,7 +702,7 @@ class VlNation
 
 	    	$d = DB::connection('vl')
 			->table("viralsamples")
-			->selectRaw($raw))
+			->selectRaw($raw)
 			->where('facility_id', $sample->facility)
 			->where('patient', $sample->patient)
 			->whereDate('datetested', '<', $sample->datetested)
