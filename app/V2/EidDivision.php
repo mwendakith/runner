@@ -5,6 +5,7 @@ namespace App\V2;
 use DB;
 use App\V2\BaseModel;
 use App\SampleSynchView;
+use App\SampleView;
 
 class EidDivision
 {
@@ -719,17 +720,10 @@ class EidDivision
 	}
 
 	public function update_patients(){
-		$sql = "id, patient, facility_id, batch_id, view_facilitys.name, view_facilitys.facilitycode, view_facilitys.DHIScode, age, gender, prophylaxis as infantproph, entry_point, feeding, prophylaxis, datecollected, receivedstatus, pcrtype, rejectedreason, reason_for_repeat, datereceived, datetested, result, datedispatched, lab, month(datetested) as month";
-
-    	$raw = "id, patient, facility_id, datetested";
 
 		ini_set("memory_limit", "-1");
 		
-		$data = SampleSynchView::selectRaw($sql)
-		->where('flag', 1)
-		->where('repeatt', 0)
-		->where('synched', 0)
-		->get();
+		$data = SampleView::where(['flag' => 1, 'repeatt' => 0, 'synched' => 0])->get();
 
 		$today=date('Y-m-d');
 
@@ -752,11 +746,7 @@ class EidDivision
 
 			if($value->pcrtype == 4){
 
-		    	$d = DB::connection('eid')
-				->table("samples")
-				->select(DB::raw($raw))
-				->where('facility', $value->facility)
-				->where('patient', $value->patient)
+				$d = SampleView::where('patient_id', $value->patient_id)
 				->whereDate('datetested', '<', $value->datetested)
 				->where('result', 1)
 				->where('repeatt', 0)
@@ -770,7 +760,7 @@ class EidDivision
 				}
 			}
 
-			DB::connection('eid_wr')->table('samples')->where('id', $value->id)->update($update_array);
+			DB::connection('eid_vl_wr')->table('samples')->where('id', $value->id)->update($update_array);
 			$p++;
 		}
 		echo "\n {$p} eid patients synched.";

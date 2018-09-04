@@ -73,7 +73,7 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT_WR', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
+            'database' => env('EV_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
@@ -84,6 +84,8 @@ return [
             'engine' => null,
         ],
 
+
+        // No Longer in Use
         'eid' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),

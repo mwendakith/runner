@@ -13,7 +13,8 @@ class VlOther
     	echo "\n Begin viralload samples update at " . date('d/m/Y h:i:s a', time());
 
     	// Justification
-        DB::connection('eid_eid_vl_wr')->table('viralsamples')->where('justification', 0)->update(['justification' => 8]);
+        DB::connection('eid_vl_wr')->table('viralsamples')->where('justification', 0)->update(['justification' => 8]);
+
 
         // Sample Type
     	DB::connection('eid_vl_wr')->table('viralsamples')->where('sampletype', 5)->update(['sampletype' => 1]);

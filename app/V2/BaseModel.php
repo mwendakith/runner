@@ -5,6 +5,7 @@ namespace App\V2;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UpdateReport;
 use App\Mail\InsertReport;
+use Carbon\Carbon;
 
 class BaseModel
 {
@@ -281,6 +282,20 @@ class BaseModel
 		}
 		$date_range[1] = ($year) . '-12-31';
 		return $date_range;
+	}
+
+	public static function date_range_month($year, $month=null)
+	{
+		if($month < 10) $month = '0' . $month;
+
+
+		$date_range[0] = ($year) . '-' . $month . '-01';
+
+		$d = Carbon::createFromFormat('Y-m-d', $date_range[0]);
+		$d->addMonth();
+		$d->subDay();
+
+		$date_range[1] = $d->toDateString();
 	}
 
 

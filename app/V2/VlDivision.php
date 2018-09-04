@@ -5,6 +5,7 @@ namespace App\V2;
 use DB;
 use App\V2\BaseModel;
 use App\ViralsampleSynchView;
+use App\ViralsampleView;
 
 class VlDivision
 {
@@ -1097,11 +1098,7 @@ class VlDivision
 
 		$raw = "ID, patient, facility, datetested";		
 
-		$data = ViralsampleSynchView::selectRaw($sql)
-		->where('flag', 1)
-		->where('repeatt', 0)
-		->where('synched', 0)
-		->get();
+		$data = ViralsampleView::where(['flag' => 1, 'repeatt' => 0, 'synched' => 0])->get();
 
 		$today=date('Y-m-d');
 
@@ -1110,20 +1107,6 @@ class VlDivision
 		$p=0;
 
 		foreach ($data as $key => $value) {
-			$data_array = array(
-				'labid' => $value->ID, 'FacilityMFLcode' => $value->facilitycode, 
-				'FacilityDHISCode' => $value->DHIScode, 'batchno' => $value->batchno,
-				'patientID' => $value->patient, 'Age' => $value->age, 'Gender' => $value->gender,
-				'Regimen' => $value->prophylaxis,	'datecollected' => $value->datecollected,
-				'SampleType' => $value->sampletype, 'Justification' => $value->justification, 
-				'receivedstatus' => $value->receivedstatus, 'result' => $value->result, 
-				'rejectedreason' => $value->rejectedreason, 
-				'reason_for_repeat' => $value->reason_for_repeat,
-				'datereceived' => $value->datereceived, 'datetested' => $value->datetested,
-				'datedispatched' => $value->datedispatched, 'lab_id' => $value->lab_id
-			);
-
-			// DB::table('patients')->insert($data_array);
 
 			$holidays = $b->getTotalHolidaysinMonth($value->month);
 
@@ -1137,11 +1120,8 @@ class VlDivision
 
 			if ($value->justification == 2) {
 
-		    	$d = DB::connection('vl')
-				->table("viralsamples")
-				->selectRaw($raw)
-				->where('facility', $value->facility)
-				->where('patient', $value->patient)
+				$d = ViralsampleView::where('patient_id', $value->patient_id)
+				->whereDate('datetested', '<', $value->datetested)
 				->whereDate('datetested', '<', $value->datetested)
 				->whereIn('rcategory', [3, 4])
 				->where('repeatt', 0)
@@ -1153,9 +1133,8 @@ class VlDivision
 					$update_array = array_merge($update_array, ['previous_nonsuppressed' => 1]);
 				}
 			}
-			// $update_array = array('synched' => 0, 'datesynched' => $today);
 
-			DB::connection('vl_wr')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+			DB::connection('eid_vl_wr')->table('viralsamples')->where('id', $value->id)->update($update_array);
 			$p++;
 		}
 

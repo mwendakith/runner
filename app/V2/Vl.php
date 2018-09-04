@@ -4,7 +4,7 @@ namespace App\V2;
 
 use App\V2\VlNation;
 use App\V2\VlDivision;
-use App\V2\VlTest;
+use App\V2\VlFacility;
 use DB;
 
 class Vl
@@ -938,7 +938,7 @@ class Vl
     public function finish_facilities_regimen($start_month, $year, $today, &$div_array, $column, $division, $div_type, $array_size){
     	ini_set("memory_limit", "-1");
 
-    	$n = new VlTest;
+    	$n = new VlFacility;
     	$update_statements = '';
     	$updates = 0;
 
