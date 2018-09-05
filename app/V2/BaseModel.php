@@ -296,6 +296,7 @@ class BaseModel
 		$d->subDay();
 
 		$date_range[1] = $d->toDateString();
+		return $date_range;		
 	}
 
 
