@@ -21,7 +21,6 @@ class VlOther
 
     	// Prophylaxis
     	DB::connection('eid_vl_wr')->table('viralsamples')->where('prophylaxis', 0)->update(['prophylaxis' => 16]);
-    	DB::connection('eid_vl_wr')->table('viralpatients')->where('prophylaxis', 0)->update(['prophylaxis' => 16]);
     	DB::connection('eid_vl_wr')->table('viralsamples')->where('justification', 2)->where('receivedstatus', 1)->update(['receivedstatus' => 3, 'reason_for_repeat' => 'Repeat For Confirmatory VL Greater 1000 copies/Ml']);
 
 
