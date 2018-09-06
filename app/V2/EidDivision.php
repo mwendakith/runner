@@ -751,7 +751,7 @@ class EidDivision
 				->where('result', 1)
 				->where('repeatt', 0)
 				->where('flag', 1)
-				->where('facility', '!=', 7148)
+				->where('facility_id', '!=', 7148)
 				->where('pcrtype', '<', 4)
 				->first();
 

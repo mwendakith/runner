@@ -1126,7 +1126,7 @@ class VlDivision
 				->whereIn('rcategory', [3, 4])
 				->where('repeatt', 0)
 				->where('flag', 1)
-				->where('facility', '!=', 7148)
+				->where('facility_id', '!=', 7148)
 				->first();
 
 				if($d == null){
