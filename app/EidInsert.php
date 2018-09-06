@@ -393,8 +393,6 @@ class EidInsert
             ->whereRaw("id not in (SELECT {$tables[2]} FROM {$tables[3]} WHERE year={$year} )")
             ->get();
 
-        if($mrows->isEmpty()) continue;
-
         // Iterate the facilities and add new row array into data array for insertion
         foreach ($mrows as $key => $mrow) {
 
