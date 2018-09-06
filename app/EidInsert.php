@@ -444,10 +444,10 @@ class EidInsert
 
                     if($mrows->isEmpty()) continue;
 
-                    // For each facility add row array into the data array to be inserted
+                    // For each facility/subcounty add row array into the data array to be inserted
                     foreach ($mrows as $key => $mrow) {
 
-                        $data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $mrow->id, $tables[2] => $row->id);
+                        $data_array[$i] = array('year' => $year, 'month' => $month, $tables[2] => $mrow->id, $column_name => $row->id);
                         $i++;
 
                         if ($i == 100) {
