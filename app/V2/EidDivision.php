@@ -16,7 +16,7 @@ class EidDivision
 
     	$data = DB::connection('eid_vl_wr')
 		->table('worksheets')
-		->selectRaw("COUNT(*) as totals, lab, month(daterun) as month")
+		->selectRaw("COUNT(*) as totals, lab_id as lab, month(daterun) as month")
 		->whereBetween('daterun', $date_range)
 		->groupBy('month', 'lab')
 		->get();

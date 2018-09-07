@@ -15,7 +15,7 @@ class VlDivision
 
     	$data = DB::connection('eid_vl_wr')
 		->table('viralworksheets')
-		->selectRaw("COUNT(*) as totals, lab, month(daterun) as month")
+		->selectRaw("COUNT(*) as totals, lab_id as lab, month(daterun) as month")
 		->whereBetween('daterun', $date_range)
 		->groupBy('month', 'lab')
 		->get();
