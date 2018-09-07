@@ -13,8 +13,8 @@ class VlDivision
 	public function control_samples($year, $start_month){
 		$date_range = BaseModel::date_range($year, $start_month);
 
-    	$data = DB::connection('vl')
-		->table('worksheets_vl')
+    	$data = DB::connection('eid_vl_wr')
+		->table('viralworksheets')
 		->selectRaw("COUNT(*) as totals, lab, month(daterun) as month")
 		->whereBetween('daterun', $date_range)
 		->groupBy('month', 'lab')
@@ -27,7 +27,7 @@ class VlDivision
 	public function lab_county_tests($year, $start_month, $division='county'){
 		$date_range = BaseModel::date_range($year, $start_month);
 
-    	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab_id")
+    	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab")
 		->when(true, function($query) use ($division){
 			if($division != "poc") return $query->addSelect($division)->groupBy($division);
 			return $query->where('site_entry', 2);
@@ -35,7 +35,7 @@ class VlDivision
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
-		->groupBy('month', 'lab_id')
+		->groupBy('month', 'lab')
 		->get();
 
 		return $data;
@@ -45,7 +45,7 @@ class VlDivision
 	public function lab_mapping_sites($year, $start_month, $division='county'){
 		$date_range = BaseModel::date_range($year, $start_month);
 
-    	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab_id")
+    	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab")
 		->when(true, function($query) use ($division){
 			if($division != "poc") return $query->addSelect($division)->groupBy($division);
 			return $query->where('site_entry', 2);
@@ -53,7 +53,7 @@ class VlDivision
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
-		->groupBy('month', 'lab_id')
+		->groupBy('month', 'lab')
 		->get();
 
 		return $data;
@@ -69,7 +69,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -133,7 +133,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -156,7 +156,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -178,7 +178,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -202,7 +202,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -225,7 +225,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -251,7 +251,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -277,7 +277,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -303,7 +303,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -328,7 +328,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -353,7 +353,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -376,7 +376,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -415,7 +415,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -440,7 +440,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -465,7 +465,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -495,7 +495,7 @@ class VlDivision
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
-			if($division == "lab_id" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		})
@@ -1088,13 +1088,6 @@ class VlDivision
     public function update_patients()
     {
     	ini_set("memory_limit", "-1");
-
-		$sql = "ID, facility_id, patient, batchno, view_facilitys.name,
-		 view_facilitys.facilitycode, view_facilitys.DHIScode, viralpatients.age, viralpatients.gender,
-		  viralpatients.prophylaxis, justification, datecollected,
-		   receivedstatus, sampletype, rejectedreason,
-		    reason_for_repeat, datereceived, datetested,
-		     result, datedispatched, lab_id, month(datetested) as month";
 
 		$raw = "ID, patient, facility, datetested";		
 

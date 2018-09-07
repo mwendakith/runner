@@ -13,7 +13,7 @@ class EidFacility extends Command
      *
      * @var string
      */
-    protected $signature = 'update:eid-facility {year?} {--type=3}';
+    protected $signature = 'update:eid-facility {year?}';
 
     /**
      * The console command description.
@@ -44,23 +44,9 @@ class EidFacility extends Command
 
         $eid = new Eid;
         $output="";
-        $type = $this->option('type');
 
-        if ($type == 1) {
-            $output .= $eid->update_facilities($year);
-        }
-
-        else if ($type == 2) {
-            $output .= $eid->update_facilities_yearly($year);
-        }
-
-        else{
-            $output .= $eid->update_facilities($year);
-            $output .= $eid->update_facilities_yearly($year);
-
-        }
-
-        
+        $output .= $eid->update_facilities_yearly($year);  
+        $output .= $eid->update_facilities($year);      
 
         $this->info($output);
     }

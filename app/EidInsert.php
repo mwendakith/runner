@@ -188,12 +188,13 @@ class EidInsert
     		$national = $this->get_table(0, $iterator);
     		$county = $this->get_table(1, $iterator);
     		$subcounty = $this->get_table(2, $iterator);
-    		$partner = $this->get_table(3, $iterator);
+            $partner = $this->get_table(3, $iterator);
+    		$site = $this->get_table(4, $iterator);
 
     		$table_name = $national[1];
     		$column_name = $national[2];
 
-			$reasons = $data = DB::connection('eid')
+			$reasons = $data = DB::connection('eid_vl')
 			->table($table_name)
 			->select('id')
 			->when($iterator, function($query) use ($iterator){
@@ -267,6 +268,27 @@ class EidInsert
 			}
 			DB::table($partner[0])->insert($data_array);
 
+
+            // Facility Insert
+            $data_array=null;
+            $i=0;
+            
+            foreach ($reasons as $key => $value) {
+                foreach ($sites as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
+                    $i++;
+
+                    if($i == 100){
+                        DB::table($site[0])->insert($data_array);
+                        $data_array=null;
+                        $i=0;
+                    }
+                }
+            }
+            DB::table($site[0])->insert($data_array);
+            $data_array=null;
+            $i=0;
+
 			// Lab Insert
 	    	if($iterator == 5){
 
@@ -286,29 +308,6 @@ class EidInsert
 				DB::table($lab[0])->insert($data_array);
 
 			
-
-
-				// Facility Insert
-				$data_array=null;
-		    	$i=0;
-		    	
-				$site = $this->get_table(4, $iterator);
-				
-				foreach ($reasons as $key => $value) {
-					foreach ($sites as $k => $val) {
-						$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
-						$i++;
-
-						if($i == 100){
-							DB::table($site[0])->insert($data_array);
-							$data_array=null;
-					    	$i=0;
-						}
-					}
-				}
-				DB::table($site[0])->insert($data_array);
-				$data_array=null;
-		    	$i=0;
 
 		    }
 			
@@ -566,7 +565,19 @@ class EidInsert
     	else if ($division == 4) {
     		switch ($type) {
                 case 0:
-                    $name = array("site_summary", "facilitys", "facility", "ip_summary_yearly");
+                    $name = array("site_summary", "facilitys", "facility", "site_summary_yearly");
+                    break;
+                case 1:
+                    $name = array("site_iprophylaxis", "prophylaxis", "prophylaxis");
+                    break;
+                case 2:
+                    $name = array("site_mprophylaxis", "prophylaxis", "prophylaxis");
+                    break;
+                case 3:
+                    $name = array("site_entrypoint", "entry_points", "entrypoint");
+                    break;
+                case 4:
+                    $name = array("site_age_breakdown", "age_bands", "age_band_id");
                     break;
     			case 5:
     				$name = array("site_rejections", "rejectedreasons", "rejected_reason");
@@ -746,7 +757,7 @@ class EidInsert
     		$table_name = $national[1];
     		$column_name = $national[2];
 
-			$reasons = $data = DB::connection('eid')
+			$reasons = $data = DB::connection('eid_vl')
 			->table($table_name)
 			->select('id')
 			->when($iterator, function($query) use ($iterator){
@@ -791,7 +802,7 @@ class EidInsert
     		$table_name = $national[1];
     		$column_name = $national[2];
 
-			$reasons = $data = DB::connection('eid')
+			$reasons = $data = DB::connection('eid_vl')
 			->table($table_name)
 			->select('id')
 			->when($iterator, function($query) use ($iterator){
@@ -827,12 +838,12 @@ class EidInsert
 
     	echo "\n Begin eid rejection insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons =  DB::connection('eid')->table('rejectedreasons')->select('id')->orderBy('id')->get();
-    	$counties =  DB::connection('eid')->table('countys')->select('id')->orderBy('id')->get();
-    	$subcounties =  DB::connection('eid')->table('districts')->select('id')->orderBy('id')->get();
-    	$partners =  DB::connection('eid')->table('partners')->select('id')->orderBy('id')->get();
-    	$labs = DB::connection('eid')->table('labs')->select('id')->orderBy('id')->get();
-    	$sites = DB::connection('eid')->table('facilitys')->select('id')->orderBy('id')->get();
+    	$reasons =  DB::connection('eid_vl')->table('rejectedreasons')->select('id')->orderBy('id')->get();
+    	$counties =  DB::connection('eid_vl')->table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties =  DB::connection('eid_vl')->table('districts')->select('id')->orderBy('id')->get();
+    	$partners =  DB::connection('eid_vl')->table('partners')->select('id')->orderBy('id')->get();
+    	$labs = DB::connection('eid_vl')->table('labs')->select('id')->orderBy('id')->get();
+    	$sites = DB::connection('eid_vl')->table('facilitys')->select('id')->orderBy('id')->get();
 
     	$data_array=null;
     	$i=0;
@@ -917,12 +928,12 @@ class EidInsert
 
     	echo "\n Begin eid age insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons =  DB::connection('eid')->table('age_bands')->select('id')->orderBy('id')->get();
-    	$counties =  DB::connection('eid')->table('countys')->select('id')->orderBy('id')->get();
-    	$subcounties =  DB::connection('eid')->table('districts')->select('id')->orderBy('id')->get();
-    	$partners =  DB::connection('eid')->table('partners')->select('id')->orderBy('id')->get();
-    	// $labs = DB::connection('eid')->table('labs')->select('id')->orderBy('id')->get();
-    	// $sites = DB::connection('eid')->table('facilitys')->select('id')->orderBy('id')->get();
+    	$reasons =  DB::connection('eid_vl')->table('age_bands')->select('id')->orderBy('id')->get();
+    	$counties =  DB::connection('eid_vl')->table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties =  DB::connection('eid_vl')->table('districts')->select('id')->orderBy('id')->get();
+    	$partners =  DB::connection('eid_vl')->table('partners')->select('id')->orderBy('id')->get();
+    	// $labs = DB::connection('eid_vl')->table('labs')->select('id')->orderBy('id')->get();
+    	// $sites = DB::connection('eid_vl')->table('facilitys')->select('id')->orderBy('id')->get();
 
     	$data_array=null;
     	$i=0;

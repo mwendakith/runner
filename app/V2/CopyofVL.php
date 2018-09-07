@@ -62,50 +62,50 @@ class Vl
 
 			$wheres = ['month' => $month];
 
-			$rec = $this->checknull($rec_a, $wheres);
-			$tested = $this->checknull($tested_a, $wheres);
-			$actualpatients = $this->checknull($actualpatients_a, $wheres);
-			$rej = $this->checknull($rej_a, $wheres);
-			$sites = $this->checknull($sites_a, $wheres);
+			$rec = $this->checknull($rec_a->where('month', $month));
+			$tested = $this->checknull($tested_a->where('month', $month));
+			$actualpatients = $this->checknull($actualpatients_a->where('month', $month));
+			$rej = $this->checknull($rej_a->where('month', $month));
+			$sites = $this->checknull($sites_a->where('month', $month));
 
-			$conftx = $this->checknull($conftx_a, $wheres);
-			$conf2VL = $this->checknull($conf2VL_a, $wheres);
+			$conftx = $this->checknull($conftx_a->where('month', $month));
+			$conf2VL = $this->checknull($conf2VL_a->where('month', $month));
 
-			$baseline = $this->checknull($baseline_a, $wheres);
-			$baselinefail = $this->checknull($baselinefail_a, $wheres); 
+			$baseline = $this->checknull($baseline_a->where('month', $month));
+			$baselinefail = $this->checknull($baselinefail_a->where('month', $month)); 
 
-			$noage = $this->checknull($ages_array->where('age_category', 0), $wheres);
-			$less2 = $this->checknull($ages_array->where('age_category', 6), $wheres);
-			$less9 = $this->checknull($ages_array->where('age_category', 7), $wheres);
-			$less14 = $this->checknull($ages_array->where('age_category', 8), $wheres);
-			$less19 = $this->checknull($ages_array->where('age_category', 9)), $wheres;
-			$less24 = $this->checknull($ages_array->where('age_category', 10), $wheres);
-			$over25 = $this->checknull($ages_array->where('age_category', 11), $wheres);
+			$noage = $this->checknull($ages_array->where('month', $month)->where('age_category', 0));
+			$less2 = $this->checknull($ages_array->where('month', $month)->where('age_category', 6));
+			$less9 = $this->checknull($ages_array->where('month', $month)->where('age_category', 7));
+			$less14 = $this->checknull($ages_array->where('month', $month)->where('age_category', 8));
+			$less19 = $this->checknull($ages_array->where('month', $month)->where('age_category', 9));
+			$less24 = $this->checknull($ages_array->where('month', $month)->where('age_category', 10));
+			$over25 = $this->checknull($ages_array->where('month', $month)->where('age_category', 11));
 			$adults = $less19 + $less24 + $over25;
 			$paeds = $less2 + $less9 + $less14;
 
-			$ldl = $this->checknull($results_array->where('rcategory', 1), $wheres);
-			$less1k = $this->checknull($results_array->where('rcategory', 2), $wheres);
-			$less5k = $this->checknull($results_array->where('rcategory', 3), $wheres);
-			$above5k = $this->checknull($results_array->where('rcategory', 4), $wheres);
-			$invalids = $this->checknull($results_array->where('rcategory', 5), $wheres);
+			$ldl = $this->checknull($results_array->where('month', $month)->where('rcategory', 1));
+			$less1k = $this->checknull($results_array->where('month', $month)->where('rcategory', 2));
+			$less5k = $this->checknull($results_array->where('month', $month)->where('rcategory', 3));
+			$above5k = $this->checknull($results_array->where('month', $month)->where('rcategory', 4));
+			$invalids = $this->checknull($results_array->where('month', $month)->where('rcategory', 5));
 			$sustx = $less5k +  $above5k;
 
-			$plas = $this->checknull($sampletype_array->where('sampletype', 1), $wheres);
-			$edta = $this->checknull($sampletype_array->where('sampletype', 2), $wheres);
-			$dbs = $this->checknull($sampletype_array->where('sampletype', 3), $wheres) +
-			$this->checknull($sampletype_array->where('sampletype', 4), $wheres);
+			$plas = $this->checknull($sampletype_array->where('month', $month)->where('sampletype', 1));
+			$edta = $this->checknull($sampletype_array->where('month', $month)->where('sampletype', 2));
+			$dbs = $this->checknull($sampletype_array->where('month', $month)->where('sampletype', 3)) +
+			$this->checknull($sampletype_array->where('month', $month)->where('sampletype', 4));
 
-			$aplas = $this->checknull($sampletype_a_array->where('sampletype', 1), $wheres);
-			$aedta = $this->checknull($sampletype_a_array->where('sampletype', 2), $wheres);
-			$adbs = $this->checknull($sampletype_a_array->where('sampletype', 3), $wheres) +
-			$this->checknull($sampletype_a_array->where('sampletype', 4), $wheres);
+			$aplas = $this->checknull($sampletype_a_array->where('month', $month)->where('sampletype', 1));
+			$aedta = $this->checknull($sampletype_a_array->where('month', $month)->where('sampletype', 2));
+			$adbs = $this->checknull($sampletype_a_array->where('month', $month)->where('sampletype', 3)) +
+			$this->checknull($sampletype_a_array->where('month', $month)->where('sampletype', 4));
 
-			$male = $this->checknull($gender_array->where('sex', 1), $wheres);
-			$female = $this->checknull($gender_array->where('sex', 2), $wheres);
-			$nogender = $this->checknull($gender_array->where('sex', 3), $wheres);
+			$male = $this->checknull($gender_array->where('month', $month)->where('sex', 1));
+			$female = $this->checknull($gender_array->where('month', $month)->where('sex', 2));
+			$nogender = $this->checknull($gender_array->where('month', $month)->where('sex', 3));
 
-			$tt = $this->check_tat($tat, $wheres);
+			$tt = $this->check_tat($tat->where('month', $month));
 
 			$data_array = array(
 				'received' => $rec, 'alltests' => $tested, 'actualpatients' => $actualpatients,
@@ -297,26 +297,24 @@ class Vl
 					$month = $i + 1;
 					if($year == Date('Y') && $month > Date('m')){ break; }
 
-					$wheres = ['month' => $month];
-
-					$tested = $this->checknull($tested_a, $wheres);
+					$tested = $this->checknull($tested_a->where('month', $month));
 
 					if($tested == 0){
 						continue;
 					}
 
-					// $rec = $this->checknull($rec_a, $wheres);
-					$rej = $this->checknull($rej_a, $wheres);
-					$rs = $this->checknull($rs_a, $wheres);
+					// $rec = $this->checknull($rec_a->where('month', $month));
+					$rej = $this->checknull($rej_a->where('month', $month));
+					$rs = $this->checknull($rs_a->where('month', $month));
 
-					$conftx = $this->checknull($conftx_a, $wheres);
-					$conf2VL = $this->checknull($conf2VL_a, $wheres);
+					$conftx = $this->checknull($conftx_a->where('month', $month));
+					$conf2VL = $this->checknull($conf2VL_a->where('month', $month));
 
-					$ldl = $this->checknull($ldl_a, $wheres);
-					$less1k = $this->checknull($less1k_a, $wheres);
-					$less5k = $this->checknull($less5k_a, $wheres);
-					$above5k = $this->checknull($above5k_a, $wheres);
-					$invalids = $this->checknull($invalids_a, $wheres);
+					$ldl = $this->checknull($ldl_a->where('month', $month));
+					$less1k = $this->checknull($less1k_a->where('month', $month));
+					$less5k = $this->checknull($less5k_a->where('month', $month));
+					$above5k = $this->checknull($above5k_a->where('month', $month));
+					$invalids = $this->checknull($invalids_a->where('month', $month));
 					$sustx = $less5k +  $above5k;
 
 					$data_array = array(
@@ -332,13 +330,13 @@ class Vl
 
 					if($type != 1 && $type != 6){
 
-						$noage = $this->checknull($noage_a, $wheres);
-						$less2 = $this->checknull($less2_a, $wheres);
-						$less9 = $this->checknull($less9_a, $wheres);
-						$less14 = $this->checknull($less14_a, $wheres);
-						$less19 = $this->checknull($less19_a, $wheres);
-						$less24 = $this->checknull($less24_a, $wheres);
-						$over25 = $this->checknull($over25_a, $wheres);
+						$noage = $this->checknull($noage_a->where('month', $month));
+						$less2 = $this->checknull($less2_a->where('month', $month));
+						$less9 = $this->checknull($less9_a->where('month', $month));
+						$less14 = $this->checknull($less14_a->where('month', $month));
+						$less19 = $this->checknull($less19_a->where('month', $month));
+						$less24 = $this->checknull($less24_a->where('month', $month));
+						$over25 = $this->checknull($over25_a->where('month', $month));
 						$adults = $less19 + $less24 + $over25;
 						$paeds = $less2 + $less9 + $less14;
 
@@ -349,13 +347,13 @@ class Vl
 
 						if($type == 3){
 
-							$noage = $this->checknull($noages_a, $wheres);
-							$less2 = $this->checknull($less2s_a, $wheres);
-							$less9 = $this->checknull($less9s_a, $wheres);
-							$less14 = $this->checknull($less14s_a, $wheres);
-							$less19 = $this->checknull($less19s_a, $wheres);
-							$less24 = $this->checknull($less24s_a, $wheres);
-							$over25 = $this->checknull($over25s_a, $wheres);
+							$noage = $this->checknull($noages_a->where('month', $month));
+							$less2 = $this->checknull($less2s_a->where('month', $month));
+							$less9 = $this->checknull($less9s_a->where('month', $month));
+							$less14 = $this->checknull($less14s_a->where('month', $month));
+							$less19 = $this->checknull($less19s_a->where('month', $month));
+							$less24 = $this->checknull($less24s_a->where('month', $month));
+							$over25 = $this->checknull($over25s_a->where('month', $month));
 
 							$age_array2 = array('less2_nonsuppressed' => $less2, 'less9_nonsuppressed' => $less9,
 							'less14_nonsuppressed' => $less14, 'less19_nonsuppressed' => $less19, 'less24_nonsuppressed' => $less24,
@@ -371,9 +369,9 @@ class Vl
 
 					if($type != 4 && $type != 6){
 
-						$plas = $this->checknull($plas_a, $wheres);
-						$edta = $this->checknull($edta_a, $wheres);
-						$dbs = $this->checknull($dbs_a, $wheres);
+						$plas = $this->checknull($plas_a->where('month', $month));
+						$edta = $this->checknull($edta_a->where('month', $month));
+						$dbs = $this->checknull($dbs_a->where('month', $month));
 
 						$sample_array = array('dbs' => $dbs, 'plasma' => $plas, 'edta' => $edta);
 
@@ -383,16 +381,16 @@ class Vl
 
 					if ($type != 2 && $type != 6) {
 					
-						$male = $this->checknull($male_a, $wheres);
-						$female = $this->checknull($female_a, $wheres);
-						$nogender = $this->checknull($nogender_a, $wheres);
+						$male = $this->checknull($male_a->where('month', $month));
+						$female = $this->checknull($female_a->where('month', $month));
+						$nogender = $this->checknull($nogender_a->where('month', $month));
 
 						$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
 
 						if($type == 1 || $type == 3){
-							$males = $this->checknull($males_a, $wheres);
-							$females = $this->checknull($females_a, $wheres);
-							$nogenders = $this->checknull($nogenders_a, $wheres);
+							$males = $this->checknull($males_a->where('month', $month));
+							$females = $this->checknull($females_a->where('month', $month));
+							$nogenders = $this->checknull($nogenders_a->where('month', $month));
 
 							$gender_array2 = array('malenonsuppressed' => $males, 'femalenonsuppressed' => $females, 'nogendernonsuppressed' => $nogenders);
 							$gender_array = array_merge($gender_array, $gender_array2);
@@ -403,8 +401,8 @@ class Vl
 
 					if ($type != 5) {
 
-						$baseline = $this->checknull($baseline_a, $wheres);
-						$baselinefail = $this->checknull($baselinefail_a, $wheres);
+						$baseline = $this->checknull($baseline_a->where('month', $month));
+						$baselinefail = $this->checknull($baselinefail_a->where('month', $month));
 
 						$baseline_array = array('baseline' => $baseline, 'baselinesustxfail' => $baselinefail);
 
@@ -524,62 +522,58 @@ class Vl
 
 			// Loop through divisions i.e. counties, subcounties, partners and sites
 			for ($it=0; $it < $array_size; $it++) { 
-
-				$wheres = ['month' => $month, 'column' => $div_array[$it]];
-				if($division == 'poc') $wheres = ['month' => $month];
-
-				$rec = $this->checknull($rec_a, $wheres);
-				$tested = $this->checknull($tested_a, $wheres);
+				$rec = $this->checknull($rec_a->where('month', $month)->where($column, $div_array[$it]));
+				$tested = $this->checknull($tested_a->where('month', $month)->where($column, $div_array[$it]));
 
 				if($rec == 0 && $tested == 0){
 					continue;
 				}
 
-				// $actualpatients = $this->checknull($actualpatients_a, $wheres);
-				$rej = $this->checknull($rej_a, $wheres);
-				$rs = $this->checknull($rs_a, $wheres);
-				$sites = $this->checknull($sites_a, $wheres);
+				// $actualpatients = $this->checknull($actualpatients_a->where('month', $month)->where($column, $div_array[$it]));
+				$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
+				$rs = $this->checknull($rs_a->where('month', $month)->where($column, $div_array[$it]));
+				$sites = $this->checknull($sites_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$conftx = $this->checknull($conftx_a, $wheres);
-				$conf2VL = $this->checknull($conf2VL_a, $wheres);
+				$conftx = $this->checknull($conftx_a->where('month', $month)->where($column, $div_array[$it]));
+				$conf2VL = $this->checknull($conf2VL_a->where('month', $month)->where($column, $div_array[$it]));
 
 				
-				$baseline = $this->checknull($baseline_a, $wheres);
-				$baselinefail = $this->checknull($baselinefail_a, $wheres);
+				$baseline = $this->checknull($baseline_a->where('month', $month)->where($column, $div_array[$it]));
+				$baselinefail = $this->checknull($baselinefail_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$noage = $this->checknull($noage_a, $wheres);
-				$less2 = $this->checknull($less2_a, $wheres);
-				$less9 = $this->checknull($less9_a, $wheres);
-				$less14 = $this->checknull($less14_a, $wheres);
-				$less19 = $this->checknull($less19_a, $wheres);
-				$less24 = $this->checknull($less24_a, $wheres);
-				$over25 = $this->checknull($over25_a, $wheres);
+				$noage = $this->checknull($noage_a->where('month', $month)->where($column, $div_array[$it]));
+				$less2 = $this->checknull($less2_a->where('month', $month)->where($column, $div_array[$it]));
+				$less9 = $this->checknull($less9_a->where('month', $month)->where($column, $div_array[$it]));
+				$less14 = $this->checknull($less14_a->where('month', $month)->where($column, $div_array[$it]));
+				$less19 = $this->checknull($less19_a->where('month', $month)->where($column, $div_array[$it]));
+				$less24 = $this->checknull($less24_a->where('month', $month)->where($column, $div_array[$it]));
+				$over25 = $this->checknull($over25_a->where('month', $month)->where($column, $div_array[$it]));
 				$adults = $less19 + $less24 + $over25;
 				$paeds = $less2 + $less9 + $less14;
 				
 
-				$ldl = $this->checknull($ldl_a, $wheres);
-				$less1k = $this->checknull($less1k_a, $wheres);
-				$less5k = $this->checknull($less5k_a, $wheres);
-				$above5k = $this->checknull($above5k_a, $wheres);
-				$invalids = $this->checknull($invalids_a, $wheres);
+				$ldl = $this->checknull($ldl_a->where('month', $month)->where($column, $div_array[$it]));
+				$less1k = $this->checknull($less1k_a->where('month', $month)->where($column, $div_array[$it]));
+				$less5k = $this->checknull($less5k_a->where('month', $month)->where($column, $div_array[$it]));
+				$above5k = $this->checknull($above5k_a->where('month', $month)->where($column, $div_array[$it]));
+				$invalids = $this->checknull($invalids_a->where('month', $month)->where($column, $div_array[$it]));
 				$sustx = $less5k +  $above5k;
 
-				$plas = $this->checknull($plas_a, $wheres);
-				$edta = $this->checknull($edta_a, $wheres);
-				$dbs = $this->checknull($dbs_a, $wheres);
+				$plas = $this->checknull($plas_a->where('month', $month)->where($column, $div_array[$it]));
+				$edta = $this->checknull($edta_a->where('month', $month)->where($column, $div_array[$it]));
+				$dbs = $this->checknull($dbs_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$aplas = $this->checknull($aplas_a, $wheres);
-				$aedta = $this->checknull($aedta_a, $wheres);
-				$adbs = $this->checknull($adbs_a, $wheres);
+				$aplas = $this->checknull($aplas_a->where('month', $month)->where($column, $div_array[$it]));
+				$aedta = $this->checknull($aedta_a->where('month', $month)->where($column, $div_array[$it]));
+				$adbs = $this->checknull($adbs_a->where('month', $month)->where($column, $div_array[$it]));
 
 
 
-				$male = $this->checknull($male_a, $wheres);
-				$female = $this->checknull($female_a, $wheres);
-				$nogender = $this->checknull($nogender_a, $wheres);
+				$male = $this->checknull($male_a->where('month', $month)->where($column, $div_array[$it]));
+				$female = $this->checknull($female_a->where('month', $month)->where($column, $div_array[$it]));
+				$nogender = $this->checknull($nogender_a->where('month', $month)->where($column, $div_array[$it]));
 
-				$tt = $this->check_tat($tat, $wheres);
+				$tt = $this->check_tat($tat->where('month', $month)->where($column, $div_array[$it]));
 				
 
 				$data_array = array(
@@ -599,15 +593,10 @@ class Vl
 				);
 
 				if($type == 5){
-					$eqa = $this->checknull($eqa_a, $wheres);
-					$fake = $this->checknull($fake_a, $wheres);
-					$controls = $this->checknull($controls_a, $wheres) * 3;
+					$eqa = $this->checknull($eqa_a->where('month', $month)->where($column, $div_array[$it]));
+					$fake = $this->checknull($fake_a->where('month', $month)->where($column, $div_array[$it]));
+					$controls = $this->checknull($controls_a->where('month', $month)->where($column, $div_array[$it])) * 3;
 					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
-				}
-
-				if($division == 'poc'){
-					DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, 11)->update($data_array);
-					break;
 				}
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
@@ -635,7 +624,7 @@ class Vl
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
 		}
 
-		if($type == 5 && $division != 'poc'){
+		if($type == 5){
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
 
 			echo $this->lab_mapping($start_month, $year);			
@@ -689,6 +678,186 @@ class Vl
 	    }
 	    // $this->mysqli->multi_query($update_statements);
     	echo "\n Completed entry into vl lab mapping at " . date('d/m/Y h:i:s a', time());
+    }
+
+
+    public function update_poc($start_month, $year=null, $type=5, $division='poc', $sum_table='vl_lab_summary'){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	// Instantiate new object
+    	$n = new VlDivision;
+    	$update_statements = '';
+    	$updates = 0;
+
+    	ini_set("memory_limit", "-1");
+
+    	$today=date("Y-m-d");
+
+    	$div_array;
+    	$array_size = 0;
+
+    	echo "\n Begin  viralload poc update at " . date('d/m/Y h:i:s a', time());
+
+    	// Get collection instances of the data
+
+    	$rec_a = $n->getallreceivediraloadsamples($year, $start_month, $division);
+    	$tested_a = $n->getalltestedviraloadsamples($year, $start_month, $division);
+    	// $actualpatients_a = $n->getallactualpatients($year, $start_month, $division);
+    	$rej_a = $n->getallrejectedviraloadsamples($year, $start_month, $division);
+    	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year, $start_month, $division);
+
+    	$conftx_a = $n->GetNationalConfirmed2VLs($year, $start_month, $division);
+    	$conf2VL_a = $n->GetNationalConfirmedFailure($year, $start_month, $division);
+		$rs_a = $n->getallrepeattviraloadsamples($year, $start_month, $division);
+
+    	
+		$baseline_a = $n->GetNationalBaseline($year, $start_month, $division);
+    	$baselinefail_a = $n->GetNationalBaselineFailure($year, $start_month, $division);
+
+    	$noage_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 0);
+    	$less2_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 6);
+    	$less9_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 7);
+    	$less14_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 8);
+    	$less19_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 9);
+    	$less24_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 10);
+    	$over25_a = $n->getalltestedviraloadsbyage($year, $start_month, $division, 11);
+	    
+    	// $adults=$less19 +$less24 + $over25 ;
+		// $paeds=$less2 + $less9 + $less14;
+
+		$ldl_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 1);
+		$less1k_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 2);
+		$less5k_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 3);
+		$above5k_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 4);
+		$invalids_a = $n->getalltestedviraloadsbyresult($year, $start_month, $division, 5);
+		// $sustx=$less5k +  $above5k;
+
+		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 1);
+		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 3);
+		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 2);
+
+		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 1, false);
+		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 3, false);
+		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 2, false);
+
+		$male_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 1);
+		$female_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 2);
+		$nogender_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 3);
+
+		if($type == 5){
+			$eqa_a = $n->get_eqa_tests($year, $start_month, $division);
+			$fake_a = $n->false_confirmatory($year, $start_month, $division);
+			$controls_a = $n->control_samples($year, $start_month);
+		}
+
+		$tat = $n->get_tat($year, $start_month, $division);
+
+		// Loop through the months and insert data into the national summary
+		for ($i=$start_month; $i < 12; $i++) { 
+			$month = $i + 1;
+			if($year == Date('Y') && $month > Date('m')){ break; }
+
+			// Loop through divisions i.e. counties, subcounties, partners and sites
+			for ($it=0; $it < $array_size; $it++) { 
+				$wheres = ['month' => $month];
+				$rec = $this->checknull($rec_a->where('month', $month));
+				$tested = $this->checknull($tested_a->where('month', $month));
+
+				if($rec == 0 && $tested == 0){
+					continue;
+				}
+
+				// $actualpatients = $this->checknull($actualpatients_a->where('month', $month)->where($column, $div_array[$it]));
+				$rej = $this->checknull($rej_a->where('month', $month));
+				$rs = $this->checknull($rs_a->where('month', $month));
+				$sites = $this->checknull($sites_a->where('month', $month));
+
+				$conftx = $this->checknull($conftx_a->where('month', $month));
+				$conf2VL = $this->checknull($conf2VL_a->where('month', $month));
+
+				
+				$baseline = $this->checknull($baseline_a->where('month', $month));
+				$baselinefail = $this->checknull($baselinefail_a->where('month', $month));
+
+				$noage = $this->checknull($noage_a->where('month', $month));
+				$less2 = $this->checknull($less2_a->where('month', $month));
+				$less9 = $this->checknull($less9_a->where('month', $month));
+				$less14 = $this->checknull($less14_a->where('month', $month));
+				$less19 = $this->checknull($less19_a->where('month', $month));
+				$less24 = $this->checknull($less24_a->where('month', $month));
+				$over25 = $this->checknull($over25_a->where('month', $month));
+				$adults = $less19 + $less24 + $over25;
+				$paeds = $less2 + $less9 + $less14;
+				
+
+				$ldl = $this->checknull($ldl_a->where('month', $month));
+				$less1k = $this->checknull($less1k_a->where('month', $month));
+				$less5k = $this->checknull($less5k_a->where('month', $month));
+				$above5k = $this->checknull($above5k_a->where('month', $month));
+				$invalids = $this->checknull($invalids_a->where('month', $month));
+				$sustx = $less5k +  $above5k;
+
+				$plas = $this->checknull($plas_a->where('month', $month));
+				$edta = $this->checknull($edta_a->where('month', $month));
+				$dbs = $this->checknull($dbs_a->where('month', $month));
+
+				$aplas = $this->checknull($aplas_a->where('month', $month));
+				$aedta = $this->checknull($aedta_a->where('month', $month));
+				$adbs = $this->checknull($adbs_a->where('month', $month));
+
+
+
+				$male = $this->checknull($male_a->where('month', $month));
+				$female = $this->checknull($female_a->where('month', $month));
+				$nogender = $this->checknull($nogender_a->where('month', $month));
+
+				$tt = $this->check_tat($tat->where('month', $month));
+				
+
+				$data_array = array(
+					'received' => $rec, 'alltests' => $tested,
+					'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
+					'confirm2vl' => $conf2VL, 'rejected' => $rej, 'dbs' => $dbs, 'plasma' => $plas,
+					'edta' => $edta, 'alldbs' => $adbs, 'allplasma' => $aplas, 'alledta' => $aedta,
+					'maletest' => $male, 'femaletest' => $female,
+					'nogendertest' => $nogender, 'Undetected' => $ldl, 'less1000' => $less1k,
+					'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
+					'sitessending' => $sites, 'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'],
+					'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'],   'dateupdated' => $today,
+					'less2' => $less2, 'less9' => $less9,
+					'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
+					'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
+					'noage' => $noage, 'baseline' => $baseline, 'baselinesustxfail' => $baselinefail
+				);
+
+				if($type == 5){
+					$eqa = $this->checknull($eqa_a->where('month', $month));
+					$fake = $this->checknull($fake_a->where('month', $month));
+					$controls = $this->checknull($controls_a->where('month', $month)) * 3;
+					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
+				}
+
+				DB::table($sum_table)->where('year', $year)->where('month', $month)->where('lab', 11)->update($data_array);
+
+				// $search_array = ['year' => $year, 'month' => $month, $column => $div_array[$it]];
+				// $update_statements .= $this->update_query($sum_table, $data_array, $search_array);
+				// $updates++;
+
+				// if($updates == 150){
+				// 	$this->mysqli->multi_query($update_statements);
+				// 	$update_statements = '';
+				// 	$updates = 0;
+				// }	
+				
+			}
+
+		}
+		// $this->mysqli->multi_query($update_statements);
+		// End of for loop
+
+		echo "\n Completed entry into viralload poc summary at " . date('d/m/Y h:i:s a', time());
+
     }
 
     public function division_rejections($start_month, $year=null, $today, &$div_array, $column, $division, $div_type, $array_size, $rej_table){
@@ -837,27 +1006,25 @@ class Vl
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
-						$wheres = ['month' => $month, $column => $div_array[$it]];
-
-						// $rec = $this->checknull($rec_a, $wheres);
-						$tested = $this->checknull($tested_a, $wheres);
+						// $rec = $this->checknull($rec_a->where('month', $month)->where('month', $month));
+						$tested = $this->checknull($tested_a->where($column, $div_array[$it])->where('month', $month));
 
 						if($tested == 0){
 							continue;
 						}
 
-						$rej = $this->checknull($rej_a, $wheres);
-						// $rs = $this->checknull($rs_a, $wheres);
+						$rej = $this->checknull($rej_a->where($column, $div_array[$it])->where('month', $month));
+						// $rs = $this->checknull($rs_a->where($column, $div_array[$it])->where('month', $month));
 						$rs = 0;
 
-						$conftx = $this->checknull($conftx_a, $wheres);
-						$conf2VL = $this->checknull($conf2VL_a, $wheres);
+						$conftx = $this->checknull($conftx_a->where($column, $div_array[$it])->where('month', $month));
+						$conf2VL = $this->checknull($conf2VL_a->where($column, $div_array[$it])->where('month', $month));
 
-						$ldl = $this->checknull($ldl_a, $wheres);
-						$less1k = $this->checknull($less1k_a, $wheres);
-						$less5k = $this->checknull($less5k_a, $wheres);
-						$above5k = $this->checknull($above5k_a, $wheres);
-						$invalids = $this->checknull($invalids_a, $wheres);
+						$ldl = $this->checknull($ldl_a->where($column, $div_array[$it])->where('month', $month));
+						$less1k = $this->checknull($less1k_a->where($column, $div_array[$it])->where('month', $month));
+						$less5k = $this->checknull($less5k_a->where($column, $div_array[$it])->where('month', $month));
+						$above5k = $this->checknull($above5k_a->where($column, $div_array[$it])->where('month', $month));
+						$invalids = $this->checknull($invalids_a->where($column, $div_array[$it])->where('month', $month));
 						$sustx = $less5k +  $above5k;
 
 						$data_array = array(
@@ -873,13 +1040,13 @@ class Vl
 
 						if($type != 1 && $type != 6){
 
-							$noage = $this->checknull($noage_a, $wheres);
-							$less2 = $this->checknull($less2_a, $wheres);
-							$less9 = $this->checknull($less9_a, $wheres);
-							$less14 = $this->checknull($less14_a, $wheres);
-							$less19 = $this->checknull($less19_a, $wheres);
-							$less24 = $this->checknull($less24_a, $wheres);
-							$over25 = $this->checknull($over25_a, $wheres);
+							$noage = $this->checknull($noage_a->where($column, $div_array[$it])->where('month', $month));
+							$less2 = $this->checknull($less2_a->where($column, $div_array[$it])->where('month', $month));
+							$less9 = $this->checknull($less9_a->where($column, $div_array[$it])->where('month', $month));
+							$less14 = $this->checknull($less14_a->where($column, $div_array[$it])->where('month', $month));
+							$less19 = $this->checknull($less19_a->where($column, $div_array[$it])->where('month', $month));
+							$less24 = $this->checknull($less24_a->where($column, $div_array[$it])->where('month', $month));
+							$over25 = $this->checknull($over25_a->where($column, $div_array[$it])->where('month', $month));
 							$adults = $less19 + $less24 + $over25;
 							$paeds = $less2 + $less9 + $less14;
 
@@ -894,9 +1061,9 @@ class Vl
 
 						if($type != 4 && $type != 6){
 
-							$plas = $this->checknull($plas_a, $wheres);
-							$edta = $this->checknull($edta_a, $wheres);
-							$dbs = $this->checknull($dbs_a, $wheres);
+							$plas = $this->checknull($plas_a->where($column, $div_array[$it])->where('month', $month));
+							$edta = $this->checknull($edta_a->where($column, $div_array[$it])->where('month', $month));
+							$dbs = $this->checknull($dbs_a->where($column, $div_array[$it])->where('month', $month));
 
 							$sample_array = array('dbs' => $dbs, 'plasma' => $plas, 'edta' => $edta);
 
@@ -906,9 +1073,9 @@ class Vl
 
 						if ($type != 2 && $type != 6) {
 						
-							$male = $this->checknull($male_a, $wheres);
-							$female = $this->checknull($female_a, $wheres);
-							$nogender = $this->checknull($nogender_a, $wheres);
+							$male = $this->checknull($male_a->where($column, $div_array[$it])->where('month', $month));
+							$female = $this->checknull($female_a->where($column, $div_array[$it])->where('month', $month));
+							$nogender = $this->checknull($nogender_a->where($column, $div_array[$it])->where('month', $month));
 
 							$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
 
@@ -917,8 +1084,8 @@ class Vl
 
 						if ($type != 5) {
 						
-							$baseline = $this->checknull($baseline_a, $wheres);
-							$baselinefail = $this->checknull($baselinefail_a, $wheres);
+							$baseline = $this->checknull($baseline_a->where($column, $div_array[$it])->where('month', $month));
+							$baselinefail = $this->checknull($baselinefail_a->where($column, $div_array[$it])->where('month', $month));
 
 							$baseline_array = array('baseline' => $baseline, 'baselinesustxfail' => $baselinefail);
 
@@ -1042,24 +1209,23 @@ class Vl
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
-						$wheres = [$column => $div_array[$it]];
-						// $rec = $this->checknull($rec_a, $wheres);
-						$tested = $this->checknull($tested_a, $wheres);
+						// $rec = $this->checknull($rec_a->where('month', $month));
+						$tested = $this->checknull($tested_a->where($column, $div_array[$it]));
 
 						if($tested == 0){
 							continue;
 						}
 
-						$rej = $this->checknull($rej_a, $wheres);
+						$rej = $this->checknull($rej_a->where($column, $div_array[$it]));
 
-						$conftx = $this->checknull($conftx_a, $wheres);
-						$conf2VL = $this->checknull($conf2VL_a, $wheres);
+						$conftx = $this->checknull($conftx_a->where($column, $div_array[$it]));
+						$conf2VL = $this->checknull($conf2VL_a->where($column, $div_array[$it]));
 
-						$ldl = $this->checknull($ldl_a, $wheres);
-						$less1k = $this->checknull($less1k_a, $wheres);
-						$less5k = $this->checknull($less5k_a, $wheres);
-						$above5k = $this->checknull($above5k_a, $wheres);
-						$invalids = $this->checknull($invalids_a, $wheres);
+						$ldl = $this->checknull($ldl_a->where($column, $div_array[$it]));
+						$less1k = $this->checknull($less1k_a->where($column, $div_array[$it]));
+						$less5k = $this->checknull($less5k_a->where($column, $div_array[$it]));
+						$above5k = $this->checknull($above5k_a->where($column, $div_array[$it]));
+						$invalids = $this->checknull($invalids_a->where($column, $div_array[$it]));
 						$sustx = $less5k +  $above5k;
 
 						$data_array = array(
@@ -1075,13 +1241,13 @@ class Vl
 
 						if($type != 1 && $type != 6){
 
-							$noage = $this->checknull($noage_a, $wheres);
-							$less2 = $this->checknull($less2_a, $wheres);
-							$less9 = $this->checknull($less9_a, $wheres);
-							$less14 = $this->checknull($less14_a, $wheres);
-							$less19 = $this->checknull($less19_a, $wheres);
-							$less24 = $this->checknull($less24_a, $wheres);
-							$over25 = $this->checknull($over25_a, $wheres);
+							$noage = $this->checknull($noage_a->where($column, $div_array[$it]));
+							$less2 = $this->checknull($less2_a->where($column, $div_array[$it]));
+							$less9 = $this->checknull($less9_a->where($column, $div_array[$it]));
+							$less14 = $this->checknull($less14_a->where($column, $div_array[$it]));
+							$less19 = $this->checknull($less19_a->where($column, $div_array[$it]));
+							$less24 = $this->checknull($less24_a->where($column, $div_array[$it]));
+							$over25 = $this->checknull($over25_a->where($column, $div_array[$it]));
 							$adults = $less19 + $less24 + $over25;
 							$paeds = $less2 + $less9 + $less14;
 
@@ -1096,9 +1262,9 @@ class Vl
 
 						if($type != 4 && $type != 6){
 
-							$plas = $this->checknull($plas_a, $wheres);
-							$edta = $this->checknull($edta_a, $wheres);
-							$dbs = $this->checknull($dbs_a, $wheres);
+							$plas = $this->checknull($plas_a->where($column, $div_array[$it]));
+							$edta = $this->checknull($edta_a->where($column, $div_array[$it]));
+							$dbs = $this->checknull($dbs_a->where($column, $div_array[$it]));
 
 							$sample_array = array('dbs' => $dbs, 'plasma' => $plas, 'edta' => $edta);
 
@@ -1108,9 +1274,9 @@ class Vl
 
 						if ($type != 2 && $type != 6) {
 						
-							$male = $this->checknull($male_a, $wheres);
-							$female = $this->checknull($female_a, $wheres);
-							$nogender = $this->checknull($nogender_a, $wheres);
+							$male = $this->checknull($male_a->where($column, $div_array[$it]));
+							$female = $this->checknull($female_a->where($column, $div_array[$it]));
+							$nogender = $this->checknull($nogender_a->where($column, $div_array[$it]));
 
 							$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
 
@@ -1119,8 +1285,8 @@ class Vl
 
 						if ($type != 5) {
 						
-							$baseline = $this->checknull($baseline_a, $wheres);
-							$baselinefail = $this->checknull($baselinefail_a, $wheres);
+							$baseline = $this->checknull($baseline_a->where($column, $div_array[$it]));
+							$baselinefail = $this->checknull($baselinefail_a->where($column, $div_array[$it]));
 
 							$baseline_array = array('baseline' => $baseline, 'baselinesustxfail' => $baselinefail);
 
@@ -1195,7 +1361,6 @@ class Vl
     }
 
     public function update_labs($start_month, $year=null){
-    	echo $this->update_division($start_month, $year, 5, 'lab', 'poc', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
     	return $this->update_division($start_month, $year, 5, 'lab', 'lab', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
     }
 
@@ -1275,15 +1440,13 @@ class Vl
 
 		foreach ($divs as $key => $value) {
 
-			$wheres = ['facility' => $value->id];
-
 			$suppressed = 
-			(int) $this->checknull($data->where('rcategory', 1), $wheres) + 
-			(int) $this->checknull($data->where('rcategory', 2), $wheres);
+			(int) $this->checknull($data->where('facility', $value->id)->where('rcategory', 1)) + 
+			(int) $this->checknull($data->where('facility', $value->id)->where('rcategory', 2));
 
 			$nonsuppressed = 
-			(int) $this->checknull($data->where('rcategory', 3), $wheres) + 
-			(int) $this->checknull($data->where('rcategory', 4), $wheres);
+			(int) $this->checknull($data->where('facility', $value->id)->where('rcategory', 3)) + 
+			(int) $this->checknull($data->where('facility', $value->id)->where('rcategory', 4));
 
 			$suppression=0;
 
@@ -1306,36 +1469,36 @@ class Vl
 				}
 			}
 
-			$noage_sup =  $this->checknull($noage, $wheres);
-			$noage_nonsup =  $this->checknull($noage_n, $wheres);
+			$noage_sup =  $this->checknull($noage->where('facility', $value->id));
+			$noage_nonsup =  $this->checknull($noage_n->where('facility', $value->id));
 
-			$less2_sup = $this->checknull($less2, $wheres);
-			$less2_nonsup =  $this->checknull($less2_n, $wheres);
+			$less2_sup = $this->checknull($less2->where('facility', $value->id));
+			$less2_nonsup =  $this->checknull($less2_n->where('facility', $value->id));
 
-			$less9_sup = $this->checknull($less9, $wheres);
-			$less9_nonsup =  $this->checknull($less9_n, $wheres);
+			$less9_sup = $this->checknull($less9->where('facility', $value->id));
+			$less9_nonsup =  $this->checknull($less9_n->where('facility', $value->id));
 
-			$less14_sup = $this->checknull($less14, $wheres);
-			$less14_nonsup =  $this->checknull($less14_n, $wheres);
+			$less14_sup = $this->checknull($less14->where('facility', $value->id));
+			$less14_nonsup =  $this->checknull($less14_n->where('facility', $value->id));
 
-			$less19_sup = $this->checknull($less19, $wheres);
-			$less19_nonsup =  $this->checknull($less19_n, $wheres);
+			$less19_sup = $this->checknull($less19->where('facility', $value->id));
+			$less19_nonsup =  $this->checknull($less19_n->where('facility', $value->id));
 
-			$less24_sup = $this->checknull($less24, $wheres);
-			$less24_nonsup =  $this->checknull($less24_n, $wheres);
+			$less24_sup = $this->checknull($less24->where('facility', $value->id));
+			$less24_nonsup =  $this->checknull($less24_n->where('facility', $value->id));
 
-			$over25_sup = $this->checknull($over25, $wheres);
-			$over25_nonsup = $this->checknull($over25_n, $wheres);
+			$over25_sup = $this->checknull($over25->where('facility', $value->id));
+			$over25_nonsup = $this->checknull($over25_n->where('facility', $value->id));
 
 
-			$male_sup = $this->checknull($male, $wheres);
-			$male_nonsup = $this->checknull($male_n, $wheres);
+			$male_sup = $this->checknull($male->where('facility', $value->id));
+			$male_nonsup = $this->checknull($male_n->where('facility', $value->id));
 
-			$female_sup = $this->checknull($female, $wheres);
-			$female_nonsup = $this->checknull($female_n, $wheres); 
+			$female_sup = $this->checknull($female->where('facility', $value->id));
+			$female_nonsup = $this->checknull($female_n->where('facility', $value->id)); 
 
-			$nogender_sup = $this->checknull($nogender, $wheres);
-			$nogender_nonsup = $this->checknull($nogender_n, $wheres);
+			$nogender_sup = $this->checknull($nogender->where('facility', $value->id));
+			$nogender_nonsup = $this->checknull($nogender_n->where('facility', $value->id));
 			
 
 			$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
@@ -1382,7 +1545,7 @@ class Vl
     }
 
 
-    public function checknull($var, $wheres=[]){
+    public function checknull($var, $wheres=null){
     	foreach ($wheres as $key => $value) {
     		$var = $var->where($key, $value);
     	}

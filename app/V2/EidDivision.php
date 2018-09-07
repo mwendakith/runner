@@ -14,8 +14,8 @@ class EidDivision
 	{
 		$date_range = BaseModel::date_range($year);
 
-    	$data = DB::connection('eid')
-		->table('worksheets_eid')
+    	$data = DB::connection('eid_vl_wr')
+		->table('worksheets')
 		->selectRaw("COUNT(*) as totals, lab, month(daterun) as month")
 		->whereBetween('daterun', $date_range)
 		->groupBy('month', 'lab')
@@ -95,7 +95,7 @@ class EidDivision
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
+			if($division == "lab"){
 				// return $query->where('facility_id', '!=', 7148);
 			}
 			else{
