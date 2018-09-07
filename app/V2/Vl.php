@@ -78,7 +78,7 @@ class Vl
 			$less2 = $this->checknull($ages_array->where('age_category', 6), $wheres);
 			$less9 = $this->checknull($ages_array->where('age_category', 7), $wheres);
 			$less14 = $this->checknull($ages_array->where('age_category', 8), $wheres);
-			$less19 = $this->checknull($ages_array->where('age_category', 9)), $wheres;
+			$less19 = $this->checknull($ages_array->where('age_category', 9), $wheres;
 			$less24 = $this->checknull($ages_array->where('age_category', 10), $wheres);
 			$over25 = $this->checknull($ages_array->where('age_category', 11), $wheres);
 			$adults = $less19 + $less24 + $over25;
