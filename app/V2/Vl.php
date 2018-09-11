@@ -234,55 +234,29 @@ class Vl
 
 		    	if ($type != 1 && $type != 6) {
 
-			    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 0);
-			    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 6);
-			    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 7);
-			    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 8);
-			    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 9);
-			    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 10);
-			    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 11);
+			    	$age_categories_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id);
 
 			    	if ($type == 3) {
-
-				    	$noages_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 0, true);
-				    	$less2s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 6, true);
-				    	$less9s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 7, true);
-				    	$less14s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 8, true);
-				    	$less19s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 9, true);
-				    	$less24s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 10, true);
-				    	$over25s_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, 11, true);
+				    	$age_categories_nonsup_a = $n->getalltestedviraloadsamplesbyagebydash($year, $start_month, $type, $value->id, true);
 			    	}
 			    }
 
 		    	// $adults=$less19 +$less24 + $over25 ;
 				// $paeds=$less2 + $less9 + $less14;
 
-				$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 1);
-				$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 2);
-				$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 3);
-				$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 4);
-				$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id, 5);
+				$rcategories_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $value->id);
 				// $sustx=$less5k +  $above5k;
 
-
 				if($type != 4 && $type != 6){
-
-					$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->id, 1);
-					$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->id, 3);
-					$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->id, 2);
+					$sample_types_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $value->id);
 				}
 
 				if($type != 2 && $type != 6){
 
-					$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 1);
-					$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 2);
-					$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 3);
+					$sexes_a->where('sex', ) = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id);
 
 					if($type == 1 || $type == 3){
-						$males_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 1, true);
-						$females_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 2, true);
-						$nogenders_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, 3, true);
-
+						$sexes_nonsup_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, true);
 					}
 
 				}
@@ -312,11 +286,11 @@ class Vl
 					$conftx = $this->checknull($conftx_a, $wheres);
 					$conf2VL = $this->checknull($conf2VL_a, $wheres);
 
-					$ldl = $this->checknull($ldl_a, $wheres);
-					$less1k = $this->checknull($less1k_a, $wheres);
-					$less5k = $this->checknull($less5k_a, $wheres);
-					$above5k = $this->checknull($above5k_a, $wheres);
-					$invalids = $this->checknull($invalids_a, $wheres);
+					$ldl = $this->checknull($rcategories_a->where('rcategory', 1), $wheres);
+					$less1k = $this->checknull($rcategories_a->where('rcategory', 2), $wheres);
+					$less5k = $this->checknull($rcategories_a->where('rcategory', 3), $wheres);
+					$above5k = $this->checknull($rcategories_a->where('rcategory', 4), $wheres);
+					$invalids = $this->checknull($rcategories_a->where('rcategory', 5), $wheres);
 					$sustx = $less5k +  $above5k;
 
 					$data_array = array(
@@ -332,13 +306,13 @@ class Vl
 
 					if($type != 1 && $type != 6){
 
-						$noage = $this->checknull($noage_a, $wheres);
-						$less2 = $this->checknull($less2_a, $wheres);
-						$less9 = $this->checknull($less9_a, $wheres);
-						$less14 = $this->checknull($less14_a, $wheres);
-						$less19 = $this->checknull($less19_a, $wheres);
-						$less24 = $this->checknull($less24_a, $wheres);
-						$over25 = $this->checknull($over25_a, $wheres);
+						$noage = $this->checknull($age_categories_a->where('age_category', 0), $wheres);
+						$less2 = $this->checknull($age_categories_a->where('age_category', 6), $wheres);
+						$less9 = $this->checknull($age_categories_a->where('age_category', 7), $wheres);
+						$less14 = $this->checknull($age_categories_a->where('age_category', 8), $wheres);
+						$less19 = $this->checknull($age_categories_a->where('age_category', 9), $wheres);
+						$less24 = $this->checknull($age_categories_a->where('age_category', 10), $wheres);
+						$over25 = $this->checknull($age_categories_a->where('age_category', 11), $wheres);
 						$adults = $less19 + $less24 + $over25;
 						$paeds = $less2 + $less9 + $less14;
 
@@ -349,13 +323,13 @@ class Vl
 
 						if($type == 3){
 
-							$noage = $this->checknull($noages_a, $wheres);
-							$less2 = $this->checknull($less2s_a, $wheres);
-							$less9 = $this->checknull($less9s_a, $wheres);
-							$less14 = $this->checknull($less14s_a, $wheres);
-							$less19 = $this->checknull($less19s_a, $wheres);
-							$less24 = $this->checknull($less24s_a, $wheres);
-							$over25 = $this->checknull($over25s_a, $wheres);
+							$noage = $this->checknull($age_categories_nonsup_a->where('age_category', 0), $wheres);
+							$less2 = $this->checknull($age_categories_nonsup_a->where('age_category', 6), $wheres);
+							$less9 = $this->checknull($age_categories_nonsup_a->where('age_category', 7), $wheres);
+							$less14 = $this->checknull($age_categories_nonsup_a->where('age_category', 8), $wheres);
+							$less19 = $this->checknull($age_categories_nonsup_a->where('age_category', 9), $wheres);
+							$less24 = $this->checknull($age_categories_nonsup_a->where('age_category', 10), $wheres);
+							$over25 = $this->checknull($age_categories_nonsup_a->where('age_category', 11), $wheres);
 
 							$age_array2 = array('less2_nonsuppressed' => $less2, 'less9_nonsuppressed' => $less9,
 							'less14_nonsuppressed' => $less14, 'less19_nonsuppressed' => $less19, 'less24_nonsuppressed' => $less24,
@@ -371,9 +345,9 @@ class Vl
 
 					if($type != 4 && $type != 6){
 
-						$plas = $this->checknull($plas_a, $wheres);
-						$edta = $this->checknull($edta_a, $wheres);
-						$dbs = $this->checknull($dbs_a, $wheres);
+						$plas = $this->checknull($sample_types_a->where('sampletype', 1), $wheres);
+						$edta = $this->checknull($sample_types_a->where('sampletype', 2), $wheres);
+						$dbs = $this->checknull($sample_types_a->where('sampletype', 3), $wheres) + $this->checknull($sample_types_a->where('sampletype', 4), $wheres);
 
 						$sample_array = array('dbs' => $dbs, 'plasma' => $plas, 'edta' => $edta);
 
@@ -383,16 +357,16 @@ class Vl
 
 					if ($type != 2 && $type != 6) {
 					
-						$male = $this->checknull($male_a, $wheres);
-						$female = $this->checknull($female_a, $wheres);
-						$nogender = $this->checknull($nogender_a, $wheres);
+						$male = $this->checknull($sexes_a->where('sex', 1), $wheres);
+						$female = $this->checknull($sexes_a->where('sex', 2), $wheres);
+						$nogender = $this->checknull($sexes_a->where('sex', 0), $wheres);
 
 						$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
 
 						if($type == 1 || $type == 3){
-							$males = $this->checknull($males_a, $wheres);
-							$females = $this->checknull($females_a, $wheres);
-							$nogenders = $this->checknull($nogenders_a, $wheres);
+							$males = $this->checknull($sexes_nonsup_a->where('sex', 1), $wheres);
+							$females = $this->checknull($sexes_nonsup_a->where('sex', 2), $wheres);
+							$nogenders = $this->checknull($sexes_nonsup_a->where('sex', 0), $wheres);
 
 							$gender_array2 = array('malenonsuppressed' => $males, 'femalenonsuppressed' => $females, 'nogendernonsuppressed' => $nogenders);
 							$gender_array = array_merge($gender_array, $gender_array2);

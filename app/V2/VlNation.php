@@ -482,7 +482,7 @@ class VlNation
 		return $data;
     }
 
-    public function getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $param, $sampletype=null){
+    public function getalltestedviraloadsamplesbytypedetailsbydash($year, $start_month, $type, $param){
 		$date_range = BaseModel::date_range($year, $start_month);
 		$p = BaseModel::get_vlparams($type, $param);
 
@@ -581,7 +581,7 @@ class VlNation
 		return $data;
     }
 
-    public function getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $param, $result){
+    public function getalltestedviraloadsamplesbyresultbydash($year, $start_month, $type, $param){
 
 		$date_range = BaseModel::date_range($year, $start_month);
 		$p = BaseModel::get_vlparams($type, $param);
