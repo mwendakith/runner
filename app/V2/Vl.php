@@ -253,7 +253,7 @@ class Vl
 
 				if($type != 2 && $type != 6){
 
-					$sexes_a->where('sex', ) = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id);
+					$sexes_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id);
 
 					if($type == 1 || $type == 3){
 						$sexes_nonsup_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $start_month, $type, $value->id, true);
