@@ -442,7 +442,7 @@ class Vl
     	$rec_a = $n->getallreceivediraloadsamples($year, $start_month, $division);
     	$tested_a = $n->getalltestedviraloadsamples($year, $start_month, $division);
 
-    	dd($tested_a);
+    	dd($tested_a->where('lab', 1));
     	// $actualpatients_a = $n->getallactualpatients($year, $start_month, $division);
     	$rej_a = $n->getallrejectedviraloadsamples($year, $start_month, $division);
     	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year, $start_month, $division);
