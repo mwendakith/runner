@@ -441,8 +441,6 @@ class Vl
 
     	$rec_a = $n->getallreceivediraloadsamples($year, $start_month, $division);
     	$tested_a = $n->getalltestedviraloadsamples($year, $start_month, $division);
-
-    	dd($tested_a->where('lab', 1));
     	// $actualpatients_a = $n->getallactualpatients($year, $start_month, $division);
     	$rej_a = $n->getallrejectedviraloadsamples($year, $start_month, $division);
     	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year, $start_month, $division);
@@ -501,13 +499,11 @@ class Vl
 			// Loop through divisions i.e. counties, subcounties, partners and sites
 			for ($it=0; $it < $array_size; $it++) { 
 
-				$wheres = ['month' => $month, 'column' => $div_array[$it]];
+				$wheres = ['month' => $month, $column => $div_array[$it]];
 				if($division == 'poc') $wheres = ['month' => $month];
 
 				$rec = $this->checknull($rec_a, $wheres);
 				$tested = $this->checknull($tested_a, $wheres);
-
-				// dd('lab ' . $div_array[$it] . ' tested ' . $tested);
 
 				if($rec == 0 && $tested == 0){
 					continue;
