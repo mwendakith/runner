@@ -604,9 +604,9 @@ class Vl
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
 
-		if($type == 5 && $division == 'poc') return null;
+		// if($type == 5 && $division == 'poc') return null;
 
-		if($division == 5){
+		// if($division == 5){
 
 			$summary_table = "vl_poc_summary";
 			foreach ($tested_a as $key => $value) {
@@ -695,7 +695,7 @@ class Vl
 				}
 			}
 			echo "\n Completed entry into viralload poc summary at " . date('d/m/Y h:i:s a', time());
-		}
+		// }
 
 
 		if ($type < 5) {
@@ -1263,7 +1263,7 @@ class Vl
     }
 
     public function update_labs($start_month, $year=null){
-    	echo $this->update_division($start_month, $year, 5, 'lab', 'poc', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
+    	// echo $this->update_division($start_month, $year, 5, 'lab', 'poc', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
     	return $this->update_division($start_month, $year, 5, 'lab', 'lab', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
     }
 
