@@ -602,10 +602,13 @@ class Vl
 		// $this->mysqli->multi_query($update_statements);
 		// End of for loop
 
+		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
+
 		if($division == 5 && $division != 'poc'){
 
 			$summary_table = "vl_poc_summary";
 			foreach ($tested_a as $key => $value) {
+				if($value->lab < 15) continue;
 				$wheres = ['month' => $value->month, 'lab' => $value->lab];
 
 				$tested = $value->totals;
@@ -686,14 +689,12 @@ class Vl
 					DB::table($summary_table)->insert($data_array);
 				}
 				else{
-					DB::table($summary_table)->where('id', $row->id)->insert($data_array);
+					DB::table($summary_table)->where('id', $row->id)->update($data_array);
 				}
-
-
 			}
+			echo "\n Completed entry into viralload poc summary at " . date('d/m/Y h:i:s a', time());
 		}
 
-		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
 
 		if ($type < 5) {
 			if($type != 4) echo $this->finish_division($start_month, $year, $today, $div_array, $column, $division, $type, $array_size);
