@@ -430,8 +430,6 @@ class Vl
     	$divs = $data = DB::connection('eid_vl')
 		->table($div_table)->select('id')->get();
 
-		dd($divs);
-
 		foreach ($divs as $key => $value) {
 			$div_array[$key] = $value->id;
 			$array_size++;
@@ -506,6 +504,8 @@ class Vl
 
 				$rec = $this->checknull($rec_a, $wheres);
 				$tested = $this->checknull($tested_a, $wheres);
+
+				dd('lab ' . $div_array[$it] . ' tested ' . $tested);
 
 				if($rec == 0 && $tested == 0){
 					continue;
