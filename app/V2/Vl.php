@@ -430,6 +430,8 @@ class Vl
     	$divs = $data = DB::connection('eid_vl')
 		->table($div_table)->select('id')->get();
 
+		dd($divs);
+
 		foreach ($divs as $key => $value) {
 			$div_array[$key] = $value->id;
 			$array_size++;
