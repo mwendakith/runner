@@ -441,6 +441,8 @@ class Vl
 
     	$rec_a = $n->getallreceivediraloadsamples($year, $start_month, $division);
     	$tested_a = $n->getalltestedviraloadsamples($year, $start_month, $division);
+
+    	dd($tested_a);
     	// $actualpatients_a = $n->getallactualpatients($year, $start_month, $division);
     	$rej_a = $n->getallrejectedviraloadsamples($year, $start_month, $division);
     	$sites_a = $n->GetSupportedfacilitysFORViralLoad($year, $start_month, $division);
@@ -505,7 +507,7 @@ class Vl
 				$rec = $this->checknull($rec_a, $wheres);
 				$tested = $this->checknull($tested_a, $wheres);
 
-				dd('lab ' . $div_array[$it] . ' tested ' . $tested);
+				// dd('lab ' . $div_array[$it] . ' tested ' . $tested);
 
 				if($rec == 0 && $tested == 0){
 					continue;
