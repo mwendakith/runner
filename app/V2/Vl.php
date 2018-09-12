@@ -1464,7 +1464,10 @@ class Vl
     	return $var->where('month', $month)->first()->totals ?? 0;
     }
 
-     public function check_tat($var){
+     public function check_tat($var, $wheres=[]){
+    	foreach ($wheres as $key => $value) {
+    		$var = $var->where($key, $value);
+    	}
     	if($var->isEmpty()){
     		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
     	}else{

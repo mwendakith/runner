@@ -669,6 +669,70 @@ class Eid
 		}
 		echo "\n Completed eid lab summary update at " . date('d/m/Y h:i:s a', time());
 
+		$poc_table = 'poc_summary';
+
+		foreach ($testedsamples as $key => $value) {
+			if($value->lab < 15) continue;
+			$wheres = ['month' => $value->month, 'lab' => $value->lab];
+
+			$received = $this->checknull($received_a, $wheres);
+			$alltests = $this->checknull($alltestedsamples, $wheres);
+			$tests = $this->checknull($testedsamples, $wheres);
+			$confirmdna = $this->checknull($confirmdna_a, $wheres);
+			$posrepeats = $this->checknull($posrepeats_a, $wheres);
+
+			$confirmdnaPOS = $this->checknull($confirmdnaPOS_a, $wheres);
+			$posrepeatsPOS = $this->checknull($posrepeatsPOS_a, $wheres);
+
+			$discrepant = $this->checknull($discrepant_a, $wheres);
+			$discrepant_pos = $this->checknull($discrepantpos_a, $wheres);
+
+
+			$fake = $this->checknull($fake_a, $wheres);
+			$controls = $this->checknull($controls_a->where('month', $month)->where('lab', $div_array[$it])) * 2;
+			
+			$eqatests = $this->checknull($EQAtestedsamples, $wheres);
+
+			$pos = $this->checknull($pos_a, $wheres);
+			$neg = $this->checknull($neg_a, $wheres);
+			$fail = $this->checknull($fail_a, $wheres);
+			$redraws = $this->checknull($redraws_a, $wheres);
+			$failed = $fail+$redraws;
+
+			$batches = $this->checknull($noofbatches, $wheres);
+
+			$rej = $this->checknull($rejectedsamples, $wheres);
+
+			$sitesending = $this->checknull($facilityssupported, $wheres);
+
+			$tt = $this->check_tat($tat, $wheres);
+
+			$data_array = array(
+				'received' => $received, 'alltests' => $alltests, 'tests' => $tests,
+				'confirmdna' => $confirmdna, 'fake_confirmatory' => $fake,  'eqatests' => $eqatests, 
+				'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
+				'tiebreaker' => $discrepant, 'tiebreakerPOS' => $discrepant_pos,
+				'repeatspos' => $posrepeats, 'pos' => $pos, 'neg' => $neg,
+				'redraw' => $failed, 'batches' => $batches, 'rejected' => $rej,
+				'sitessending' => $sitesending, 'controls' => $controls,
+				'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 
+				'tat4' => $tt['tat4'], 'dateupdated' => $today
+			);
+
+			$locator = ['year' => $year, 'month' => $value->month, 'facility' => $value->lab];
+
+			$row = DB::table($poc_table)->where($locator)->first();
+
+			if(!$row){
+				$data_array = array_merge($locator, $data_array);
+				DB::table($poc_table)->insert($data_array);
+			}
+			else{
+				DB::table($poc_table)->where('id', $row->id)->update($data_array);
+			}
+		}
+		echo "\n Completed eid poc summary update at " . date('d/m/Y h:i:s a', time());
+
 		echo "\n Begin entry into eid lab rejections " . date('d/m/Y h:i:s a', time());
 
 		// Start of rejections
@@ -1424,7 +1488,10 @@ class Eid
 
 
 
-    public function checknull($var){
+    public function checknull($var, $wheres=[]){
+    	foreach ($wheres as $key => $value) {
+    		$var = $var->where($key, $value);
+    	}
     	return $var->first()->totals ?? 0;
     }
 
@@ -1432,7 +1499,10 @@ class Eid
     	return $var->where('month', $month)->first()->totals ?? 0;
     }
 
-    public function check_tat($var){
+    public function check_tat($var, $wheres=[]){
+    	foreach ($wheres as $key => $value) {
+    		$var = $var->where($key, $value);
+    	}
     	if($var->isEmpty()){
     		return array('tat1' => 0, 'tat2' => 0, 'tat3' => 0, 'tat4' => 0);
     	}else{
