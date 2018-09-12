@@ -1169,7 +1169,7 @@ class Vl
     }
 
     public function update_labs($start_month, $year=null){
-    	echo $this->update_division($start_month, $year, 5, 'lab', 'poc', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
+    	// echo $this->update_division($start_month, $year, 5, 'lab', 'poc', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
     	return $this->update_division($start_month, $year, 5, 'lab', 'lab', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
     }
 
