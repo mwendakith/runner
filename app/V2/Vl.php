@@ -602,6 +602,97 @@ class Vl
 		// $this->mysqli->multi_query($update_statements);
 		// End of for loop
 
+		if($division == 5 && $division != 'poc'){
+
+			$summary_table = "vl_poc_summary";
+			foreach ($tested_a as $key => $value) {
+				$wheres = ['month' => $value->month, 'lab' => $value->lab];
+
+				$tested = $value->totals;
+				$rec = $this->checknull($rec_a, $wheres);
+
+				$rej = $this->checknull($rej_a, $wheres);
+				$rs = $this->checknull($rs_a, $wheres);
+				$sites = $this->checknull($sites_a, $wheres);
+
+				$conftx = $this->checknull($conftx_a, $wheres);
+				$conf2VL = $this->checknull($conf2VL_a, $wheres);
+
+				
+				$baseline = $this->checknull($baseline_a, $wheres);
+				$baselinefail = $this->checknull($baselinefail_a, $wheres);
+
+				$noage = $this->checknull($noage_a, $wheres);
+				$less2 = $this->checknull($less2_a, $wheres);
+				$less9 = $this->checknull($less9_a, $wheres);
+				$less14 = $this->checknull($less14_a, $wheres);
+				$less19 = $this->checknull($less19_a, $wheres);
+				$less24 = $this->checknull($less24_a, $wheres);
+				$over25 = $this->checknull($over25_a, $wheres);
+				$adults = $less19 + $less24 + $over25;
+				$paeds = $less2 + $less9 + $less14;
+				
+
+				$ldl = $this->checknull($ldl_a, $wheres);
+				$less1k = $this->checknull($less1k_a, $wheres);
+				$less5k = $this->checknull($less5k_a, $wheres);
+				$above5k = $this->checknull($above5k_a, $wheres);
+				$invalids = $this->checknull($invalids_a, $wheres);
+				$sustx = $less5k +  $above5k;
+
+				$plas = $this->checknull($plas_a, $wheres);
+				$edta = $this->checknull($edta_a, $wheres);
+				$dbs = $this->checknull($dbs_a, $wheres);
+
+				$aplas = $this->checknull($aplas_a, $wheres);
+				$aedta = $this->checknull($aedta_a, $wheres);
+				$adbs = $this->checknull($adbs_a, $wheres);
+
+
+
+				$male = $this->checknull($male_a, $wheres);
+				$female = $this->checknull($female_a, $wheres);
+				$nogender = $this->checknull($nogender_a, $wheres);
+
+				$tt = $this->check_tat($tat, $wheres);				
+
+				$data_array = array(
+					'received' => $rec, 'alltests' => $tested,
+					'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
+					'confirm2vl' => $conf2VL, 'rejected' => $rej, 'dbs' => $dbs, 'plasma' => $plas,
+					'edta' => $edta, 'alldbs' => $adbs, 'allplasma' => $aplas, 'alledta' => $aedta,
+					'maletest' => $male, 'femaletest' => $female,
+					'nogendertest' => $nogender, 'Undetected' => $ldl, 'less1000' => $less1k,
+					'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
+					'sitessending' => $sites, 'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'],
+					'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'],   'dateupdated' => $today,
+					'less2' => $less2, 'less9' => $less9,
+					'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
+					'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
+					'noage' => $noage, 'baseline' => $baseline, 'baselinesustxfail' => $baselinefail
+				);
+
+				// $eqa = $this->checknull($eqa_a, $wheres);
+				// $fake = $this->checknull($fake_a, $wheres);
+				// $controls = $this->checknull($controls_a, $wheres) * 3;
+				// $data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
+
+				$locator = ['year' => $year, 'month' => $value->month, 'facility' => $value->lab];
+
+				$row = DB::table($summary_table)->where($locator)->first();
+
+				if(!$row){
+					$data_array = array_merge($locator, $data_array);
+					DB::table($summary_table)->insert($data_array);
+				}
+				else{
+					DB::table($summary_table)->where('id', $row->id)->insert($data_array);
+				}
+
+
+			}
+		}
+
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
 
 		if ($type < 5) {
