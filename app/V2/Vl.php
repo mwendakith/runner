@@ -604,7 +604,9 @@ class Vl
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
 
-		// if($division == 5 && $division != 'poc'){
+		if($type == 5 && $division == 'poc') return null;
+
+		if($division == 5){
 
 			$summary_table = "vl_poc_summary";
 			foreach ($tested_a as $key => $value) {
@@ -693,7 +695,7 @@ class Vl
 				}
 			}
 			echo "\n Completed entry into viralload poc summary at " . date('d/m/Y h:i:s a', time());
-		// }
+		}
 
 
 		if ($type < 5) {
