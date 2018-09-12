@@ -689,7 +689,7 @@ class Eid
 
 
 			$fake = $this->checknull($fake_a, $wheres);
-			$controls = $this->checknull($controls_a->where('month', $month)->where('lab', $div_array[$it])) * 2;
+			$controls = $this->checknull($controls_a, $wheres) * 2;
 			
 			$eqatests = $this->checknull($EQAtestedsamples, $wheres);
 
