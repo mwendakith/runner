@@ -747,7 +747,7 @@ class EidDivision
 			if($value->pcrtype == 4){
 
 				$d = SampleView::where('patient_id', $value->patient_id)
-				->whereDate('datetested', '<', $value->datetested)
+				->where('datetested', '<', $value->datetested)
 				->where('result', 1)
 				->where('repeatt', 0)
 				->where('flag', 1)
