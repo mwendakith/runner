@@ -1111,9 +1111,7 @@ class VlDivision
 
 			$update_array = array('synched' => 1, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
-			if ($value->justification == 2) {
-
-				dd($value);
+			if ($value->justification == 2 && $value->datetested) {
 
 				$d = ViralsampleView::where('patient_id', $value->patient_id)
 				->where('datetested', '<', $value->datetested)
