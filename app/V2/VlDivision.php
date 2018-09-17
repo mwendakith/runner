@@ -1113,6 +1113,8 @@ class VlDivision
 
 			if ($value->justification == 2) {
 
+				dd($value);
+
 				$d = ViralsampleView::where('patient_id', $value->patient_id)
 				->where('datetested', '<', $value->datetested)
 				->where('datetested', '<', $value->datetested)
