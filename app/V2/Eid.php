@@ -728,7 +728,7 @@ class Eid
 				DB::table($poc_table)->insert($data_array);
 			}
 			else{
-				DB::table($poc_table)->where('id', $row->id)->update($data_array);
+				DB::table($poc_table)->where('id', $row->ID)->update($data_array);
 			}
 		}
 		echo "\n Completed eid poc summary update at " . date('d/m/Y h:i:s a', time());

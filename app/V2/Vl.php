@@ -691,7 +691,7 @@ class Vl
 					DB::table($summary_table)->insert($data_array);
 				}
 				else{
-					DB::table($summary_table)->where('id', $row->id)->update($data_array);
+					DB::table($summary_table)->where('id', $row->ID)->update($data_array);
 				}
 			}
 			echo "\n Completed entry into viralload poc summary at " . date('d/m/Y h:i:s a', time());
