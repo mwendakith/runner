@@ -26,27 +26,6 @@ class VlOther
 
 
     	// Age
-    	// DB::connection('eid_vl_wr')->table('viralsamples')
-    	// ->where('age_category', 0)->whereBetween('age', [0.0001, 4.9])
-    	// ->update(['age_category' => 1]);
-
-    	// DB::connection('eid_vl_wr')->table('viralsamples')
-    	// ->where('age_category', 0)->whereBetween('age', [5, 9.9])
-    	// ->update(['age_category' => 2]);
-
-    	// DB::connection('eid_vl_wr')->table('viralsamples')
-    	// ->where('age_category', 0)->whereBetween('age', [10, 14.9])
-    	// ->update(['age_category' => 3]);
-
-    	// DB::connection('eid_vl_wr')->table('viralsamples')
-    	// ->where('age_category', 0)->whereBetween('age', [15, 17.9])
-    	// ->update(['age_category' => 4]);
-
-    	// DB::connection('eid_vl_wr')->table('viralsamples')
-    	// ->where('age_category', 0)->where('age', '>', 17.9)
-    	// ->update(['age_category' => 5]);
-
-
     	DB::connection('eid_vl_wr')->table('viralsamples')
     	->where('age_category', 0)->whereBetween('age', [0.000001, 1.99999])
     	->update(['age_category' => 6]);
@@ -72,11 +51,10 @@ class VlOther
     	->update(['age_category' => 11]);
 
 
-    	$r1 = "(result='< LDL copies' OR result='Target not detected' 
-    			OR result='< LDL copies' OR result='Not Detected' OR result='< LDL copies/ml' 
-    			OR result='<LDL copies/ml')";
+    	$r1 = "(result='Target not detected' OR result='Not Detected')";
 
-    	$r2 = "(result='<550' OR result='< 550 ' OR result='<150' OR result='<160'
+    	$r2 = "(result='< LDL copies' OR result='< LDL copies' OR result='< LDL copies/ml' OR result='<LDL copies/ml'
+                 OR result='<550' OR result='< 550 ' OR result='<150' OR result='<160'
     			 OR result='<75' OR result='<274' OR result='<400' OR result='< 400'
     			 OR result='<188' OR result='<218' OR result='<839' OR result='< 21'
     			 OR result='<40' OR result='<20' OR result='<218' OR result ='<1000')";
@@ -93,7 +71,7 @@ class VlOther
     	// Result Categories
     	DB::connection('eid_vl_wr')->table('viralsamples')
     	->where('rcategory', 0)->where('result', '< LDL copies/ml')
-    	->update(['rcategory' => 1]);
+    	->update(['rcategory' => 2]);
 
     	DB::connection('eid_vl_wr')->table('viralsamples')
     	->where('rcategory', 0)->where(DB::raw($r1))
