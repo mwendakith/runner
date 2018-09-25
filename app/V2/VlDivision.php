@@ -986,7 +986,7 @@ class VlDivision
 		$sql .= 'GROUP BY facility_id, rcategory ';
 		$sql .= 'ORDER BY facility_id, rcategory ';
 
-		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
+		$data = DB::connection('eid_vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
 
 		return $data;
     }
@@ -1024,7 +1024,7 @@ class VlDivision
 		$sql .= 'GROUP BY facility_id ';
 		$sql .= 'ORDER BY facility_id';
 
-		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
+		$data = DB::connection('eid_vl')->select($sql, [$prev_year, $prev_month, $year, $month, $age]);
 
 		return collect($data);
     }
@@ -1064,8 +1064,7 @@ class VlDivision
 		$sql .= 'GROUP BY facility_id ';
 		$sql .= 'ORDER BY facility_id ';
 
-		$data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month, $sex]);
-		// $data = DB::connection('vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
+		$data = DB::connection('eid_vl')->select($sql, [$prev_year, $prev_month, $year, $month, $sex]);
 
 		return collect($data);
     }
