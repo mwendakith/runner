@@ -961,8 +961,6 @@ class VlDivision
 		// ORDER BY facility_id, rcategory 
 
 
-
-
     	$r = $this->current_range();
 
     	$year = $r[0];
@@ -1065,6 +1063,44 @@ class VlDivision
 		$sql .= 'ORDER BY facility_id ';
 
 		$data = DB::connection('eid_vl')->select($sql, [$prev_year, $prev_month, $year, $month, $sex]);
+
+		return collect($data);
+    }
+
+    public function current_datim_suppression($lower, $upper $suppression=true)
+    {
+    	ini_set("memory_limit", "-1"); 
+
+    	$r = $this->current_range();
+
+    	$b = new BaseModel;
+
+    	$sql = 'SELECT facility_id as facility, sex, count(*) as totals ';
+		$sql .= 'FROM ';
+		$sql .= '(SELECT v.id, v.facility_id, v.rcategory, v.sex, v.age ';
+		$sql .= 'FROM viralsamples_view v ';
+		$sql .= 'RIGHT JOIN ';
+		$sql .= '(SELECT id, patient_id, max(datetested) as maxdate ';
+		$sql .= 'FROM viralsamples_view ';
+		$sql .= 'WHERE datetested between 2017-10-01 and 2018-09-30 ';
+		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
+		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4) ';
+		$sql .= 'AND justification != 10 and facility_id != 7148 ';
+		$sql .= 'GROUP BY patient_id) gv ';
+		$sql .= 'ON v.id=gv.id) tb ';
+		if($suppression){
+			$sql .= 'WHERE rcategory in (1, 2) ';
+		}
+		else{
+			$sql .= 'WHERE rcategory in (3, 4) ';
+		}
+		$sql .= "AND age >= {$lower} ";
+		if($upper) $sql .= "AND age < {$upper} ";
+
+		$sql .= 'GROUP BY facility_id, sex ';
+		$sql .= 'ORDER BY facility_id, sex ';
+
+		$data = DB::connection('eid_vl')->select($sql);
 
 		return collect($data);
     }

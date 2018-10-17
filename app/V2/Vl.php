@@ -1353,14 +1353,11 @@ class Vl
 			(int) $this->checknull($data->where('rcategory', 3), $wheres) + 
 			(int) $this->checknull($data->where('rcategory', 4), $wheres);
 
-			$suppression=0;
-
 			$tests =  ($suppressed + $nonsuppressed);
-			$coverage = 0;
+			$suppression = $coverage = 0;
 
 			if($tests == 0){
-				continue;
-				$suppression = 0;
+				// continue;
 			}
 			else{
 
@@ -1426,6 +1423,160 @@ class Vl
 		}
 
     	echo "\n Completed entry into vl suppression at " . date('d/m/Y h:i:s a', time()); 
+    }
+
+    public function update_suppression_datim(){
+    	ini_set("memory_limit", "-1");
+
+    	echo "\n Begin entry into vl suppression at " . date('d/m/Y h:i:s a', time()); 
+
+    	// Instantiate new object
+    	$n = new VlDivision;
+
+    	$today=date('Y-m-d');
+
+    	$b1s = $n->current_datim_suppression(0.0000001, 1, true);
+    	$b1n = $n->current_datim_suppression(0.0000001, 1, false);
+
+    	$b5s = $n->current_datim_suppression(1, 5, true);
+    	$b5n = $n->current_datim_suppression(1, 5, false);
+
+    	$b10s = $n->current_datim_suppression(5, 10, true);
+    	$b10n = $n->current_datim_suppression(5, 10, false);
+
+    	$b15s = $n->current_datim_suppression(10, 15, true);
+    	$b15n = $n->current_datim_suppression(10, 15, false);
+
+    	$b20s = $n->current_datim_suppression(15, 20, true);
+    	$b20n = $n->current_datim_suppression(15, 20, false);
+
+    	$b25s = $n->current_datim_suppression(20, 25, true);
+    	$b25n = $n->current_datim_suppression(20, 25, false);
+
+    	$b30s = $n->current_datim_suppression(25, 30, true);
+    	$b30n = $n->current_datim_suppression(25, 30, false);
+
+    	$b35s = $n->current_datim_suppression(30, 35, true);
+    	$b35n = $n->current_datim_suppression(30, 35, false);
+
+    	$b30s = $n->current_datim_suppression(25, 30, true);
+    	$b30n = $n->current_datim_suppression(25, 30, false);
+
+    	$b35s = $n->current_datim_suppression(30, 35, true);
+    	$b35n = $n->current_datim_suppression(30, 35, false);
+
+    	$b40s = $n->current_datim_suppression(35, 40, true);
+    	$b40n = $n->current_datim_suppression(35, 40, false);
+
+    	$b45s = $n->current_datim_suppression(40, 45, true);
+    	$b45n = $n->current_datim_suppression(40, 45, false);
+
+    	$b50s = $n->current_datim_suppression(45, 50, true);
+    	$b50n = $n->current_datim_suppression(45, 50, false);
+
+    	$a50s = $n->current_datim_suppression(50, false, true);
+    	$a50n = $n->current_datim_suppression(50, false, false);
+
+    	$divs = DB::table('facilitys')->select('id')->get();
+
+		foreach ($divs as $key => $value) {
+
+			$wheres = ['facility' => $value->id];
+			$mw = ['facility' => $value->id, 'sex' => 1];
+			$fw = ['facility' => $value->id, 'sex' => 2];
+			$nw = ['facility' => $value->id, 'sex' => 0];			
+
+			$data_array = array('dateupdated' => $today,
+  
+				'below1_m_sup' => $this->checknull($b1s, $mw),
+				'below1_f_sup' => $this->checknull($b1s, $fw),
+				'below1_u_sup' => $this->checknull($b1s, $nw),
+				'below1_m_nonsup' => $this->checknull($b1n, $mw),
+				'below1_f_nonsup' => $this->checknull($b1n, $fw),
+				'below1_u_nonsup' => $this->checknull($b1n, $nw),
+
+				'below5_m_sup' => $this->checknull($b5s, $mw),
+				'below5_f_sup' => $this->checknull($b5s, $fw),
+				'below5_u_sup' => $this->checknull($b5s, $nw),
+				'below5_m_nonsup' => $this->checknull($b5n, $mw),
+				'below5_f_nonsup' => $this->checknull($b5n, $fw),
+				'below5_u_nonsup' => $this->checknull($b5n, $nw),
+
+				'below10_m_sup' => $this->checknull($b10s, $mw),
+				'below10_f_sup' => $this->checknull($b10s, $fw),
+				'below10_u_sup' => $this->checknull($b10s, $nw),
+				'below10_m_nonsup' => $this->checknull($b10n, $mw),
+				'below10_f_nonsup' => $this->checknull($b10n, $fw),
+				'below10_u_nonsup' => $this->checknull($b10n, $nw),
+
+				'below15_m_sup' => $this->checknull($b15s, $mw),
+				'below15_f_sup' => $this->checknull($b15s, $fw),
+				'below15_u_sup' => $this->checknull($b15s, $nw),
+				'below15_m_nonsup' => $this->checknull($b15n, $mw),
+				'below15_f_nonsup' => $this->checknull($b15n, $fw),
+				'below15_u_nonsup' => $this->checknull($b15n, $nw),
+
+				'below20_m_sup' => $this->checknull($b20s, $mw),
+				'below20_f_sup' => $this->checknull($b20s, $fw),
+				'below20_u_sup' => $this->checknull($b20s, $nw),
+				'below20_m_nonsup' => $this->checknull($b20n, $mw),
+				'below20_f_nonsup' => $this->checknull($b20n, $fw),
+				'below20_u_nonsup' => $this->checknull($b20n, $nw),
+
+				'below25_m_sup' => $this->checknull($b25s, $mw),
+				'below25_f_sup' => $this->checknull($b25s, $fw),
+				'below25_u_sup' => $this->checknull($b25s, $nw),
+				'below25_m_nonsup' => $this->checknull($b25n, $mw),
+				'below25_f_nonsup' => $this->checknull($b25n, $fw),
+				'below25_u_nonsup' => $this->checknull($b25n, $nw),
+
+				'below30_m_sup' => $this->checknull($b30s, $mw),
+				'below30_f_sup' => $this->checknull($b30s, $fw),
+				'below30_u_sup' => $this->checknull($b30s, $nw),
+				'below30_m_nonsup' => $this->checknull($b30n, $mw),
+				'below30_f_nonsup' => $this->checknull($b30n, $fw),
+				'below30_u_nonsup' => $this->checknull($b30n, $nw),
+
+				'below35_m_sup' => $this->checknull($b35s, $mw),
+				'below35_f_sup' => $this->checknull($b35s, $mw),
+				'below35_u_sup' => $this->checknull($b35s, $mw),
+				'below35_m_nonsup' => $this->checknull($b35n, $mw),
+				'below35_f_nonsup' => $this->checknull($b35n, $mw),
+				'below35_u_nonsup' => $this->checknull($b35n, $mw),
+
+				'below40_m_sup' => $this->checknull($b40s, $mw),
+				'below40_f_sup' => $this->checknull($b40s, $fw),
+				'below40_u_sup' => $this->checknull($b40s, $nw),
+				'below40_m_nonsup' => $this->checknull($b40n, $mw),
+				'below40_f_nonsup' => $this->checknull($b40n, $fw),
+				'below40_u_nonsup' => $this->checknull($b40n, $nw),
+
+				'below45_m_sup' => $this->checknull($b45s, $mw),
+				'below45_f_sup' => $this->checknull($b45s, $fw),
+				'below45_u_sup' => $this->checknull($b45s, $nw),
+				'below45_m_nonsup' => $this->checknull($b45n, $mw),
+				'below45_f_nonsup' => $this->checknull($b45n, $fw),
+				'below45_u_nonsup' => $this->checknull($b45n, $nw),
+
+				'below50_m_sup' => $this->checknull($b50s, $mw),
+				'below50_f_sup' => $this->checknull($b50s, $fw),
+				'below50_u_sup' => $this->checknull($b50s, $nw),
+				'below50_m_nonsup' => $this->checknull($b50n, $mw),
+				'below50_f_nonsup' => $this->checknull($b50n, $fw),
+				'below50_u_nonsup' => $this->checknull($b50n, $nw),
+
+				'above50_m_sup' => $this->checknull($a50s, $mw),
+				'above50_f_sup' => $this->checknull($a50s, $fw),
+				'above50_u_sup' => $this->checknull($a50s, $nw),
+				'above50_m_nonsup' => $this->checknull($a50n, $mw),
+				'above50_f_nonsup' => $this->checknull($a50n, $fw),
+				'above50_u_nonsup' => $this->checknull($a50n, $nw),
+			);
+
+			DB::table('vl_site_suppression_datim')->where('facility', $value->id)->update($data_array);
+		}
+
+    	echo "\n Completed entry into vl suppression datim at " . date('d/m/Y h:i:s a', time()); 
     }
 
     public function update_tat($year=null){
