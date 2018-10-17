@@ -1575,12 +1575,12 @@ class Vl
 				'above50_f_nonsup' => $this->checknull($a50n, $fw),
 				'above50_u_nonsup' => $this->checknull($a50n, $nw),
 
-				'total50_m_sup' => $this->checknull($ts, $mw),
-				'total50_f_sup' => $this->checknull($ts, $fw),
-				'total50_u_sup' => $this->checknull($ts, $nw),
-				'total50_m_nonsup' => $this->checknull($tn, $mw),
-				'total50_f_nonsup' => $this->checknull($tn, $fw),
-				'total50_u_nonsup' => $this->checknull($tn, $nw),
+				'total_m_sup' => $this->checknull($ts, $mw),
+				'total_f_sup' => $this->checknull($ts, $fw),
+				'total_u_sup' => $this->checknull($ts, $nw),
+				'total_m_nonsup' => $this->checknull($tn, $mw),
+				'total_f_nonsup' => $this->checknull($tn, $fw),
+				'total_u_nonsup' => $this->checknull($tn, $nw),
 			);
 
 			DB::table('vl_site_suppression_datim')->where('facility', $value->id)->update($data_array);
