@@ -1477,8 +1477,8 @@ class Vl
     	$a50s = $n->current_datim_suppression(50, false, true);
     	$a50n = $n->current_datim_suppression(50, false, false);
 
-    	$ts = $n->current_datim_suppression(-1, 100, true);
-    	$tn = $n->current_datim_suppression(-1, 100, false);
+    	$ts = $n->current_datim_suppression(0, false, true);
+    	$tn = $n->current_datim_suppression(0, false, false);
 
     	$divs = DB::table('facilitys')->select('id')->get();
 
