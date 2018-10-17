@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Inspiring;
+use \App\V2\Vl;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +18,15 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
 
-Artisan::command('fart', function () {
-    $this->comment("This is pretty smelly.");
-})->describe('Release a smelly gas');
-
 Artisan::command('clean:storage', function () {
 	\App\Cleaner::clean_storage();
+})->describe('Alter MyIsam tables to InnoDB.');
+
+Artisan::command('update:vl-datim-suppression', function () {
+	\App\Cleaner::clean_storage();
+	$n = new Vl;
+	$a = $n->update_suppression_datim();
+	$this->comment($a);
 })->describe('Alter MyIsam tables to InnoDB.');
 
 
