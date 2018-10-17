@@ -1082,7 +1082,7 @@ class VlDivision
 		$sql .= 'RIGHT JOIN ';
 		$sql .= '(SELECT id, patient_id, max(datetested) as maxdate ';
 		$sql .= 'FROM viralsamples_view ';
-		$sql .= 'WHERE datetested between 2017-10-01 and 2018-09-30 ';
+		$sql .= "WHERE datetested between '2017-10-01' and '2018-09-30' ";
 		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4) ';
 		$sql .= 'AND justification != 10 and facility_id != 7148 ';
