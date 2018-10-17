@@ -1067,7 +1067,7 @@ class VlDivision
 		return collect($data);
     }
 
-    public function current_datim_suppression($lower, $upper $suppression=true)
+    public function current_datim_suppression($lower, $upper, $suppression=true)
     {
     	ini_set("memory_limit", "-1"); 
 
