@@ -4,6 +4,7 @@ namespace App\V2;
 
 use App\V2\EidNation;
 use App\V2\EidDivision;
+use App\V2\EidFacility;
 use App\V2\EidPoc;
 use DB;
 
@@ -1173,6 +1174,107 @@ class Eid
 
 							$fail = $this->checknull($fail_a->where('month', $month)->where($column, $div_array[$it]));
 							$rd = $this->checknull($rd_a->where('month', $month)->where($column, $div_array[$it]));
+
+							$redraw = $fail + $rd;
+							$tests = $pos + $neg +  $redraw;
+
+							$data_array = array_merge($data_array, ['tests' => $tests, 'redraw' => $redraw]);
+						}
+
+						DB::table($table[0])->where('year', $year)->where('month', $month)
+						->where($table[2], $value->id)->where($column, $div_array[$it])->update($data_array);
+
+						// $update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it], $table[2] => $value->id]);
+						// $updates++;
+
+						// if($updates == 200){
+						// 	$this->mysqli->multi_query($update_statements);
+						// 	$update_statements = '';
+						// 	$updates = 0;
+						// }	
+					}
+					// End of looping through divisions
+				}
+				//End of looping through months
+			}
+			// End of looping through ids of each table e.g. entry_points
+			echo "\n Completed eid " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+		}
+		// $this->mysqli->multi_query($update_statements);
+    }
+
+    public function continue_facility($year, $today, &$div_array, $division, $column, $div_type, $array_size){
+    	$n = new EidFacility;
+
+    	$update_statements = "";
+    	$updates = 0;
+
+    	for ($type=1; $type < 5; $type++) { 
+
+			$table = $this->get_table($div_type, $type);
+
+			echo "\n Begin eid " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+			
+			// Get ids of the necessary table
+			$divs = $data = DB::connection('eid_vl')
+			->table($table[1])
+			->when($type, function($query) use ($type){
+				if($type == 1){
+					return $query->where('ptype', 2);
+				}
+				if($type == 2){
+					return $query->where('ptype', 1);
+				}								
+			})
+			->get();
+
+			foreach ($divs as $key => $value) {
+
+				// Loop through each month and update entrypoints
+				for ($i=0; $i < 12; $i++) { 
+					$month = $i + 1;
+					if($year == Date('Y') && $month > Date('m')){ break; }
+
+					$ttttt = 0;
+
+					if($type == 1){
+						$pos_a = $n->Getinfantprophpositivitycount($year, $month, $value->id, 2, $division);
+						$neg_a = $n->Getinfantprophpositivitycount($year, $month, $value->id, 1, $division);
+						$fail_a = $n->Getinfantprophpositivitycount($year, $month, $value->id, 3, $division);
+						$rd_a = $n->Getinfantprophpositivitycount($year, $month, $value->id, 5, $division);
+					}
+
+					if($type == 2){
+						$pos_a = $n->Getinterventionspositivitycount($year, $month, $value->id, 2, $division);
+						$neg_a = $n->Getinterventionspositivitycount($year, $month, $value->id, 1, $division);
+						$fail_a = $n->Getinterventionspositivitycount($year, $month, $value->id, 3, $division);
+						$rd_a = $n->Getinterventionspositivitycount($year, $month, $value->id, 5, $division);
+					}
+
+					if($type == 3){
+						$pos_a = $n->GetNationalResultbyEntrypoint($year, $month, $value->id, 2, $division);
+						$neg_a = $n->GetNationalResultbyEntrypoint($year, $month, $value->id, 1, $division);
+						$fail_a = $n->GetNationalResultbyEntrypoint($year, $month, $value->id, 3, $division);
+						$rd_a = $n->GetNationalResultbyEntrypoint($year, $month, $value->id, 5, $division);
+					}
+
+					if($type == 4){
+						$pos_a = $n->OutcomesByAgeBand($year, $month, [$value->lower, $value->upper], 2, $division);
+						$neg_a = $n->OutcomesByAgeBand($year, $month, [$value->lower, $value->upper], 1, $division);
+					}
+
+					// Loop through divisions i.e. counties, subcounties, partners and sites
+					for ($it=0; $it < $array_size; $it++) { 
+
+						$pos = $this->checknull($pos_a->where($column, $div_array[$it]));
+						$neg = $this->checknull($neg_a->where($column, $div_array[$it]));
+
+						$data_array = array('pos' => $pos, 'neg' => $neg, 'dateupdated' => $today);
+
+						if($type != 4){							
+
+							$fail = $this->checknull($fail_a->where($column, $div_array[$it]));
+							$rd = $this->checknull($rd_a->where($column, $div_array[$it]));
 
 							$redraw = $fail + $rd;
 							$tests = $pos + $neg +  $redraw;
