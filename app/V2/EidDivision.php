@@ -744,7 +744,7 @@ class EidDivision
 			$update_array = array('synched' => 1, 'datesynched' => $today, 'tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 			// $update_array = array('synched' => 1, 'datesynched' => $today);
 
-			if($value->pcrtype == 4){
+			if($value->pcrtype == 4 && $value->datetested){
 
 				$d = SampleView::where('patient_id', $value->patient_id)
 				->where('datetested', '<', $value->datetested)
