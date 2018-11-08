@@ -71,7 +71,7 @@ class VlOther
     	// Result Categories
     	DB::connection('eid_vl_wr')->table('viralsamples')
     	->where('rcategory', 0)->where('result', '< LDL copies/ml')
-    	->update(['rcategory' => 2]);
+    	->update(['rcategory' => 1]);
 
     	DB::connection('eid_vl_wr')->table('viralsamples')
     	->where('rcategory', 0)->where(DB::raw($r1))
@@ -79,7 +79,7 @@ class VlOther
 
     	DB::connection('eid_vl_wr')->table('viralsamples')
     	->where('rcategory', 0)->where(DB::raw($r2))
-    	->update(['result' => '< LDL copies/ml', 'rcategory' => 2]);
+    	->update(['result' => '< LDL copies/ml', 'rcategory' => 1]);
 
     	DB::connection('eid_vl_wr')->table('viralsamples')
     	->where('rcategory', 0)->whereBetween('result', [1, 1000])
