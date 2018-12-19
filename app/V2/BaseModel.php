@@ -176,31 +176,7 @@ class BaseModel
 
 		$s = Carbon::parse($start);
 		$f = Carbon::parse($finish);
-		if($s->greaterThan($f)) return null;
 		$workingdays = $s->diffInWeekdays($f, false);
-
-		// return $workingdays;
-
-		if($workingdays < 0) return null;
-
-		$totaldays = $workingdays - $holidays;
-		if ($totaldays < 1) $totaldays=1;
-		return $totaldays;
-	}
-
-	public static function get_wdays($start, $finish, $holidays){
-		if(!$start || !$finish) return null;
-		if($start == '0000-00-00' || $finish == '0000-00-00') return null;
-		// $finish = date("d-m-Y",strtotime($finish));
-		// $start = date("d-m-Y",strtotime($start));
-		// $workingdays= $this->getWorkingDays($start, $finish);
-
-		$s = Carbon::parse($start);
-		$f = Carbon::parse($finish);
-		if($s->greaterThan($f)) return null;
-		$workingdays = $s->diffInWeekdays($f, false);
-
-		// return $workingdays;
 
 		if($workingdays < 0) return null;
 
