@@ -617,7 +617,7 @@ class VlNation
 		// $date_range = BaseModel::date_range($year, $start_month);
 		// $sql = "datediff(datereceived, datecollected) as tat1, datediff(datetested, datereceived) as tat2, datediff(datedispatched, datetested) as tat3, datediff(datedispatched, datecollected) as tat4, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		
-		$sql = "ID, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
+		$sql = "id, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$b = new BaseModel;
 		
 		ini_set("memory_limit", "-1");
@@ -635,11 +635,11 @@ class VlNation
 			->whereYear('datereceived', '>', 1980)
 			->whereYear('datetested', '>', 1980)
 			->whereYear('datedispatched', '>', 1980)
-			->whereColumn([
-				['datecollected', '<=', 'datereceived'],
-				['datereceived', '<=', 'datetested'],
-				['datetested', '<=', 'datedispatched']
-			])
+			// ->whereColumn([
+			// 	['datecollected', '<=', 'datereceived'],
+			// 	['datereceived', '<=', 'datetested'],
+			// 	['datetested', '<=', 'datedispatched']
+			// ])
 			->whereYear('datetested', $year)
 			->whereMonth('datetested', $month)
 			->where('flag', 1)
@@ -662,7 +662,7 @@ class VlNation
 
 				$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
-				DB::connection('vl_wr')->table('viralsamples')->where('ID', $value->ID)->update($update_array);
+				DB::connection('vl_wr')->table('viralsamples')->where('id', $value->id)->update($update_array);
 
 			}
 			echo "\n Completed vl samples tat update for {$year} {$month} at " . date('d/m/Y h:i:s a', time());

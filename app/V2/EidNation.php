@@ -488,7 +488,7 @@ class EidNation
 	{
 		$date_range = BaseModel::date_range($year);
 		
-		$sql = "ID, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
+		$sql = "id, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$b = new BaseModel;
 
 
@@ -499,11 +499,11 @@ class EidNation
 		->whereYear('datereceived', '>', 1980)
 		->whereYear('datetested', '>', 1980)
 		->whereYear('datedispatched', '>', 1980)
-		->whereColumn([
-			['datecollected', '<=', 'datereceived'],
-			['datereceived', '<=', 'datetested'],
-			['datetested', '<=', 'datedispatched']
-		])
+		// ->whereColumn([
+		// 	['datecollected', '<=', 'datereceived'],
+		// 	['datereceived', '<=', 'datetested'],
+		// 	['datetested', '<=', 'datedispatched']
+		// ])
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -520,7 +520,7 @@ class EidNation
 
 			$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 
-			DB::connection('eid_wr')->table('samples')->where('ID', $value->ID)->update($update_array);
+			DB::connection('eid_wr')->table('samples')->where('id', $value->id)->update($update_array);
 
 		}
 		echo "\n Completed eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
