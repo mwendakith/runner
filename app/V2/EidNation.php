@@ -499,11 +499,11 @@ class EidNation
 		->whereYear('datereceived', '>', 1980)
 		->whereYear('datetested', '>', 1980)
 		->whereYear('datedispatched', '>', 1980)
-		// ->whereColumn([
-		// 	['datecollected', '<=', 'datereceived'],
-		// 	['datereceived', '<=', 'datetested'],
-		// 	['datetested', '<=', 'datedispatched']
-		// ])
+		->whereColumn([
+			['datecollected', '<=', 'datereceived'],
+			['datereceived', '<=', 'datetested'],
+			['datetested', '<=', 'datedispatched']
+		])
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->where('repeatt', 0)

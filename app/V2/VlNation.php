@@ -635,11 +635,11 @@ class VlNation
 			->whereYear('datereceived', '>', 1980)
 			->whereYear('datetested', '>', 1980)
 			->whereYear('datedispatched', '>', 1980)
-			// ->whereColumn([
-			// 	['datecollected', '<=', 'datereceived'],
-			// 	['datereceived', '<=', 'datetested'],
-			// 	['datetested', '<=', 'datedispatched']
-			// ])
+			->whereColumn([
+				['datecollected', '<=', 'datereceived'],
+				['datereceived', '<=', 'datetested'],
+				['datetested', '<=', 'datedispatched']
+			])
 			->whereYear('datetested', $year)
 			->whereMonth('datetested', $month)
 			->where('flag', 1)
