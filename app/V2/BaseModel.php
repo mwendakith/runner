@@ -168,6 +168,7 @@ class BaseModel
 	}
 
 	public function get_days($start, $finish, $holidays){
+		if(!$start || !$finish) return null;
 		if($start == '0000-00-00' || $finish == '0000-00-00') return null;
 		// $finish = date("d-m-Y",strtotime($finish));
 		// $start = date("d-m-Y",strtotime($start));
@@ -175,7 +176,9 @@ class BaseModel
 
 		$s = Carbon::parse($start);
 		$f = Carbon::parse($finish);
-		$workingdays = $s->diffInWeekdays($f);
+		$workingdays = $s->diffInWeekdays($f, false);
+
+		if($workingdays < 0) return null;
 
 		$totaldays = $workingdays - $holidays;
 		if ($totaldays < 1) $totaldays=1;
