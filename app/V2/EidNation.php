@@ -490,7 +490,8 @@ class EidNation
 		
 		$sql = "id, datecollected, datereceived, datetested, datedispatched, month(datetested) as month";
 		$b = new BaseModel;
-
+		
+		ini_set("memory_limit", "-1");
 
 		echo "\n Begin eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 
