@@ -106,7 +106,7 @@ class VlInsert
     	$sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
 
     	// Iterate through classes of tables
-    	for ($iterator=6; $iterator < 8; $iterator++) { 
+    	for ($iterator=1; $iterator < 8; $iterator++) { 
     		$national = $this->get_table(0, $iterator);
     		$county = $this->get_table(1, $iterator);
     		$subcounty = $this->get_table(2, $iterator);
