@@ -68,7 +68,7 @@ class EidInsert
 		}
 		// POC row 
 		$data_array[$i] = array('year' => $year, 'month' => $month, 'lab' => 11);
-		DB::table('lab_summary')->insert($data_array);
+		if($data_array) DB::table('lab_summary')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
@@ -82,7 +82,7 @@ class EidInsert
 		    	$i=0;
 			}
 		}
-		DB::table('site_summary')->insert($data_array);
+		if($data_array) DB::table('site_summary')->insert($data_array);
 
 		echo "\n Completed eid summary insert at " . date('d/m/Y h:i:s a', time());
 
@@ -111,7 +111,7 @@ class EidInsert
 		$data_array[$i] = array('year' => $year);
 		$i++;
 
-		DB::table('national_summary_yearly')->insert($data_array);
+		if($data_array) DB::table('national_summary_yearly')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
@@ -120,7 +120,7 @@ class EidInsert
 			$data_array[$i] = array('year' => $year, 'county' => $val->id);
 			$i++;
 		}
-		DB::table('county_summary_yearly')->insert($data_array);
+		if($data_array) DB::table('county_summary_yearly')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
@@ -129,7 +129,7 @@ class EidInsert
 			$data_array[$i] = array('year' => $year, 'subcounty' => $val->id);
 			$i++;
 		}
-		DB::table('subcounty_summary_yearly')->insert($data_array);
+		if($data_array) DB::table('subcounty_summary_yearly')->insert($data_array);
 
 		$data_array=null;
     	$i=0;
@@ -138,7 +138,7 @@ class EidInsert
 			$data_array[$i] = array('year' => $year, 'partner' => $val->id);
 			$i++;
 		}
-		DB::table('ip_summary_yearly')->insert($data_array);
+		if($data_array) DB::table('ip_summary_yearly')->insert($data_array);
 
 		// $data_array=null;
     	// $i=0;
@@ -162,7 +162,7 @@ class EidInsert
 		    	$i=0;
 			}
 		}
-		DB::table('site_summary_yearly')->insert($data_array);
+		if($data_array) DB::table('site_summary_yearly')->insert($data_array);
 
 		echo "\n Completed eid summary yearly insert at " . date('d/m/Y h:i:s a', time());
     }
@@ -217,7 +217,7 @@ class EidInsert
 				$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id);
 				$i++;
 			}
-			DB::table($national[0])->insert($data_array);
+			if($data_array) DB::table($national[0])->insert($data_array);
 
 
 			// County Insert
@@ -230,7 +230,7 @@ class EidInsert
 					$i++;
 				}
 			}
-			DB::table($county[0])->insert($data_array);
+			if($data_array) DB::table($county[0])->insert($data_array);
 
 			// Subcounty Insert
 			$data_array=null;
@@ -248,7 +248,7 @@ class EidInsert
 					}
 				}
 			}
-			DB::table($subcounty[0])->insert($data_array);
+			if($data_array) DB::table($subcounty[0])->insert($data_array);
 
 			// Partner Insert
 			$data_array=null;
@@ -266,7 +266,7 @@ class EidInsert
 					}
 				}
 			}
-			DB::table($partner[0])->insert($data_array);
+			if($data_array) DB::table($partner[0])->insert($data_array);
 
 
             // Facility Insert
@@ -285,7 +285,7 @@ class EidInsert
                     }
                 }
             }
-            DB::table($site[0])->insert($data_array);
+            if($data_array) DB::table($site[0])->insert($data_array);
             $data_array=null;
             $i=0;
 
@@ -305,7 +305,7 @@ class EidInsert
 					$i++;
 				}
 				$lab = $this->get_table(5, $iterator);
-				DB::table($lab[0])->insert($data_array);
+				if($data_array) DB::table($lab[0])->insert($data_array);
 
 			
 

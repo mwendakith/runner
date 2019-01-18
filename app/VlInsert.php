@@ -148,7 +148,7 @@ class VlInsert
 					$i++;
 				}
 			}
-			DB::table($county[0])->insert($data_array);
+			if($data_array) DB::table($county[0])->insert($data_array);
 
 			// Subcounty Insert
 			$data_array=null;
@@ -166,7 +166,7 @@ class VlInsert
 					}
 				}
 			}
-			DB::table($subcounty[0])->insert($data_array);
+			if($data_array) DB::table($subcounty[0])->insert($data_array);
 
 			// Partner Insert
 			$data_array=null;
@@ -184,7 +184,7 @@ class VlInsert
                     }
 				}
 			}
-			DB::table($partner[0])->insert($data_array);
+			if($data_array) DB::table($partner[0])->insert($data_array);
 
 			// Lab Insert
 	    	if($iterator == 7){
@@ -202,7 +202,7 @@ class VlInsert
                     $i++;
 				}
 				$lab = $this->get_table(5, $iterator);
-				DB::table($lab[0])->insert($data_array);
+				if($data_array) DB::table($lab[0])->insert($data_array);
 
 			}
 
@@ -224,7 +224,7 @@ class VlInsert
 				}
 			}
 
-			DB::table($site[0])->insert($data_array);
+			if($data_array) DB::table($site[0])->insert($data_array);
 			$data_array=null;
 	    	$i=0;
 			
