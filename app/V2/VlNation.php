@@ -628,13 +628,8 @@ class VlNation
 
 			echo "\n Begin vl samples tat update for {$year} {$month} at " . date('d/m/Y h:i:s a', time());
 
-			$data = DB::connection('vl')
-			->table('viralsamples')
-			->selectRaw($sql)
-			->whereYear('datecollected', '>', 1980)
-			->whereYear('datereceived', '>', 1980)
-			->whereYear('datetested', '>', 1980)
-			->whereYear('datedispatched', '>', 1980)
+			$data = ViralsampleView::selectRaw($sql)
+			->where('datedispatched', '>', "2000-01-01")
 			->whereColumn([
 				['datecollected', '<=', 'datereceived'],
 				['datereceived', '<=', 'datetested'],
@@ -657,8 +652,8 @@ class VlNation
 				$tat1 = $b->get_days($value->datecollected, $value->datereceived, $holidays);
 				$tat2 = $b->get_days($value->datereceived, $value->datetested, $holidays);
 				$tat3 = $b->get_days($value->datetested, $value->datedispatched, $holidays);
-				// $tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
-				$tat4 = $tat1 + $tat2 + $tat3;
+				$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
+				// $tat4 = $tat1 + $tat2 + $tat3;
 
 				$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
 

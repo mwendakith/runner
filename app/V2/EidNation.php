@@ -495,10 +495,7 @@ class EidNation
 		echo "\n Begin eid samples tat update for {$year} at " . date('d/m/Y h:i:s a', time());
 
 		$data = SampleView::selectRaw($sql)
-		->whereYear('datecollected', '>', 1980)
-		->whereYear('datereceived', '>', 1980)
-		->whereYear('datetested', '>', 1980)
-		->whereYear('datedispatched', '>', 1980)
+		->where('datedispatched', '>', "2000-01-01")
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],
