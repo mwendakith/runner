@@ -516,7 +516,7 @@ class EidNation
 			$tat4 = $b->get_days($value->datecollected, $value->datedispatched, $holidays);
 			// $tat4 = $tat1 + $tat2 + $tat3;
 
-			$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4);
+			$update_array = array('tat1' => $tat1, 'tat2' => $tat2, 'tat3' => $tat3, 'tat4' => $tat4, 'updated_at' => date('Y-m-d H:i:s'));
 
 			DB::connection('eid_wr')->table('samples')->where('id', $value->id)->update($update_array);
 
