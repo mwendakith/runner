@@ -29,7 +29,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('facility_id', '!=', 7148)
@@ -47,7 +48,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('facility_id', '!=', 7148)
@@ -65,7 +67,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -90,7 +93,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('facility', 7148)
@@ -108,7 +112,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -129,7 +134,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -152,7 +158,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -174,7 +181,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -198,7 +206,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datereceived) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -221,7 +230,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -247,7 +257,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -273,7 +284,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -299,7 +311,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -324,7 +337,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -349,7 +363,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -372,7 +387,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -411,7 +427,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -436,7 +453,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -461,7 +479,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -491,7 +510,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw($sql)
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -520,7 +540,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($type, function($query) use ($type){
@@ -557,7 +578,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datereceived', $date_range)
@@ -584,7 +606,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datereceived', $date_range)
@@ -612,7 +635,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datetested', $date_range)
@@ -641,7 +665,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datetested', $date_range)
@@ -671,7 +696,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datetested', $date_range)
@@ -701,7 +727,8 @@ class VlDivision
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datetested', $date_range)
@@ -731,7 +758,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datetested', $date_range)
@@ -759,7 +787,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($type, function($query) use ($type){
@@ -807,7 +836,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($type, function($query) use ($type){
@@ -845,7 +875,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($type, function($query) use ($type){
@@ -883,7 +914,8 @@ class VlDivision
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if(!str_contains($division, $poc)) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($type, function($query) use ($type){

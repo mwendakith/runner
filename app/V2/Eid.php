@@ -1399,7 +1399,7 @@ class Eid
 		$v_rp_a = $n->GetHEIFollowUpNational($year, 4, $v, $division); //repeat
 		$v_uf_a = $n->GetHEIFollowUpNational($year, 5, $v, $division); //unknownfacility		
 		
-		$sitesending_a = $n->GettotalEidsitesbytimeperiod($year, $division);
+		// $sitesending_a = $n->GettotalEidsitesbytimeperiod($year, $division);
 		$avgage_a = $n->Getoverallaverageage($year, $division);
 		// $medage_a = $n->Getoverallmedianage($year, $div_array, $division, $column);
 		// $medage_a = collect($medage_a);
@@ -1421,7 +1421,7 @@ class Eid
 
 				$wheres = ['month' => $month, 'facility' => $row->facility];
 
-				$alltests = $this->checknull($alltests_a, $wheres);
+				$alltests = $row->totals;
 				$received = $this->checknull($received_a, $wheres);
 
 				if($alltests == 0 && $received == 0) continue;
@@ -1478,7 +1478,8 @@ class Eid
 				$v_rp = $this->checknull($v_rp_a, $wheres);
 				$v_uf = $this->checknull($v_uf_a, $wheres);
 
-				$sitesending = $this->checknull($sitesending_a, $wheres);
+				// $sitesending = $this->checknull($sitesending_a, $wheres);
+				$sitesending = 1;
 				$avgage = $this->checknull($avgage_a, $wheres);
 				// $medage = $this->checkmedage($medage_a->where('month', $month)->where('division', $div_array[$it]));
 

@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
         Commands\VlSubcounty::class,
         Commands\VlFacility::class,
         Commands\VlLab::class,
+        Commands\VlPoc::class,
         Commands\VlPartner::class,
         Commands\VlLablog::class,
         Commands\VlSamples::class,
