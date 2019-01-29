@@ -1416,74 +1416,74 @@ class Eid
 			// Loop through divisions i.e. counties, subcounties, partners and sites
 			// for ($it=0; $it < $array_size; $it++) { 
 
+				$wheres = ['month' => $month, 'facility' => $row->facility];
+
 
 			foreach ($alltests_a as $row) {
 
-				$wheres = ['month' => $month, 'facility' => $row->facility];
-
-				$alltests = $this->checknull($alltests_a->where($wheres));
-				$received = $this->checknull($received_a->where($wheres));
+				$alltests = $this->checknull($alltests_a, $wheres);
+				$received = $this->checknull($received_a, $wheres);
 
 				if($alltests == 0 && $received == 0) continue;
 
-				$eqatests = $this->checknull($eqatests_a->where($wheres));
-				$tests = $this->checknull($tests_a->where($wheres));
-				$patienttests = $this->checknull($patienttests_a->where($wheres));
-				$patienttestsPOS = $this->checknull($patienttestsPOS_a->where($wheres));
+				$eqatests = $this->checknull($eqatests_a, $wheres);
+				$tests = $this->checknull($tests_a, $wheres);
+				$patienttests = $this->checknull($patienttests_a, $wheres);
+				$patienttestsPOS = $this->checknull($patienttestsPOS_a, $wheres);
 
 				
-				$firstdna = $this->checknull($firstdna_a->where($wheres));
-				$confirmdna = $this->checknull($confirmdna_a->where($wheres));
-				$posrepeats = $this->checknull($posrepeats_a->where($wheres));
-				$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where($wheres));
-				$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where($wheres));
+				$firstdna = $this->checknull($firstdna_a, $wheres);
+				$confirmdna = $this->checknull($confirmdna_a, $wheres);
+				$posrepeats = $this->checknull($posrepeats_a, $wheres);
+				$confirmdnaPOS = $this->checknull($confirmdnaPOS_a, $wheres);
+				$posrepeatsPOS = $this->checknull($posrepeatsPOS_a, $wheres);
 				$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
 
-				$infantsless2m = $this->checknull($infantsless2m_a->where($wheres));
-				$infantsless2mPOS = $this->checknull($infantsless2mPOS_a->where($wheres));
-				$infantsless2w = $this->checknull($infantsless2w_a->where($wheres));
-				$infantsless2wPOS = $this->checknull($infantsless2wPOS_a->where($wheres));
-				$infantsless46w = $this->checknull($infantsless46w_a->where($wheres));
-				$infantsless46wPOS = $this->checknull($infantsless46wPOS_a->where($wheres));
-				$infantsabove2m = $this->checknull($infantsabove2m_a->where($wheres));
-				$infantsabove2mPOS = $this->checknull($infantsabove2mPOS_a->where($wheres));
-				$adulttests = $this->checknull($adulttests_a->where($wheres));
-				$adulttestsPOS = $this->checknull($adulttestsPOS_a->where($wheres));
+				$infantsless2m = $this->checknull($infantsless2m_a, $wheres);
+				$infantsless2mPOS = $this->checknull($infantsless2mPOS_a, $wheres);
+				$infantsless2w = $this->checknull($infantsless2w_a, $wheres);
+				$infantsless2wPOS = $this->checknull($infantsless2wPOS_a, $wheres);
+				$infantsless46w = $this->checknull($infantsless46w_a, $wheres);
+				$infantsless46wPOS = $this->checknull($infantsless46wPOS_a, $wheres);
+				$infantsabove2m = $this->checknull($infantsabove2m_a, $wheres);
+				$infantsabove2mPOS = $this->checknull($infantsabove2mPOS_a, $wheres);
+				$adulttests = $this->checknull($adulttests_a, $wheres);
+				$adulttestsPOS = $this->checknull($adulttestsPOS_a, $wheres);
 
 
-				$pos = $this->checknull($pos_a->where($wheres));
-				$neg = $this->checknull($neg_a->where($wheres));
-				$fail = $this->checknull($fail_a->where($wheres));
-				$rd = $this->checknull($rd_a->where($wheres));
-				$rdd = $this->checknull($rdd_a->where($wheres));
+				$pos = $this->checknull($pos_a, $wheres);
+				$neg = $this->checknull($neg_a, $wheres);
+				$fail = $this->checknull($fail_a, $wheres);
+				$rd = $this->checknull($rd_a, $wheres);
+				$rdd = $this->checknull($rdd_a, $wheres);
 				$redraw = $fail + $rd + $rdd;
 
-				$rpos = $this->checknull($rpos_a->where($wheres));
-				$rneg = $this->checknull($rneg_a->where($wheres));
+				$rpos = $this->checknull($rpos_a, $wheres);
+				$rneg = $this->checknull($rneg_a, $wheres);
 
-				$allpos = $this->checknull($allpos_a->where($wheres));
-				$allneg = $this->checknull($allneg_a->where($wheres));
+				$allpos = $this->checknull($allpos_a, $wheres);
+				$allneg = $this->checknull($allneg_a, $wheres);
 
-				$rej = $this->checknull($rej_a->where($wheres));
-				$enrolled = $this->checknull($enrolled_a->where($wheres));
-				$ltfu = $this->checknull($ltfu_a->where($wheres));
-				$dead = $this->checknull($dead_a->where($wheres));
-				$adult = $this->checknull($adult_a->where($wheres));
-				$transout = $this->checknull($transout_a->where($wheres));
-				$other = $this->checknull($other_a->where($wheres));
+				$rej = $this->checknull($rej_a, $wheres);
+				$enrolled = $this->checknull($enrolled_a, $wheres);
+				$ltfu = $this->checknull($ltfu_a, $wheres);
+				$dead = $this->checknull($dead_a, $wheres);
+				$adult = $this->checknull($adult_a, $wheres);
+				$transout = $this->checknull($transout_a, $wheres);
+				$other = $this->checknull($other_a, $wheres);
 
-				$v_cp = $this->checknull($v_cp_a->where($wheres));
-				$v_ad = $this->checknull($v_ad_a->where($wheres));
-				$v_vl = $this->checknull($v_vl_a->where($wheres));
-				$v_rp = $this->checknull($v_rp_a->where($wheres));
-				$v_uf = $this->checknull($v_uf_a->where($wheres));
+				$v_cp = $this->checknull($v_cp_a, $wheres);
+				$v_ad = $this->checknull($v_ad_a, $wheres);
+				$v_vl = $this->checknull($v_vl_a, $wheres);
+				$v_rp = $this->checknull($v_rp_a, $wheres);
+				$v_uf = $this->checknull($v_uf_a, $wheres);
 
-				$sitesending = $this->checknull($sitesending_a->where($wheres));
-				$avgage = $this->checknull($avgage_a->where($wheres));
+				$sitesending = $this->checknull($sitesending_a, $wheres);
+				$avgage = $this->checknull($avgage_a, $wheres);
 				$medage = $this->checkmedage($medage_a->where('month', $month)->where('division', $div_array[$it]));
 
 				
-				$tt = $this->check_tat($tat->where($wheres));
+				$tt = $this->check_tat($tat, $wheres);
 				// $tt = $this->checktat($tat->where('month', $month)->where('division', $div_array[$it]));
 				
 
@@ -1533,16 +1533,20 @@ class Eid
 		// End of division updator
     }
 
-    public function continue_poc($year){
+    public function continue_poc($year=null){
     	$n = new EidFacility;
 
     	$division = 'site_poc';
     	$column = 'facility';
 
+    	if($year == null) $year = Date('Y');
+
     	$today = date('Y-m-d');
 
     	$update_statements = "";
     	$updates = 0;
+
+    	ini_set("memory_limit", "-1");
 
     	for ($type=3; $type < 5; $type++) { 
 

@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel
         Commands\EidSubcounty::class,
         Commands\EidFacility::class,
         Commands\EidLab::class,
+        Commands\EidPoc::class,
         Commands\EidPartner::class,
 
         Commands\VlNation::class,
