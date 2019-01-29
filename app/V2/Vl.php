@@ -1362,7 +1362,8 @@ class Vl
 				$tt = $this->check_tat($tat, $wheres);
 				
 
-				$data_array = array(
+				$data_array = [
+					'facility_tested_in' => $tested_row->lab_id,
 					'received' => $rec, 'alltests' => $tested,
 					'sustxfail' => $sustx, 'confirmtx' => $conftx, 'repeattests' => $rs,
 					'confirm2vl' => $conf2VL, 'rejected' => $rej, 'dbs' => $dbs, 'plasma' => $plas,
@@ -1376,18 +1377,13 @@ class Vl
 					'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
 					'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
 					'noage' => $noage, 'baseline' => $baseline, 'baselinesustxfail' => $baselinefail
-				);
+				];
 
 				if($type == 5){
 					$eqa = $this->checknull($eqa_a, $wheres);
 					$fake = $this->checknull($fake_a, $wheres);
 					$controls = $this->checknull($controls_a, $wheres) * 3;
 					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
-				}
-
-				if($division == 'poc'){
-					DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, 11)->update($data_array);
-					break;
 				}
 
 				$wheres = array_merge($wheres, ['year' => $year]);
