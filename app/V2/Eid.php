@@ -1416,10 +1416,10 @@ class Eid
 			// Loop through divisions i.e. counties, subcounties, partners and sites
 			// for ($it=0; $it < $array_size; $it++) { 
 
-				$wheres = ['month' => $month, 'facility' => $row->facility];
-
 
 			foreach ($alltests_a as $row) {
+
+				$wheres = ['month' => $month, 'facility' => $row->facility];
 
 				$alltests = $this->checknull($alltests_a, $wheres);
 				$received = $this->checknull($received_a, $wheres);
