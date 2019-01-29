@@ -31,7 +31,8 @@ class EidFacility
 
     	$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('facility_id', '!=', 7148)
@@ -50,7 +51,8 @@ class EidFacility
 
     	$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('facility_id', '!=', 7148)
@@ -74,7 +76,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datetested', $date_range)
@@ -100,7 +103,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('result', '>', 0)
@@ -125,7 +129,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('result', '>', 0)
@@ -150,7 +155,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereIn('result', [1, 2])
@@ -174,7 +180,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when(true, function($query) use ($pos){
@@ -208,7 +215,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datereceived', $date_range)
@@ -231,7 +239,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('previous_positive', 1)
@@ -254,7 +263,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when(true, function($query) use ($pos){
@@ -290,7 +300,8 @@ class EidFacility
 		$data = SampleSynchView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
 		->whereBetween('age', $age)
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when(true, function($query) use ($pos){
@@ -327,7 +338,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('result', $result_type)
@@ -360,7 +372,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('datereceived', $date_range)
@@ -380,7 +393,8 @@ class EidFacility
 
 		$data = SampleSynchView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('result', 2)
@@ -407,7 +421,8 @@ class EidFacility
 
 		$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datereceived) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->when($division, function($query) use ($division){
@@ -434,7 +449,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('pcrtype', 1)
@@ -461,7 +477,8 @@ class EidFacility
 			}
 		})
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('pcrtype', 1)
@@ -534,7 +551,8 @@ class EidFacility
 
 		$data = SampleSynchView::selectRaw("COUNT(patient_id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('regimen', $drug)
@@ -556,7 +574,8 @@ class EidFacility
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('mother_prophylaxis', $drug)
@@ -577,7 +596,8 @@ class EidFacility
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('entry_point', $entry_point)
@@ -598,7 +618,8 @@ class EidFacility
 
 		$data = SampleSynchView::selectRaw("COUNT(patient_id) as totals, month(datetested) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereBetween('age', $age_array)
@@ -619,7 +640,8 @@ class EidFacility
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->where('receivedstatus', 2)
@@ -641,7 +663,8 @@ class EidFacility
 
 		$data = SampleSynchView::selectRaw($sql)
 		->when(true, function($query) use ($division){
-			if($division != "poc") return $query->addSelect($division)->groupBy($division);
+			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
 			return $query->where('site_entry', 2);
 		})
 		->whereColumn([
