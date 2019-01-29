@@ -1625,7 +1625,7 @@ class Eid
 							$data_array = array_merge($data_array, ['tests' => $tests, 'redraw' => $redraw]);
 						}
 
-						$wheres = ['year' => $year, 'month' => $month, 'facility' => $neg_row->facility, $column => $div_array[$it]];
+						$wheres = ['year' => $year, 'month' => $month, 'facility' => $neg_row->facility, $table[2] => $value->id];
 
 						$row = DB::table($table[0])->where($wheres)->first();
 

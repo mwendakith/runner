@@ -23,10 +23,9 @@ Artisan::command('clean:storage', function () {
 })->describe('Alter MyIsam tables to InnoDB.');
 
 Artisan::command('update:vl-datim-suppression', function () {
-	\App\Cleaner::clean_storage();
 	$n = new Vl;
 	$a = $n->update_suppression_datim();
 	$this->comment($a);
-})->describe('Alter MyIsam tables to InnoDB.');
+})->describe('Update VL Datim Suppression.');
 
 

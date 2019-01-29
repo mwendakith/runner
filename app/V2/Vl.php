@@ -1222,6 +1222,216 @@ class Vl
 
 
 
+    // Div type is the type of division eg county, subcounty, partner and facility
+    public function finish_poc($start_month, $year=null){
+    	ini_set("memory_limit", "-1");
+
+    	$n = new VlFacility;
+    	$update_statements = '';
+    	$updates = 0;
+
+    	$division = 'site_poc';
+    	$column = 'facility';
+
+    	$today = date('Y-m-d');
+
+    	if($year == null) $year = Date('Y');
+
+    	for ($type=1; $type < 3; $type++) { 
+
+			$table = $this->get_table(6, $type);
+
+			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+			
+			// Get ids of the necessary table
+			$divs = $data = DB::connection('eid_vl')
+			->table($table[1])->select('id')
+			->when($type, function($query) use ($type){
+				if($type == 1 || $type == 6){
+					return $query->where('subid', 1);
+				}				
+			})
+			->get();
+
+			foreach ($divs as $key => $value) {	
+
+
+				// Loop through the months and insert data
+				for ($i=$start_month; $i < 12; $i++) { 
+					$month = $i + 1;
+					if($year == Date('Y') && $month > Date('m')){ break; }
+
+					// Get collection instances of the data
+			    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $month, $division, $type, $value->id);
+			    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $month, $division, $type, $value->id);
+			    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $month, $division, $type, $value->id);
+
+			    	if($tested_a->count() == 0 && $rej_a->count() == 0) continue;
+
+			    	$conftx_a = $n->GetNationalConfirmed2VLsbydash($year, $month, $division, $type, $value->id);
+			    	$conf2VL_a = $n->GetNationalConfirmedFailurebydash($year, $month, $division, $type, $value->id);
+			    	// $rs = $n->getallrepeattviraloadsamplesbydash($year, $month, $division, $type, $value->id);
+			    	$rs = 0;
+
+			    	if ($type != 1 && $type != 6) {
+
+				    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 0);
+				    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 6);
+				    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 7);
+				    	$less14_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 8);
+				    	$less19_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 9);
+				    	$less24_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 10);
+				    	$over25_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 11);
+				    }
+
+			    	// $adults=$less19 +$less24 + $over25 ;
+					// $paeds=$less2 + $less9 + $less14;
+
+					$ldl_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 1);
+					$less1k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 2);
+					$less5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 3);
+					$above5k_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 4);
+					$invalids_a = $n->getalltestedviraloadsamplesbyresultbydash($year, $month, $division, $type, $value->id, 5);
+					// $sustx=$less5k +  $above5k;
+
+					if($type != 4 && $type != 6){
+
+						$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 1);
+						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 3);
+						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 2);
+					}
+
+					if($type != 2 && $type != 6){
+
+						$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 1);
+						$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 2);
+						$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 3);
+
+					}
+
+					if ($type != 5) {
+						$baseline_a = $n->GetNationalBaselinebydash($year, $month, $division, $type, $value->id);
+						$baselinefail_a = $n->GetNationalBaselineFailurebydash($year, $month, $division, $type, $value->id);
+					}
+
+					// Loop through divisions i.e. counties, subcounties, partners and sites
+					// for ($it=0; $it < $array_size; $it++) { 
+
+					foreach ($tested_a as $tested_row) {
+
+						$wheres = [$column => $tested_row->facility];
+						// $rec = $this->checknull($rec_a, $wheres);
+						$tested = $this->checknull($tested_a, $wheres);
+
+						$rej = $this->checknull($rej_a, $wheres);
+
+						$conftx = $this->checknull($conftx_a, $wheres);
+						$conf2VL = $this->checknull($conf2VL_a, $wheres);
+
+						$ldl = $this->checknull($ldl_a, $wheres);
+						$less1k = $this->checknull($less1k_a, $wheres);
+						$less5k = $this->checknull($less5k_a, $wheres);
+						$above5k = $this->checknull($above5k_a, $wheres);
+						$invalids = $this->checknull($invalids_a, $wheres);
+						$sustx = $less5k +  $above5k;
+
+						$data_array = array(
+							'sustxfail' => $sustx, 'confirmtx' => $conftx,
+							'confirm2vl' => $conf2VL, 'rejected' => $rej, 'Undetected' => $ldl, 'less1000' => $less1k,
+							'less5000' => $less5k, 'above5000' => $above5k, 'invalids' => $invalids,
+							'dateupdated' => $today
+						);		
+
+						if($type != 6){
+							$data_array = array_merge($data_array, ['tests' => $tested, 'repeattests' => $rs]);
+						}				
+
+						if($type != 1 && $type != 6){
+
+							$noage = $this->checknull($noage_a, $wheres);
+							$less2 = $this->checknull($less2_a, $wheres);
+							$less9 = $this->checknull($less9_a, $wheres);
+							$less14 = $this->checknull($less14_a, $wheres);
+							$less19 = $this->checknull($less19_a, $wheres);
+							$less24 = $this->checknull($less24_a, $wheres);
+							$over25 = $this->checknull($over25_a, $wheres);
+							$adults = $less19 + $less24 + $over25;
+							$paeds = $less2 + $less9 + $less14;
+
+							$age_array = array('less2' => $less2, 'less9' => $less9,
+							'less14' => $less14, 'less19' => $less19, 'less24' => $less24,
+							'over25' => $over25, 'adults' => $adults, 'paeds' => $paeds,
+							'noage' => $noage);
+
+							$data_array = array_merge($age_array, $data_array);
+
+						}
+
+						if($type != 4 && $type != 6){
+
+							$plas = $this->checknull($plas_a, $wheres);
+							$edta = $this->checknull($edta_a, $wheres);
+							$dbs = $this->checknull($dbs_a, $wheres);
+
+							$sample_array = array('dbs' => $dbs, 'plasma' => $plas, 'edta' => $edta);
+
+							$data_array = array_merge($sample_array, $data_array);
+
+						}
+
+						if ($type != 2 && $type != 6) {
+						
+							$male = $this->checknull($male_a, $wheres);
+							$female = $this->checknull($female_a, $wheres);
+							$nogender = $this->checknull($nogender_a, $wheres);
+
+							$gender_array = array('maletest' => $male, 'femaletest' => $female, 'nogendertest' => $nogender);
+
+							$data_array = array_merge($gender_array, $data_array);
+						}
+
+						if ($type != 5) {
+						
+							$baseline = $this->checknull($baseline_a, $wheres);
+							$baselinefail = $this->checknull($baselinefail_a, $wheres);
+
+							$baseline_array = array('baseline' => $baseline, 'baselinesustxfail' => $baselinefail);
+
+							$data_array = array_merge($baseline_array, $data_array);
+						}
+
+						$wheres = ['year' => $year, 'month' => $month, 'facility' => $tested_row->facility, $column => $div_array[$it]];
+
+
+
+						
+
+						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($column, $div_array[$it])->update($data_array);
+
+						// $search_array = ['year' => $year, 'month' => $month, $table[2] => $value->id, $column => $div_array[$it]];
+						// $update_statements .= $this->update_query($table[0], $data_array, $search_array);
+						// $updates++;
+
+						// if($updates == 150){
+						// 	$this->mysqli->multi_query($update_statements);
+						// 	$update_statements = '';
+						// 	$updates = 0;
+						// }
+					}
+
+				}
+				// End of for loop for months
+
+			}
+			// End of looping through ids of each table e.g. agecategory
+			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
+		}
+		// $this->mysqli->multi_query($update_statements);
+		// End of looping of params
+    }
+
+
+
     public function update_counties($start_month, $year=null){
     	return $this->update_division($start_month, $year, 1, 'county', 'county', 'countys', 'vl_county_summary', 'vl_county_rejections');
     }
@@ -1761,6 +1971,31 @@ class Vl
     				break;
     			case 6:
     				$name = array("vl_site_pmtct", "viralpmtcttype", "pmtcttype");
+    				break;
+    			default:
+    				break;
+    		}
+    	}
+
+    	else if ($division == 6) {
+    		switch ($type) {
+    			case 1:
+    				$name = array("vl_site_age_poc", "agecategory", "age");
+    				break;
+    			case 2:
+    				$name = array("vl_site_gender_poc", "gender", "gender");
+    				break;
+    			case 3:
+    				$name = array("vl_site_regimen_poc", "viralprophylaxis", "regimen");
+    				break;
+    			case 4:
+    				$name = array("vl_site_sampletype_poc", "viralsampletypedetails", "sampletype");
+    				break;
+    			case 5:
+    				$name = array("vl_site_justification_poc", "viraljustifications", "justification");
+    				break;
+    			case 6:
+    				$name = array("vl_site_pmtct_poc", "viralpmtcttype", "pmtcttype");
     				break;
     			default:
     				break;
