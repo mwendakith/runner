@@ -1609,15 +1609,15 @@ class Eid
 
 					foreach ($neg_a as $key_row => $neg_row) {
 
-						$pos = $this->checknull($pos_a->where($column, $neg->facility));
-						$neg = $neg->totals;
+						$pos = $this->checknull($pos_a->where($column, $neg_row->facility));
+						$neg = $neg_row->totals;
 
 						$data_array = array('pos' => $pos, 'neg' => $neg, 'dateupdated' => $today);
 
 						if($type != 4){							
 
-							$fail = $this->checknull($fail_a->where($column, $neg->facility));
-							$rd = $this->checknull($rd_a->where($column, $neg->facility));
+							$fail = $this->checknull($fail_a->where($column, $neg_row->facility));
+							$rd = $this->checknull($rd_a->where($column, $neg_row->facility));
 
 							$redraw = $fail + $rd;
 							$tests = $pos + $neg +  $redraw;
@@ -1625,7 +1625,7 @@ class Eid
 							$data_array = array_merge($data_array, ['tests' => $tests, 'redraw' => $redraw]);
 						}
 
-						$wheres = ['year' => $year, 'month' => $month, 'facility' => $neg->facility, $column => $div_array[$it]];
+						$wheres = ['year' => $year, 'month' => $month, 'facility' => $neg_row->facility, $column => $div_array[$it]];
 
 						$row = DB::table($table[0])->where($wheres)->first();
 
