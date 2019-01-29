@@ -1480,7 +1480,7 @@ class Eid
 
 				$sitesending = $this->checknull($sitesending_a, $wheres);
 				$avgage = $this->checknull($avgage_a, $wheres);
-				$medage = $this->checkmedage($medage_a->where('month', $month)->where('division', $div_array[$it]));
+				// $medage = $this->checkmedage($medage_a->where('month', $month)->where('division', $div_array[$it]));
 
 				
 				$tt = $this->check_tat($tat, $wheres);
@@ -1488,7 +1488,7 @@ class Eid
 				
 
 				$data_array = array(
-					'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
+					'avgage' => $avgage,	'received' => $received,
 					'alltests' => $alltests, 'eqatests' => $eqatests, 'tests' => $tests,
 					'firstdna' => $firstdna, 'confirmdna' => $confirmdna, 'repeatspos' => $posrepeats,
 					'confirmedPOs' => $confirmdnaPOS, 'repeatposPOS' => $posrepeatsPOS,
