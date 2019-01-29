@@ -1345,13 +1345,13 @@ class Vl
 
 			$wheres = ['facility' => $value->id];
 
-			$suppressed = 
-			(int) $this->checknull($data->where('rcategory', 1), $wheres) + 
-			(int) $this->checknull($data->where('rcategory', 2), $wheres);
+			$Undetected = (int) $this->checknull($data->where('rcategory', 1), $wheres);
+			$less1000 = (int) $this->checknull($data->where('rcategory', 2), $wheres);
+			$suppressed = $Undetected + $less1000;
 
-			$nonsuppressed = 
-			(int) $this->checknull($data->where('rcategory', 3), $wheres) + 
-			(int) $this->checknull($data->where('rcategory', 4), $wheres);
+			$less5000 = (int) $this->checknull($data->where('rcategory', 3), $wheres); 
+			$above5000 = (int) $this->checknull($data->where('rcategory', 4), $wheres);
+			$nonsuppressed = $less1000 + $less5000;
 
 			$tests =  ($suppressed + $nonsuppressed);
 			$suppression = $coverage = 0;
@@ -1405,6 +1405,8 @@ class Vl
 
 			$data_array = array('dateupdated' => $today, 'suppressed' => $suppressed, 
 				'nonsuppressed' => $nonsuppressed, 'suppression' => $suppression, 'coverage' => $coverage,
+
+				'Undetected' => $Undetected, 'less1000' => $less1000, 'less5000' => $less5000, 'above5000' => $above5000,
 
 				'noage_suppressed' => $noage_sup, 'noage_nonsuppressed' => $noage_nonsup,
 				'less2_suppressed' => $less2_sup, 'less2_nonsuppressed' => $less2_nonsup,
