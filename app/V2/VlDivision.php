@@ -829,7 +829,7 @@ class VlDivision
 		return $data;
     }
 
-    public function getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division='county', $type, $param, $sex){
+    public function getalltestedviraloadsamplesbygenderbydash($year, $start_month, $division='county', $type, $param, $sex, $nonsuppressed=false){
 
 		$date_range = BaseModel::date_range($year, $start_month);
 		$p = BaseModel::get_vlparams($type, $param);
@@ -849,6 +849,9 @@ class VlDivision
 			if($type == 4){
 				return $query->whereIn('rcategory', [1, 2, 3, 4]);
 			}					
+		})
+		->when($nonsuppressed, function($query) use ($nonsuppressed){
+			return $query->whereIn('rcategory', [3, 4]);
 		})
 		->whereBetween('datetested', $date_range)
 		->when($type, function($query) use ($type, $param, $p){
