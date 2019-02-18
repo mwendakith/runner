@@ -1748,7 +1748,7 @@ class Vl
 
 			$less5000 = (int) $this->checknull($data->where('rcategory', 3), $wheres); 
 			$above5000 = (int) $this->checknull($data->where('rcategory', 4), $wheres);
-			$nonsuppressed = $less1000 + $less5000;
+			$nonsuppressed = $less5000 + $above5000;
 
 			$tests =  ($suppressed + $nonsuppressed);
 			$suppression = $coverage = 0;
