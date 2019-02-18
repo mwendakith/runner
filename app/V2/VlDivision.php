@@ -1140,7 +1140,7 @@ class VlDivision
 		return collect($data);
     }
 
-    public function suppression(){
+    public function suppression_two($facility_id){
     	ini_set("memory_limit", "-1");
 
     	// SELECT facility_id as facility, rcategory, count(*) as totals 
@@ -1178,6 +1178,7 @@ class VlDivision
 		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
 		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4) ';
 		$sql .= 'AND justification != 10 AND facility_id != 7148 ';
+		$sql .= 'AND facility_id = ' . $facility_id . ' ';
 		$sql .= 'GROUP BY patient_id) gv ';
 		$sql .= 'ON v.id=gv.id) tb ';
 		$sql .= 'GROUP BY facility_id, rcategory ';
