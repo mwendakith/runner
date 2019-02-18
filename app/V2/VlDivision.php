@@ -1140,6 +1140,54 @@ class VlDivision
 		return collect($data);
     }
 
+    public function suppression(){
+    	ini_set("memory_limit", "-1");
+
+    	// SELECT facility_id as facility, rcategory, count(*) as totals 
+		// FROM 
+		// (SELECT v.id, v.facility_id, v.rcategory 
+		// FROM viralsamples_view v 
+		// RIGHT JOIN 
+		// (SELECT id, patient_id, max(datetested) as maxdate 
+		// FROM viralsamples_view 
+		// WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) 
+		// AND patient != '' AND patient != 'null' AND patient is not null 
+		// AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4)
+		// AND justification != 10 AND facility_id != 7148 
+		// GROUP BY patient_id) gv 
+		// ON v.id=gv.id) tb 
+		// GROUP BY facility_id, rcategory 
+		// ORDER BY facility_id, rcategory 
+
+
+    	$r = $this->current_range();
+
+    	$year = $r[0];
+    	$prev_year = $r[1];
+    	$month = $r[2];
+    	$prev_month = $r[3];
+
+    	$sql = 'SELECT facility_id as facility, rcategory, count(*) as totals ';
+		$sql .= 'FROM ';
+		$sql .= '(SELECT v.id, v.facility_id, v.rcategory ';
+		$sql .= 'FROM viralsamples_view v ';
+		$sql .= 'RIGHT JOIN ';
+		$sql .= '(SELECT id, patient_id, max(datetested) as maxdate ';
+		$sql .= 'FROM viralsamples_view ';
+		$sql .= 'WHERE ( (year(datetested) = ? and month(datetested) > ?) || (year(datetested) = ? and month(datetested) < ?) ) ';
+		$sql .= "AND patient != '' AND patient != 'null' AND patient is not null ";
+		$sql .= 'AND flag=1 AND repeatt=0 AND rcategory in (1, 2, 3, 4) ';
+		$sql .= 'AND justification != 10 AND facility_id != 7148 ';
+		$sql .= 'GROUP BY patient_id) gv ';
+		$sql .= 'ON v.id=gv.id) tb ';
+		$sql .= 'GROUP BY facility_id, rcategory ';
+		$sql .= 'ORDER BY facility_id, rcategory ';
+
+		$data = DB::connection('eid_vl')->select($sql, [$prev_year, $prev_month, $year, $month]);
+
+		return $data;
+    }
+
     private function current_range(){
 
     	$year = ((int) Date('Y'));
