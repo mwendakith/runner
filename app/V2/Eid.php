@@ -934,7 +934,7 @@ class Eid
 				$alltests = $this->checknull($alltests_a->where('month', $month)->where($column, $div_array[$it]));
 				$received = $this->checknull($received_a->where('month', $month)->where($column, $div_array[$it]));
 
-				if($alltests == 0 && $received == 0) continue;
+				// if($alltests == 0 && $received == 0) continue;
 
 				$eqatests = $this->checknull($eqatests_a->where('month', $month)->where($column, $div_array[$it]));
 				$tests = $this->checknull($tests_a->where('month', $month)->where($column, $div_array[$it]));

@@ -505,9 +505,7 @@ class Vl
 				$rec = $this->checknull($rec_a, $wheres);
 				$tested = $this->checknull($tested_a, $wheres);
 
-				if($rec == 0 && $tested == 0){
-					continue;
-				}
+				// if($rec == 0 && $tested == 0) continue;
 
 				// $actualpatients = $this->checknull($actualpatients_a, $wheres);
 				$rej = $this->checknull($rej_a, $wheres);
@@ -790,9 +788,7 @@ class Vl
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 
-					if($rej == 0){
-						continue;
-					}
+					// if($rej == 0) continue;
 
 					$data_array = array(
 						'dateupdated' => $today, 'total' => $rej
@@ -915,9 +911,7 @@ class Vl
 						// $rec = $this->checknull($rec_a, $wheres);
 						$tested = $this->checknull($tested_a, $wheres);
 
-						if($tested == 0){
-							continue;
-						}
+						if($tested == 0) continue;
 
 						$rej = $this->checknull($rej_a, $wheres);
 						// $rs = $this->checknull($rs_a, $wheres);
