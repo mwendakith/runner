@@ -28,4 +28,11 @@ Artisan::command('update:vl-datim-suppression', function () {
 	$this->comment($a);
 })->describe('Update VL Datim Suppression.');
 
+Artisan::command('create:missing-rows {year}', function ($year) {
+	\App\Cleaner::eid_missing_site_rows($year);
+	\App\Cleaner::vl_missing_site_rows($year);
+})->describe('Alter MyIsam tables to InnoDB.');
+
+
+
 
