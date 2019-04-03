@@ -285,22 +285,26 @@ class Cleaner
 		$i=0;
 
 		// Insert missing rows in vl_site_suppression
-		$table_name = 'vl_site_suppression';
-		$mfacilities = DB::table('facilitys')
-			->select('id')
-			->whereRaw("id not in (SELECT facility FROM {$table_name} )")
-			->get();
+		$table_names = ['vl_site_suppression_datim', 'vl_site_suppression'];
 
-		if($mfacilities->isNotEmpty()){
-			foreach ($mfacilities as $key => $fac) {
-				$data_array[$i] = array('facility' => $fac->id);
-				$i++;
+		foreach ($table_names as $table_name) {
+
+			$mfacilities = DB::table('facilitys')
+				->select('id')
+				->whereRaw("id not in (SELECT facility FROM {$table_name} )")
+				->get();
+
+			if($mfacilities->isNotEmpty()){
+				foreach ($mfacilities as $key => $fac) {
+					$data_array[$i] = array('facility' => $fac->id);
+					$i++;
+				}
 			}
-		}
 
-		if($data_array) DB::table($table_name)->insert($data_array);
-		$data_array=null;
-		$i=0;
+			if($data_array) DB::table($table_name)->insert($data_array);
+			$data_array=null;
+			$i=0;
+		}
 
 
 		// Iterate through vl site tables
