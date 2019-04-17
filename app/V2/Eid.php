@@ -931,6 +931,8 @@ class Eid
 
 			// Loop through divisions i.e. counties, subcounties, partners and sites
 			for ($it=0; $it < $array_size; $it++) { 
+				if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
+
 				$alltests = $this->checknull($alltests_a->where('month', $month)->where($column, $div_array[$it]));
 				$received = $this->checknull($received_a->where('month', $month)->where($column, $div_array[$it]));
 
@@ -1167,16 +1169,19 @@ class Eid
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
+						if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
 
-						$pos = $this->checknull($pos_a->where('month', $month)->where($column, $div_array[$it]));
-						$neg = $this->checknull($neg_a->where('month', $month)->where($column, $div_array[$it]));
+						$wheres = ['month' => $month, $column => $div_array[$it]];
+
+						$pos = $this->checknull($pos_a, $wheres);
+						$neg = $this->checknull($neg_a, $wheres);
 
 						$data_array = array('pos' => $pos, 'neg' => $neg, 'dateupdated' => $today);
 
 						if($type != 4){							
 
-							$fail = $this->checknull($fail_a->where('month', $month)->where($column, $div_array[$it]));
-							$rd = $this->checknull($rd_a->where('month', $month)->where($column, $div_array[$it]));
+							$fail = $this->checknull($fail_a, $wheres);
+							$rd = $this->checknull($rd_a, $wheres);
 
 							$redraw = $fail + $rd;
 							$tests = $pos + $neg +  $redraw;
@@ -1268,6 +1273,7 @@ class Eid
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
+						if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
 
 						$pos = $this->checknull($pos_a->where($column, $div_array[$it]));
 						$neg = $this->checknull($neg_a->where($column, $div_array[$it]));
@@ -1752,71 +1758,72 @@ class Eid
 
 		// Loop through divisions i.e. counties, subcounties, partners and sites
 		for ($it=0; $it < $array_size; $it++) { 
-			$alltests = $this->checknull($alltests_a->where($column, $div_array[$it]));
-			$received = $this->checknull($received_a->where($column, $div_array[$it]));
+			if($type == 3 && $div_array[$it] == 55 && $year < 2019) continue;
+			$wheres = [$column => $div_array[$it]];
 
-			if($alltests == 0 && $received == 0){
-				continue;
-			}
+			$alltests = $this->checknull($alltests_a, $wheres);
+			$received = $this->checknull($received_a, $wheres);
 
-			$eqatests = $this->checknull($eqatests_a->where($column, $div_array[$it]));
+			if($alltests == 0 && $received == 0) continue;
 
-			$tests = $this->checknull($tests_a->where($column, $div_array[$it]));
-			$patienttests = $this->checknull($patienttests_a->where($column, $div_array[$it]));
-			$patienttestsPOS = $this->checknull($patienttestsPOS_a->where($column, $div_array[$it]));
+			$eqatests = $this->checknull($eqatests_a, $wheres);
+
+			$tests = $this->checknull($tests_a, $wheres);
+			$patienttests = $this->checknull($patienttests_a, $wheres);
+			$patienttestsPOS = $this->checknull($patienttestsPOS_a, $wheres);
 
 			
-			$firstdna = $this->checknull($firstdna_a->where($column, $div_array[$it]));
-			$confirmdna = $this->checknull($confirmdna_a->where($column, $div_array[$it]));
-			$posrepeats = $this->checknull($posrepeats_a->where($column, $div_array[$it]));
-			$confirmdnaPOS = $this->checknull($confirmdnaPOS_a->where($column, $div_array[$it]));
-			$posrepeatsPOS = $this->checknull($posrepeatsPOS_a->where($column, $div_array[$it]));
+			$firstdna = $this->checknull($firstdna_a, $wheres);
+			$confirmdna = $this->checknull($confirmdna_a, $wheres);
+			$posrepeats = $this->checknull($posrepeats_a, $wheres);
+			$confirmdnaPOS = $this->checknull($confirmdnaPOS_a, $wheres);
+			$posrepeatsPOS = $this->checknull($posrepeatsPOS_a, $wheres);
 			$confimPOS = $confirmdnaPOS + $posrepeatsPOS;
 
-			$infantsless2m = $this->checknull($infantsless2m_a->where($column, $div_array[$it]));
-			$infantsless2mPOS = $this->checknull($infantsless2mPOS_a->where($column, $div_array[$it]));
-			$infantsless2w = $this->checknull($infantsless2w_a->where($column, $div_array[$it]));
-			$infantsless2wPOS = $this->checknull($infantsless2wPOS_a->where($column, $div_array[$it]));
-			$infantsless46w = $this->checknull($infantsless46w_a->where($column, $div_array[$it]));
-			$infantsless46wPOS = $this->checknull($infantsless46wPOS_a->where($column, $div_array[$it]));
-			$infantsabove2m = $this->checknull($infantsabove2m_a->where($column, $div_array[$it]));
-			$infantsabove2mPOS = $this->checknull($infantsabove2mPOS_a->where($column, $div_array[$it]));
-			$adulttests = $this->checknull($adulttests_a->where($column, $div_array[$it]));
-			$adulttestsPOS = $this->checknull($adulttestsPOS_a->where($column, $div_array[$it]));
+			$infantsless2m = $this->checknull($infantsless2m_a, $wheres);
+			$infantsless2mPOS = $this->checknull($infantsless2mPOS_a, $wheres);
+			$infantsless2w = $this->checknull($infantsless2w_a, $wheres);
+			$infantsless2wPOS = $this->checknull($infantsless2wPOS_a, $wheres);
+			$infantsless46w = $this->checknull($infantsless46w_a, $wheres);
+			$infantsless46wPOS = $this->checknull($infantsless46wPOS_a, $wheres);
+			$infantsabove2m = $this->checknull($infantsabove2m_a, $wheres);
+			$infantsabove2mPOS = $this->checknull($infantsabove2mPOS_a, $wheres);
+			$adulttests = $this->checknull($adulttests_a, $wheres);
+			$adulttestsPOS = $this->checknull($adulttestsPOS_a, $wheres);
 
 
-			$pos = $this->checknull($pos_a->where($column, $div_array[$it]));
-			$neg = $this->checknull($neg_a->where($column, $div_array[$it]));
-			$fail = $this->checknull($fail_a->where($column, $div_array[$it]));
-			$rd = $this->checknull($rd_a->where($column, $div_array[$it]));
-			$rdd = $this->checknull($rdd_a->where($column, $div_array[$it]));
+			$pos = $this->checknull($pos_a, $wheres);
+			$neg = $this->checknull($neg_a, $wheres);
+			$fail = $this->checknull($fail_a, $wheres);
+			$rd = $this->checknull($rd_a, $wheres);
+			$rdd = $this->checknull($rdd_a, $wheres);
 			$redraw = $fail + $rd + $rdd;
 
-			$rpos = $this->checknull($rpos_a->where($column, $div_array[$it]));
-			$rneg = $this->checknull($rneg_a->where($column, $div_array[$it]));
+			$rpos = $this->checknull($rpos_a, $wheres);
+			$rneg = $this->checknull($rneg_a, $wheres);
 
-			$allpos = $this->checknull($allpos_a->where($column, $div_array[$it]));
-			$allneg = $this->checknull($allneg_a->where($column, $div_array[$it]));
+			$allpos = $this->checknull($allpos_a, $wheres);
+			$allneg = $this->checknull($allneg_a, $wheres);
 
-			$rej = $this->checknull($rej_a->where($column, $div_array[$it]));
-			$enrolled = $this->checknull($enrolled_a->where($column, $div_array[$it]));
-			$ltfu = $this->checknull($ltfu_a->where($column, $div_array[$it]));
-			$dead = $this->checknull($dead_a->where($column, $div_array[$it]));
-			$adult = $this->checknull($adult_a->where($column, $div_array[$it]));
-			$transout = $this->checknull($transout_a->where($column, $div_array[$it]));
-			$other = $this->checknull($other_a->where($column, $div_array[$it]));
+			$rej = $this->checknull($rej_a, $wheres);
+			$enrolled = $this->checknull($enrolled_a, $wheres);
+			$ltfu = $this->checknull($ltfu_a, $wheres);
+			$dead = $this->checknull($dead_a, $wheres);
+			$adult = $this->checknull($adult_a, $wheres);
+			$transout = $this->checknull($transout_a, $wheres);
+			$other = $this->checknull($other_a, $wheres);
 
-			$v_cp = $this->checknull($v_cp_a->where($column, $div_array[$it]));
-			$v_ad = $this->checknull($v_ad_a->where($column, $div_array[$it]));
-			$v_vl = $this->checknull($v_vl_a->where($column, $div_array[$it]));
-			$v_rp = $this->checknull($v_rp_a->where($column, $div_array[$it]));
-			$v_uf = $this->checknull($v_uf_a->where($column, $div_array[$it]));
+			$v_cp = $this->checknull($v_cp_a, $wheres);
+			$v_ad = $this->checknull($v_ad_a, $wheres);
+			$v_vl = $this->checknull($v_vl_a, $wheres);
+			$v_rp = $this->checknull($v_rp_a, $wheres);
+			$v_uf = $this->checknull($v_uf_a, $wheres);
 
-			$sitesending = $this->checknull($sitesending_a->where($column, $div_array[$it]));
-			$avgage = $this->checknull($avgage_a->where($column, $div_array[$it]));
+			$sitesending = $this->checknull($sitesending_a, $wheres);
+			$avgage = $this->checknull($avgage_a, $wheres);
 			$medage = $this->checkmedage($medage_a->where('division', $div_array[$it]));
 
-			$tt = $this->check_tat($tat->where($column, $div_array[$it]));
+			$tt = $this->check_tat($tat, $wheres);
 
 			$data_array = array(
 				'avgage' => $avgage,	'medage' => $medage,	'received' => $received,
@@ -1840,8 +1847,8 @@ class Eid
 			);
 
 			if ($type == 4) {
-				$noage = $this->checknull($noage_a->where($column, $div_array[$it]));
-				$noagePOS = $this->checknull($noagePOS_a->where($column, $div_array[$it]));
+				$noage = $this->checknull($noage_a, $wheres);
+				$noagePOS = $this->checknull($noagePOS_a, $wheres);
 				$data_array = array_merge($data_array, ['noage' => $noage, 'noagePOS' => $noagePOS]);
 			}
 

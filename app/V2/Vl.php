@@ -275,9 +275,7 @@ class Vl
 
 					$tested = $this->checknull($tested_a, $wheres);
 
-					if($tested == 0){
-						continue;
-					}
+					if($tested == 0) continue;
 
 					// $rec = $this->checknull($rec_a, $wheres);
 					$rej = $this->checknull($rej_a, $wheres);
@@ -487,6 +485,7 @@ class Vl
 			$eqa_a = $n->get_eqa_tests($year, $start_month, $division);
 			$fake_a = $n->false_confirmatory($year, $start_month, $division);
 			$controls_a = $n->control_samples($year, $start_month);
+			$calibrations_a = $n->calibration_samples($year, $start_month);
 		}
 
 		$tat = $n->get_tat($year, $start_month, $division);
@@ -501,6 +500,8 @@ class Vl
 
 				$wheres = ['month' => $month, $column => $div_array[$it]];
 				if($division == 'poc') $wheres = ['month' => $month];
+
+				if($type == 3 && $div_array[$it] == 55 && $year < 2019) continue;
 
 				$rec = $this->checknull($rec_a, $wheres);
 				$tested = $this->checknull($tested_a, $wheres);
@@ -574,6 +575,8 @@ class Vl
 					$eqa = $this->checknull($eqa_a, $wheres);
 					$fake = $this->checknull($fake_a, $wheres);
 					$controls = $this->checknull($controls_a, $wheres) * 3;
+					// $controls = $this->checknull($controls_a, $wheres) * 3 + $this->checknull($calibrations_a, $wheres) * 8;
+					// $calibrations = $this->checknull($calibrations_a, $wheres) * 8;
 					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
 				}
 
@@ -785,6 +788,7 @@ class Vl
 
 				// Loop through divisions i.e. counties, subcounties, partners and sites
 				for ($it=0; $it < $array_size; $it++) { 
+					if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
 
@@ -823,9 +827,7 @@ class Vl
 
     	for ($type=1; $type < 7; $type++) { 
 
-    		if($type == 3 && $column == "facility"){
-				continue;
-			}
+    		if($type == 3 && $column == "facility") continue;
 
 			$table = $this->get_table($div_type, $type);
 
@@ -907,6 +909,8 @@ class Vl
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
 						$wheres = ['month' => $month, $column => $div_array[$it]];
+
+						if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
 
 						// $rec = $this->checknull($rec_a, $wheres);
 						$tested = $this->checknull($tested_a, $wheres);

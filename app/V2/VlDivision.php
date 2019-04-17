@@ -23,6 +23,21 @@ class VlDivision
 		return $data;
 	}
 
+    //Calibration Tests
+	public function calibration_samples($year, $start_month){
+		$date_range = BaseModel::date_range($year, $start_month);
+
+    	$data = DB::connection('eid_vl_wr')
+		->table('viralworksheets')
+		->selectRaw("COUNT(*) as totals, lab_id as lab, month(daterun) as month")
+		->whereBetween('daterun', $date_range)
+		->where('calibration', 1)
+		->groupBy('month', 'lab')
+		->get();
+
+		return $data;
+	}
+
     //Mapping
 	public function lab_county_tests($year, $start_month, $division='county'){
 		$date_range = BaseModel::date_range($year, $start_month);
