@@ -19,7 +19,6 @@ class EidPoc
 		->whereBetween('datetested', $date_range)
 		->where('pcrtype', 1)
 		->where('flag', 1)
-		->where('eqa', 0)
 		->where('repeatt', 0)
 		->where('site_entry', 2)
 		->when($monthly, function($query){
@@ -39,7 +38,6 @@ class EidPoc
 		->whereBetween('datetested', $date_range)
 		->whereRaw("(parentid=0  OR parentid IS NULL)")
 		->where('flag', 1)
-		->where('eqa', 0)
 		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
@@ -57,7 +55,6 @@ class EidPoc
 		$data =SampleSynchView::selectRaw("COUNT(DISTINCT facility) as totals, month(datereceived) as month")
 		->whereBetween('datereceived', $date_range)
 		->where('flag', 1)
-		->where('eqa', 0)
 		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
@@ -103,7 +100,6 @@ class EidPoc
 		->whereBetween('datereceived', $date_range)
 		->whereRaw("(parentid=0 OR parentid IS NULL)")
 		->where('flag', 1)
-		->where('eqa', 0)
 		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
@@ -123,7 +119,6 @@ class EidPoc
 		->whereBetween('datetested', $date_range)
 		->where('repeatt', 0)
 		->where('flag', 1)
-		->where('eqa', 0)
 		->where('site_entry', 2)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
@@ -142,7 +137,6 @@ class EidPoc
 		->where('result', '>', 0)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
-		->where('eqa', 0)
 		->where('repeatt', 0)
 		->where('site_entry', 2)
 		->when($monthly, function($query){
@@ -198,7 +192,6 @@ class EidPoc
 		})
 		->where('site_entry', 2)
 		->where('flag', 1)
-		->where('eqa', 0)
 		->where('repeatt', 0)
 		->when($monthly, function($query){
 			return $query->groupBy('month');			
@@ -217,7 +210,6 @@ class EidPoc
 		->whereBetween('datereceived', $date_range)
 		->where('receivedstatus', 2)
 		->where('flag', 1)
-		->where('eqa', 0)
 		->where('repeatt', 0)
 		->where('site_entry', 2)
 		->when($monthly, function($query){
