@@ -1246,6 +1246,8 @@ class Vl
 		}
 
 		$tat = $n->get_tat($year, $start_month, $division);
+		
+		DB::table($sum_table)->where('year', $year)->delete();
 
 		// Loop through the months and insert data into the national summary
 		for ($i=$start_month; $i < 12; $i++) { 

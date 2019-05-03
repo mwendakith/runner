@@ -1415,6 +1415,7 @@ class Eid
 		
 		$tat = $n->get_tat($year, $division);
 		
+		DB::table($sum_table)->where('year', $year)->delete();
 
 		// Loop through the months and insert data into the division summary
 		for ($i=0; $i < 12; $i++) { 
@@ -1531,7 +1532,7 @@ class Eid
 				if($row) DB::table($sum_table)->where('id', $row->ID)->update($data_array);
 				else{
 					$data_array = array_merge($data_array, $wheres);
-					 DB::table($sum_table)->insert($data_array);
+					DB::table($sum_table)->insert($data_array);
 				}
 			}
 			// End of division loop
