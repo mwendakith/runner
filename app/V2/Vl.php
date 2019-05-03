@@ -528,8 +528,8 @@ class Vl
 					$fake = $this->checknull($fake_a, $wheres);
 					$controls = $this->checknull($controls_a, $wheres) * 3;
 					// $controls = $this->checknull($controls_a, $wheres) * 3 + $this->checknull($calibrations_a, $wheres) * 8;
-					// $calibrations = $this->checknull($calibrations_a, $wheres) * 8;
-					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
+					$calibrations = $this->checknull($calibrations_a, $wheres) * 8;
+					$data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls, 'calibrations' => $calibrations], $data_array);
 				}
 
 				if($division == 'poc'){
