@@ -9,14 +9,6 @@ use DB;
 
 class Vl
 {
-    //
-
-	// protected $mysqli;
-
-	// public function __construct(){
-	// 	$this->mysqli = new \mysqli(env('DB_HOST', '127.0.0.1'), env('DB_USERNAME', 'forge'), env('DB_PASSWORD', ''), env('DB_DATABASE', 'forge'), env('DB_PORT_WR', 3306));
-	// }
-
 
     public function update_nation($start_month, $year=null){
     	if($year == null){
@@ -124,18 +116,6 @@ class Vl
 			);
 
 			DB::table('vl_national_summary')->where('year', $year)->where('month', $month)->update($data_array);
-
-			// $update_statements .= $this->update_query('vl_national_summary', $data_array, ['year' => $year, 'month' => $month]);
-			// $updates++;
-
-			// if($updates == 150){
-			// 	$this->mysqli->multi_query($update_statements);
-			// 	$update_statements = '';
-			// 	$updates = 0;
-			// }
-
-			// $sql = "UPDATE vl_national_summary set received='$rec',alltests='$tested' ,actualpatients='$actualpatients' ,sustxfail='$sustx',confirmtx='$conftx',repeattests='$rs',confirm2vl='$conf2VL',rejected='$rej',dbs='$dbs',plasma='$plas',edta='$edta',maletest='$male',femaletest='$female',nogendertest='$nogender',adults='$adults',paeds='$paeds',noage='$noage',Undetected='$ldl',less1000='$less1k',less5000='$less5k',above5000='$above5k',invalids='$invalids',sitessending='$sites' ,less2='$less2',less9='$less9',less14='$less14',less19='$less19',less24='$less24',over25='$over25', tat1='$t1', tat2='$t2', tat3='$t3', tat4='$t4',baseline='$baseline',baselinesustxfail='$baselinefail', dateupdated='$today'  WHERE month='$month' AND year='$year' ";
-
 		}
 		// End of for loop
 
@@ -182,18 +162,8 @@ class Vl
 				);
 				DB::table('vl_national_rejections')->where('year', $year)->where('month', $month)
 				->where('rejected_reason', $value->id)->update($data_array);
-
-				// $update_statements .= $this->update_query('vl_national_rejections', $data_array, ['year' => $year, 'month' => $month, 'rejected_reason' => $value->id]);
-				// $updates++;
-
-				// if($updates == 150){
-				// 	$this->mysqli->multi_query($update_statements);
-				// 	$update_statements = '';
-				// 	$updates = 0;
-				// }	
 			}
     	}
-    	// $this->mysqli->multi_query($update_statements);
 
     	echo "\n Completed viralload nation rejections update at " . date('d/m/Y h:i:s a', time());
     }
@@ -381,31 +351,15 @@ class Vl
 						$baseline_array = array('baseline' => $baseline, 'baselinesustxfail' => $baselinefail);
 
 						$data_array = array_merge($baseline_array, $data_array);
-					}
-
-					// echo "\n Sample - {$value->id}  Actual - {$sample} ";
-					
+					}					
 
 					DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->update($data_array);
-
-					// $update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $table[2] => $value->id]);
-					// $updates++;
-
-					// if($updates == 150){
-					// 	$this->mysqli->multi_query($update_statements);
-					// 	$update_statements = '';
-					// 	$updates = 0;
-					// }	
-
 				}
 				// End of for loop for months
-
-			}
-			
+			}			
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
-		// $this->mysqli->multi_query($update_statements);
 		// End of looping of params
     }
 
@@ -546,8 +500,6 @@ class Vl
 				$aedta = $this->checknull($aedta_a, $wheres);
 				$adbs = $this->checknull($adbs_a, $wheres);
 
-
-
 				$male = $this->checknull($male_a, $wheres);
 				$female = $this->checknull($female_a, $wheres);
 				$nogender = $this->checknull($nogender_a, $wheres);
@@ -586,21 +538,8 @@ class Vl
 				}
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
-
-				// $search_array = ['year' => $year, 'month' => $month, $column => $div_array[$it]];
-				// $update_statements .= $this->update_query($sum_table, $data_array, $search_array);
-				// $updates++;
-
-				// if($updates == 150){
-				// 	$this->mysqli->multi_query($update_statements);
-				// 	$update_statements = '';
-				// 	$updates = 0;
-				// }	
-				
 			}
-
 		}
-		// $this->mysqli->multi_query($update_statements);
 		// End of for loop
 
 		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
@@ -653,8 +592,6 @@ class Vl
 				$aplas = $this->checknull($aplas_a, $wheres);
 				$aedta = $this->checknull($aedta_a, $wheres);
 				$adbs = $this->checknull($adbs_a, $wheres);
-
-
 
 				$male = $this->checknull($male_a, $wheres);
 				$female = $this->checknull($female_a, $wheres);
@@ -781,6 +718,8 @@ class Vl
     	foreach ($reasons as $key => $value) {
     		$rej_a = $n->national_rejections($year, $start_month, $division, $value->id);
 
+    		if($division == 'lab') $poc_rej_a = $n->national_rejections($year, $start_month, 'poc', $value->id);
+
     		// Loop through the months and insert data into the national summary
 			for ($i=$start_month; $i < 12; $i++) { 
 				$month = $i + 1;
@@ -794,26 +733,21 @@ class Vl
 
 					if($rej == 0) continue;
 
-					$data_array = array(
-						'dateupdated' => $today, 'total' => $rej
-					);
+					$data_array = ['dateupdated' => $today, 'total' => $rej];
 
 					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
 					->where('rejected_reason', $value->id)->update($data_array);
+				}	
 
-					// $search_array = ['year' => $year, 'month' => $month, 'rejected_reason' => $value->id, $column => $div_array[$it]];
-					// $update_statements .= $this->update_query($rej_table, $data_array, $search_array);
-					// $updates++;
-
-					// if($updates == 150){
-					// 	$this->mysqli->multi_query($update_statements);
-					// 	$update_statements = '';
-					// 	$updates = 0;
-					// }	
-				}		
+				if($division == 'lab')
+				{					
+					// Update POC row
+					$rej = $this->checknull($poc_rej_a->where('month', $month));
+					$data_array = ['total' => $rej, 'dateupdated' => $today];
+					DB::table($rej_table)->where('year', $year)->where('month', $month)->where("lab", 11)->where('rejected_reason', $value->id)->update($data_array);
+				}	
 			}
     	}
-    	// $this->mysqli->multi_query($update_statements);
     	echo "\n Completed viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
     }
 
