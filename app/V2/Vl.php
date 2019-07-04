@@ -151,15 +151,11 @@ class Vl
 				$month = $i + 1;
 				if($year == Date('Y') && $month > Date('m')){ break; }
 
-				$rej = $this->checknull($rej_a->where('month', $month)->where('rejected_reason', $value->id));
+				$rej = $this->checknull($rej_a->where('month', $month)->where('rejectedreason', $value->id));
 
-				if($rej == 0){
-					continue;
-				}
+				if($rej == 0) continue;
 
-				$data_array = array(
-					'dateupdated' => $today, 'total' => $rej
-				);
+				$data_array = ['dateupdated' => $today, 'total' => $rej];
 				DB::table('vl_national_rejections')->where('year', $year)->where('month', $month)
 				->where('rejected_reason', $value->id)->update($data_array);
 			}

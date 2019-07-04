@@ -1516,7 +1516,7 @@ class Eid
 					'validation_viralload' => $v_vl, 'validation_adult' => $v_rp,
 					'validation_unknownsite' => $v_uf, 'sitessending' => $sitesending,
 					'tat1' => $tt['tat1'], 'tat2' => $tt['tat2'], 'tat3' => $tt['tat3'], 'tat4' => $tt['tat4'],
-					 'dateupdated' => $today, 'facility_tested_in' => $row->lab_id
+					'dateupdated' => $today, 'facility_tested_in' => $row->lab_id
 				);
 
 				if ($type == 4) {
