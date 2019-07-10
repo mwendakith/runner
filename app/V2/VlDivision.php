@@ -960,6 +960,27 @@ class VlDivision
 		return $data;
     }
 
+    public function get_results_by_multiple_params($year, $start_month, $division='county', $params){
+
+		$date_range = BaseModel::date_range($year, $start_month);
+
+		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, rcategory")
+		->when(true, function($query) use ($division){
+			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
+			return $query->where('site_entry', 2);
+		})
+		->whereNotIn('justification', [2, 10])
+		->whereBetween('datetested', $date_range)
+		->where($params)
+		->where('flag', 1)
+		->where('repeatt', 0)
+		->groupBy('month')
+		->get();
+
+		return $data;
+    }
+
     public function supp($year=null){
 
     	$sql = 'SELECT v.facility, v.rcategory, month(datetested) AS month ';

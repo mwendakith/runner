@@ -9,6 +9,7 @@ use DB;
 
 class Vl
 {
+	$age_gender_tables = ['vl_national_age_gender', 'vl_county_age_gender', 'vl_subcounty_age_gender', 'vl_partner_age_gender', 'vl_site_age_gender'];
 
     public function update_nation($start_month, $year=null){
     	if($year == null){
@@ -166,8 +167,6 @@ class Vl
 
     public function finish_nation($start_month, $year, $today){
     	$n = new VlNation;
-    	$update_statements = '';
-    	$updates = 0;
 
     	for ($type=1; $type < 7; $type++) { 
 
@@ -359,7 +358,48 @@ class Vl
 		// End of looping of params
     }
 
-    public function update_division($start_month, $year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='vl_county_summary', $rej_table='vl_county_rejections'){
+    public function nation_age_gender($start_month, $year, $today)
+    {
+    	$ages = DB::connection('eid_vl')->table('agecategory')->where('subid', 1)->get();
+    	$genders = DB::connection('eid_vl')->table('gender')->get();
+    	$n = new VlNation;
+
+		echo "\n Started vl_national_age_gender update at " . date('d/m/Y h:i:s a', time());
+
+    	foreach ($ages as $age) {
+    		foreach ($genders as $gender) {
+    			$param = ['age_category' => $age->id, 'sex' => $gender->id];    			
+    			$original_wheres = ['age' => $age->id, 'gender' => $gender->id];    			
+		    	$rcategories_a = $n->get_results_by_multiple_params($year, $start_month, $param);
+
+				// Loop through the months and insert data into the national summary
+				for ($i=$start_month; $i < 12; $i++) { 
+					$month = $i + 1;
+					if($year == Date('Y') && $month > Date('m')){ break; }
+
+					$wheres = ['month' => $month];
+
+					$data_array['dateupdated'] = $today;
+					$data_array['Undetected'] = $this->checknull($rcategories_a->where('rcategory', 1), $wheres);
+					$data_array['less1000'] = $this->checknull($rcategories_a->where('rcategory', 2), $wheres);
+					$data_array['less5000'] = $this->checknull($rcategories_a->where('rcategory', 3), $wheres);
+					$data_array['above5000'] = $this->checknull($rcategories_a->where('rcategory', 4), $wheres);
+					$data_array['invalids'] = $this->checknull($rcategories_a->where('rcategory', 5), $wheres);
+
+					$locator = array_merge($original_wheres, $wheres);
+					$locator = array_merge(['year' => $year, 'month' => $month], $locator);
+
+					DB::table('vl_national_age_gender')->where($locator)->update($data_array);
+
+				}
+    		}
+    	}
+		echo "\n Completed vl_national_age_gender update at " . date('d/m/Y h:i:s a', time());
+    }
+
+
+    // For POC (vl_poc_summary), column is lab but division is poc 
+    public function update_division($start_month, $year=null, $type=1, $column='county', $division='county', $div_table='countys', $sum_table='vl_county_summary', $rej_table='vl_county_rejections'){
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -633,12 +673,12 @@ class Vl
 
 
 		if ($type < 5) {
-			if($type != 4) echo $this->finish_division($start_month, $year, $today, $div_array, $column, $division, $type, $array_size);
-			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
+			if($type != 4) echo $this->finish_division($start_month, $year, $today, $div_array, $division, $type);
+			echo $this->division_rejections($start_month, $year, $today, $div_array, $division, $type, $rej_table);
 		}
 
 		if($type == 5 && $division != 'poc'){
-			echo $this->division_rejections($start_month, $year, $today, $div_array, $column, $division, $type, $array_size, $rej_table);
+			echo $this->division_rejections($start_month, $year, $today, $div_array, $division, $type, $rej_table);
 
 			echo $this->lab_mapping($start_month, $year);			
 		}
@@ -693,17 +733,14 @@ class Vl
     	echo "\n Completed entry into vl lab mapping at " . date('d/m/Y h:i:s a', time());
     }
 
-    public function division_rejections($start_month, $year=null, $today, &$div_array, $column, $division, $div_type, $array_size, $rej_table){
+    public function division_rejections($start_month, $year=null, $today, &$div_array, $division, $div_type, $rej_table){
 
     	if($year == null){
     		$year = Date('Y');
     	}
     	// Instantiate new object
     	$n = new VlDivision;
-    	$update_statements = '';
-    	$updates = 0;
-
-    	$column2 = $column;
+    	$array_size = sizeof($div_array);
 
     	$today=date("Y-m-d");
 
@@ -723,15 +760,15 @@ class Vl
 
 				// Loop through divisions i.e. counties, subcounties, partners and sites
 				for ($it=0; $it < $array_size; $it++) { 
-					if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
+					if($division == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
 
-					$rej = $this->checknull($rej_a->where('month', $month)->where($column, $div_array[$it]));
+					$rej = $this->checknull($rej_a->where('month', $month)->where($division, $div_array[$it]));
 
 					if($rej == 0) continue;
 
 					$data_array = ['dateupdated' => $today, 'total' => $rej];
 
-					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])
+					DB::table($rej_table)->where('year', $year)->where('month', $month)->where($division, $div_array[$it])
 					->where('rejected_reason', $value->id)->update($data_array);
 				}	
 
@@ -748,16 +785,15 @@ class Vl
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility
-    public function finish_division($start_month, $year, $today, &$div_array, $column, $division, $div_type, $array_size){
+    public function finish_division($start_month, $year, $today, &$div_array, $division, $div_type, $array_size){
     	ini_set("memory_limit", "-1");
 
     	$n = new VlDivision;
-    	$update_statements = '';
-    	$updates = 0;
+    	$array_size = sizeof($div_array);
 
     	for ($type=1; $type < 7; $type++) { 
 
-    		if($type == 3 && $column == "facility") continue;
+    		if($type == 3 && $division == "facility") continue;
 
 			$table = $this->get_table($div_type, $type);
 
@@ -838,9 +874,9 @@ class Vl
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
-						$wheres = ['month' => $month, $column => $div_array[$it]];
+						$wheres = ['month' => $month, $division => $div_array[$it]];
 
-						if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
+						if($division == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
 
 						// $rec = $this->checknull($rec_a, $wheres);
 						$tested = $this->checknull($tested_a, $wheres);
@@ -936,18 +972,10 @@ class Vl
 							$data_array = array_merge($baseline_array, $data_array);
 						}
 						
+						$locator = array_merge(['year' => $year, $table[2] => $value->id], $wheres);
 
-						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($column, $div_array[$it])->update($data_array);
-
-						// $search_array = ['year' => $year, 'month' => $month, $table[2] => $value->id, $column => $div_array[$it]];
-						// $update_statements .= $this->update_query($table[0], $data_array, $search_array);
-						// $updates++;
-
-						// if($updates == 150){
-						// 	$this->mysqli->multi_query($update_statements);
-						// 	$update_statements = '';
-						// 	$updates = 0;
-						// }
+						DB::table($table[0])->where($locator)->update($data_array);
+						// DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($division, $div_array[$it])->update($data_array);
 					}
 
 				}
@@ -1163,6 +1191,61 @@ class Vl
 		// End of looping of params
     }
 
+
+
+    public function division_age_gender($start_month, $year, $today, &$div_array, $column, $division, $div_type)
+    {
+    	$ages = DB::connection('eid_vl')->table('agecategory')->where('subid', 1)->get();
+    	$genders = DB::connection('eid_vl')->table('gender')->get();
+    	$n = new VlDivision;
+
+    	$array_size = sizeof($div_array);
+
+    	$table = $this->age_gender_tables[$div_type];
+
+		echo "\n Started {$table} update at " . date('d/m/Y h:i:s a', time());
+
+    	foreach ($ages as $age) {
+    		foreach ($genders as $gender) {
+    			$param = ['age_category' => $age->id, 'sex' => $gender->id];			
+    			$original_wheres = ['age' => $age->id, 'gender' => $gender->id];    			
+		    	$ldl_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 1]));
+		    	$less1k_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 2]));
+		    	$less5k_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 3]));
+		    	$above5k_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 4]));
+		    	$invalids_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 5]));
+
+				// Loop through the months and insert data into the national summary
+				for ($i=$start_month; $i < 12; $i++) { 
+					$month = $i + 1;
+					if($year == Date('Y') && $month > Date('m')){ break; }
+
+					// Loop through divisions i.e. counties, subcounties, partners and sites
+					for ($it=0; $it < $array_size; $it++) { 
+						$wheres = ['month' => $month, $column => $div_array[$it]];
+
+						$data_array['dateupdated'] = $today;
+						$data_array['Undetected'] = $this->checknull($ldl_a->where('rcategory', 1), $wheres);
+						$data_array['less1000'] = $this->checknull($less1k_a->where('rcategory', 2), $wheres);
+						$data_array['less5000'] = $this->checknull($less5k_a->where('rcategory', 3), $wheres);
+						$data_array['above5000'] = $this->checknull($above5k_a->where('rcategory', 4), $wheres);
+						$data_array['invalids'] = $this->checknull($invalids_a->where('rcategory', 5), $wheres);
+
+						$locator = array_merge($original_wheres, $wheres);
+						$locator = array_merge(['year' => $year, 'month' => $month], $locator);
+
+						DB::table($table)->where($locator)->update($data_array);
+					}
+					// End of looping through divisions
+				}
+				// End of looping through months
+    		}
+    		// End of looping through genders
+    	}
+    	// End of looping though ages
+
+		echo "\n Completed {$table} update at " . date('d/m/Y h:i:s a', time());
+    }
 
 
     public function update_poc($start_month, $year=null){
@@ -1989,6 +2072,9 @@ class Vl
     				break;
     			case 6:
     				$name = array("vl_national_pmtct", "viralpmtcttype", "pmtcttype");
+    				break;
+    			case 7:
+    				$name = array("vl_national_rejections", "viralrejectedreasons", "rejectedreason");
     				break;
     			default:
     				break;

@@ -610,6 +610,23 @@ class VlNation
 		return $data;
     }
 
+    public function get_results_by_multiple_params($year, $start_month, $params){
+
+		$date_range = BaseModel::date_range($year, $start_month);
+		// $p = BaseModel::get_vlparams($type, $param);
+
+		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month, rcategory")
+		->whereNotIn('justification', [2, 10])
+		->whereBetween('datetested', $date_range)
+		->where($params)
+		->where('flag', 1)
+		->where('repeatt', 0)
+		->groupBy('month', 'rcategory')
+		->get();
+
+		return $data;
+    }
+
 
     // Update samples tats	
 	public function update_tats($year)

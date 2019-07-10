@@ -272,6 +272,11 @@ class BaseModel
 		else if($type == 6){
 			return array('column' => 'pmtct', 'param' => $param);
 		}
+
+		// Type 7 for rejectedreason
+		else if($type == 7){
+			return array('column' => 'rejectedreason', 'param' => $param);
+		}
 	}
 
 	public static function date_range($year, $start_month=null)
