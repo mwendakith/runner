@@ -11,6 +11,8 @@ class Vl
 {
 	$age_gender_tables = ['vl_national_age_gender', 'vl_county_age_gender', 'vl_subcounty_age_gender', 'vl_partner_age_gender', 'vl_site_age_gender'];
 
+	$rejection_tables = ['vl_national_rejections', 'vl_county_rejections', 'vl_subcounty_rejections', 'vl_partner_rejections', 'vl_site_rejections'];
+
     public function update_nation($start_month, $year=null){
     	if($year == null){
     		$year = Date('Y');
@@ -124,6 +126,7 @@ class Vl
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
+		echo $this->nation_age_gender($start_month, $year, $today);
 		echo $this->finish_nation($start_month, $year, $today);
 		echo $this->nation_rejections($start_month, $year, $today);
     }
@@ -2039,7 +2042,7 @@ class Vl
     	return $var->where('month', $month)->first()->totals ?? 0;
     }
 
-     public function check_tat($var, $wheres=[]){
+    public function check_tat($var, $wheres=[]){
     	foreach ($wheres as $key => $value) {
     		$var = $var->where($key, $value);
     	}
