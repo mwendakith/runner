@@ -126,7 +126,7 @@ class Vl
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
-		echo $this->nation_age_gender($start_month, $year, $today);
+		// echo $this->nation_age_gender($start_month, $year, $today);
 		echo $this->finish_nation($start_month, $year, $today);
 		echo $this->nation_rejections($start_month, $year, $today);
     }
