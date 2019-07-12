@@ -358,7 +358,7 @@ class VlInsert
             }
         }
 
-        if($data_array) DB::table('vl_site_age_gender'])->insert($data_array);        
+        if($data_array) DB::table('vl_site_age_gender')->insert($data_array);        
 
         echo "\n Completed vl age gender insert at " . date('d/m/Y h:i:s a', time());
     }
