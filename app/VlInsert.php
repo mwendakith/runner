@@ -75,7 +75,7 @@ class VlInsert
 		foreach ($sites as $k => $val) {
 			$data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $val->id);
 			$i++;
-			if ($i == 100) {
+			if ($i == 150) {
 				DB::table('vl_site_summary')->insert($data_array);
 				$data_array=null;
 		    	$i=0;
@@ -89,7 +89,8 @@ class VlInsert
 		$this->insert_lab_mapping($year, $month);
     }
 
-    public function inserter($year=null, $month=null){
+    public function inserter($year=null, $month=null)
+    {
     	if($year == null){
     		$year = Date('Y');
     	}
@@ -146,6 +147,12 @@ class VlInsert
 				foreach ($counties as $k => $val) {
 					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'county' => $val->id);
 					$i++;
+
+                    if($i == 150){
+                        DB::table($county[0])->insert($data_array);
+                        $data_array=null;
+                        $i=0;
+                    }
 				}
 			}
 			if($data_array) DB::table($county[0])->insert($data_array);
@@ -159,7 +166,7 @@ class VlInsert
 					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $val->id);
 					$i++;
 
-					if($i == 100){
+					if($i == 150){
 						DB::table($subcounty[0])->insert($data_array);
 						$data_array=null;
 				    	$i=0;
@@ -177,7 +184,7 @@ class VlInsert
                     $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $val->id);
 					$i++;
 
-                    if($i == 100){
+                    if($i == 150){
                         DB::table($partner[0])->insert($data_array);
                         $data_array=null;
                         $i=0;
@@ -216,7 +223,7 @@ class VlInsert
 					$data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
 					$i++;
 
-					if($i == 100){
+					if($i == 150){
 						DB::table($site[0])->insert($data_array);
 						$data_array=null;
 				    	$i=0;
@@ -234,7 +241,8 @@ class VlInsert
     	}
     }
 
-    public function inserter_two($year=null, $month=null){
+    public function inserter_age_gender($year=null, $month=null)
+    {
         if($year == null){
             $year = Date('Y');
         }
@@ -243,6 +251,8 @@ class VlInsert
         }
         ini_set("memory_limit", "-1");
 
+        $age_gender_tables = ['vl_national_age_gender', 'vl_county_age_gender', 'vl_subcounty_age_gender', 'vl_partner_age_gender', 'vl_site_age_gender'];
+
         // Get List of Divisions
         $counties = DB::table('countys')->select('id')->orderBy('id')->get();
         $subcounties = DB::table('districts')->select('id')->orderBy('id')->get();
@@ -250,132 +260,115 @@ class VlInsert
         // $labs = DB::table('labs')->select('id')->orderBy('id')->get();
         $sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
 
-        // Iterate through classes of tables
-        for ($iterator=1; $iterator < 8; $iterator++) { 
-            $national = $this->get_table(0, $iterator);
-            $county = $this->get_table(1, $iterator);
-            $subcounty = $this->get_table(2, $iterator);
-            $partner = $this->get_table(3, $iterator);
-            $site = $this->get_table(4, $iterator);
+        $ages = DB::connection('eid_vl')->table('agecategory')->where('subid', 1)->get();
+        $genders = DB::connection('eid_vl')->table('gender')->get();
 
-            $table_name = $national[1];
-            $column_name = $national[2];
+        echo "\n Begin vl age gender insert at " . date('d/m/Y h:i:s a', time());
 
-            $reasons = $data = DB::connection('eid_vl')
-            ->table($table_name)->select('id')
-            ->when($iterator, function($query) use ($iterator){
-                if($iterator == 1 || $iterator == 6){
-                    return $query->where('subid', 1);
-                }               
-            })
-            ->get();
+        // National Insert
+        $data_array=null;
+        $i=0;
 
-            echo "\n Begin vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
-
-            // National Insert
-            $data_array=null;
-            $i=0;
-
-            foreach ($reasons as $key => $value) {
-                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id);
+        foreach ($ages as $age) {
+            foreach ($genders as $gender) {
+                $data_array[$i] = ['year' => $year, 'month' => $month, 'age' => $age->id, 'gender' => $gender->id];
                 $i++;
             }
-            DB::table($national[0])->insert($data_array);
+        }
+        DB::table('vl_national_age_gender')->insert($data_array);
 
 
-            // County Insert
-            $data_array=null;
-            $i=0;
+        // County Insert
+        $data_array=null;
+        $i=0;
 
-            foreach ($reasons as $key => $value) {
+        foreach ($ages as $age) {
+            foreach ($genders as $gender) {
                 foreach ($counties as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'county' => $val->id);
+                    $data_array[$i] = ['year' => $year, 'month' => $month, 'age' => $age->id, 'gender' => $gender->id, 'county' => $val->id];
                     $i++;
+
+                    if($i == 150){
+                        DB::table('vl_county_age_gender')->insert($data_array);
+                        $data_array=null;
+                        $i=0;
+                    }
                 }
             }
-            if($data_array) DB::table($county[0])->insert($data_array);
+        }
+        if($data_array) DB::table('vl_county_age_gender')->insert($data_array);
 
-            // Subcounty Insert
-            $data_array=null;
-            $i=0;
+        // Subcounty Insert
+        $data_array=null;
+        $i=0;
 
-            foreach ($reasons as $key => $value) {
+        foreach ($ages as $age) {
+            foreach ($genders as $gender) {
                 foreach ($subcounties as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $val->id);
+                    $data_array[$i] = ['year' => $year, 'month' => $month, 'age' => $age->id, 'gender' => $gender->id, 'subcounty' => $val->id];
                     $i++;
 
-                    if($i == 100){
-                        DB::table($subcounty[0])->insert($data_array);
+                    if($i == 150){
+                        DB::table('vl_subcounty_age_gender')->insert($data_array);
                         $data_array=null;
                         $i=0;
                     }
                 }
             }
-            if($data_array) DB::table($subcounty[0])->insert($data_array);
+        }
+        if($data_array) DB::table('vl_subcounty_age_gender')->insert($data_array);
 
-            // Partner Insert
-            $data_array=null;
-            $i=0;
+        // Partner Insert
+        $data_array=null;
+        $i=0;
 
-            foreach ($reasons as $key => $value) {
+        foreach ($ages as $age) {
+            foreach ($genders as $gender) {
                 foreach ($partners as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $val->id);
+                    $data_array[$i] = ['year' => $year, 'month' => $month, 'age' => $age->id, 'gender' => $gender->id, 'partner' => $val->id];
                     $i++;
 
-                    if($i == 100){
-                        DB::table($partner[0])->insert($data_array);
+                    if($i == 150){
+                        DB::table('vl_partner_age_gender')->insert($data_array);
                         $data_array=null;
                         $i=0;
                     }
                 }
             }
-            if($data_array) DB::table($partner[0])->insert($data_array);
-
-            // Lab Insert
-            if($iterator == 7){
-
-                $data_array=null;
-                $i=0;
-
-                foreach ($reasons as $key => $value) {
-                    foreach ($labs as $k => $val) {
-                        $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => $val->id);
-                        $i++;
-                    }
-                    // POC Rejection Row
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => 11);
-                    $i++;
-                }
-                $lab = $this->get_table(5, $iterator);
-                if($data_array) DB::table($lab[0])->insert($data_array);
-
-            }
+        }
+        if($data_array) DB::table('vl_partner_age_gender')->insert($data_array);
 
 
-            // Facility Insert
-            $data_array=null;
-            $i=0;
-            
-            foreach ($reasons as $key => $value) {
+        // Facility Insert
+        $data_array=null;
+        $i=0;
+        
+        foreach ($ages as $age) {
+            foreach ($genders as $gender) {
                 foreach ($sites as $k => $val) {
-                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
+                    $data_array[$i] = ['year' => $year, 'month' => $month, 'age' => $age->id, 'gender' => $gender->id, 'facility' => $val->id];
                     $i++;
 
-                    if($i == 100){
-                        DB::table($site[0])->insert($data_array);
+                    if($i == 150){
+                        DB::table('vl_site_age_gender')->insert($data_array);
                         $data_array=null;
                         $i=0;
                     }
                 }
             }
+        }
 
-            if($data_array) DB::table($site[0])->insert($data_array);
-            $data_array=null;
-            $i=0;
-            
+        if($data_array) DB::table('vl_site_age_gender'])->insert($data_array);        
 
-            echo "\n Completed vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
+        echo "\n Completed vl age gender insert at " . date('d/m/Y h:i:s a', time());
+    }
 
+    public function insert_ag_rows($year=null)
+    {
+        if(!$year) $year = date('Y');
+        for ($month=1; $month < 13; $month++) { 
+            if($year == date('Y') && $month == date('m')) break;
+            $this->inserter_age_gender($year, $month);
         }
     }
 
@@ -437,7 +430,7 @@ class VlInsert
 
                 $data_array[$i] = array('year' => $year, 'month' => $month, $tables[2] => $mrow->id);
                 $i++;
-                if ($i == 100) {
+                if ($i == 150) {
                     DB::table($tables[0])->insert($data_array);
                     $data_array=null;
                     $i=0;
@@ -489,7 +482,7 @@ class VlInsert
                         $data_array[$i] = array('year' => $year, 'month' => $month, $tables[2] => $mrow->id, $column_name => $row->id);
                         $i++;
 
-                        if ($i == 100) {
+                        if ($i == 150) {
                             DB::table($table_name)->insert($data_array);
                             $data_array=null;
                             $i=0;
@@ -781,7 +774,7 @@ class VlInsert
                     $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
                     $i++;
 
-                    if($i == 100){
+                    if($i == 150){
                         DB::table($site[0])->insert($data_array);
                         $data_array=null;
                         $i=0;
