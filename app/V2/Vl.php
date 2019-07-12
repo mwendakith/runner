@@ -126,9 +126,9 @@ class Vl
 
 		echo "\n Completed entry into viralload national summary at " . date('d/m/Y h:i:s a', time());
 
-		// echo $this->nation_age_gender($start_month, $year, $today);
 		echo $this->finish_nation($start_month, $year, $today);
 		echo $this->nation_rejections($start_month, $year, $today);
+		echo $this->nation_age_gender($start_month, $year, $today);
     }
 
     public function nation_rejections($start_month, $year=null){
@@ -677,6 +677,7 @@ class Vl
 
 		if ($type < 5) {
 			if($type != 4) echo $this->finish_division($start_month, $year, $today, $div_array, $division, $type);
+			echo $this->division_age_gender($start_month, $year, $today, $div_array, $division, $type);
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $division, $type, $rej_table);
 		}
 
@@ -788,7 +789,7 @@ class Vl
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility
-    public function finish_division($start_month, $year, $today, &$div_array, $division, $div_type, $array_size){
+    public function finish_division($start_month, $year, $today, &$div_array, $division, $div_type){
     	ini_set("memory_limit", "-1");
 
     	$n = new VlDivision;
@@ -993,8 +994,10 @@ class Vl
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility
-    public function finish_facilities_regimen($start_month, $year, $today, &$div_array, $column, $division, $div_type, $array_size){
+    public function finish_facilities_regimen($start_month, $year, $today, &$div_array, $column, $division, $div_type)
+    {
     	ini_set("memory_limit", "-1");
+    	$array_size = sizeof($div_array);
 
     	$n = new VlFacility;
     	$update_statements = '';
@@ -1672,7 +1675,7 @@ class Vl
 		}
 
 		// echo $this->finish_division($start_month, $year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
-		return $this->finish_facilities_regimen($start_month, $year, $today, $div_array, 'facility', 'facility', 4, $array_size);
+		return $this->finish_facilities_regimen($start_month, $year, $today, $div_array, 'facility', 'facility', 4);
     }
 
     public function update_labs($start_month, $year=null){
