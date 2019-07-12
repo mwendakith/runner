@@ -116,7 +116,7 @@ class VlInsert
     		$table_name = $national[1];
     		$column_name = $national[2];
 
-			$reasons = $data = DB::connection('vl')
+			$reasons = $data = DB::connection('eid_vl')
 			->table($table_name)->select('id')
 			->when($iterator, function($query) use ($iterator){
 				if($iterator == 1 || $iterator == 6){
@@ -232,6 +232,151 @@ class VlInsert
 			echo "\n Completed vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
 
     	}
+    }
+
+    public function inserter_two($year=null, $month=null){
+        if($year == null){
+            $year = Date('Y');
+        }
+        if($month == null){
+            $month = Date('m');
+        }
+        ini_set("memory_limit", "-1");
+
+        // Get List of Divisions
+        $counties = DB::table('countys')->select('id')->orderBy('id')->get();
+        $subcounties = DB::table('districts')->select('id')->orderBy('id')->get();
+        $partners = DB::table('partners')->select('id')->orderBy('id')->get();
+        // $labs = DB::table('labs')->select('id')->orderBy('id')->get();
+        $sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
+
+        // Iterate through classes of tables
+        for ($iterator=1; $iterator < 8; $iterator++) { 
+            $national = $this->get_table(0, $iterator);
+            $county = $this->get_table(1, $iterator);
+            $subcounty = $this->get_table(2, $iterator);
+            $partner = $this->get_table(3, $iterator);
+            $site = $this->get_table(4, $iterator);
+
+            $table_name = $national[1];
+            $column_name = $national[2];
+
+            $reasons = $data = DB::connection('eid_vl')
+            ->table($table_name)->select('id')
+            ->when($iterator, function($query) use ($iterator){
+                if($iterator == 1 || $iterator == 6){
+                    return $query->where('subid', 1);
+                }               
+            })
+            ->get();
+
+            echo "\n Begin vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
+
+            // National Insert
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id);
+                $i++;
+            }
+            DB::table($national[0])->insert($data_array);
+
+
+            // County Insert
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                foreach ($counties as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'county' => $val->id);
+                    $i++;
+                }
+            }
+            if($data_array) DB::table($county[0])->insert($data_array);
+
+            // Subcounty Insert
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                foreach ($subcounties as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'subcounty' => $val->id);
+                    $i++;
+
+                    if($i == 100){
+                        DB::table($subcounty[0])->insert($data_array);
+                        $data_array=null;
+                        $i=0;
+                    }
+                }
+            }
+            if($data_array) DB::table($subcounty[0])->insert($data_array);
+
+            // Partner Insert
+            $data_array=null;
+            $i=0;
+
+            foreach ($reasons as $key => $value) {
+                foreach ($partners as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'partner' => $val->id);
+                    $i++;
+
+                    if($i == 100){
+                        DB::table($partner[0])->insert($data_array);
+                        $data_array=null;
+                        $i=0;
+                    }
+                }
+            }
+            if($data_array) DB::table($partner[0])->insert($data_array);
+
+            // Lab Insert
+            if($iterator == 7){
+
+                $data_array=null;
+                $i=0;
+
+                foreach ($reasons as $key => $value) {
+                    foreach ($labs as $k => $val) {
+                        $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => $val->id);
+                        $i++;
+                    }
+                    // POC Rejection Row
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'lab' => 11);
+                    $i++;
+                }
+                $lab = $this->get_table(5, $iterator);
+                if($data_array) DB::table($lab[0])->insert($data_array);
+
+            }
+
+
+            // Facility Insert
+            $data_array=null;
+            $i=0;
+            
+            foreach ($reasons as $key => $value) {
+                foreach ($sites as $k => $val) {
+                    $data_array[$i] = array('year' => $year, 'month' => $month, $column_name => $value->id, 'facility' => $val->id);
+                    $i++;
+
+                    if($i == 100){
+                        DB::table($site[0])->insert($data_array);
+                        $data_array=null;
+                        $i=0;
+                    }
+                }
+            }
+
+            if($data_array) DB::table($site[0])->insert($data_array);
+            $data_array=null;
+            $i=0;
+            
+
+            echo "\n Completed vl {$table_name} insert at " . date('d/m/Y h:i:s a', time());
+
+        }
     }
 
 
@@ -538,11 +683,11 @@ class VlInsert
         ini_set("memory_limit", "-1");
 
         // Get List of Divisions
-        $counties = DB::connection('vl')->table('countys')->select('id')->orderBy('id')->get();
-        $subcounties = DB::connection('vl')->table('districts')->select('id')->orderBy('id')->get();
-        $partners = DB::connection('vl')->table('partners')->select('id')->orderBy('id')->get();
-        $labs = DB::connection('vl')->table('labs')->select('id')->orderBy('id')->get();
-        $sites = DB::connection('vl')->table('facilitys')->select('id')->orderBy('id')->get();
+        $counties = DB::connection('eid_vl')->table('countys')->select('id')->orderBy('id')->get();
+        $subcounties = DB::connection('eid_vl')->table('districts')->select('id')->orderBy('id')->get();
+        $partners = DB::connection('eid_vl')->table('partners')->select('id')->orderBy('id')->get();
+        $labs = DB::connection('eid_vl')->table('labs')->select('id')->orderBy('id')->get();
+        $sites = DB::connection('eid_vl')->table('facilitys')->select('id')->orderBy('id')->get();
 
         // Iterate through classes of tables
         for ($iterator=5; $iterator < 6; $iterator++) { 
@@ -555,7 +700,7 @@ class VlInsert
             $table_name = $national[1];
             $column_name = $national[2];
 
-            $reasons = $data = DB::connection('vl')
+            $reasons = $data = DB::connection('eid_vl')
             ->table($table_name)->select('id')
             ->where('id', '>', 6)
             ->get();
@@ -676,7 +821,7 @@ class VlInsert
             $table_name = $national[1];
             $column_name = $national[2];
 
-            $reasons = $data = DB::connection('vl')
+            $reasons = $data = DB::connection('eid_vl')
             ->table($table_name)->select('id')
             ->when($iterator, function($query) use ($iterator){
                 if($iterator == 1 || $iterator == 6){
@@ -718,7 +863,7 @@ class VlInsert
             $table_name = $national[1];
             $column_name = $national[2];
 
-            $reasons = $data = DB::connection('vl')
+            $reasons = $data = DB::connection('eid_vl')
             ->table($table_name)->select('id')
             ->when($iterator, function($query) use ($iterator){
                 if($iterator == 1 || $iterator == 6){
@@ -750,12 +895,12 @@ class VlInsert
 
     	echo "\n Begin vl rejection insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralrejectedreasons')->select('id')->orderBy('id')->get();
-    	$counties = DB::connection('vl')->table('countys')->select('id')->orderBy('id')->get();
-    	$subcounties = DB::connection('vl')->table('districts')->select('id')->orderBy('id')->get();
-    	$partners = DB::connection('vl')->table('partners')->select('id')->orderBy('id')->get();
-    	$labs = DB::connection('vl')->table('labs')->select('id')->orderBy('id')->get();
-    	$sites = DB::connection('vl')->table('facilitys')->select('id')->orderBy('id')->get();
+    	$reasons = DB::connection('eid_vl')->table('viralrejectedreasons')->select('id')->orderBy('id')->get();
+    	$counties = DB::connection('eid_vl')->table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties = DB::connection('eid_vl')->table('districts')->select('id')->orderBy('id')->get();
+    	$partners = DB::connection('eid_vl')->table('partners')->select('id')->orderBy('id')->get();
+    	$labs = DB::connection('eid_vl')->table('labs')->select('id')->orderBy('id')->get();
+    	$sites = DB::connection('eid_vl')->table('facilitys')->select('id')->orderBy('id')->get();
 
     	$data_array=null;
     	$i=0;
@@ -838,12 +983,12 @@ class VlInsert
 
     	echo "\n Begin vl pmtct insert at " . date('d/m/Y h:i:s a', time());
 
-    	$reasons = DB::connection('vl')->table('viralpmtcttype')->select('id')->where('subid', 1)->orderBy('id')->get();
-    	$counties = DB::connection('vl')->table('countys')->select('id')->orderBy('id')->get();
-    	$subcounties = DB::connection('vl')->table('districts')->select('id')->orderBy('id')->get();
-    	$partners = DB::connection('vl')->table('partners')->select('id')->orderBy('id')->get();
-    	$labs = DB::connection('vl')->table('labs')->select('id')->orderBy('id')->get();
-    	$sites = DB::connection('vl')->table('facilitys')->select('id')->orderBy('id')->get();
+    	$reasons = DB::connection('eid_vl')->table('viralpmtcttype')->select('id')->where('subid', 1)->orderBy('id')->get();
+    	$counties = DB::connection('eid_vl')->table('countys')->select('id')->orderBy('id')->get();
+    	$subcounties = DB::connection('eid_vl')->table('districts')->select('id')->orderBy('id')->get();
+    	$partners = DB::connection('eid_vl')->table('partners')->select('id')->orderBy('id')->get();
+    	$labs = DB::connection('eid_vl')->table('labs')->select('id')->orderBy('id')->get();
+    	$sites = DB::connection('eid_vl')->table('facilitys')->select('id')->orderBy('id')->get();
 
     	$data_array=null;
     	$i=0;
