@@ -1199,7 +1199,7 @@ class Vl
 
 
 
-    public function division_age_gender($start_month, $year, $today, &$div_array, $column, $division, $div_type)
+    public function division_age_gender($start_month, $year, $today, &$div_array, $division, $div_type)
     {
     	$ages = DB::connection('eid_vl')->table('agecategory')->where('subid', 1)->get();
     	$genders = DB::connection('eid_vl')->table('gender')->get();
@@ -1228,7 +1228,7 @@ class Vl
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
-						$wheres = ['month' => $month, $column => $div_array[$it]];
+						$wheres = ['month' => $month, $division => $div_array[$it]];
 
 						$data_array['dateupdated'] = $today;
 						$data_array['Undetected'] = $this->checknull($ldl_a->where('rcategory', 1), $wheres);
