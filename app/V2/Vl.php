@@ -994,7 +994,7 @@ class Vl
     }
 
     // Div type is the type of division eg county, subcounty, partner and facility
-    public function finish_facilities_regimen($start_month, $year, $today, &$div_array, $column, $division, $div_type)
+    public function finish_facilities_regimen($start_month, $year, $today, &$div_array, $division, $div_type)
     {
     	ini_set("memory_limit", "-1");
     	$array_size = sizeof($div_array);
@@ -1004,12 +1004,6 @@ class Vl
     	$updates = 0;
 
     	for ($type=1; $type < 7; $type++) { 
-    	// for ($type=3; $type < 4; $type++) { 
-
-    		// if($type == 3 && $column == "facility"){
-			// 	continue;
-			// }
-
 			$table = $this->get_table($div_type, $type);
 
 			echo "\n Begin " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
@@ -1087,7 +1081,7 @@ class Vl
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
-						$wheres = [$column => $div_array[$it]];
+						$wheres = [$division => $div_array[$it]];
 						// $rec = $this->checknull($rec_a, $wheres);
 						$tested = $this->checknull($tested_a, $wheres);
 
@@ -1173,27 +1167,15 @@ class Vl
 						}
 						
 
-						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($column, $div_array[$it])->update($data_array);
-
-						// $search_array = ['year' => $year, 'month' => $month, $table[2] => $value->id, $column => $div_array[$it]];
-						// $update_statements .= $this->update_query($table[0], $data_array, $search_array);
-						// $updates++;
-
-						// if($updates == 150){
-						// 	$this->mysqli->multi_query($update_statements);
-						// 	$update_statements = '';
-						// 	$updates = 0;
-						// }
+						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($division, $div_array[$it])->update($data_array);
 					}
 
 				}
 				// End of for loop for months
-
 			}
 			// End of looping through ids of each table e.g. agecategory
 			echo "\n Completed " . $table[0] . " update at " . date('d/m/Y h:i:s a', time());
 		}
-		// $this->mysqli->multi_query($update_statements);
 		// End of looping of params
     }
 
@@ -1675,7 +1657,7 @@ class Vl
 		}
 
 		// echo $this->finish_division($start_month, $year, $today, $div_array, 'facility', 'viralsamples.facility', 4, $array_size);
-		return $this->finish_facilities_regimen($start_month, $year, $today, $div_array, 'facility', 'facility', 4);
+		return $this->finish_facilities_regimen($start_month, $year, $today, $div_array, 'facility', 4);
     }
 
     public function update_labs($start_month, $year=null){
