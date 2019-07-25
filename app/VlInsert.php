@@ -87,6 +87,7 @@ class VlInsert
 
 		$this->inserter($year, $month);
 		$this->insert_lab_mapping($year, $month);
+        $this->inserter_age_gender($year, $month);
     }
 
     public function inserter($year=null, $month=null)

@@ -676,8 +676,8 @@ class Vl
 
 
 		if ($type < 5) {
-			if($type != 4) echo $this->finish_division($start_month, $year, $today, $div_array, $division, $type);
 			echo $this->division_age_gender($start_month, $year, $today, $div_array, $division, $type);
+			if($type != 4) echo $this->finish_division($start_month, $year, $today, $div_array, $division, $type);
 			echo $this->division_rejections($start_month, $year, $today, $div_array, $division, $type, $rej_table);
 		}
 
