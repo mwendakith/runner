@@ -1823,13 +1823,21 @@ class Vl
     }
 
 
+    public function checknull_two(&$var, $wheres=[]){
+    	$desired = $var[0];
+    	// if
+
+    	foreach ($wheres as $key => $value) {
+    		$var = $var->where($key, $value);
+    	}
+    	return $var->first()->totals ?? 0;
+    }
+
+
     // public function check_null($var, $wheres=null){
     // 	return $var->first()->totals ?? 0;
     // }
 
-    public function checknull_month($var, $month){
-    	return $var->where('month', $month)->first()->totals ?? 0;
-    }
 
     public function check_tat($var, $wheres=[]){
     	foreach ($wheres as $key => $value) {
