@@ -13,8 +13,8 @@ class VlFacility
 	public function get_callback($division)
 	{
 		return function($query) use($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
+			if(!str_contains($division, 'poc')) return $query->addSelect($division)->orderBy($division, 'asc')->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->orderBy('facility', 'asc')->groupBy('facility');
 			return $query->where('site_entry', 2);
 		};
 	}
@@ -62,6 +62,7 @@ class VlFacility
 		->table('viralworksheets')
 		->selectRaw("COUNT(*) as totals, lab_id as lab")
 		->whereBetween('daterun', $date_range)
+		->groupBy('lab', 'asc')
 		->groupBy('lab')
 		->get();
 
@@ -78,6 +79,7 @@ class VlFacility
 		->whereBetween('daterun', $date_range)
 		->where('calibration', 1)
 		->groupBy('lab')
+		->groupBy('lab', 'asc')
 		->get();
 
 		return $data;
@@ -93,6 +95,7 @@ class VlFacility
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->groupBy('lab')
+		->groupBy('lab', 'asc')
 		->get();
 
 		return $data;
@@ -108,6 +111,7 @@ class VlFacility
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->groupBy('lab')
+		->groupBy('lab', 'asc')
 		->get();
 
 		return $data;

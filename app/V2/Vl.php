@@ -701,43 +701,37 @@ class Vl
         $counties = DB::table('countys')->select('id')->orderBy('id')->get();
         $labs = DB::table('labs')->select('id')->orderBy('id')->get();
 
-    	$n = new VlDivision;
+    	// $n = new VlDivision;
+    	$n = new VlFacility;
     	$update_statements = '';
     	$updates = 0;
     	$today=date("Y-m-d");
 
     	echo "\n Begin entry into vl lab mapping at " . date('d/m/Y h:i:s a', time());
 
-    	$tests_a = $n->lab_county_tests($year, $start_month);
-    	$supported_sites_a = $n->lab_mapping_sites($year, $start_month);
+    	// $tests_a = $n->lab_county_tests($year, $start_month);
+    	// $supported_sites_a = $n->lab_mapping_sites($year, $start_month);
 
     	for ($i=$start_month; $i < 12; $i++) { 
 			$month = $i + 1;
 			if($year == Date('Y') && $month > Date('m')){ break; }
 
-	    	foreach ($labs as $lab) {
-	    		foreach ($counties as $county) {
-	    			// $search = ['month' => $month, 'lab' => $lab->id, 'county' => $county->id];
-	    			$search_array = ['month' => $month, 'lab' => $lab->id, 'county' => $county->id, 'year' => $year];
-	    			$tests = $this->checknull( $tests_a->where('month', $month)->where('lab', $lab->id)->where('county', $county->id) );
-	    			if($tests == 0){
-	    				continue;
-	    			}
-	    			$supported = $this->checknull($supported_sites_a->where('month', $month)->where('lab', $lab->id)->where('county', $county->id));
+	    	$tests_a = $n->lab_county_tests($year, $month);
+	    	$supported_sites_a = $n->lab_mapping_sites($year, $month);
+
+
+    		foreach ($counties as $county) {
+		    	foreach ($labs as $lab) {
+	    			$wheres = ['lab' => $lab->id, 'county' => $county->id];
+
+	    			$search_array = array_merge($wheres, ['month' => $month, 'year' => $year]);
+	    			$tests = $this->checknull($tests_a, $wheres);
+	    			if($tests == 0) continue;
+	    			$supported = $this->checknull($supported_sites_a, $wheres);
 
 	    			$data_array = ['total' => $tests, 'site_sending' => $supported];
 
 	    			DB::table('vl_lab_mapping')->where($search_array)->update($data_array);
-
-					// $update_statements .= $this->update_query('vl_lab_mapping', $data_array, $search_array);
-					// $updates++;
-
-					// if($updates == 150){
-					// 	$this->mysqli->multi_query($update_statements);
-					// 	$update_statements = '';
-					// 	$updates = 0;
-					// }	
-
 	    		}
 	    	}
 	    }
@@ -1823,20 +1817,19 @@ class Vl
     }
 
 
-    public function checknull_two(&$var, $wheres=[]){
-    	$desired = $var[0];
-    	// if
+    public function checknull_test(&$var, $wheres=[]){
+    	$obj = $var[0] ?? null;
+
+    	if(!$obj) return 0;
 
     	foreach ($wheres as $key => $value) {
     		$var = $var->where($key, $value);
+    		if($obj->$key != $value) return 0;
     	}
-    	return $var->first()->totals ?? 0;
+    	$obj = $var->shift();
+    	return $obj->totals ?? 0;
     }
 
-
-    // public function check_null($var, $wheres=null){
-    // 	return $var->first()->totals ?? 0;
-    // }
 
 
     public function check_tat($var, $wheres=[]){
