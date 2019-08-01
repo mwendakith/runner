@@ -944,7 +944,7 @@ class Vl
 					// $controls = $this->checknull($controls_a, $wheres) * 3;
 					// $data_array = array_merge(['eqa' => $eqa, 'fake_confirmatory' => $fake, 'controls' => $controls], $data_array);
 
-					$locator = ['year' => $year, 'month' => $value->month, 'facility' => $value->lab];
+					$locator = ['year' => $year, 'month' => $month, 'facility' => $value->lab];
 
 					$row = DB::table($summary_table_two)->where($locator)->first();
 
