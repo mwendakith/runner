@@ -68,7 +68,8 @@ class Kernel extends ConsoleKernel
         $filePath = public_path('logs.txt');
 
         // $schedule->command('update:all')->dailyAt('19:00')->withoutOverlapping()->appendOutputTo($filePath);
-        $schedule->command('update:all')->dailyAt('19:00')->withoutOverlapping()->emailOutputTo('joelkith@gmail.com');
+        // $schedule->command('update:all')->dailyAt('19:00')->withoutOverlapping()->emailOutputTo('joelkith@gmail.com');
+        
     }
 
     /**

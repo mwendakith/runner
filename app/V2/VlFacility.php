@@ -22,7 +22,7 @@ class VlFacility
 	public function get_eqa_callback($division)
 	{
 		return function($query) use($division){
-			if($division == "lab" || $division == "facility_id"){
+			if($division == "lab" || $division == "facility"){
 				return $query->where('facility_id', '!=', 7148);
 			}
 		};

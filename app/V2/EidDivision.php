@@ -9,6 +9,28 @@ use App\SampleView;
 
 class EidDivision
 {
+
+	// Callbacks
+	public function get_callback($division)
+	{
+		return function($query) use($division){
+			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
+			return $query->where('site_entry', 2);
+		};
+	}
+
+	public function get_eqa_callback($division)
+	{
+		return function($query) use($division){
+			if($division == "lab" || $division == "facility"){
+				return $query->where('facility_id', '!=', 7148);
+			}
+		};
+	}
+
+
+
     //Control Tests
 	public function control_samples($year)
 	{
@@ -30,11 +52,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
     	$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -50,11 +68,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
     	$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -70,16 +84,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
     	$data = SampleSynchView::selectRaw("COUNT(DISTINCT batch_id) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereRaw("(parentid=0  OR parentid IS NULL)")
 		->where('flag', 1)
@@ -97,19 +103,10 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab"){
-				// return $query->where('facility_id', '!=', 7148);
-			}
-			else{
-				return $query->where('repeatt', 0);
-			}
+		->when(($division != "lab"), function($query){
+			return $query->where('repeatt', 0);
 		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('result', '>', 0)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -129,16 +126,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				// return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('result', '>', 0)
 		->whereBetween('datetested', $date_range)
 		->where('facility_id', 7148)
@@ -158,16 +146,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->whereIn('result', [1, 2])
 		->whereBetween('datetested', $date_range)
 		->where('repeatt', 0)
@@ -186,16 +166,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->when(true, function($query) use ($pos){
 			if($pos){
 				return $query->where('result', 2);
@@ -224,16 +196,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->whereBetween('datereceived', $date_range)
 		->whereRaw("(parentid=0 OR parentid IS NULL)")
 		->where('flag', 1)
@@ -251,16 +215,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->where('previous_positive', 1)
 		->whereBetween('datetested', $date_range)
 		->where('repeatt', 0)
@@ -278,16 +234,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->when(true, function($query) use ($pos){
 			if($pos){
 				return $query->where('result', 2);
@@ -323,11 +271,7 @@ class EidDivision
 
 		$data = SampleSynchView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
 		->whereBetween('age', $age)
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->when(true, function($query) use ($pos){
 			if($pos){
 				return $query->where('result', 2);
@@ -359,16 +303,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->where('result', $result_type)
 		->whereBetween('datetested', $date_range)
 		->when($pcrtype, function($query) use ($pcrtype){
@@ -396,16 +332,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->whereBetween('datereceived', $date_range)
 		->whereRaw("(parentid=0 OR parentid IS NULL)")
 		->where('receivedstatus', 2)
@@ -425,11 +353,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('result', 2)
 		->whereBetween('datetested', $date_range)
 		->whereBetween('age', [0.0001, 24])
@@ -456,16 +380,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datereceived) as month")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datereceived', $date_range)
 		->where('flag', 1)
 		->when($monthly, function($query){
@@ -482,16 +398,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("AVG(age) as totals, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->where('pcrtype', 1)
 		->where('age', '>', 0)
 		->where('age', '<', 24)
@@ -513,16 +421,8 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("age, month(datetested) as month")
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_eqa_callback($division))
+		->when(true, $this->get_callback($division))
 		->where('pcrtype', 1)
 		->where('age', '>', 0)
 		->where('age', '<', 24)
@@ -592,11 +492,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(patient_id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('regimen', $drug)
 		->where('result', $result_type)
 		->where('pcrtype', 1)
@@ -618,11 +514,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('mother_prophylaxis', $drug)
 		->where('result', $result_type)
 		->where('pcrtype', 1)
@@ -643,11 +535,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('entry_point', $entry_point)
 		->where('result', $result_type)
 		->where('pcrtype', 1)
@@ -668,11 +556,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(patient_id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereBetween('age', $age_array)
 		->where('result', $result_type)
 		->whereBetween('datetested', $date_range)
@@ -693,11 +577,7 @@ class EidDivision
 		$date_range = BaseModel::date_range($year);
 
 		$data = SampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
 		->whereBetween('datereceived', $date_range)
@@ -719,11 +599,7 @@ class EidDivision
 		$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
 
 		$data = SampleSynchView::selectRaw($sql)
-		->when(true, function($query) use ($division){
-			if($division != "poc" && $division != "site_poc") return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
 			['datereceived', '<=', 'datetested'],

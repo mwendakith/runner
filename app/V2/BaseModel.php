@@ -294,6 +294,7 @@ class BaseModel
 
 	public static function date_range_month($year, $month=null)
 	{
+		if(!$month) return ["{$year}-01-01", "{$year}-12-31"];
 		if($month < 10) $month = '0' . $month;
 
 
