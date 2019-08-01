@@ -37,16 +37,54 @@ class VlFacility
 		return $data;
 	}
 
+	public function get_callback($division)
+	{
+		return function($query) use($division){
+			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
+			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
+			return $query->where('site_entry', 2);
+		};
+	}
+
+	public function get_eqa_callback($division)
+	{
+		return function($query) use($division){
+			if($division == "lab" || $division == "facility_id"){
+				return $query->where('facility_id', '!=', 7148);
+			}
+		};
+	}
+
+	public function get_sampletype_dbs_callback($type, $param, $p)
+	{
+		return function($query) use ($type, $param, $p){
+			if($type == 4 && $p['param'] == 3){
+				return $query->whereIn($p['column'], [3, 4]);
+			}
+			else{
+				return $query->where($p['column'], $p['param']);
+			}		
+		};
+	}
+
+	public function get_justification_callback($type)
+	{
+		return function($query) use ($type){
+			if($type < 4){
+				return $query->whereNotIn('justification', [2, 10])->whereIn('rcategory', [1, 2, 3, 4]);
+			}
+			if($type == 4){
+				return $query->whereIn('rcategory', [1, 2, 3, 4]);
+			}					
+		};
+	}
+
     //Mapping
 	public function lab_county_tests($year, $month, $division='county'){
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month, lab")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -61,11 +99,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datetested) as month, lab")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -80,16 +114,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
 		->whereBetween('datereceived', $date_range)
@@ -105,11 +131,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->where('facility', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -123,11 +145,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->when($division, function($query) use ($division){
 			if($division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
@@ -144,16 +162,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT patient_id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->where('flag', 1)
@@ -167,16 +177,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datereceived', $date_range)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->where('flag', 1)
@@ -189,16 +191,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->whereBetween('datereceived', $date_range)
 		->where('receivedstatus', 2)
@@ -213,16 +207,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, month(datereceived) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->whereBetween('datereceived', $date_range)
 		->where('facility_id', '!=', 0)
@@ -236,16 +222,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
@@ -262,16 +240,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
@@ -288,16 +258,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
@@ -314,16 +276,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
@@ -339,16 +293,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
@@ -364,16 +310,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->where('receivedstatus', 3)
 		->where('flag', 1)
@@ -387,16 +325,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->when($routine, function($query) use ($routine){
@@ -426,16 +356,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->where('sex', $sex)
@@ -451,16 +373,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->where('age_category', $age)
@@ -476,16 +390,8 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->when($result, function($query) use ($result){
 			if($result != 5){
@@ -506,16 +412,8 @@ class VlFacility
     	$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4, month(datetested) as month";
 
 		$data = ViralsampleSynchView::selectRaw($sql)
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($division, function($query) use ($division){
-			if($division == "lab" || $division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
-			}
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereColumn([
 			['datecollected', '<=', 'datereceived'],
@@ -547,29 +445,9 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($type, function($query) use ($type){
-			if($type < 4){
-				return $query
-		        ->whereNotIn('justification', [2, 10])
-				->whereIn('rcategory', [1, 2, 3, 4]);
-			}
-			if($type == 4){
-				return $query->whereIn('rcategory', [1, 2, 3, 4]);
-			}					
-		})
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_justification_callback($type))
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -584,21 +462,10 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereBetween('datereceived', $date_range)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('flag', 1)
 		->get();
 
@@ -611,20 +478,9 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereBetween('datereceived', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('receivedstatus', 2)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -639,21 +495,10 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('sampletype', [1, 2, 3, 4])
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('justification', 2)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -668,22 +513,11 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('sampletype', [1, 2, 3, 4])
 		->whereIn('rcategory', [3, 4])
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('justification', 2)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -698,20 +532,9 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
 		->where('justification', 10)
@@ -728,20 +551,9 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereIn('rcategory', [3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
 		->where('justification', 10)
@@ -758,20 +570,9 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
+		->when(true, $this->get_callback($division))
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('receivedstatus', 3)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -786,37 +587,13 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($type, function($query) use ($type){
-			if($type < 4){
-				return $query
-		        ->whereNotIn('justification', [2, 10])
-				->whereIn('rcategory', [1, 2, 3, 4]);
-			}
-			if($type == 4){
-				return $query->whereIn('rcategory', [1, 2, 3, 4]);
-			}					
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_justification_callback($type))
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->when($sampletype, function($query) use ($sampletype){
-			if($sampletype == 2){
-				return $query->whereIn('sampletype', [3, 4]);
-			}
-			else if($sampletype == 3){
-				return $query->where('sampletype', 2);
-			}
+			if($sampletype == 2) return $query->whereIn('sampletype', [3, 4]);
+			else if($sampletype == 3) return $query->where('sampletype', 2);
 			else{
 				return $query->where('sampletype', 1);
 			}				
@@ -834,30 +611,10 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($type, function($query) use ($type){
-			if($type < 4){
-				return $query
-		        ->whereNotIn('justification', [2, 10])
-				->whereIn('rcategory', [1, 2, 3, 4]);
-			}
-			if($type == 4){
-				return $query->whereIn('rcategory', [1, 2, 3, 4]);
-			}					
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_justification_callback($type))
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('sex', $sex)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -872,30 +629,10 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($type, function($query) use ($type){
-			if($type < 4){
-				return $query
-		        ->whereNotIn('justification', [2, 10])
-				->whereIn('rcategory', [1, 2, 3, 4]);
-			}
-			if($type == 4){
-				return $query->whereIn('rcategory', [1, 2, 3, 4]);
-			}					
-		})
+		->when(true, $this->get_callback($division))
+		->when(true, $this->get_justification_callback($type))
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('age_category', $age)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -910,26 +647,12 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when(true, function($query) use ($division){
-			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
-			if($division == "site_poc") return $query->addSelect('facility')->where('site_entry', 2)->groupBy('facility');
-			return $query->where('site_entry', 2);
-		})
-		->when($type, function($query) use ($type){
-			if($type < 4){
-				return $query
-		        ->whereNotIn('justification', [2, 10]);
-			}				
+		->when(true, $this->get_callback($division))
+		->when(($type < 4), function($query){
+			return $query->whereNotIn('justification', [2, 10]);			
 		})
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('rcategory', $result)
 		->where('flag', 1)
 		->where('repeatt', 0)
