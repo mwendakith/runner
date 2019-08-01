@@ -8,6 +8,31 @@ use App\ViralsampleView;
 
 class VlNation
 {
+	public function get_sampletype_dbs_callback($type, $param, $p)
+	{
+		return function($query) use ($type, $param, $p){
+			if($type == 4 && $p['param'] == 3){
+				return $query->whereIn($p['column'], [3, 4]);
+			}
+			else{
+				return $query->where($p['column'], $p['param']);
+			}		
+		};
+	}
+
+	public function get_justification_callback($type)
+	{
+		return function($query) use ($type){
+			if($type < 4){
+				return $query->whereNotIn('justification', [2, 10])->whereIn('rcategory', [1, 2, 3, 4]);
+			}
+			if($type == 4){
+				return $query->whereIn('rcategory', [1, 2, 3, 4]);
+			}					
+		};
+	}
+
+	
     
 	//National rejections
 	public function national_rejections($year, $start_month){
@@ -288,24 +313,8 @@ class VlNation
 		$p = BaseModel::get_vlparams($type, $param);
 
     	$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
-		->when($type, function($query) use ($type){
-			if($type < 4){
-				return $query
-		        ->whereNotIn('justification', [2, 10])
-				->whereIn('rcategory', [1, 2, 3, 4]);
-			}
-			if($type == 4){
-				return $query->whereIn('rcategory', [1, 2, 3, 4]);
-			}					
-		})
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_justification_callback($type))
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -321,14 +330,7 @@ class VlNation
 
 		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->whereBetween('datereceived', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->where('flag', 1)
 		->groupBy('month')
@@ -343,14 +345,7 @@ class VlNation
 
 		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datereceived) as month")
 		->whereBetween('datereceived', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('receivedstatus', 2)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -367,14 +362,7 @@ class VlNation
 		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->whereBetween('datetested', $date_range)
 		->whereIn('sampletype', [1, 2, 3, 4])
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('justification', 2)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -392,14 +380,7 @@ class VlNation
 		->whereBetween('datetested', $date_range)
 		->whereIn('sampletype', [1, 2, 3, 4])
 		->whereIn('rcategory', [3, 4])
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('justification', 2)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -415,14 +396,7 @@ class VlNation
 
     	$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereIn('rcategory', [1, 2, 3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
 		->where('justification', 10)
@@ -440,14 +414,7 @@ class VlNation
 
     	$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereIn('rcategory', [3, 4])
 		->whereIn('sampletype', [1, 2, 3, 4])
 		->where('justification', 10)
@@ -465,14 +432,7 @@ class VlNation
 
 		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month")
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('receivedstatus', 3)
 		->where('flag', 1)
 		->where('repeatt', 0)
@@ -495,14 +455,7 @@ class VlNation
 			}				
 		})
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month', 'sampletype')
@@ -516,28 +469,12 @@ class VlNation
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month, sex")
-		->when($type, function($query) use ($type){
-			if($type < 4){
-				return $query
-		        ->whereNotIn('justification', [2, 10])
-				->whereIn('rcategory', [1, 2, 3, 4]);
-			}
-			if($type == 4){
-				return $query->whereIn('rcategory', [1, 2, 3, 4]);
-			}					
-		})
+		->when(true, $this->get_justification_callback($type))
 		->when($nonsuppressed, function($query) use ($nonsuppressed){
 			return $query->whereIn('rcategory', [3, 4]);
 		})
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month', 'sex')
@@ -551,28 +488,12 @@ class VlNation
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleView::selectRaw("COUNT(id) as totals, month(datetested) as month, age_category")
-		->when($type, function($query) use ($type){
-			if($type < 4){
-				return $query
-		        ->whereNotIn('justification', [2, 10])
-				->whereIn('rcategory', [1, 2, 3, 4]);
-			}
-			if($type == 4){
-				return $query->whereIn('rcategory', [1, 2, 3, 4]);
-			}					
-		})
+		->when(true, $this->get_justification_callback($type))
 		->whereBetween('datetested', $date_range)
 		->when($nonsuppressed, function($query) use ($nonsuppressed){
 			return $query->whereIn('rcategory', [3, 4]);
 		})
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month', 'age_category')
@@ -594,14 +515,7 @@ class VlNation
 			}				
 		})
 		->whereBetween('datetested', $date_range)
-		->when($type, function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
-				return $query->whereIn($p['column'], [3, 4]);
-			}
-			else{
-				return $query->where($p['column'], $p['param']);
-			}				
-		})
+		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month', 'rcategory')

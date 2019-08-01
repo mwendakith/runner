@@ -1481,7 +1481,7 @@ class Vl
     {
     	$ages = DB::connection('eid_vl')->table('agecategory')->where('subid', 1)->get();
     	$genders = DB::connection('eid_vl')->table('gender')->get();
-    	$n = new VlDivision;
+    	$n = new VlFacility;
 
     	$array_size = sizeof($div_array);
 
@@ -1492,21 +1492,23 @@ class Vl
     	foreach ($ages as $age) {
     		foreach ($genders as $gender) {
     			$param = ['age_category' => $age->id, 'sex' => $gender->id];			
-    			$original_wheres = ['age' => $age->id, 'gender' => $gender->id];    			
-		    	$ldl_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 1]));
-		    	$less1k_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 2]));
-		    	$less5k_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 3]));
-		    	$above5k_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 4]));
-		    	$invalids_a = $n->get_results_by_multiple_params($year, $start_month, $division, array_merge($param, ['rcategory' => 5]));
+    			$original_wheres = ['age' => $age->id, 'gender' => $gender->id];  
+
 
 				// Loop through the months and insert data into the national summary
 				for ($i=$start_month; $i < 12; $i++) { 
 					$month = $i + 1;
 					if($year == Date('Y') && $month > Date('m')){ break; }
 
+			    	$ldl_a = $n->get_results_by_multiple_params($year, $month, $division, array_merge($param, ['rcategory' => 1]));
+			    	$less1k_a = $n->get_results_by_multiple_params($year, $month, $division, array_merge($param, ['rcategory' => 2]));
+			    	$less5k_a = $n->get_results_by_multiple_params($year, $month, $division, array_merge($param, ['rcategory' => 3]));
+			    	$above5k_a = $n->get_results_by_multiple_params($year, $month, $division, array_merge($param, ['rcategory' => 4]));
+			    	$invalids_a = $n->get_results_by_multiple_params($year, $month, $division, array_merge($param, ['rcategory' => 5]));
+
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
-						$wheres = ['month' => $month, $division => $div_array[$it]];
+						$wheres = [$division => $div_array[$it]];
 
 						$data_array['dateupdated'] = $today;
 						$data_array['Undetected'] = $this->checknull($ldl_a->where('rcategory', 1), $wheres);
