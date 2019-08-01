@@ -867,20 +867,13 @@ class Vl
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 			}
-		}
-		// End of for loop
 
-		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
-
-		if($type == 5 && $division == 'poc') return null;
-
-		if($type == 5){
-
-			$summary_table = "vl_poc_summary";
-			foreach ($tested_a as $key => $value) {
+			// If updating labs, also update vl poc summary
+			// When division is poc, it only updates the poc row in the vl_lab_summary
+			if($type == 5 && $division != 'poc'){
+				$summary_table_two= "vl_poc_summary";
 				if($value->lab < 15) continue;
-				$wheres = ['month' => $value->month, 'lab' => $value->lab];
-
+				$wheres = ['lab' => $value->lab];
 				$tested = $value->totals;
 				$rec = $this->checknull($rec_a, $wheres);
 
@@ -950,18 +943,26 @@ class Vl
 
 				$locator = ['year' => $year, 'month' => $value->month, 'facility' => $value->lab];
 
-				$row = DB::table($summary_table)->where($locator)->first();
+				$row = DB::table($summary_table_two)->where($locator)->first();
 
 				if(!$row){
 					$data_array = array_merge($locator, $data_array);
-					DB::table($summary_table)->insert($data_array);
+					DB::table($summary_table_two)->insert($data_array);
 				}
 				else{
-					DB::table($summary_table)->where('id', $row->ID)->update($data_array);
+					DB::table($summary_table_two)->where('id', $row->ID)->update($data_array);
 				}
+
 			}
-			echo "\n Completed entry into viralload poc summary at " . date('d/m/Y h:i:s a', time());
+
+
 		}
+		// End of for loop
+
+		echo "\n Completed entry into viralload {$column} summary at " . date('d/m/Y h:i:s a', time());
+		if($type == 5 && $division != 'poc') echo "\n Completed entry into viralload vl_poc_summary at " . date('d/m/Y h:i:s a', time());
+
+		if($type == 5 && $division == 'poc') return null;
 
 
 		if ($type < 5) {
@@ -1912,7 +1913,7 @@ class Vl
 
 
     public function update_counties($start_month, $year=null){
-    	return $this->update_division($start_month, $year, 1, 'county', 'county', 'countys', 'vl_county_summary', 'vl_county_rejections');
+    	return $this->update_division_two($start_month, $year, 1, 'county', 'county', 'countys', 'vl_county_summary', 'vl_county_rejections');
     }
 
     public function update_subcounties($start_month, $year=null){
@@ -1920,7 +1921,7 @@ class Vl
     }
 
     public function update_partners($start_month, $year=null){
-    	return $this->update_division($start_month, $year, 3, 'partner', 'partner', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
+    	return $this->update_division_two($start_month, $year, 3, 'partner', 'partner', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
     }
 
     public function update_facilities($start_month, $year=null){
@@ -1952,8 +1953,8 @@ class Vl
     }
 
     public function update_labs($start_month, $year=null){
-    	echo $this->update_division($start_month, $year, 5, 'lab', 'poc', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
-    	return $this->update_division($start_month, $year, 5, 'lab', 'lab', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
+    	echo $this->update_division_two($start_month, $year, 5, 'lab', 'poc', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
+    	return $this->update_division_two($start_month, $year, 5, 'lab', 'lab', 'labs', 'vl_lab_summary', 'vl_lab_rejections');
     }
 
     public function finish_labs(){

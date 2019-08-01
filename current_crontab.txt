@@ -1,39 +1,42 @@
-update='php /root/runner/artisan update'
+execute='php /root/runner/artisan '
 
-30 17 * * * $update:vl-samples >> /root/runner/public/logs.txt 2>&1
-30 17 * * * $update:eid-tat >> /root/runner/public/logs_tat.txt 2>&1
-45 17 * * * $update:eid-patients >>  /root/runner/public/logs.txt 2>&1
-45 17 * * * $update:vl-patients >>  /root/runner/public/logs.txt 2>&1
+30 17 * * * $execute update:vl-samples >> /root/runner/public/logs.txt 2>&1
+30 17 * * * $execute update:eid-tat >> /root/runner/public/logs_tat.txt 2>&1
+45 17 * * * $execute update:eid-patients >>  /root/runner/public/logs.txt 2>&1
+45 17 * * * $execute update:vl-patients >>  /root/runner/public/logs.txt 2>&1
 
-0 5 * * * $update:vl-lablogs >>  /root/runner/public/logs.txt 2>&1
+0 5 * * * $execute update:vl-lablogs >>  /root/runner/public/logs.txt 2>&1
 
-30 20 * * * $update:vl-facility --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
-0 18 * * * $update:vl-facility --type=2 --month=0  >> /root/runner/public/logs.txt 2>&1
-0 18 * * * $update:vl --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
+30 20 * * * $execute update:vl-facility --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
+0 18 * * * $execute update:vl-facility --type=2 --month=0  >> /root/runner/public/logs.txt 2>&1
+0 18 * * * $execute update:vl --type=1 --month=0 >> /root/runner/public/logs.txt 2>&1
 
-0 18 * * * $update:eid-facility >> /root/runner/public/logs.txt 2>&1
-20 18 * * * $update:eid --type=1 >> /root/runner/public/logs.txt 2>&1
+0 18 * * * $execute update:eid-facility >> /root/runner/public/logs.txt 2>&1
+20 18 * * * $execute update:eid --type=1 >> /root/runner/public/logs.txt 2>&1
 
-#10 9 * * * $update:vl-tat 2018 >> /root/runner/public/logs.txt 2>&1
+#10 9 * * * $execute update:vl-tat 2018 >> /root/runner/public/logs.txt 2>&1
+
+0 1 * * * $execute update:eid-poc >> /root/runner/public/logs.txt 2>&1
+0 1 * * * $execute update:vl-poc >> /root/runner/public/logs.txt 2>&1
+0 1 * * * $execute update:vl-datim-suppression >> /root/runner/public/logs.txt 2>&1
 
 
-0 10 * * * php /root/runner/artisan report:send 2>&1
+0 8 * * * $execute report:send 2>&1
 0 11 * * * echo '' > /root/runner/public/logs.txt 2>&1
 0 4 * * * echo '' > /root/newlogs.txt 2>&1
 
 
-0 8-17 * * 1-6 $update:eid-nation >> /root/newlogs.txt 2>&1
-0 8-17 * * 1-6 $update:eid-lab  >> /root/newlogs.txt 2>&1 
-0 8-16 * * 1-6 $update:vl-nation  >> /root/newlogs.txt 2>&1
-0 8-16 * * 1-6 $update:vl-lab  >> /root/newlogs.txt 2>&1
-10 8-17 * * 1-6 $update:eid-partner >> /root/newlogs.txt 2>&1
-5 8-16/2 * * 1-6 $update:vl-partner >> /root/newlogs.txt 2>&1
+0 7-17 * * 1-6 $execute update:eid-nation >> /root/newlogs.txt 2>&1
+0 7-17 * * 1-6 $execute update:eid-lab  >> /root/newlogs.txt 2>&1 
+0 7-16 * * 1-6 $execute update:vl-nation  >> /root/newlogs.txt 2>&1
+0 7-16 * * 1-6 $execute update:vl-lab  >> /root/newlogs.txt 2>&1
+10 7-17 * * 1-6 $execute update:eid-partner >> /root/newlogs.txt 2>&1
+5 8-16/2 * * 1-6 $execute update:vl-partner >> /root/newlogs.txt 2>&1
 
-30 8-16/4 * * 1-5 $update:vl-suppression  >> /root/newlogs.txt 2>&1
+30 8-16/4 * * 1-5 $execute update:vl-suppression  >> /root/newlogs.txt 2>&1
 
-
-0 5 1 1 * php /root/runner/artisan insert:eid --type=0 >> /root/runner/public/insertlogs.txt 2>&1
-30 4 1 * * php /root/runner/artisan insert:eid  >> /root/runner/public/insertlogs.txt 2>&1
-30 4 1 * * php /root/runner/artisan insert:vl  >> /root/runner/public/insertlogs.txt 2>&1
-0 6 1 * * php /root/runner/artisan report:send --insert 2>&1
+0 5 1 1 * $execute insert:eid --type=0 >> /root/runner/public/insertlogs.txt 2>&1
+30 4 1 * * $execute insert:eid  >> /root/runner/public/insertlogs.txt 2>&1
+30 4 1 * * $execute insert:vl  >> /root/runner/public/insertlogs.txt 2>&1
+0 6 1 * * $execute report:send --insert 2>&1
 0 7 1 * * echo '' > /root/runner/public/insertlogs.txt 2>&1
