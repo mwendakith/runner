@@ -31,12 +31,13 @@ class VlFacility
 	public function get_sampletype_dbs_callback($type, $param, $p)
 	{
 		return function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
+			/*if($type == 4 && $p['param'] == 3){
 				return $query->whereIn($p['column'], [3, 4]);
 			}
 			else{
 				return $query->where($p['column'], $p['param']);
-			}		
+			}*/	
+			return $query->where($p['column'], $p['param']);	
 		};
 	}
 
@@ -63,7 +64,6 @@ class VlFacility
 		->selectRaw("COUNT(*) as totals, lab_id as lab")
 		->whereBetween('daterun', $date_range)
 		->groupBy('lab', 'asc')
-		->groupBy('lab')
 		->get();
 
 		return $data;
@@ -78,7 +78,6 @@ class VlFacility
 		->selectRaw("COUNT(*) as totals, lab_id as lab")
 		->whereBetween('daterun', $date_range)
 		->where('calibration', 1)
-		->groupBy('lab')
 		->groupBy('lab', 'asc')
 		->get();
 
@@ -94,7 +93,6 @@ class VlFacility
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
-		->groupBy('lab')
 		->groupBy('lab', 'asc')
 		->get();
 
@@ -110,7 +108,6 @@ class VlFacility
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
-		->groupBy('lab')
 		->groupBy('lab', 'asc')
 		->get();
 
@@ -342,17 +339,7 @@ class VlFacility
 			->where('justification', '!=', 2)
 			->where('justification', '!=', 10);
 		})
-		->when($sampletype, function($query) use ($sampletype){
-			if($sampletype == 2){
-				return $query->whereIn('sampletype', [3, 4]);
-			}
-			else if($sampletype == 3){
-				return $query->where('sampletype', 2);
-			}
-			else{
-				return $query->where('sampletype', 1);
-			}				
-		})
+		->where('sampletype', $sampletype)
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->get();
@@ -599,13 +586,7 @@ class VlFacility
 		->when(true, $this->get_justification_callback($type))
 		->whereBetween('datetested', $date_range)
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
-		->when($sampletype, function($query) use ($sampletype){
-			if($sampletype == 2) return $query->whereIn('sampletype', [3, 4]);
-			else if($sampletype == 3) return $query->where('sampletype', 2);
-			else{
-				return $query->where('sampletype', 1);
-			}				
-		})
+		->where('sampletype', $sampletype)
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->get();
@@ -680,7 +661,6 @@ class VlFacility
 		->where($params)
 		->where('flag', 1)
 		->where('repeatt', 0)
-		->groupBy('month')
 		->get();
 
 		return $data;

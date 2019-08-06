@@ -418,17 +418,7 @@ class VlDivision
 			->where('justification', '!=', 2)
 			->where('justification', '!=', 10);
 		})
-		->when($sampletype, function($query) use ($sampletype){
-			if($sampletype == 2){
-				return $query->whereIn('sampletype', [3, 4]);
-			}
-			else if($sampletype == 3){
-				return $query->where('sampletype', 2);
-			}
-			else{
-				return $query->where('sampletype', 1);
-			}				
-		})
+		->where('sampletype', $sampletype)
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month')
@@ -825,17 +815,7 @@ class VlDivision
 				return $query->where($p['column'], $p['param']);
 			}				
 		})
-		->when($sampletype, function($query) use ($sampletype){
-			if($sampletype == 2){
-				return $query->whereIn('sampletype', [3, 4]);
-			}
-			else if($sampletype == 3){
-				return $query->where('sampletype', 2);
-			}
-			else{
-				return $query->where('sampletype', 1);
-			}				
-		})
+		->where('sampletype', $sampletype)
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->groupBy('month')

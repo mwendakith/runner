@@ -11,12 +11,13 @@ class VlNation
 	public function get_sampletype_dbs_callback($type, $param, $p)
 	{
 		return function($query) use ($type, $param, $p){
-			if($type == 4 && $p['param'] == 3){
+			/*if($type == 4 && $p['param'] == 3){
 				return $query->whereIn($p['column'], [3, 4]);
 			}
 			else{
 				return $query->where($p['column'], $p['param']);
-			}		
+			}*/	
+			return $query->where($p['column'], $p['param']);	
 		};
 	}
 

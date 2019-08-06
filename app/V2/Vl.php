@@ -88,13 +88,11 @@ class Vl
 
 			$plas = $this->checknull($sampletype_array->where('sampletype', 1), $wheres);
 			$edta = $this->checknull($sampletype_array->where('sampletype', 2), $wheres);
-			$dbs = $this->checknull($sampletype_array->where('sampletype', 3), $wheres) +
-			$this->checknull($sampletype_array->where('sampletype', 4), $wheres);
+			$dbs = $this->checknull($sampletype_array->where('sampletype', 3), $wheres);
 
 			$aplas = $this->checknull($sampletype_a_array->where('sampletype', 1), $wheres);
 			$aedta = $this->checknull($sampletype_a_array->where('sampletype', 2), $wheres);
-			$adbs = $this->checknull($sampletype_a_array->where('sampletype', 3), $wheres) +
-			$this->checknull($sampletype_a_array->where('sampletype', 4), $wheres);
+			$adbs = $this->checknull($sampletype_a_array->where('sampletype', 3), $wheres);
 
 			$male = $this->checknull($gender_array->where('sex', 1), $wheres);
 			$female = $this->checknull($gender_array->where('sex', 2), $wheres);
@@ -313,7 +311,7 @@ class Vl
 
 						$plas = $this->checknull($sample_types_a->where('sampletype', 1), $wheres);
 						$edta = $this->checknull($sample_types_a->where('sampletype', 2), $wheres);
-						$dbs = $this->checknull($sample_types_a->where('sampletype', 3), $wheres) + $this->checknull($sample_types_a->where('sampletype', 4), $wheres);
+						$dbs = $this->checknull($sample_types_a->where('sampletype', 3), $wheres);
 
 						$sample_array = array('dbs' => $dbs, 'plasma' => $plas, 'edta' => $edta);
 
@@ -468,12 +466,12 @@ class Vl
 			// $sustx=$less5k +  $above5k;
 
 			$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 1);
-			$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 3);
-			$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 2);
+			$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 2);
+			$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 3);
 
 			$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 1, false);
-			$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 3, false);
-			$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 2, false);
+			$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 2, false);
+			$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $month, $division, 3, false);
 
 			$male_a = $n->getalltestedviraloadbygender($year, $month, $division, 1);
 			$female_a = $n->getalltestedviraloadbygender($year, $month, $division, 2);
@@ -859,8 +857,8 @@ class Vl
 					if($type != 4 && $type != 6){
 
 						$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 1);
-						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 3);
-						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 2);
+						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 2);
+						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 3);
 					}
 
 					if($type != 2 && $type != 6){
@@ -1094,12 +1092,12 @@ class Vl
 		// $sustx=$less5k +  $above5k;
 
 		$plas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 1);
-		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 3);
-		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 2);
+		$edta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 2);
+		$dbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 3);
 
 		$aplas_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 1, false);
-		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 3, false);
-		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 2, false);
+		$aedta_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 2, false);
+		$adbs_a = $n->getalltestedviraloadsamplesbytypedetails($year, $start_month, $division, 3, false);
 
 		$male_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 1);
 		$female_a = $n->getalltestedviraloadbygender($year, $start_month, $division, 2);
@@ -1293,8 +1291,8 @@ class Vl
 					if($type != 4 && $type != 6){
 
 						$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 1);
-						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 3);
-						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 2);
+						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 2);
+						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 3);
 					}
 
 					if($type != 2 && $type != 6){
