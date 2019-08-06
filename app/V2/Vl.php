@@ -179,9 +179,8 @@ class Vl
 			$divs = $data = DB::connection('eid_vl')
 			->table($table[1])->select('id')
 			->when($type, function($query) use ($type){
-				if($type == 1 || $type == 6){
-					return $query->where('subid', 1);
-				}				
+				if($type == 1 || $type == 6) return $query->where('subid', 1);
+				if($type == 5) return $query->where('flag', 1);
 			})
 			->get();
 
@@ -807,9 +806,8 @@ class Vl
 			$divs = $data = DB::connection('eid_vl')
 			->table($table[1])->select('id')
 			->when($type, function($query) use ($type){
-				if($type == 1 || $type == 6){
-					return $query->where('subid', 1);
-				}				
+				if($type == 1 || $type == 6) return $query->where('subid', 1);
+				if($type == 5) return $query->where('flag', 1);
 			})
 			->get();
 
