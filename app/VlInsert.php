@@ -121,9 +121,8 @@ class VlInsert
 			$reasons = $data = DB::connection('eid_vl')
 			->table($table_name)->select('id')
 			->when($iterator, function($query) use ($iterator){
-				if($iterator == 1 || $iterator == 6){
-					return $query->where('subid', 1);
-				}				
+                if($iterator == 1 || $iterator == 6) return $query->where('subid', 1);
+                if($iterator == 5) return $query->where('flag', 1);
 			})
 			->get();
 
