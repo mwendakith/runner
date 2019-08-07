@@ -190,6 +190,7 @@ class Vl
 
 		    	// $rec_a = $n->getallreceivediraloadsamplesbydash($year, $start_month, $type, $value->id);
 		    	$tested_a = $n->getalltestedviraloadsamplesbydash($year, $start_month, $type, $value->id);
+		    	if($tested_a->isEmpty()) continue;
 		    	$rej_a = $n->getallrejectedviraloadsamplesbydash($year, $start_month, $type, $value->id);
 		    	$rs_a = $n->getallrepeattviraloadsamplesbydash($year, $start_month, $type, $value->id);
 				
@@ -832,7 +833,6 @@ class Vl
 			    	$rs = 0;
 
 			    	if ($type != 1 && $type != 6) {
-
 				    	$noage_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 0);
 				    	$less2_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 6);
 				    	$less9_a = $n->getalltestedviraloadsamplesbyagebydash($year, $month, $division, $type, $value->id, 7);
@@ -853,14 +853,12 @@ class Vl
 					// $sustx=$less5k +  $above5k;
 
 					if($type != 4 && $type != 6){
-
 						$plas_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 1);
 						$edta_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 2);
 						$dbs_a = $n->getalltestedviraloadsamplesbytypedetailsbydash($year, $month, $division, $type, $value->id, 3);
 					}
 
 					if($type != 2 && $type != 6){
-
 						$male_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 1);
 						$female_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 2);
 						$nogender_a = $n->getalltestedviraloadsamplesbygenderbydash($year, $month, $division, $type, $value->id, 3);
@@ -878,9 +876,7 @@ class Vl
 						// $rec = $this->checknull($rec_a, $wheres);
 						$tested = $this->checknull($tested_a, $wheres);
 
-						if($tested == 0){
-							continue;
-						}
+						if($tested == 0) continue;
 
 						$rej = $this->checknull($rej_a, $wheres);
 
@@ -1851,7 +1847,7 @@ class Vl
     				$name = array("vl_national_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_national_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_national_regimen", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_national_sampletype", "viralsampletypedetails", "sampletype");
@@ -1878,7 +1874,7 @@ class Vl
     				$name = array("vl_county_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_county_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_county_regimen", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_county_sampletype", "viralsampletypedetails", "sampletype");
@@ -1903,7 +1899,7 @@ class Vl
     				$name = array("vl_subcounty_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_subcounty_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_subcounty_regimen", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_subcounty_sampletype", "viralsampletypedetails", "sampletype");
@@ -1928,7 +1924,7 @@ class Vl
     				$name = array("vl_partner_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_partner_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_partner_regimen", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_partner_sampletype", "viralsampletypedetails", "sampletype");
@@ -1953,7 +1949,7 @@ class Vl
     				$name = array("vl_site_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_site_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_site_regimen", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_site_sampletype", "viralsampletypedetails", "sampletype");
@@ -1978,7 +1974,7 @@ class Vl
     				$name = array("vl_site_gender_poc", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_site_regimen_poc", "viralprophylaxis", "regimen");
+    				$name = array("vl_site_regimen_poc", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_site_sampletype_poc", "viralsampletypedetails", "sampletype");

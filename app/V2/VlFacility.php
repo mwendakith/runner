@@ -63,7 +63,8 @@ class VlFacility
 		->table('viralworksheets')
 		->selectRaw("COUNT(*) as totals, lab_id as lab")
 		->whereBetween('daterun', $date_range)
-		->groupBy('lab', 'asc')
+		->groupBy('lab')
+		->orderBy('lab', 'asc')
 		->get();
 
 		return $data;
@@ -78,7 +79,8 @@ class VlFacility
 		->selectRaw("COUNT(*) as totals, lab_id as lab")
 		->whereBetween('daterun', $date_range)
 		->where('calibration', 1)
-		->groupBy('lab', 'asc')
+		->groupBy('lab')
+		->orderBy('lab', 'asc')
 		->get();
 
 		return $data;
@@ -93,7 +95,8 @@ class VlFacility
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
-		->groupBy('lab', 'asc')
+		->groupBy('lab')
+		->orderBy('lab', 'asc')
 		->get();
 
 		return $data;
@@ -108,7 +111,8 @@ class VlFacility
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
-		->groupBy('lab', 'asc')
+		->groupBy('lab')
+		->orderBy('lab', 'asc')
 		->get();
 
 		return $data;

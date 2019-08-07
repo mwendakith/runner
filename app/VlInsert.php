@@ -514,7 +514,7 @@ class VlInsert
     				$name = array("vl_national_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_national_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_national_prophylaxis", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_national_sampletype", "viralsampletypedetails", "sampletype");
@@ -541,7 +541,7 @@ class VlInsert
     				$name = array("vl_county_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_county_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_county_prophylaxis", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_county_sampletype", "viralsampletypedetails", "sampletype");
@@ -572,7 +572,7 @@ class VlInsert
     				$name = array("vl_subcounty_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_subcounty_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_subcounty_prophylaxis", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_subcounty_sampletype", "viralsampletypedetails", "sampletype");
@@ -603,7 +603,7 @@ class VlInsert
     				$name = array("vl_partner_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_partner_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_partner_prophylaxis", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_partner_sampletype", "viralsampletypedetails", "sampletype");
@@ -634,7 +634,7 @@ class VlInsert
     				$name = array("vl_site_gender", "gender", "gender");
     				break;
     			case 3:
-    				$name = array("vl_site_regimen", "viralprophylaxis", "regimen");
+    				$name = array("vl_site_prophylaxis", "viralregimen", "regimen");
     				break;
     			case 4:
     				$name = array("vl_site_sampletype", "viralsampletypedetails", "sampletype");
