@@ -108,7 +108,8 @@ class VlInsert
     	$sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
 
     	// Iterate through classes of tables
-    	for ($iterator=1; $iterator < 8; $iterator++) { 
+    	// for ($iterator=1; $iterator < 8; $iterator++) { 
+        for ($iterator=3; $iterator < 4; $iterator++) { 
     		$national = $this->get_table(0, $iterator);
     		$county = $this->get_table(1, $iterator);
     		$subcounty = $this->get_table(2, $iterator);
@@ -368,7 +369,8 @@ class VlInsert
         if(!$year) $year = date('Y');
         for ($month=1; $month < 13; $month++) { 
             if($year == date('Y') && $month == date('m')) break;
-            $this->inserter_age_gender($year, $month);
+            // $this->inserter_age_gender($year, $month);
+            $this->inserter($year, $month);
         }
     }
 
