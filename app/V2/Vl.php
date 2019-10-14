@@ -799,6 +799,9 @@ class Vl
     	$update_statements = '';
     	$updates = 0;
 
+		$column = $division;
+		if($division == 'partner_id') $column = 'partner';
+
     	for ($type=1; $type < 7; $type++) { 
 			$table = $this->get_table($div_type, $type);
 
@@ -957,7 +960,7 @@ class Vl
 						}
 						
 
-						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($division, $div_array[$it])->update($data_array);
+						DB::table($table[0])->where('year', $year)->where('month', $month)->where($table[2], $value->id)->where($column, $div_array[$it])->update($data_array);
 					}
 
 				}
@@ -976,6 +979,9 @@ class Vl
     	$ages = DB::connection('eid_vl')->table('agecategory')->where('subid', 1)->get();
     	$genders = DB::connection('eid_vl')->table('gender')->get();
     	$n = new VlFacility;
+
+		$column = $division;
+		if($division == 'partner_id') $column = 'partner';
 
     	$array_size = sizeof($div_array);
 
@@ -1011,7 +1017,7 @@ class Vl
 						$data_array['above5000'] = $this->checknull($above5k_a->where('rcategory', 4), $wheres);
 						$data_array['invalids'] = $this->checknull($invalids_a->where('rcategory', 5), $wheres);
 
-						$locator = array_merge($original_wheres, $wheres);
+						$locator = array_merge($original_wheres, [$column => $div_array[$it]]);
 						$locator = array_merge(['year' => $year, 'month' => $month], $locator);
 
 						DB::table($table)->where($locator)->update($data_array);
