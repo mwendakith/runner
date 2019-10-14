@@ -28,7 +28,7 @@ class VlFacility
 	{
 		return function($query) use($division){
 			if($division == "lab" || $division == "facility"){
-				return $query->where('facility_id', '!=', 7148);
+				return $query->where('facility', '!=', 7148);
 			}
 		};
 	}
@@ -97,7 +97,7 @@ class VlFacility
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(viralsample_synch_view.id) as totals, lab")
 		->when(true, $this->get_callback($division, $date_range))
-		->where('facility_id', '!=', 7148)
+		->where('facility', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->groupBy('lab')
@@ -111,9 +111,9 @@ class VlFacility
 	public function lab_mapping_sites($year, $month, $division='county'){
 		$date_range = BaseModel::date_range_month($year, $month);
 
-    	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT viralsample_synch_view.facility_id) as totals, lab")
+    	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility) as totals, lab")
 		->when(true, $this->get_callback($division, $date_range))
-		->where('facility_id', '!=', 7148)
+		->where('facility', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->groupBy('lab')
@@ -161,8 +161,8 @@ class VlFacility
     	$data = ViralsampleSynchView::selectRaw("COUNT(viralsample_synch_view.id) as totals")
 		->when(true, $this->get_callback($division, $date_range))
 		->when($division, function($query) use ($division){
-			if($division == "facility_id"){
-				return $query->where('facility_id', '!=', 7148);
+			if($division == "facility"){
+				return $query->where('facility', '!=', 7148);
 			}
 		})
 		->whereBetween('datetested', $date_range)
@@ -220,12 +220,12 @@ class VlFacility
     public function GetSupportedfacilitysFORViralLoad($year, $month, $division='county'){
 		$date_range = BaseModel::date_range_month($year, $month);
 
-    	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT viralsample_synch_view.facility_id) as totals")
+    	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility) as totals")
 		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->whereBetween('datereceived', $date_range)
-		->where('facility_id', '!=', 0)
+		->where('facility', '!=', 0)
 		->where('flag', 1)
 		->get();
 
