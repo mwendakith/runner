@@ -1421,7 +1421,7 @@ class Vl
     }
 
     public function update_partners($start_month, $year=null){
-    	return $this->update_division($start_month, $year, 3, 'partner', 'partner', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
+    	return $this->update_division($start_month, $year, 3, 'partner', 'partner_id', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
     }
 
     public function update_facilities($start_month, $year=null){
