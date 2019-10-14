@@ -416,6 +416,7 @@ class Vl
     	$div_array;
     	$array_size = 0;
 
+
     	$divs = $data = DB::connection('eid_vl')
 		->table($div_table)->select('id')->get();
 
@@ -1857,9 +1858,6 @@ class Vl
     				break;
     			case 6:
     				$name = array("vl_national_pmtct", "viralpmtcttype", "pmtcttype");
-    				break;
-    			case 7:
-    				$name = array("vl_national_rejections", "viralrejectedreasons", "rejectedreason");
     				break;
     			default:
     				break;

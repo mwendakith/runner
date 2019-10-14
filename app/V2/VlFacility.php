@@ -10,9 +10,14 @@ class VlFacility
 {
 
 	// Callbacks
-	public function get_callback($division)
+	public function get_callback($division, $date_range)
 	{
-		return function($query) use($division){
+		return function($query) use($division, $date_range){
+			if($division == 'partner_id'){
+				$query->join('partner_facilities', 'viralsample_synch_view.facility_id', '=', 'partner_facilities.facility_id')
+					->whereRaw("((start_date <= {$date_range[0]} AND end_date => {$date_range[1]}) OR 
+						(start_date <= {$date_range[0]} AND end_date IS NULL) )");
+			}
 			if(!str_contains($division, 'poc')) return $query->addSelect($division)->orderBy($division, 'asc')->groupBy($division);
 			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->orderBy('facility', 'asc')->groupBy('facility');
 			return $query->where('site_entry', 2);
@@ -91,7 +96,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, lab")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -107,7 +112,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, lab")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -123,7 +128,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
@@ -140,7 +145,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->where('facility', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
@@ -154,7 +159,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when($division, function($query) use ($division){
 			if($division == "facility_id"){
 				return $query->where('facility_id', '!=', 7148);
@@ -171,7 +176,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT patient_id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
@@ -186,7 +191,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datereceived', $date_range)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
@@ -200,7 +205,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->whereBetween('datereceived', $date_range)
@@ -216,7 +221,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->whereBetween('datereceived', $date_range)
@@ -231,7 +236,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
@@ -249,7 +254,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [3, 4])
@@ -267,7 +272,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
@@ -285,7 +290,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
@@ -302,7 +307,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [3, 4])
@@ -319,7 +324,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->where('receivedstatus', 3)
@@ -334,7 +339,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
@@ -355,7 +360,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
@@ -372,7 +377,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereIn('rcategory', [1, 2, 3, 4])
@@ -389,7 +394,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->when($result, function($query) use ($result){
@@ -411,7 +416,7 @@ class VlFacility
     	$sql = "AVG(tat1) AS tat1, AVG(tat2) AS tat2, AVG(tat3) AS tat3, AVG(tat4) AS tat4";
 
 		$data = ViralsampleSynchView::selectRaw($sql)
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datetested', $date_range)
 		->whereColumn([
@@ -444,7 +449,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_justification_callback($type))
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereBetween('datetested', $date_range)
@@ -461,7 +466,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datereceived', $date_range)
 		->whereRaw("((parentid=0) || (parentid IS NULL))")
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
@@ -477,7 +482,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datereceived', $date_range)
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('receivedstatus', 2)
@@ -494,7 +499,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datetested', $date_range)
 		->whereIn('sampletype', [1, 2, 3, 4])
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
@@ -512,7 +517,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datetested', $date_range)
 		->whereIn('sampletype', [1, 2, 3, 4])
 		->whereIn('rcategory', [3, 4])
@@ -531,7 +536,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datetested', $date_range)
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereIn('rcategory', [1, 2, 3, 4])
@@ -550,7 +555,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
     	$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datetested', $date_range)
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->whereIn('rcategory', [3, 4])
@@ -569,7 +574,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datetested', $date_range)
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
 		->where('receivedstatus', 3)
@@ -586,7 +591,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_justification_callback($type))
 		->whereBetween('datetested', $date_range)
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
@@ -604,7 +609,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_justification_callback($type))
 		->whereBetween('datetested', $date_range)
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
@@ -622,7 +627,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_justification_callback($type))
 		->whereBetween('datetested', $date_range)
 		->when(true, $this->get_sampletype_dbs_callback($type, $param, $p))
@@ -640,7 +645,7 @@ class VlFacility
 		$p = BaseModel::get_vlparams($type, $param);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->when(($type < 4), function($query){
 			return $query->whereNotIn('justification', [2, 10]);			
 		})
@@ -659,7 +664,7 @@ class VlFacility
 		$date_range = BaseModel::date_range_month($year, $month);
 
 		$data = ViralsampleSynchView::selectRaw("COUNT(id) as totals, rcategory")
-		->when(true, $this->get_callback($division))
+		->when(true, $this->get_callback($division, $date_range))
 		->whereNotIn('justification', [2, 10])
 		->whereBetween('datetested', $date_range)
 		->where($params)
