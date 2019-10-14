@@ -494,7 +494,7 @@ class Vl
 				$wheres = [$column => $div_array[$it]];
 				if($division == 'poc') $wheres = ['month' => $month];
 
-				if($type == 3 && $div_array[$it] == 55 && $year < 2019) continue;
+				// if($type == 3 && $div_array[$it] == 55 && $year < 2019) continue;
 
 				$rec = $this->checknull($rec_a, $wheres);
 				$tested = $this->checknull($tested_a, $wheres);
@@ -765,7 +765,7 @@ class Vl
 
 				// Loop through divisions i.e. counties, subcounties, partners and sites
 				for ($it=0; $it < $array_size; $it++) { 
-					if($division == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
+					// if($division == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
 
 					$rej = $this->checknull($rej_a->where('month', $month)->where($division, $div_array[$it]));
 
