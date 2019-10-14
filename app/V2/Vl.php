@@ -749,6 +749,8 @@ class Vl
 
     	$today=date("Y-m-d");
 
+    	if($division == 'partner_id') $division = 'partner';
+
     	echo "\n Begin viralload {$rej_table} update at " . date('d/m/Y h:i:s a', time());
 
     	$reasons = DB::connection('eid_vl')->table('viralrejectedreasons')->select('id')->get();
