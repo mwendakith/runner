@@ -400,53 +400,22 @@ class EidFacility
 
 		$place = 0;
 
-		if($monthly){
+		for ($iterator=0; $iterator < count($div_array); $iterator++) { 
+			$c = $div_array[$iterator];
+			
+			$d = $data->where($col, $c);
 
-			for ($i=0; $i < 12; $i++) { 
-				$month = $i + 1;
-
-				for ($iterator=0; $iterator < count($div_array); $iterator++) { 
-					$c = $div_array[$iterator];
-					
-					$d = $data->where('month', $month)->where($col, $c);
-
-					if($d->isEmpty()){
-						$return[$place]['totals'] = 0;
-						$return[$place]['division'] = $c;
-						$return[$place]['month'] = $month;
-						continue;
-					}
-
-					$return[$place]['totals'] = $d->median('age');
-					$return[$place]['division'] = $c;
-					$return[$place]['month'] = $month;
-
-					$place++;
-
-				}
-
-
-			}
-		}
-
-		else{
-			for ($iterator=0; $iterator < count($div_array); $iterator++) { 
-				$c = $div_array[$iterator];
-				
-				$d = $data->where($col, $c);
-
-				if($d->isEmpty()){
-					$return[$place]['totals'] = 0;
-					$return[$place]['division'] = $c;
-					continue;
-				}
-
-				$return[$place]['totals'] = $d->median('age');
+			if($d->isEmpty()){
+				$return[$place]['totals'] = 0;
 				$return[$place]['division'] = $c;
-
-				$place++;
-
+				continue;
 			}
+
+			$return[$place]['totals'] = $d->median('age');
+			$return[$place]['division'] = $c;
+
+			$place++;
+
 		}
 		return $return;
 	}
