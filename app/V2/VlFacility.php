@@ -15,8 +15,8 @@ class VlFacility
 		return function($query) use($division, $date_range){
 			if($division == 'partner_id'){
 				$query->join('partner_facilities', 'viralsample_synch_view.facility_id', '=', 'partner_facilities.facility_id')
-					->whereRaw("((start_date <= {$date_range[0]} AND end_date >= {$date_range[1]}) OR 
-						(start_date <= {$date_range[0]} AND end_date IS NULL) )");
+					->whereRaw("((start_date <= '{$date_range[0]}' AND end_date >= '{$date_range[1]}') OR 
+						(start_date <= '{$date_range[0]}' AND end_date IS NULL) )");
 			}
 			if(!str_contains($division, 'poc')) return $query->addSelect($division)->orderBy($division, 'asc')->groupBy($division);
 			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->orderBy('facility', 'asc')->groupBy('facility');

@@ -17,8 +17,8 @@ class EidFacility
 		return function($query) use($division, $date_range){
 			if($division == 'partner_id'){
 				$query->join('national_db.partner_facilities', 'sample_synch_view.facility_id', '=', 'partner_facilities.facility_id')
-					->whereRaw("((start_date <= {$date_range[0]} AND end_date >= {$date_range[1]}) OR 
-						(start_date <= {$date_range[0]} AND end_date IS NULL) )");
+					->whereRaw("((start_date <= '{$date_range[0]}' AND end_date >= '{$date_range[1]}') OR 
+						(start_date <= '{$date_range[0]}' AND end_date IS NULL) )");
 			}
 			if(!str_contains($division, 'poc')) return $query->addSelect($division)->groupBy($division);
 			if($division == "site_poc") return $query->addSelect('facility', 'lab_id')->where('site_entry', 2)->groupBy('facility');
@@ -143,20 +143,14 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		DB::connection('eid_vl')->enableQueryLog();
-
 		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
 		->when(true, $this->get_callback($division, $date_range))
 		->whereIn('result', [1, 2])
 		->whereBetween('datetested', $date_range)
 		->where('repeatt', 0)
-		->where('flag', 1)->toSql();
-
-		dd($data);
-		// ->get(); 
-
-		return DB::connection('eid_vl')->getQueryLog();
+		->where('flag', 1)
+		->get(); 
 
 		return $data; 
 	}
