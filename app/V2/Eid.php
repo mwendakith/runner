@@ -1145,9 +1145,9 @@ class Eid
 			if($year == Date('Y') && $month > Date('m')) break;
 
 			// Get collection instances of the data
-			// DB::enableQueryLog();
+			DB::connection('eid_vl')->enableQueryLog();
 	    	$alltests_a = $n->CumulativeTestedSamples($year, $month, $division);
-	    	// dd(DB::getQueryLog());
+	    	dd(DB::connection('eid_vl')->getQueryLog());
 	    	$eqatests_a = $n->OverallEQATestedSamples($year, $month, $division);
 
 	    	$tests_a = $n->OverallTestedSamples($year, $month, $division);

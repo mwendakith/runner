@@ -143,7 +143,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		DB::enableQueryLog();
+		DB::connection('eid_vl')->enableQueryLog();
 
 		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
@@ -156,7 +156,7 @@ class EidFacility
 		dd($data);
 		// ->get(); 
 
-		return DB::getQueryLog();
+		return DB::connection('eid_vl')->getQueryLog();
 
 		return $data; 
 	}
