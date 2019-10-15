@@ -30,7 +30,7 @@ class EidFacility
 	{
 		return function($query) use($division){
 			if($division == "lab" || $division == "facility"){
-				return $query->where('facility_id', '!=', 7148);
+				return $query->where('facility', '!=', 7148);
 			}
 		};
 	}
@@ -60,7 +60,7 @@ class EidFacility
 
     	$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals, lab")
 		->when(true, $this->get_callback($division, $date_range))
-		->where('facility_id', '!=', 7148)
+		->where('facility', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->groupBy('lab')
@@ -74,9 +74,9 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-    	$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals, lab")
+    	$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility) as totals, lab")
 		->when(true, $this->get_callback($division, $date_range))
-		->where('facility_id', '!=', 7148)
+		->where('facility', '!=', 7148)
 		->whereBetween('datetested', $date_range)
 		->where('flag', 1)
 		->groupBy('lab')
@@ -130,7 +130,7 @@ class EidFacility
 		->when(true, $this->get_callback($division, $date_range))
 		->where('result', '>', 0)
 		->whereBetween('datetested', $date_range)
-		->where('facility_id', 7148)
+		->where('facility', 7148)
 		->where('flag', 1)
 		->where('repeatt', 0)
 		->get();
@@ -350,7 +350,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility_id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(DISTINCT facility) as totals")
 		->when(true, $this->get_callback($division, $date_range))
 		->when(true, $this->get_eqa_callback($division))
 		->whereBetween('datereceived', $date_range)
