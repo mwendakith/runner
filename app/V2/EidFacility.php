@@ -16,7 +16,7 @@ class EidFacility
 	{
 		return function($query) use($division, $date_range){
 			if($division == 'partner_id'){
-				$query->join('partner_facilities', 'sample_synch_view.facility_id', '=', 'partner_facilities.facility_id')
+				$query->join('national_db.partner_facilities', 'sample_synch_view.facility_id', '=', 'partner_facilities.facility_id')
 					->whereRaw("((start_date <= {$date_range[0]} AND end_date >= {$date_range[1]}) OR 
 						(start_date <= {$date_range[0]} AND end_date IS NULL) )");
 			}
