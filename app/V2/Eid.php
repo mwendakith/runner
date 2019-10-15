@@ -1148,10 +1148,10 @@ class Eid
 			// DB::enableQueryLog();
 	    	$alltests_a = $n->CumulativeTestedSamples($year, $month, $division);
 	    	// dd(DB::getQueryLog());
-	    	dd($alltests_a);
 	    	$eqatests_a = $n->OverallEQATestedSamples($year, $month, $division);
 
 	    	$tests_a = $n->OverallTestedSamples($year, $month, $division);
+	    	dd($tests_a);
 			
 			$patienttests_a = $n->OverallTestedPatients($year, $month, false, $division);
 			$patienttestsPOS_a = $n->OverallTestedPatients($year, $month, true, $division);
