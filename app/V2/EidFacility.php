@@ -151,7 +151,7 @@ class EidFacility
 		->whereIn('result', [1, 2])
 		->whereBetween('datetested', $date_range)
 		->where('repeatt', 0)
-		->where('flag', 1);
+		->where('flag', 1)->toSql();
 
 		dd($data);
 		// ->get(); 
