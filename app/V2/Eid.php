@@ -1108,7 +1108,7 @@ class Eid
 
     
     
-    public function division_updator($year=null, $type=1, $column='county', $division='view_facilitys.county', $div_table='countys', $sum_table='county_summary', $age_table='county_agebreakdown', $rej_table='county_rejections'){
+    public function division_updator($year=null, $type=1, $column='county', $division='county', $div_table='countys', $sum_table='county_summary', $age_table='county_agebreakdown', $rej_table='county_rejections'){
 
     	if($year == null){
     		$year = Date('Y');
@@ -1530,7 +1530,7 @@ class Eid
 
 					// Loop through divisions i.e. counties, subcounties, partners and sites
 					for ($it=0; $it < $array_size; $it++) { 
-						if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
+						// if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
 
 						$pos = $this->checknull($pos_a->where($column, $div_array[$it]));
 						$neg = $this->checknull($neg_a->where($column, $div_array[$it]));
@@ -1548,17 +1548,7 @@ class Eid
 							$data_array = array_merge($data_array, ['tests' => $tests, 'redraw' => $redraw]);
 						}
 
-						DB::table($table[0])->where('year', $year)->where('month', $month)
-						->where($table[2], $value->id)->where($column, $div_array[$it])->update($data_array);
-
-						// $update_statements .= $this->update_query($table[0], $data_array, ['year' => $year, 'month' => $month, $column => $div_array[$it], $table[2] => $value->id]);
-						// $updates++;
-
-						// if($updates == 200){
-						// 	$this->mysqli->multi_query($update_statements);
-						// 	$update_statements = '';
-						// 	$updates = 0;
-						// }	
+						DB::table($table[0])->where(['year' => $year, 'month' => $month, $table[2] => $value->id, $column => $div_array[$it]])->update($data_array);
 					}
 					// End of looping through divisions
 				}
@@ -2138,7 +2128,7 @@ class Eid
     }
 
     public function update_partners($year = null){
-    	return $this->division_updator($year, 3, 'partner', 'partner', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_rejections');
+    	return $this->division_updator($year, 3, 'partner', 'partner_id', 'partners', 'ip_summary', 'ip_agebreakdown', 'ip_rejections');
     }
 
     public function update_facilities($year = null){
