@@ -1152,7 +1152,7 @@ class Eid
 
 	    	$tests_a = $n->OverallTestedSamples($year, $month, $division);
 
-	    	dd($tests_a);
+	    	// dd($tests_a);
 			
 			$patienttests_a = $n->OverallTestedPatients($year, $month, false, $division);
 			$patienttestsPOS_a = $n->OverallTestedPatients($year, $month, true, $division);
