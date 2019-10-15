@@ -1151,6 +1151,7 @@ class Eid
 	    	$eqatests_a = $n->OverallEQATestedSamples($year, $month, $division);
 
 	    	$tests_a = $n->OverallTestedSamples($year, $month, $division);
+
 	    	dd($tests_a);
 			
 			$patienttests_a = $n->OverallTestedPatients($year, $month, false, $division);

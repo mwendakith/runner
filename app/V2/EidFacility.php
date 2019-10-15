@@ -143,6 +143,8 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
+		DB::enableQueryLog();
+
 		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
 		->when(true, $this->get_callback($division, $date_range))
@@ -151,6 +153,8 @@ class EidFacility
 		->where('repeatt', 0)
 		->where('flag', 1)
 		->get(); 
+
+		return DB::getQueryLog();
 
 		return $data; 
 	}
