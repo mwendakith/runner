@@ -58,7 +58,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-    	$data = SampleSynchView::selectRaw("COUNT(id) as totals, lab")
+    	$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals, lab")
 		->when(true, $this->get_callback($division, $date_range))
 		->where('facility_id', '!=', 7148)
 		->whereBetween('datetested', $date_range)
@@ -106,7 +106,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(($division != "lab"), function($query){
 			return $query->where('repeatt', 0);
 		})
@@ -126,7 +126,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_callback($division, $date_range))
 		->where('result', '>', 0)
 		->whereBetween('datetested', $date_range)
@@ -143,7 +143,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
 		->when(true, $this->get_callback($division, $date_range))
 		->whereIn('result', [1, 2])
@@ -187,7 +187,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
 		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datereceived', $date_range)
@@ -203,7 +203,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
 		->when(true, $this->get_callback($division, $date_range))
 		->where('previous_positive', 1)
@@ -219,7 +219,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
 		->when(true, $this->get_callback($division, $date_range))
 		->when(true, function($query) use ($pos){
@@ -282,7 +282,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
 		->when(true, $this->get_callback($division, $date_range))
 		->where('result', $result_type)
@@ -308,7 +308,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_eqa_callback($division))
 		->when(true, $this->get_callback($division, $date_range))
 		->whereBetween('datereceived', $date_range)
@@ -475,7 +475,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_callback($division, $date_range))
 		->where('mother_prophylaxis', $drug)
 		->where('result', $result_type)
@@ -493,7 +493,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_callback($division, $date_range))
 		->where('entry_point', $entry_point)
 		->where('result', $result_type)
@@ -529,7 +529,7 @@ class EidFacility
 	{
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = SampleSynchView::selectRaw("COUNT(id) as totals")
+		$data = SampleSynchView::selectRaw("COUNT(sample_synch_view.id) as totals")
 		->when(true, $this->get_callback($division, $date_range))
 		->where('receivedstatus', 2)
 		->where('rejectedreason', $rejected_reason)
