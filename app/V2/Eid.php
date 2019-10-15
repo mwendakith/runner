@@ -1333,6 +1333,8 @@ class Eid
 
     	$n = new EidDivision;
 
+    	$division = $column;
+
 		// Start of rejections
 		$reasons = $data = DB::connection('eid_vl')->table('rejectedreasons')->select('id')->get();
 
