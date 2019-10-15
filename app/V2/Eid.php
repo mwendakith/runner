@@ -1220,7 +1220,7 @@ class Eid
 			// Loop through divisions i.e. counties, subcounties, partners and sites
 			for ($it=0; $it < $array_size; $it++) { 
 				// if($column == 'partner' && $div_array[$it] == 55 && $year < 2019) continue;
-				$wheres = [$column => $div_array[$it]];
+				$wheres = [$division => $div_array[$it]];
 
 				$alltests = $this->checknull($alltests_a, $wheres);
 				$received = $this->checknull($received_a, $wheres);

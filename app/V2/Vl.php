@@ -493,6 +493,7 @@ class Vl
 
 				$wheres = [$column => $div_array[$it]];
 				if($division == 'poc') $wheres = ['month' => $month];
+				if($division == 'partner_id') $wheres = [$division => $div_array[$it]];
 
 				// if($type == 3 && $div_array[$it] == 55 && $year < 2019) continue;
 
