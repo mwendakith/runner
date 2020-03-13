@@ -369,8 +369,8 @@ class VlInsert
         if(!$year) $year = date('Y');
         for ($month=1; $month < 13; $month++) { 
             if($year == date('Y') && $month == date('m')) break;
-            // $this->inserter_age_gender($year, $month);
-            $this->inserter($year, $month);
+            $this->inserter_age_gender($year, $month);
+            // $this->inserter($year, $month);
         }
     }
 
