@@ -698,7 +698,7 @@ class VlFacility
 		return $data;
 	}
 
-	$dhis_sql = "
+	/*$dhis_sql = "
 	CREATE TABLE `vl_site_dhis` (
 		`ID` int(10) NOT NULL AUTO_INCREMENT,
 		`dateupdated` date DEFAULT NULL,
@@ -730,6 +730,6 @@ class VlFacility
 		KEY `vl_site_dhis` (`facility`,`year`,`month`),
 		KEY `vl_site_dhis_year` (`year`,`month`)
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1
-	";
+	";*/
 
 }
