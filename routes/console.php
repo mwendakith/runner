@@ -28,9 +28,10 @@ Artisan::command('update:vl-datim-suppression', function () {
 	$this->comment($a);
 })->describe('Update VL Datim Suppression.');
 
-Artisan::command('update:vl-dhis', function () {
+Artisan::command('update:vl-dhis {year?} {--month=0}', function ($year=null, $month=0) {
+	if(!$year) $year = date('Y');
 	$n = new Vl;
-	$a = $n->update_dhis();
+	$a = $n->update_dhis($month, $year);
 	$this->comment($a);
 })->describe('Update VL DHIS table.');
 
