@@ -691,7 +691,7 @@ class VlFacility
 			if($suppressed) return $query->whereIn('rcategory', [1,2]);
 			return $query->whereIn('rcategory', [3,4]);
 		})
-		->where(['repeatt' => 0, 'flag' 1])
+		->where(['repeatt' => 0, 'flag' => 1])
 		->groupBy('sex')
 		->get();
 
