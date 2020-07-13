@@ -5,6 +5,28 @@ use DB;
 
 class VlInsert
 {
+    public function insert_dhis()
+    {
+        $sites = $sites = DB::table('facilitys')->select('id')->orderBy('id')->get();
+
+        $year = date('Y');
+        $data_array=null;
+        $i=0;
+
+        for ($month=1; $month < 8; $month++) { 
+            foreach ($sites as $k => $val) {
+                $data_array[$i] = array('year' => $year, 'month' => $month, 'facility' => $val->id);
+                $i++;
+                if ($i == 150) {
+                    DB::table('vl_site_dhis')->insert($data_array);
+                    $data_array=null;
+                    $i=0;
+                }
+            }
+            DB::table('vl_site_dhis')->insert($data_array);
+        }
+    }
+
     //
     public function summary($year=null, $month=null){
     	if($year == null){
@@ -77,11 +99,13 @@ class VlInsert
 			$i++;
 			if ($i == 150) {
 				DB::table('vl_site_summary')->insert($data_array);
+                DB::table('vl_site_dhis')->insert($data_array);
 				$data_array=null;
 		    	$i=0;
 			}
 		}
 		DB::table('vl_site_summary')->insert($data_array);
+        DB::table('vl_site_dhis')->insert($data_array);
 
 		echo "\n Completed vl summary insert at " . date('d/m/Y h:i:s a', time());
 

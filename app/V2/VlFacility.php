@@ -663,7 +663,7 @@ class VlFacility
 
 		$date_range = BaseModel::date_range_month($year, $month);
 
-		$data = ViralsampleSynchView::selectRaw("COUNT(viralsample_synch_view.id) as totals, rcategory")
+		$data = ViralsampleSynchView::selectRaw("COUNT(viralsample_synch_view.id) as totals ")
 		->when(true, $this->get_callback($division, $date_range))
 		->whereNotIn('justification', [2, 10])
 		->whereBetween('datetested', $date_range)
@@ -674,5 +674,62 @@ class VlFacility
 
 		return $data;
     }
+
+
+    public function get_dhis_suppression($year, $month, $division='facility', $age_range, $suppressed){
+
+		$date_range = BaseModel::date_range_month($year, $month);
+
+		$data = ViralsampleSynchView::selectRaw("COUNT(viralsample_synch_view.id) as totals, sex")
+		->when(true, $this->get_callback($division, $date_range))
+		// ->whereNotIn('justification', [2, 10])
+		->whereBetween('datetested', $date_range)
+		->whereBetween('age', $age_range)
+		->where('age', '>', 0)
+		->where($params)
+		->when(true, function($query) use ($suppressed){
+			if($suppressed) return $query->whereIn('rcategory', [1,2]);
+			return $query->whereIn('rcategory', [3,4]);
+		})
+		->where(['repeatt' => 0, 'flag' 1])
+		->groupBy('sex')
+		->get();
+
+		return $data;
+	}
+
+	$dhis_sql = "
+	CREATE TABLE `vl_site_dhis` (
+		`ID` int(10) NOT NULL AUTO_INCREMENT,
+		`dateupdated` date DEFAULT NULL,
+		`month` int(10) DEFAULT '0',
+		`year` int(10) DEFAULT '0',
+		`facility` int(10) DEFAULT '0',
+		`male_below_10_suppressed` int(14) DEFAULT NULL,
+		`male_below_10_nonsuppressed` int(14) DEFAULT NULL,
+		`male_below_15_suppressed` int(14) DEFAULT NULL,
+		`male_below_15_nonsuppressed` int(14) DEFAULT NULL,
+		`male_below_20_suppressed` int(14) DEFAULT NULL,
+		`male_below_20_nonsuppressed` int(14) DEFAULT NULL,
+		`male_below_25_suppressed` int(14) DEFAULT NULL,
+		`male_below_25_nonsuppressed` int(14) DEFAULT NULL,
+		`male_above_25_suppressed` int(14) DEFAULT NULL,
+		`male_above_25_nonsuppressed` int(14) DEFAULT NULL,
+		`female_below_10_suppressed` int(14) DEFAULT NULL,
+		`female_below_10_nonsuppressed` int(14) DEFAULT NULL,
+		`female_below_15_suppressed` int(14) DEFAULT NULL,
+		`female_below_15_nonsuppressed` int(14) DEFAULT NULL,
+		`female_below_20_suppressed` int(14) DEFAULT NULL,
+		`female_below_20_nonsuppressed` int(14) DEFAULT NULL,
+		`female_below_25_suppressed` int(14) DEFAULT NULL,
+		`female_below_25_nonsuppressed` int(14) DEFAULT NULL,
+		`female_above_25_suppressed` int(14) DEFAULT NULL,
+		`female_above_25_nonsuppressed` int(14) DEFAULT NULL,
+		PRIMARY KEY (`ID`),
+		KEY `facility` (`facility`),
+		KEY `vl_site_dhis` (`facility`,`year`,`month`),
+		KEY `vl_site_dhis_year` (`year`,`month`)
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1
+	";
 
 }

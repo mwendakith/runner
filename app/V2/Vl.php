@@ -697,6 +697,108 @@ class Vl
 
 
 
+    // For POC (vl_poc_summary), column is lab but division is poc 
+    public function update_division_dhis($start_month, $year=null, $type=1, $column='county', $division='county', $div_table='countys', $sum_table='vl_county_dhis'){
+    	if($year == null){
+    		$year = Date('Y');
+    	}
+    	// Instantiate new object
+    	$n = new VlFacility;
+    	$update_statements = '';
+    	$updates = 0;
+
+    	ini_set("memory_limit", "-1");
+
+    	$today=date("Y-m-d");
+
+    	$div_array;
+    	$array_size = 0;
+
+
+    	$divs = $data = DB::connection('eid_vl')
+		->table($div_table)->select('id')->get();
+
+		foreach ($divs as $key => $value) {
+			$div_array[$key] = $value->id;
+			$array_size++;
+		}
+
+    	echo "\n Begin  viralload {$column} summary update at " . date('d/m/Y h:i:s a', time());
+
+		// Loop through the months and insert data into the summary table
+		for ($i=$start_month; $i < 12; $i++) { 
+			$month = $i + 1;
+			if($year == Date('Y') && $month > Date('m')){ break; }
+
+	    	// Get collection instances of the data
+
+	    	$under_10_sup = $n->get_dhis_suppression($year, $month, $division, [0, 9], true);
+	    	$under_10_nonsup = $n->get_dhis_suppression($year, $month, $division, [0, 9], false);
+
+	    	$under_15_sup = $n->get_dhis_suppression($year, $month, $division, [10, 14], true);
+	    	$under_15_nonsup = $n->get_dhis_suppression($year, $month, $division, [10, 14], false);
+
+	    	$under_20_sup = $n->get_dhis_suppression($year, $month, $division, [15, 19], true);
+	    	$under_20_nonsup = $n->get_dhis_suppression($year, $month, $division, [15, 19], false);
+
+	    	$under_25_sup = $n->get_dhis_suppression($year, $month, $division, [20, 24], true);
+	    	$under_25_nonsup = $n->get_dhis_suppression($year, $month, $division, [20, 24], false);
+
+	    	$above_25_sup = $n->get_dhis_suppression($year, $month, $division, [25, 100], true);
+	    	$above_25_nonsup = $n->get_dhis_suppression($year, $month, $division, [25, 100], false);
+
+
+			// Loop through divisions i.e. counties, subcounties, partners and sites
+			for ($it=0; $it < $array_size; $it++) { 
+
+				$wheres_male = [$column => $div_array[$it], 'sex' => 1];
+				$wheres_female = [$column => $div_array[$it], 'sex' => 2];
+
+				$male_below_10_suppressed = $this->checknull($under_10_sup, $wheres_male);
+				$male_below_10_nonsuppressed = $this->checknull($under_10_nonsup, $wheres_male);
+
+				$male_below_15_suppressed = $this->checknull($under_15_sup, $wheres_male);
+				$male_below_15_nonsuppressed = $this->checknull($under_15_nonsup, $wheres_male);
+
+				$male_below_20_suppressed = $this->checknull($under_20_sup, $wheres_male);
+				$male_below_20_nonsuppressed = $this->checknull($under_20_nonsup, $wheres_male);
+
+				$male_below_25_suppressed = $this->checknull($under_25_sup, $wheres_male);
+				$male_below_25_nonsuppressed = $this->checknull($under_25_nonsup, $wheres_male);
+
+				$male_above_25_suppressed = $this->checknull($above_25_sup, $wheres_male);
+				$male_above_25_nonsuppressed = $this->checknull($above_25_nonsup, $wheres_male);
+
+
+				$male_data_array = compact('male_below_10_suppressed', 'male_below_10_nonsuppressed', 'male_below_15_suppressed', 'male_below_15_nonsuppressed', 'male_below_20_suppressed', 'male_below_20_nonsuppressed', 'male_below_25_suppressed', 'male_below_25_nonsuppressed', 'male_above_25_suppressed', 'male_above_25_nonsuppressed');
+
+
+				$female_below_10_suppressed = $this->checknull($under_10_sup, $wheres_female);
+				$female_below_10_nonsuppressed = $this->checknull($under_10_nonsup, $wheres_female);
+
+				$female_below_15_suppressed = $this->checknull($under_15_sup, $wheres_female);
+				$female_below_15_nonsuppressed = $this->checknull($under_15_nonsup, $wheres_female);
+
+				$female_below_20_suppressed = $this->checknull($under_20_sup, $wheres_female);
+				$female_below_20_nonsuppressed = $this->checknull($under_20_nonsup, $wheres_female);
+
+				$female_below_25_suppressed = $this->checknull($under_25_sup, $wheres_female);
+				$female_below_25_nonsuppressed = $this->checknull($under_25_nonsup, $wheres_female);
+
+				$female_above_25_suppressed = $this->checknull($above_25_sup, $wheres_female);
+				$female_above_25_nonsuppressed = $this->checknull($above_25_nonsup, $wheres_female);
+
+
+				$female_data_array = compact('female_below_10_suppressed', 'female_below_10_nonsuppressed', 'female_below_15_suppressed', 'female_below_15_nonsuppressed', 'female_below_20_suppressed', 'female_below_20_nonsuppressed', 'female_below_25_suppressed', 'female_below_25_nonsuppressed', 'female_above_25_suppressed', 'female_above_25_nonsuppressed');
+
+				$data_array = array_merge($male_data_array, $female_data_array);
+
+				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
+			}
+		}
+		// End of for loop
+    }
+
     public function lab_mapping($start_month, $year=null){
         $counties = DB::table('countys')->select('id')->orderBy('id')->get();
         $labs = DB::table('labs')->select('id')->orderBy('id')->get();
@@ -1431,6 +1533,10 @@ class Vl
 
     public function update_partners($start_month, $year=null){
     	return $this->update_division($start_month, $year, 3, 'partner', 'partner_id', 'partners', 'vl_partner_summary', 'vl_partner_rejections');
+    }
+
+    public function update_dhis($start_month, $year=null){
+    	return $this->update_division_dhis($start_month, $year, 4, 'facility', 'facility', 'facilitys', 'vl_site_dhis');
     }
 
     public function update_facilities($start_month, $year=null){

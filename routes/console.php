@@ -28,6 +28,12 @@ Artisan::command('update:vl-datim-suppression', function () {
 	$this->comment($a);
 })->describe('Update VL Datim Suppression.');
 
+Artisan::command('update:vl-dhis', function () {
+	$n = new Vl;
+	$a = $n->update_dhis();
+	$this->comment($a);
+})->describe('Update VL DHIS table.');
+
 Artisan::command('create:missing-rows {year}', function ($year) {
 	\App\Cleaner::eid_missing_site_rows($year);
 	\App\Cleaner::vl_missing_site_rows($year);
