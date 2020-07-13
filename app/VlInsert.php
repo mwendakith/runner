@@ -24,6 +24,8 @@ class VlInsert
                 }
             }
             DB::table('vl_site_dhis')->insert($data_array);
+            $data_array=null;
+            $i=0;
         }
     }
 
