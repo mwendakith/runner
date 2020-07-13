@@ -686,7 +686,7 @@ class VlFacility
 		->whereBetween('datetested', $date_range)
 		->whereBetween('age', $age_range)
 		->where('age', '>', 0)
-		->where($params)
+		// ->where($params)
 		->when(true, function($query) use ($suppressed){
 			if($suppressed) return $query->whereIn('rcategory', [1,2]);
 			return $query->whereIn('rcategory', [3,4]);
