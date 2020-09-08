@@ -723,7 +723,7 @@ class Vl
 			$array_size++;
 		}
 
-    	echo "\n Begin  viralload {$column} summary update at " . date('d/m/Y h:i:s a', time());
+    	echo "\n Begin  viralload {$column} dhis update at " . date('d/m/Y h:i:s a');
 
 		// Loop through the months and insert data into the summary table
 		for ($i=$start_month; $i < 12; $i++) { 
@@ -795,6 +795,7 @@ class Vl
 
 				DB::table($sum_table)->where('year', $year)->where('month', $month)->where($column, $div_array[$it])->update($data_array);
 			}
+	    	echo "\n Completed  viralload {$column} dhis update at " . date('d/m/Y h:i:s a');
 		}
 		// End of for loop
     }
