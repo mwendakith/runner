@@ -732,8 +732,11 @@ class Vl
 
 	    	// Get collection instances of the data
 
-	    	$under_10_sup = $n->get_dhis_suppression($year, $month, $division, [0, 9], true);
-	    	$under_10_nonsup = $n->get_dhis_suppression($year, $month, $division, [0, 9], false);
+	    	$under_1_sup = $n->get_dhis_suppression($year, $month, $division, [0, 0.9999], true);
+	    	$under_1_nonsup = $n->get_dhis_suppression($year, $month, $division, [0, 0.9999], false);
+
+	    	$under_10_sup = $n->get_dhis_suppression($year, $month, $division, [1, 9], true);
+	    	$under_10_nonsup = $n->get_dhis_suppression($year, $month, $division, [1, 9], false);
 
 	    	$under_15_sup = $n->get_dhis_suppression($year, $month, $division, [10, 14], true);
 	    	$under_15_nonsup = $n->get_dhis_suppression($year, $month, $division, [10, 14], false);
@@ -754,6 +757,9 @@ class Vl
 				$wheres_male = [$column => $div_array[$it], 'sex' => 1];
 				$wheres_female = [$column => $div_array[$it], 'sex' => 2];
 
+				$male_below_1_suppressed = $this->checknull($under_1_sup, $wheres_male);
+				$male_below_1_nonsuppressed = $this->checknull($under_1_nonsup, $wheres_male);
+
 				$male_below_10_suppressed = $this->checknull($under_10_sup, $wheres_male);
 				$male_below_10_nonsuppressed = $this->checknull($under_10_nonsup, $wheres_male);
 
@@ -770,8 +776,11 @@ class Vl
 				$male_above_25_nonsuppressed = $this->checknull($above_25_nonsup, $wheres_male);
 
 
-				$male_data_array = compact('male_below_10_suppressed', 'male_below_10_nonsuppressed', 'male_below_15_suppressed', 'male_below_15_nonsuppressed', 'male_below_20_suppressed', 'male_below_20_nonsuppressed', 'male_below_25_suppressed', 'male_below_25_nonsuppressed', 'male_above_25_suppressed', 'male_above_25_nonsuppressed');
+				$male_data_array = compact('male_below_1_suppressed', 'male_below_1_nonsuppressed', 'male_below_10_suppressed', 'male_below_10_nonsuppressed', 'male_below_15_suppressed', 'male_below_15_nonsuppressed', 'male_below_20_suppressed', 'male_below_20_nonsuppressed', 'male_below_25_suppressed', 'male_below_25_nonsuppressed', 'male_above_25_suppressed', 'male_above_25_nonsuppressed');
 
+
+				$female_below_1_suppressed = $this->checknull($under_1_sup, $wheres_female);
+				$female_below_1_nonsuppressed = $this->checknull($under_1_nonsup, $wheres_female);
 
 				$female_below_10_suppressed = $this->checknull($under_10_sup, $wheres_female);
 				$female_below_10_nonsuppressed = $this->checknull($under_10_nonsup, $wheres_female);
@@ -789,7 +798,7 @@ class Vl
 				$female_above_25_nonsuppressed = $this->checknull($above_25_nonsup, $wheres_female);
 
 
-				$female_data_array = compact('female_below_10_suppressed', 'female_below_10_nonsuppressed', 'female_below_15_suppressed', 'female_below_15_nonsuppressed', 'female_below_20_suppressed', 'female_below_20_nonsuppressed', 'female_below_25_suppressed', 'female_below_25_nonsuppressed', 'female_above_25_suppressed', 'female_above_25_nonsuppressed');
+				$female_data_array = compact('female_below_1_suppressed', 'female_below_1_nonsuppressed', 'female_below_10_suppressed', 'female_below_10_nonsuppressed', 'female_below_15_suppressed', 'female_below_15_nonsuppressed', 'female_below_20_suppressed', 'female_below_20_nonsuppressed', 'female_below_25_suppressed', 'female_below_25_nonsuppressed', 'female_above_25_suppressed', 'female_above_25_nonsuppressed');
 
 				$data_array = array_merge($male_data_array, $female_data_array);
 
